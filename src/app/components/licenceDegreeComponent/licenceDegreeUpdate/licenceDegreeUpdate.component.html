@@ -1,0 +1,48 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="uptadeForm">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Licence Degree Name</span>
+            <input
+              formControlName="licenceName"
+              type="text"
+              class="form-control"
+              id="input1"
+              placeholder="Licence Degree"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              routerLink="/dashboard/licencedegrees"
+              routerLinkActive="router-link-active"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

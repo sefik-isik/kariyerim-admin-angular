@@ -1,0 +1,149 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="uptadeForm">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+        </div>
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              formControlName="companyUserName"
+              type="text"
+              class="form-control"
+              id="input1"
+              placeholder="Company User Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              formControlName="sectorName"
+              type="text"
+              class="form-control"
+              list="datalist1"
+              id="input2"
+              placeholder="Select Company Sector..."
+              (change)="getSectors()"
+            />
+            <datalist id="datalist1">
+              <option
+                *ngFor="let sector of sectors"
+                value="{{ sector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tax City Name</span>
+            <input
+              formControlName="cityName"
+              type="text"
+              class="form-control"
+              list="datalist2"
+              id="input3"
+              placeholder="Select Tax City..."
+              (change)="getTaxOffices()"
+            />
+            <datalist id="datalist2">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput3()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tax Office Name</span>
+            <input
+              formControlName="taxOfficeName"
+              type="text"
+              class="form-control"
+              list="datalist3"
+              id="input4"
+              placeholder="Select Tax Office..."
+              (input)="getTaxOffices()"
+            />
+            <datalist id="datalist3">
+              <option
+                *ngFor="let taxOffice of taxOffices"
+                value="{{ taxOffice.taxOfficeName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput4()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tax Number</span>
+            <input
+              formControlName="taxNumber"
+              type="text"
+              class="form-control"
+              id="input5"
+              placeholder="Tax Number"
+              minlength="10"
+              maxlength="10"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput5()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              routerLink="/dashboard/companyusers"
+              routerLinkActive="router-link-active"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

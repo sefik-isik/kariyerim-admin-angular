@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <div class="d-grid gap-2 mt-3">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          routerLink="/dashboard/languagelevels"
+          routerLinkActive="router-link-active"
+        >
+          Back
+        </button>
+      </div>
+      <div class="mt-3 table-responsive-xxl">
+        <table
+          *ngIf="languageLevels.length > 0"
+          class="table table-striped table-hover table-sm"
+        >
+          <thead>
+            <tr>
+              <th>languageLevel Id</th>
+              <th>level</th>
+              <th>levelTitle</th>
+              <th>levelDescription</th>
+              <th>Created Date</th>
+              <th>Updated Date</th>
+              <th></th>
+              <th>
+                <i
+                  (click)="unDeleteAll()"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let languageLevel of languageLevels">
+              <td>{{ languageLevel.id }}</td>
+              <td>{{ languageLevel.level }}</td>
+              <td>{{ languageLevel.levelTitle }}</td>
+              <td>{{ languageLevel.levelDescription }}</td>
+              <td>
+                {{ languageLevel.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+              </td>
+              <td>
+                {{ languageLevel.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+              </td>
+              <td>
+                <i
+                  [routerLink]="['languagelevelupdate/' + languageLevel.id]"
+                  routerLinkActive="active"
+                  ariaCurrentWhenActive="page"
+                  class="bi bi-pencil-square"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="unDelete(languageLevel)"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

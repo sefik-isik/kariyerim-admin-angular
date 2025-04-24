@@ -1,0 +1,116 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="updateForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+          <span class="input-group-text"
+            >Personel User Name : {{ personelUserName }}</span
+          >
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Cv Name</span>
+          <input
+            formControlName="cvName"
+            type="text"
+            class="form-control"
+            id="input1"
+            placeholder="Type Cv Name..."
+            minlength="3"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Language Name</span>
+          <input
+            formControlName="languageName"
+            type="text"
+            class="form-control"
+            list="datalist1"
+            id="input2"
+            placeholder="Select Language..."
+            minlength="3"
+            (change)="getLanguages()"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let language of languages"
+              value="{{ language.languageName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Language Level</span>
+          <input
+            formControlName="languageLevel"
+            type="text"
+            class="form-control"
+            list="datalist1"
+            id="input3"
+            placeholder="Select Language Level..."
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let languageLevel of languageLevels"
+              value="{{ languageLevel.levelTitle }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="isPrivate"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input4"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked">
+              isPrivate
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="update()" type="button" class="btn btn-outline-primary">
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercvs"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

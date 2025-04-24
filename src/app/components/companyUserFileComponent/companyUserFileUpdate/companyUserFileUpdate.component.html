@@ -1,0 +1,78 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="uptadeForm" class="form">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+          <span class="input-group-text"
+            >Company Name : {{ companyUserName }}</span
+          >
+        </div>
+
+        <div class="input-group mb-3" *ngIf="result == true">
+          <span class="input-group-text"
+            >File Name : {{ fileName }}
+            <span style="margin-left: 10px">
+              <i
+                type="button"
+                (click)="deleteFile()"
+                class="bi bi-x-circle-fill"
+                style="color: red"
+              >
+              </i>
+            </span>
+          </span>
+        </div>
+        <div class="input-group mb-3" *ngIf="result == false">
+          <input
+            formControlName="file"
+            type="file"
+            class="form-control"
+            id="input1"
+            placeholder="Upload File"
+            (change)="onFileSelected($event)"
+            aria-label="Upload File"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        *ngIf="result == false"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onUpload()"
+      >
+        Upload
+      </button>
+
+      <button
+        *ngIf="result == true"
+        type="button"
+        class="btn btn-outline-primary"
+        disabled
+      >
+        Dosya güncellemesi yapmak için mevcut dosyayı silmelisiniz.
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/companyuserfiles"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

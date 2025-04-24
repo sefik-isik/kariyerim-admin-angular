@@ -1,0 +1,149 @@
+<div class="card">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="datalist1"
+          id="input1"
+          placeholder="Filter Personel User Cvs By User..."
+          (change)="getUsers()"
+        />
+        <datalist id="datalist1">
+          <option
+            *ngFor="let userDTO of userDTOs"
+            value="{{ userDTO.email }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <button
+        [routerLink]="['personelusercvadd']"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        type="button"
+        class="btn btn-outline-success"
+      >
+        Add New Personel Cv <i class="bi bi-plus-circle"></i>
+      </button>
+      <button
+        routerLink="/dashboard/personelusercvs/personelusercvofdeleted"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        type="button"
+        class="btn btn-outline-secondary"
+        style="margin-left: 10px"
+      >
+        Deleted Personel Cvs <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+    <div class="mt-3 table-responsive-xxl">
+      <table
+        *ngIf="personelUserCvDTOs.length > 0"
+        class="table table-striped table-hover table-sm"
+      >
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>userId</th>
+            <th>firstName</th>
+            <th>lastName</th>
+            <th>phoneNumber</th>
+            <th>email</th>
+            <th>personelUserId</th>
+            <th>identityNumber</th>
+            <th>cvId</th>
+            <th>cvName</th>
+            <th>gender</th>
+            <th>birthPlaceId</th>
+            <th>birthPlaceName</th>
+            <th>isPrivate</th>
+            <th>languageId</th>
+            <th>languageName</th>
+            <th>languageLevelId</th>
+            <th>level</th>
+            <th>levelTitle</th>
+            <th>levelDescription</th>
+            <th>Created Date</th>
+            <th>Updated Date</th>
+            <th></th>
+            <th>
+              <i
+                (click)="deleteAll()"
+                class="bi bi-trash"
+                style="color: red; cursor: pointer"
+              ></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let personelUserCvDTO of personelUserCvDTOs
+                | filterPersonelUserCvByUser : filter1
+            "
+          >
+            <td>{{ personelUserCvDTO.id }}</td>
+            <td>{{ personelUserCvDTO.userId }}</td>
+            <td>{{ personelUserCvDTO.firstName }}</td>
+            <td>{{ personelUserCvDTO.lastName }}</td>
+            <td>{{ personelUserCvDTO.phoneNumber }}</td>
+            <td>{{ personelUserCvDTO.email }}</td>
+            <td>{{ personelUserCvDTO.personelUserId }}</td>
+            <td>{{ personelUserCvDTO.identityNumber }}</td>
+            <td>{{ personelUserCvDTO.cvId }}</td>
+            <td>{{ personelUserCvDTO.cvName }}</td>
+            <td>{{ personelUserCvDTO.gender }}</td>
+            <td>{{ personelUserCvDTO.birthPlaceId }}</td>
+            <td>{{ personelUserCvDTO.birthPlaceName }}</td>
+            <td>{{ personelUserCvDTO.isPrivate }}</td>
+            <td>{{ personelUserCvDTO.languageId }}</td>
+            <td>{{ personelUserCvDTO.languageName }}</td>
+            <td>{{ personelUserCvDTO.languageLevelId }}</td>
+            <td>{{ personelUserCvDTO.level }}</td>
+            <td>{{ personelUserCvDTO.levelTitle }}</td>
+            <td>{{ personelUserCvDTO.levelDescription }}</td>
+            <td>
+              {{ personelUserCvDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+            </td>
+            <td>
+              {{ personelUserCvDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+            </td>
+
+            <td>
+              <i
+                [routerLink]="['personelusercvupdate/' + personelUserCvDTO.id]"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                class="bi bi-pencil-square"
+                style="color: midnightblue"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="delete(personelUserCvDTO)"
+                class="bi bi-trash"
+                style="color: red; cursor: pointer"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

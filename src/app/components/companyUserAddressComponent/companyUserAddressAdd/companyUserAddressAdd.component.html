@@ -1,0 +1,177 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+            (change)="getCompanyUsers()"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let user of users"
+              value="{{ user.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Company Name</span>
+          <input
+            formControlName="companyUserName"
+            type="text"
+            class="form-control"
+            list="input2"
+            id="companiesData"
+            placeholder="Select Company..."
+          />
+          <datalist id="datalist2">
+            <option
+              *ngFor="let companyUserDTO of companyUserDTOs"
+              value="{{ companyUserDTO.companyUserName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Country Name</span>
+          <input
+            formControlName="countryName"
+            type="text"
+            class="form-control"
+            list="datalist3"
+            id="input3"
+            placeholder="Select Country..."
+            minlength="3"
+            (change)="getCities()"
+          />
+          <datalist id="datalist3">
+            <option
+              *ngFor="let country of countries"
+              value="{{ country.countryName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">City Name</span>
+          <input
+            formControlName="cityName"
+            type="text"
+            class="form-control"
+            list="datalist4"
+            id="input4"
+            placeholder="Select City..."
+            minlength="3"
+            (change)="getRegions()"
+          />
+          <datalist id="datalist4">
+            <option
+              *ngFor="let city of cities"
+              value="{{ city.cityName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput4()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Region Name</span>
+          <input
+            formControlName="regionName"
+            type="text"
+            class="form-control"
+            list="input5"
+            id="input5"
+            placeholder="Region Name..."
+          />
+          <datalist id="datalist5">
+            <option
+              *ngFor="let region of regions"
+              value="{{ region.regionName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput5()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >Address Detail <br />{{ addressDetail }} \ 250</span
+          >
+
+          <textarea
+            formControlName="addressDetail"
+            class="form-control"
+            id="input6"
+            style="height: 120px"
+            minlength="50"
+            maxlength="250"
+            (input)="count()"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput6()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/companyuseraddresses"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="uptadeForm">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">User Email : {{ userEmail }}</span>
+            <span class="input-group-text"
+              >Company Name : {{ companyUserName }}</span
+            >
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Country Name</span>
+            <input
+              formControlName="countryName"
+              type="text"
+              class="form-control"
+              list="datalist1"
+              id="input1"
+              placeholder="Select Country..."
+              (change)="getCities()"
+            />
+            <datalist id="datalist1">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">City Name</span>
+            <input
+              formControlName="cityName"
+              type="text"
+              class="form-control"
+              list="datalist2"
+              id="input2"
+              placeholder="Select City..."
+              (change)="getRegions()"
+            />
+            <datalist id="datalist2">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Region Name</span>
+            <input
+              formControlName="regionName"
+              type="text"
+              class="form-control"
+              list="datalist3"
+              id="input3"
+              placeholder="Select Region..."
+            />
+            <datalist id="datalist3">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput3()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"
+              >Address Detail <br />{{ addressDetailCount }} \ 250</span
+            >
+
+            <textarea
+              formControlName="addressDetail"
+              class="form-control"
+              id="input4"
+              style="height: 120px"
+              minlength="50"
+              maxlength="250"
+              (input)="count(addressDetail)"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput4()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              routerLink="/dashboard/companyuseraddresses"
+              routerLinkActive="router-link-active"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

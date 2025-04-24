@@ -1,0 +1,93 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm" class="form">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+            (change)="getCompanyUsers()"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let user of users"
+              value="{{ user.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Company Name</span>
+          <input
+            formControlName="companyUserName"
+            type="text"
+            class="form-control"
+            list="datalist2"
+            id="input2"
+            placeholder="Select Company..."
+          />
+          <datalist id="datalist2">
+            <option
+              *ngFor="let companyUser of companyUsers"
+              value="{{ companyUser.companyUserName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Department Name</span>
+          <input
+            formControlName="departmentName"
+            type="text"
+            class="form-control"
+            id="input3"
+            placeholder="Type Department Name..."
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/companyuserdepartments"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+import { Injectable } from '@angular/core';
+import { ApiUrl } from '../models/apiUrl';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ResponseModel } from '../models/responseModel';
+import { ListResponseModel } from '../models/listResponseModel';
+import { SingleResponseModel } from '../models/singleResponseModel';
+import { University } from '../models/university';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UniversityService {
+  newUrlPath: string = ApiUrl + 'Universities/';
+
+  constructor(private httpClient: HttpClient) {}
+
+  add(university: University): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'add',
+      university
+    );
+  }
+
+  update(university: University): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'update',
+      university
+    );
+  }
+
+  delete(university: University): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'delete',
+      university
+    );
+  }
+
+  getAll(): Observable<ListResponseModel<University>> {
+    let path = this.newUrlPath + 'getall';
+    return this.httpClient.get<ListResponseModel<University>>(path);
+  }
+
+  getById(id: number): Observable<SingleResponseModel<University>> {
+    let path = this.newUrlPath + 'getbyid?id=' + id;
+    return this.httpClient.get<SingleResponseModel<University>>(path);
+  }
+}

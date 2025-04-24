@@ -1,0 +1,8 @@
+/* let userId: number;
+    if (this.companyUserDepartmentAddForm.value.companyName) {
+      userId = this.getCompanyUserId(
+        this.companyUserDepartmentAddForm.value.companyName
+      );
+    } else {
+      userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    } */

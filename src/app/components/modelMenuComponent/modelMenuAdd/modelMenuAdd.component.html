@@ -1,0 +1,41 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">Model Menu Name</span>
+          <input
+            formControlName="modelName"
+            type="text"
+            class="form-control"
+            id="input1"
+            placeholder="Model Menu Name"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/modelmenulists"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

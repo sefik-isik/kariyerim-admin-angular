@@ -1,0 +1,98 @@
+<div class="row justify-content-md-center">
+  <div class="col col-md-10">
+    <div class="card">
+      <div class="card-body">
+        <div class="alert alert-primary" role="alert">
+          {{ componentTitle }}
+        </div>
+        <form [formGroup]="registerForm">
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="eMail" class="form-label">Email Address</label>
+              <input
+                formControlName="email"
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Email Address"
+                minlength="3"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="password" class="form-label">Password</label>
+              <input
+                formControlName="password"
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Password"
+                minlength="6"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input
+                formControlName="firstName"
+                type="text"
+                class="form-control"
+                id="firstName"
+                placeholder="First Name"
+                minlength="3"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input
+                formControlName="lastName"
+                type="text"
+                class="form-control"
+                id="lastName"
+                placeholder="Last Name"
+                minlength="3"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input
+                formControlName="phoneNumber"
+                type="text"
+                class="form-control"
+                id="phoneNumber"
+                placeholder="Phone Number"
+              />
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="register()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Register
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="login()"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

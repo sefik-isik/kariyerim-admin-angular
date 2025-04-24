@@ -1,0 +1,75 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="uptadeForm" class="form">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <div class="card" *ngIf="result == true">
+            <img
+              src="{{ imagePath + 'thumbs/' + imageName }}"
+              class="img-fluid img-thumbnail"
+              style="height: 250px; width: 100%; border: none"
+              alt="{{ imageName }}"
+            />
+            <i
+              type="button"
+              (click)="deleteImage()"
+              class="bi bi-x-circle-fill btn btn-outline-danger"
+            >
+              Delete Image
+            </i>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            *ngIf="result == false"
+            formControlName="image"
+            type="file"
+            class="form-control"
+            id="imageName"
+            placeholder="Upload Image"
+            (change)="onImageSelected($event)"
+            aria-label="Upload Image"
+          />
+          <span class="input-group-text" *ngIf="result == false">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        *ngIf="result == false"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onUpload()"
+      >
+        Upload
+      </button>
+
+      <button
+        *ngIf="result == true"
+        type="button"
+        class="btn btn-outline-primary"
+        disabled
+      >
+        Resim güncellemesi yapmak için mevcut resmi silmelisiniz.
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/companyuserimages"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

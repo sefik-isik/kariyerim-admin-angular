@@ -1,0 +1,161 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+            (change)="getPersonelUsers()"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let user of users"
+              value="{{ user.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Persoenel User Name</span>
+          <input
+            formControlName="personelUserName"
+            type="text"
+            class="form-control"
+            list="datalist2"
+            id="input2"
+            placeholder="Select Personel User..."
+          />
+          <datalist id="datalist2">
+            <option
+              *ngFor="let personelUser of personelUsers"
+              value="{{ personelUser.firstName }} {{ personelUser.lastName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Cv Name</span>
+          <input
+            formControlName="cvName"
+            type="text"
+            class="form-control"
+            id="input3"
+            placeholder="Type Cv Name..."
+            minlength="3"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Language Name</span>
+          <input
+            formControlName="languageName"
+            type="text"
+            class="form-control"
+            list="datalist3"
+            id="input4"
+            placeholder="Select Language..."
+            minlength="3"
+            (change)="getLanguages()"
+          />
+          <datalist id="datalist3">
+            <option
+              *ngFor="let language of languages"
+              value="{{ language.languageName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput4()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Language Level</span>
+          <input
+            formControlName="languageLevel"
+            type="text"
+            class="form-control"
+            list="datalist4"
+            id="input4"
+            placeholder="Select Language Level..."
+          />
+          <datalist id="datalist4">
+            <option
+              *ngFor="let languageLevel of languageLevels"
+              value="{{ languageLevel.levelTitle }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput5()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="isPrivate"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input5"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked">
+              isPrivate
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercvs"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

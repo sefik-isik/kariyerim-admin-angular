@@ -1,0 +1,268 @@
+import { Sector } from '../../../models/sector';
+import { City } from './../../../models/city';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CityService } from '../../../services/city.service';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+  FormGroup,
+  FormBuilder,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { CompanyUser } from '../../../models/companyUser';
+import { CompanyUserService } from '../../../services/companyUser.service';
+import { SectorService } from '../../../services/sectorService';
+import { TaxOffice } from '../../../models/taxOffice';
+import { TaxOfficeService } from '../../../services/taxOffice.service';
+import { UserDTO } from '../../../models/userDTO';
+import { UserService } from '../../../services/user.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { CompanyUserDTO } from '../../../models/companyUserDTO';
+import { AuthService } from '../../../services/auth.service';
+
+@Component({
+  selector: 'app-companyUserUpdate',
+  templateUrl: './companyUserUpdate.component.html',
+  styleUrls: ['./companyUserUpdate.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+})
+export class CompanyUserUpdateComponent implements OnInit {
+  uptadeForm: FormGroup;
+  companyUsers: CompanyUserDTO[];
+  sectors: Sector[];
+  cities: City[];
+  taxOffices: TaxOffice[];
+  users: UserDTO[] = [];
+  id: number;
+  sectorId: number;
+  taxCityId: number;
+  taxOfficeId: number;
+  componentTitle = 'Company User Update';
+  userEmail: string;
+  userName: string;
+  userId: number;
+  isAdmin: boolean = false;
+
+  constructor(
+    private companyUserService: CompanyUserService,
+    private sectorService: SectorService,
+    private cityService: CityService,
+    private taxOfficeService: TaxOfficeService,
+    private userService: UserService,
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private toastrService: ToastrService,
+    private router: Router,
+    private localStorageService: LocalStorageService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    this.getUsers();
+    this.getSectors();
+    this.getCities();
+    this.createUpdateForm();
+    this.getTaxOffices();
+
+    setTimeout(() => {
+      this.activatedRoute.params.subscribe((params) => {
+        this.getById(params['companyUserId']);
+      });
+    }, 500);
+  }
+
+  checkAdmin() {
+    if (this.authService.isAdmin('status')) {
+      this.isAdmin = true;
+    }
+  }
+
+  createUpdateForm() {
+    this.uptadeForm = this.formBuilder.group({
+      companyUserName: ['', [Validators.required, Validators.minLength(3)]],
+      sectorName: ['', [Validators.required, Validators.minLength(3)]],
+      cityName: ['', [Validators.required, Validators.minLength(3)]],
+      taxOfficeName: ['', [Validators.required, Validators.minLength(3)]],
+      taxNumber: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
+
+  getById(id: number) {
+    this.companyUserService.getById(id).subscribe(
+      (response) => {
+        this.id = response.data.id;
+        this.userId = response.data.userId;
+        this.userEmail = this.getUserEmailById(this.userId);
+        this.sectorId = response.data.sectorId;
+        this.taxCityId = response.data.taxCityId;
+        this.taxOfficeId = response.data.taxOfficeId;
+
+        this.uptadeForm.patchValue({
+          userEmail: this.userEmail,
+          companyUserName: response.data.companyUserName,
+          sectorName: this.getSectorNameById(this.sectorId),
+          cityName: this.getCityById(this.taxCityId),
+          taxOfficeName: this.getTaxOfficeById(this.taxOfficeId),
+          taxNumber: response.data.taxNumber,
+        });
+      },
+      (error) => console.error
+    );
+  }
+
+  update() {
+    if (
+      this.uptadeForm.valid &&
+      this.getModel().id > 0 &&
+      this.getModel().userId > 0 &&
+      this.getModel().sectorId > 0 &&
+      this.getModel().taxCityId > 0 &&
+      this.getModel().taxOfficeId > 0
+    ) {
+      this.companyUserService.update(this.getModel()).subscribe(
+        (response) => {
+          this.toastrService.success(response.message, 'Başarılı');
+          this.router.navigate(['/dashboard/companyusers']);
+        },
+        (error) => {
+          this.toastrService.error(error.error.message);
+        }
+      );
+    } else {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+    }
+  }
+
+  getModel(): CompanyUser {
+    return Object.assign({
+      id: this.id,
+      userId: this.userId,
+      companyUserName: this.uptadeForm.value.companyUserName,
+      sectorId: this.getsectorId(this.uptadeForm.value.sectorName),
+      taxCityId: this.getCityId(this.uptadeForm.value.cityName),
+      taxOfficeId: this.getTaxOfficeId(this.uptadeForm.value.taxOfficeName),
+      taxNumber: this.uptadeForm.value.taxNumber,
+      createdDate: new Date(Date.now()).toJSON(),
+      updatedDate: new Date(Date.now()).toJSON(),
+      deletedDate: new Date(Date.now()).toJSON(),
+    });
+  }
+
+  getUsers() {
+    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.userService.getAllDTO(this.userId).subscribe(
+      (response) => {
+        this.users = response.data.filter((f) => f.deletedDate == null);
+      },
+      (error) => console.error
+    );
+  }
+
+  getCities() {
+    this.cityService.getAll().subscribe(
+      (response) => {
+        this.cities = response.data.filter((f) => f.deletedDate == null);
+      },
+      (error) => console.error
+    );
+  }
+
+  getSectors() {
+    this.sectorService.getAll().subscribe(
+      (response) => {
+        this.sectors = response.data.filter((f) => f.deletedDate == null);
+      },
+      (error) => console.error
+    );
+  }
+
+  getTaxOffices() {
+    this.taxOfficeService.getAll().subscribe(
+      (response) => {
+        if (this.uptadeForm.value.cityName) {
+          this.taxOffices = response.data
+            .filter(
+              (f) => f.cityId === this.getCityId(this.uptadeForm.value.cityName)
+            )
+            .filter((f) => f.deletedDate == null);
+        } else {
+          this.taxOffices = response.data;
+        }
+      },
+      (error) => console.error
+    );
+  }
+
+  getUserEmailById(userId: number): string {
+    return this.users.find((c) => c.id == userId)?.email;
+  }
+
+  getSectorNameById(sectorId: number): string {
+    return this.sectors.find((c) => c.id == sectorId)?.sectorName;
+  }
+
+  getCityById(cityId: number): string {
+    return this.cities.find((c) => c.id == cityId)?.cityName;
+  }
+
+  getTaxOfficeById(taxOfficeId: number): string {
+    return this.taxOffices.find((c) => c.id == taxOfficeId)?.taxOfficeName;
+  }
+
+  getUserId(email: string): number {
+    return this.users.find(
+      (c) => c.email.toLocaleLowerCase() == email.toLocaleLowerCase()
+    )?.id;
+  }
+
+  getsectorId(sectorName: string): number {
+    return this.sectors.find(
+      (c) => c.sectorName.toLocaleLowerCase() == sectorName.toLocaleLowerCase()
+    )?.id;
+  }
+
+  getCityId(cityName: string): number {
+    return this.cities.find(
+      (c) => c.cityName.toLocaleLowerCase() == cityName.toLocaleLowerCase()
+    )?.id;
+  }
+
+  getTaxOfficeId(taxOfficeName: string): number {
+    return this.taxOffices.find(
+      (c) =>
+        c.taxOfficeName.toLocaleLowerCase() == taxOfficeName.toLocaleLowerCase()
+    )?.id;
+  }
+
+  clearInput1() {
+    let value = this.uptadeForm.get('companyUserName');
+    value.reset();
+  }
+
+  clearInput2() {
+    let value = this.uptadeForm.get('sectorName');
+    value.reset();
+    this.getSectors();
+  }
+
+  clearInput3() {
+    let value = this.uptadeForm.get('cityName');
+    value.reset();
+    this.getCities();
+  }
+
+  clearInput4() {
+    let value = this.uptadeForm.get('taxOfficeName');
+    value.reset();
+    this.getTaxOffices();
+  }
+
+  clearInput5() {
+    let value = this.uptadeForm.get('taxNumber');
+    value.reset();
+  }
+}
