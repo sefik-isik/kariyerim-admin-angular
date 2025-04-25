@@ -76,11 +76,26 @@ export class LanguageUpdateComponent implements OnInit {
   getModel(): Language {
     return Object.assign({
       id: this.languageId,
-      languageName: this.uptadeForm.value.languageName,
+      languageName: this.capitalizeFirstLetter(
+        this.uptadeForm.value.languageName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   clearInput1() {

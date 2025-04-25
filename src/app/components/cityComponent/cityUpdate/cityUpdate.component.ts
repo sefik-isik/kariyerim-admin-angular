@@ -90,11 +90,24 @@ export class CityUpdateComponent implements OnInit {
     return Object.assign({
       id: this.cityId,
       countryId: this.getCountryId(this.uptadeForm.value.countryName),
-      cityName: this.uptadeForm.value.cityName,
+      cityName: this.capitalizeFirstLetter(this.uptadeForm.value.cityName),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   getCountries() {

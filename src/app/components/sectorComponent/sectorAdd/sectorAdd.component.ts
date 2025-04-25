@@ -30,10 +30,10 @@ export class SectorAddComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.createSectorAddForm();
+    this.createAddForm();
   }
 
-  createSectorAddForm() {
+  createAddForm() {
     this.addForm = this.formBuilder.group({
       sectorName: ['', [Validators.required, Validators.minLength(3)]],
     });
@@ -57,9 +57,22 @@ export class SectorAddComponent implements OnInit {
 
   getModel(): Sector {
     return Object.assign({
-      sectorName: this.addForm.value.sectorName,
+      sectorName: this.capitalizeFirstLetter(this.addForm.value.sectorName),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   clearInput1() {

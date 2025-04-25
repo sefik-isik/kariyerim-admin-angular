@@ -63,10 +63,23 @@ export class CityAddComponent implements OnInit {
 
   getModel(): City {
     return Object.assign({
-      cityName: this.addForm1.value.cityName,
+      cityName: this.capitalizeFirstLetter(this.addForm1.value.cityName),
       countryId: this.getCountryId(this.addForm1.value.countryName),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   getCountries() {

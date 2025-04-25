@@ -61,10 +61,25 @@ export class LanguageLevelAddComponent implements OnInit {
   getModel(): LanguageLevel {
     return Object.assign({
       level: this.addForm.value.level,
-      levelTitle: this.addForm.value.levelTitle,
-      levelDescription: this.addForm.value.levelDescription,
+      levelTitle: this.capitalizeFirstLetter(this.addForm.value.levelTitle),
+      levelDescription: this.capitalizeFirstLetter(
+        this.addForm.value.levelDescription
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   clearInput1() {

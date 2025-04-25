@@ -78,11 +78,15 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   getModel(): LicenceDegree {
     return Object.assign({
       id: this.licenceDegreeId,
-      licenceName: this.uptadeForm.value.licenceName,
+      licenceName: this.capitalizeToUpper(this.uptadeForm.value.licenceName),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeToUpper(str: string) {
+    return str.toUpperCase();
   }
 
   clearInput1() {

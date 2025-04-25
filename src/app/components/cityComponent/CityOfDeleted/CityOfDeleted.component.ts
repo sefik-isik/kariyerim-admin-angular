@@ -12,6 +12,8 @@ import { Country } from '../../../models/country';
 
 @Component({
   selector: 'app-CityOfDeleted',
+  templateUrl: './CityOfDeleted.component.html',
+  styleUrls: ['./CityOfDeleted.component.css'],
   imports: [
     CommonModule,
     FormsModule,
@@ -19,8 +21,6 @@ import { Country } from '../../../models/country';
     RouterLink,
     FilterCityByCountryPipe,
   ],
-  templateUrl: './CityOfDeleted.component.html',
-  styleUrls: ['./CityOfDeleted.component.css'],
 })
 export class CityOfDeletedComponent implements OnInit {
   cityDTOs: CityDTO[] = [];

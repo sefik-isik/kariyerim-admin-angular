@@ -58,9 +58,22 @@ export class FacultyAddComponent implements OnInit {
 
   getModel(): Faculty {
     return Object.assign({
-      facultyName: this.addForm.value.facultyName,
+      facultyName: this.capitalizeFirstLetter(this.addForm.value.facultyName),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   clearInput1() {

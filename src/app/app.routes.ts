@@ -79,6 +79,14 @@ import { RegionComponent } from './components/regionComponent/region/region.comp
 import { RegionAddComponent } from './components/regionComponent/regionAdd/regionAdd.component';
 import { RegionOfDeletedComponent } from './components/regionComponent/regionOfDeleted/regionOfDeleted.component';
 import { RegionUpdateComponent } from './components/regionComponent/regionUpdate/regionUpdate.component';
+import { TaxOfficeComponent } from './components/taxOfficeComponent/taxOffice/taxOffice.component';
+import { TaxOfficeAddComponent } from './components/taxOfficeComponent/taxOfficeAdd/taxOfficeAdd.component';
+import { TaxOfficeOfDeletedComponent } from './components/taxOfficeComponent/taxOfficeOfDeleted/taxOfficeOfDeleted.component';
+import { TaxOfficeUpdateComponent } from './components/taxOfficeComponent/taxOfficeUpdate/taxOfficeUpdate.component';
+import { UniversityComponent } from './components/universityComponent/university/university.component';
+import { UniversityAddComponent } from './components/universityComponent/universityAdd/universityAdd.component';
+import { UniversityOfDeletedComponent } from './components/universityComponent/universityOfDeleted/universityOfDeleted.component';
+import { UniversityUpdateComponent } from './components/universityComponent/universityUpdate/universityUpdate.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -444,6 +452,46 @@ export const routes: Routes = [
       {
         path: 'regions/regionupdate/:regionId',
         component: RegionUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'taxoffices',
+        component: TaxOfficeComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'taxoffices/taxofficeadd',
+        component: TaxOfficeAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'taxoffices/taxofficeofdeleted',
+        component: TaxOfficeOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'taxoffices/taxofficeupdate/:taxofficeId',
+        component: TaxOfficeUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universities',
+        component: UniversityComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universities/universityadd',
+        component: UniversityAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universities/universityofdeleted',
+        component: UniversityOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universities/universityupdate/:universityId',
+        component: UniversityUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

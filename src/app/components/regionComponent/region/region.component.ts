@@ -1,18 +1,16 @@
-import { CountryService } from './../../../services/country.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
-import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
 import { AuthService } from '../../../services/auth.service';
 import { RegionDTO } from '../../../models/regionDTO';
 import { City } from '../../../models/city';
 import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
+import { Region } from '../../../models/region';
 
 @Component({
   selector: 'app-region',
@@ -61,6 +59,44 @@ export class RegionComponent implements OnInit {
       (error) => console.error
     );
   }
+
+  // updateAll() {
+  //   this.regionDTOs.forEach((regionDTO) => {
+  //     this.regionService
+  //       .update(
+  //         this.getModel(regionDTO.id, regionDTO.cityId, regionDTO.regionName)
+  //       )
+  //       .subscribe(
+  //         (response) => {},
+  //         (error) => console.log(error)
+  //       );
+  //   });
+  // }
+
+  // getModel(id: number, cityId: number, regionName: string): Region {
+  //   console;
+  //   return Object.assign({
+  //     id: id,
+  //     cityId: cityId,
+  //     regionName: this.capitalizeFirstLetter(regionName),
+  //     createdDate: new Date(Date.now()).toJSON(),
+  //     updatedDate: new Date(Date.now()).toJSON(),
+  //     deletedDate: new Date(Date.now()).toJSON(),
+  //   });
+  // }
+
+  // capitalizeFirstLetter(str: string) {
+  //   let strs: string[] = str.split(' ');
+  //   let strText: string = '';
+
+  //   strs.forEach((str) => {
+  //     str = str.toLowerCase();
+  //     str = str[0].toUpperCase() + str.slice(1);
+  //     strText = strText + ' ' + str;
+  //     strText = strText.trim();
+  //   });
+  //   return strText;
+  // }
 
   delete(regionDTO: RegionDTO) {
     if (!this.authService.isAdmin('status')) {

@@ -1,0 +1,120 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="uptadeForm">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">City Name</span>
+            <input
+              formControlName="cityName"
+              type="text"
+              class="form-control"
+              list="datalist1"
+              id="input1"
+              placeholder="Select City..."
+              (change)="getRegions()"
+            />
+            <datalist id="datalist1">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Region Name</span>
+            <input
+              formControlName="regionName"
+              type="text"
+              class="form-control"
+              list="datalist2"
+              id="input2"
+              placeholder="Select Region..."
+              (input)="getRegions()"
+            />
+            <datalist id="datalist2">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tax Office Code</span>
+            <input
+              formControlName="taxOfficeCode"
+              type="number"
+              class="form-control"
+              id="input3"
+              placeholder="Type Tax Office Code"
+              minLength="4"
+              maxlength="5"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput3()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tax Office Name</span>
+            <input
+              formControlName="taxOfficeName"
+              type="text"
+              class="form-control"
+              id="input4"
+              placeholder="Type Tax Office Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput4()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              routerLink="/dashboard/taxoffices"
+              routerLinkActive="router-link-active"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

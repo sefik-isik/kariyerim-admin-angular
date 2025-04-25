@@ -81,12 +81,27 @@ export class LanguageLevelUpdateComponent implements OnInit {
     return Object.assign({
       id: this.languageLevelId,
       level: this.updateForm.value.level,
-      levelTitle: this.updateForm.value.levelTitle,
-      levelDescription: this.updateForm.value.levelDescription,
+      levelTitle: this.capitalizeFirstLetter(this.updateForm.value.levelTitle),
+      levelDescription: this.capitalizeFirstLetter(
+        this.updateForm.value.levelDescription
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   clearInput1() {

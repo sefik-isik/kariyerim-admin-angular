@@ -45,7 +45,7 @@ export class CountryAddComponent implements OnInit {
       this.countryService.add(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/sectors']);
+          this.router.navigate(['/dashboard/countries']);
         },
         (error) => {
           this.toastrService.error(error.error.message);
@@ -58,10 +58,27 @@ export class CountryAddComponent implements OnInit {
 
   getModel(): Country {
     return Object.assign({
-      countryName: this.addForm.value.countryName,
-      countryIso: this.addForm.value.countryIso,
+      countryName: this.capitalizeFirstLetter(this.addForm.value.countryName),
+      countryIso: this.capitalizeToUpper(this.addForm.value.countryIso),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
+  }
+
+  capitalizeToUpper(str: string) {
+    return str.toUpperCase();
   }
 
   clearInput1() {

@@ -57,9 +57,13 @@ export class DriverLicenceAddComponent implements OnInit {
 
   getModel(): DriverLicence {
     return Object.assign({
-      licenceName: this.addForm.value.licenceName,
+      licenceName: this.capitalizeToUpper(this.addForm.value.licenceName),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeToUpper(str: string) {
+    return str.toUpperCase();
   }
 
   clearInput1() {

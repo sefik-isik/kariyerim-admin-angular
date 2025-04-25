@@ -6,6 +6,7 @@ import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { TaxOffice } from '../models/taxOffice';
+import { TaxOfficeDTO } from '../models/taxOfficeDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,10 @@ export class TaxOfficeService {
   getById(id: number): Observable<SingleResponseModel<TaxOffice>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<TaxOffice>>(path);
+  }
+
+  getAllDTO(): Observable<ListResponseModel<TaxOfficeDTO>> {
+    let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<TaxOfficeDTO>>(path);
   }
 }
