@@ -109,7 +109,10 @@
 
             <td>
               <i
-                [routerLink]="['companyusercvupdate/' + personelUserCvDTO.id]"
+                [routerLink]="[
+                  '/dashboard/personelusercvs/personelusercvupdate/' +
+                    personelUserCvDTO.id
+                ]"
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
                 class="bi bi-pencil-square"

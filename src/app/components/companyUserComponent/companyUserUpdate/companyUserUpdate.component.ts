@@ -141,7 +141,9 @@ export class CompanyUserUpdateComponent implements OnInit {
     return Object.assign({
       id: this.id,
       userId: this.userId,
-      companyUserName: this.uptadeForm.value.companyUserName,
+      companyUserName: this.capitalizeFirstLetter(
+        this.uptadeForm.value.companyUserName
+      ),
       sectorId: this.getsectorId(this.uptadeForm.value.sectorName),
       taxCityId: this.getCityId(this.uptadeForm.value.cityName),
       taxOfficeId: this.getTaxOfficeId(this.uptadeForm.value.taxOfficeName),
@@ -150,6 +152,19 @@ export class CompanyUserUpdateComponent implements OnInit {
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   getUsers() {

@@ -110,7 +110,9 @@ export class CompanyUserAddComponent implements OnInit {
 
   getCModel(): CompanyUser {
     return Object.assign({
-      companyUserName: this.addForm.value.companyUserName,
+      companyUserName: this.capitalizeFirstLetter(
+        this.addForm.value.companyUserName
+      ),
       userId: this.getUserId(this.addForm.value.userEmail),
       sectorId: this.getSectorId(this.addForm.value.sectorName),
       taxOfficeId: this.getTaxOfficeId(this.addForm.value.taxOfficeName),
@@ -118,6 +120,19 @@ export class CompanyUserAddComponent implements OnInit {
       taxNumber: this.addForm.value.taxNumber,
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  capitalizeFirstLetter(str: string) {
+    let strs: string[] = str.split(' ');
+    let strText: string = '';
+
+    strs.forEach((str) => {
+      str = str.toLowerCase();
+      str = str[0].toUpperCase() + str.slice(1);
+      strText = strText + ' ' + str;
+      strText = strText.trim();
+    });
+    return strText;
   }
 
   getUsers() {
