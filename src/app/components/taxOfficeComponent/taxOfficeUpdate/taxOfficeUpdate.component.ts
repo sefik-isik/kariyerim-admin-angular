@@ -17,6 +17,7 @@ import { Region } from '../../../models/region';
 import { RegionService } from '../../../services/region.service';
 import { TaxOffice } from '../../../models/taxOffice';
 import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-taxOfficeUpdate',
@@ -25,7 +26,7 @@ import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class TaxOfficeUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   taxOfficeDTOs: TaxOfficeDTO[];
   regions: Region[];
   cities: City[];
@@ -41,7 +42,8 @@ export class TaxOfficeUpdateComponent implements OnInit {
     private regionService: RegionService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       cityName: ['', [Validators.required, Validators.minLength(3)]],
       regionName: ['', [Validators.required, Validators.minLength(3)]],
       taxOfficeCode: [
@@ -71,7 +73,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
   getById(id: number) {
     this.taxOfficeService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           regionName: response.data.regionName,
           cityName: this.getCityById(response.data.cityId),
           taxOfficeCode: response.data.taxOfficeCode,
@@ -86,7 +88,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid && this.getModel().cityId > 0) {
+    if (this.updateForm.valid && this.getModel().cityId > 0) {
       this.taxOfficeService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -102,29 +104,18 @@ export class TaxOfficeUpdateComponent implements OnInit {
   getModel(): TaxOffice {
     return Object.assign({
       id: this.taxOfficeId,
-      cityId: this.getCityId(this.uptadeForm.value.cityName),
-      regionName: this.capitalizeFirstLetter(this.uptadeForm.value.regionName),
-      taxOfficeCode: this.uptadeForm.value.taxOfficeCode,
-      taxOfficeName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.taxOfficeName
+      cityId: this.getCityId(this.updateForm.value.cityName),
+      regionName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.regionName
+      ),
+      taxOfficeCode: this.updateForm.value.taxOfficeCode,
+      taxOfficeName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.taxOfficeName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getCities() {
@@ -160,23 +151,23 @@ export class TaxOfficeUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('cityName');
+    let value = this.updateForm.get('cityName');
     value.reset();
     this.getCities();
   }
 
   clearInput2() {
-    let value = this.uptadeForm.get('regionName');
+    let value = this.updateForm.get('regionName');
     value.reset();
   }
 
   clearInput3() {
-    let value = this.uptadeForm.get('taxOfficeCode');
+    let value = this.updateForm.get('taxOfficeCode');
     value.reset();
   }
 
   clearInput4() {
-    let value = this.uptadeForm.get('taxOfficeName');
+    let value = this.updateForm.get('taxOfficeName');
     value.reset();
   }
 }

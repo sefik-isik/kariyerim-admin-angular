@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { SectorService } from '../../../services/sectorService';
 import { Sector } from '../../../models/sector';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-sectorUpdate',
@@ -20,7 +21,7 @@ import { Sector } from '../../../models/sector';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class SectorUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   sectorId: number;
   componentTitle = 'Sector Update';
 
@@ -29,7 +30,8 @@ export class SectorUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class SectorUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       sectorName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -48,7 +50,7 @@ export class SectorUpdateComponent implements OnInit {
   getById(id: number) {
     this.sectorService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           sectorName: response.data.sectorName,
         });
         this.sectorId = id;
@@ -58,7 +60,7 @@ export class SectorUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.sectorService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -76,28 +78,17 @@ export class SectorUpdateComponent implements OnInit {
   getModel(): Sector {
     return Object.assign({
       id: this.sectorId,
-      sectorName: this.capitalizeFirstLetter(this.uptadeForm.value.sectorName),
+      sectorName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.sectorName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('sectorName');
+    let value = this.updateForm.get('sectorName');
     value.reset();
   }
 }

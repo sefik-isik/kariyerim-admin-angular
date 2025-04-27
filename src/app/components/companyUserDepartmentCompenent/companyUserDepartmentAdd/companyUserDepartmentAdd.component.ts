@@ -17,6 +17,7 @@ import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { AuthService } from '../../../services/auth.service';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-companyUserDepartmentAdd',
@@ -40,7 +41,8 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     private companyUserService: CompanyUserService,
     private localStorageService: LocalStorageService,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -82,28 +84,15 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
       companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
-      companyUserName: this.capitalizeFirstLetter(
+      companyUserName: this.caseService.capitalizeFirstLetter(
         this.addForm.value.companyUserName
       ),
 
-      departmentName: this.capitalizeFirstLetter(
+      departmentName: this.caseService.capitalizeFirstLetter(
         this.addForm.value.departmentName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getUsers() {

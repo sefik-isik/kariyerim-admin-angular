@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-regionAdd',
@@ -30,7 +31,8 @@ export class RegionAddComponent implements OnInit {
     private regionService: RegionService,
     private cityService: CityService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -61,23 +63,12 @@ export class RegionAddComponent implements OnInit {
 
   getModel(): Region {
     return Object.assign({
-      regionName: this.capitalizeFirstLetter(this.addForm1.value.regionName),
+      regionName: this.caseService.capitalizeFirstLetter(
+        this.addForm1.value.regionName
+      ),
       cityId: this.getCityId(this.addForm1.value.cityName),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getCities() {

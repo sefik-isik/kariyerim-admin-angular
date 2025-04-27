@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { LanguageLevel } from '../../../models/languageLevel';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-languageLevelAdd',
@@ -27,7 +28,8 @@ export class LanguageLevelAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private languageLevelService: LanguageLevelService
+    private languageLevelService: LanguageLevelService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -61,25 +63,14 @@ export class LanguageLevelAddComponent implements OnInit {
   getModel(): LanguageLevel {
     return Object.assign({
       level: this.addForm.value.level,
-      levelTitle: this.capitalizeFirstLetter(this.addForm.value.levelTitle),
-      levelDescription: this.capitalizeFirstLetter(
+      levelTitle: this.caseService.capitalizeFirstLetter(
+        this.addForm.value.levelTitle
+      ),
+      levelDescription: this.caseService.capitalizeFirstLetter(
         this.addForm.value.levelDescription
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   clearInput1() {

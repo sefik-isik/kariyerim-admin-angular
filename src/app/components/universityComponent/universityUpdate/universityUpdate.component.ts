@@ -10,10 +10,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { SectorService } from '../../../services/sectorService';
-import { Sector } from '../../../models/sector';
 import { UniversityService } from '../../../services/university.service';
 import { University } from '../../../models/university';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-universityUpdate',
@@ -22,7 +21,7 @@ import { University } from '../../../models/university';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class UniversityUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   universityId: number;
   componentTitle = 'University Update';
 
@@ -31,7 +30,8 @@ export class UniversityUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -42,7 +42,7 @@ export class UniversityUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       universityName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -50,7 +50,7 @@ export class UniversityUpdateComponent implements OnInit {
   getById(id: number) {
     this.universityService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           universityName: response.data.universityName,
         });
         this.universityId = id;
@@ -60,7 +60,7 @@ export class UniversityUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.universityService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -78,8 +78,8 @@ export class UniversityUpdateComponent implements OnInit {
   getModel(): University {
     return Object.assign({
       id: this.universityId,
-      universityName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.universityName
+      universityName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.universityName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -87,21 +87,8 @@ export class UniversityUpdateComponent implements OnInit {
     });
   }
 
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('universityName');
+    let value = this.updateForm.get('universityName');
     value.reset();
   }
 }

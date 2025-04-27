@@ -1,3 +1,4 @@
+import { CaseService } from './../../../services/case.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -22,7 +23,7 @@ import { LicenceDegree } from '../../../models/licenceDegree';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class LicenceDegreeUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   licenceDegreeId: number;
   componentTitle = 'Licence Degree Update';
 
@@ -31,7 +32,8 @@ export class LicenceDegreeUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       licenceName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -50,7 +52,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   getById(id: number) {
     this.licenceDegreeService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           licenceName: response.data.licenceName,
         });
         this.licenceDegreeId = id;
@@ -60,7 +62,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.licenceDegreeService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -78,19 +80,17 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   getModel(): LicenceDegree {
     return Object.assign({
       id: this.licenceDegreeId,
-      licenceName: this.capitalizeToUpper(this.uptadeForm.value.licenceName),
+      licenceName: this.caseService.capitalizeToUpper(
+        this.updateForm.value.licenceName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  capitalizeToUpper(str: string) {
-    return str.toUpperCase();
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('licenceName');
+    let value = this.updateForm.get('licenceName');
     value.reset();
   }
 }

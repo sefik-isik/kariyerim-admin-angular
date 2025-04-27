@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-countryAdd',
@@ -26,7 +27,8 @@ export class CountryAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -58,27 +60,14 @@ export class CountryAddComponent implements OnInit {
 
   getModel(): Country {
     return Object.assign({
-      countryName: this.capitalizeFirstLetter(this.addForm.value.countryName),
-      countryIso: this.capitalizeToUpper(this.addForm.value.countryIso),
+      countryName: this.caseService.capitalizeFirstLetter(
+        this.addForm.value.countryName
+      ),
+      countryIso: this.caseService.capitalizeFirstLetter(
+        this.addForm.value.countryIso
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
-  }
-
-  capitalizeToUpper(str: string) {
-    return str.toUpperCase();
   }
 
   clearInput1() {

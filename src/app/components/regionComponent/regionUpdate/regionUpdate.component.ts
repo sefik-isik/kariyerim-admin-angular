@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { Region } from '../../../models/region';
 import { RegionService } from '../../../services/region.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-regionUpdate',
@@ -22,7 +23,7 @@ import { RegionService } from '../../../services/region.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class RegionUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   regions: Region[];
   cities: City[];
   cityId: number;
@@ -35,7 +36,8 @@ export class RegionUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private regionService: RegionService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class RegionUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       cityName: ['', [Validators.required, Validators.minLength(3)]],
       regionName: ['', [Validators.required, Validators.minLength(3)]],
     });
@@ -60,7 +62,7 @@ export class RegionUpdateComponent implements OnInit {
   getById(id: number) {
     this.regionService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           regionName: response.data.regionName,
           cityName: this.getCityById(response.data.cityId),
         });
@@ -73,7 +75,7 @@ export class RegionUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid && this.getModel().cityId > 0) {
+    if (this.updateForm.valid && this.getModel().cityId > 0) {
       this.regionService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -89,25 +91,14 @@ export class RegionUpdateComponent implements OnInit {
   getModel(): Region {
     return Object.assign({
       id: this.regionId,
-      cityId: this.getCityId(this.uptadeForm.value.cityName),
-      regionName: this.capitalizeFirstLetter(this.uptadeForm.value.regionName),
+      cityId: this.getCityId(this.updateForm.value.cityName),
+      regionName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.regionName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getCities() {
@@ -143,13 +134,13 @@ export class RegionUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('cityName');
+    let value = this.updateForm.get('cityName');
     value.reset();
     this.getCities();
   }
 
   clearInput2() {
-    let value = this.uptadeForm.get('regionName');
+    let value = this.updateForm.get('regionName');
     value.reset();
   }
 }

@@ -98,9 +98,9 @@ export class CityComponent implements OnInit {
     }, 500);
   }
 
-  getCountryId(filterCityByCountry: string): number {
+  getCountryId(countryName: string): number {
     return this.countries.find(
-      (f) => f.countryName.toLowerCase() == filterCityByCountry.toLowerCase()
+      (f) => f.countryName.toLowerCase() == countryName.toLowerCase()
     )?.id;
   }
 

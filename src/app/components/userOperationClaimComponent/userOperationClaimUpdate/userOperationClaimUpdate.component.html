@@ -1,0 +1,74 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="updateForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let user of users"
+              value="{{ user.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">Operation Claims</span>
+          <input
+            formControlName="claimName"
+            type="email"
+            class="form-control"
+            list="datalist2"
+            id="input2"
+            placeholder="Select Operation Claim..."
+            minlength="3"
+          />
+          <datalist id="datalist2">
+            <option
+              *ngFor="let operationClaim of operationClaims"
+              value="{{ operationClaim.name }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="update()" type="button" class="btn btn-outline-primary">
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/useroperationclaims"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

@@ -23,6 +23,7 @@ import { UserService } from '../../../services/user.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { AuthService } from '../../../services/auth.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-companyUserUpdate',
@@ -31,7 +32,7 @@ import { AuthService } from '../../../services/auth.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CompanyUserUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   companyUsers: CompanyUserDTO[];
   sectors: Sector[];
   cities: City[];
@@ -58,7 +59,8 @@ export class CompanyUserUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -82,7 +84,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
       sectorName: ['', [Validators.required, Validators.minLength(3)]],
       cityName: ['', [Validators.required, Validators.minLength(3)]],
@@ -101,7 +103,7 @@ export class CompanyUserUpdateComponent implements OnInit {
         this.taxCityId = response.data.taxCityId;
         this.taxOfficeId = response.data.taxOfficeId;
 
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           userEmail: this.userEmail,
           companyUserName: response.data.companyUserName,
           sectorName: this.getSectorNameById(this.sectorId),
@@ -116,7 +118,7 @@ export class CompanyUserUpdateComponent implements OnInit {
 
   update() {
     if (
-      this.uptadeForm.valid &&
+      this.updateForm.valid &&
       this.getModel().id > 0 &&
       this.getModel().userId > 0 &&
       this.getModel().sectorId > 0 &&
@@ -141,30 +143,17 @@ export class CompanyUserUpdateComponent implements OnInit {
     return Object.assign({
       id: this.id,
       userId: this.userId,
-      companyUserName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.companyUserName
+      companyUserName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.companyUserName
       ),
-      sectorId: this.getsectorId(this.uptadeForm.value.sectorName),
-      taxCityId: this.getCityId(this.uptadeForm.value.cityName),
-      taxOfficeId: this.getTaxOfficeId(this.uptadeForm.value.taxOfficeName),
-      taxNumber: this.uptadeForm.value.taxNumber,
+      sectorId: this.getsectorId(this.updateForm.value.sectorName),
+      taxCityId: this.getCityId(this.updateForm.value.cityName),
+      taxOfficeId: this.getTaxOfficeId(this.updateForm.value.taxOfficeName),
+      taxNumber: this.updateForm.value.taxNumber,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getUsers() {
@@ -198,10 +187,10 @@ export class CompanyUserUpdateComponent implements OnInit {
   getTaxOffices() {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
-        if (this.uptadeForm.value.cityName) {
+        if (this.updateForm.value.cityName) {
           this.taxOffices = response.data
             .filter(
-              (f) => f.cityId === this.getCityId(this.uptadeForm.value.cityName)
+              (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
             )
             .filter((f) => f.deletedDate == null);
         } else {
@@ -254,30 +243,30 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('companyUserName');
+    let value = this.updateForm.get('companyUserName');
     value.reset();
   }
 
   clearInput2() {
-    let value = this.uptadeForm.get('sectorName');
+    let value = this.updateForm.get('sectorName');
     value.reset();
     this.getSectors();
   }
 
   clearInput3() {
-    let value = this.uptadeForm.get('cityName');
+    let value = this.updateForm.get('cityName');
     value.reset();
     this.getCities();
   }
 
   clearInput4() {
-    let value = this.uptadeForm.get('taxOfficeName');
+    let value = this.updateForm.get('taxOfficeName');
     value.reset();
     this.getTaxOffices();
   }
 
   clearInput5() {
-    let value = this.uptadeForm.get('taxNumber');
+    let value = this.updateForm.get('taxNumber');
     value.reset();
   }
 }

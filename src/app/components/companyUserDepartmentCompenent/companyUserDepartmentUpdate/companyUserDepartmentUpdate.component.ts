@@ -17,6 +17,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -25,7 +26,7 @@ import { UserService } from '../../../services/user.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CompanyUserDepartmentUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   companyUsers: CompanyUserDTO[] = [];
   id: number;
   companyUserId: number;
@@ -43,7 +44,8 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       departmentName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -74,7 +76,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
         this.companyUserId = response.data.companyUserId;
         this.companyUserName = this.getCompanyUserById(this.userId);
 
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           userEmail: this.userEmail,
           departmentName: response.data.departmentName,
         });
@@ -85,7 +87,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
 
   update() {
     if (
-      this.uptadeForm.valid &&
+      this.updateForm.valid &&
       this.getModel().id > 0 &&
       this.getModel().companyUserId > 0
     ) {
@@ -108,27 +110,16 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
       id: this.id,
       userId: this.userId,
       companyUserId: this.companyUserId,
-      companyUserName: this.capitalizeFirstLetter(this.companyUserName),
-      departmentName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.departmentName
+      companyUserName: this.caseService.capitalizeFirstLetter(
+        this.companyUserName
+      ),
+      departmentName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.departmentName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getUsers() {
@@ -176,7 +167,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     )?.id;
   }
   clearInput1() {
-    let value = this.uptadeForm.get('departmentName');
+    let value = this.updateForm.get('departmentName');
     value.reset();
   }
 }

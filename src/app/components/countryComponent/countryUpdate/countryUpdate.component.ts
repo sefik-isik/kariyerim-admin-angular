@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-countryUpdate',
@@ -20,7 +21,7 @@ import { Country } from '../../../models/country';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CountryUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   countryId: number;
   componentTitle = 'Country Update';
 
@@ -29,7 +30,8 @@ export class CountryUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class CountryUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       countryName: ['', [Validators.required, Validators.minLength(3)]],
       countryIso: ['', [Validators.required, Validators.minLength(2)]],
     });
@@ -49,7 +51,7 @@ export class CountryUpdateComponent implements OnInit {
   getById(countryId: number) {
     this.countryService.getById(countryId).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           countryName: response.data.countryName,
           countryIso: response.data.countryIso,
         });
@@ -60,7 +62,7 @@ export class CountryUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.countryService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -78,36 +80,23 @@ export class CountryUpdateComponent implements OnInit {
   getModel(): Country {
     return Object.assign({
       id: this.countryId,
-      countryName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.countryName
+      countryName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.countryName
       ),
-      countryIso: this.uptadeForm.value.countryIso,
+      countryIso: this.updateForm.value.countryIso,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('countryName');
+    let value = this.updateForm.get('countryName');
     value.reset();
   }
 
   clearInput2() {
-    let value = this.uptadeForm.get('countryIso');
+    let value = this.updateForm.get('countryIso');
     value.reset();
   }
 }

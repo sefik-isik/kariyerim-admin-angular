@@ -53,15 +53,9 @@ export class CompanyUserOfDeletedComponent implements OnInit {
     const userId = this.getUserId(this.filter1);
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        if (userId) {
-          this.companyUserDTOs = response.data
-            .filter((f) => f.companyUserId == userId)
-            .filter((f) => f.deletedDate != null);
-        } else {
-          this.companyUserDTOs = response.data.filter(
-            (f) => f.deletedDate != null
-          );
-        }
+        this.companyUserDTOs = response.data.filter(
+          (f) => f.deletedDate != null
+        );
       },
       (error) => console.log(error)
     );
@@ -100,6 +94,6 @@ export class CompanyUserOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyUsers();
+    this.ngOnInit();
   }
 }

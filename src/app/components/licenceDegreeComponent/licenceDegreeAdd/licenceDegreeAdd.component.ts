@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 
 import { LicenceDegreeService } from '../../../services/licenseDegree.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-licenceDegreeAdd',
@@ -27,7 +28,8 @@ export class LicenceDegreeAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private licenceDegreeService: LicenceDegreeService
+    private licenceDegreeService: LicenceDegreeService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -58,13 +60,11 @@ export class LicenceDegreeAddComponent implements OnInit {
 
   getModel(): LicenceDegree {
     return Object.assign({
-      licenceName: this.capitalizeToUpper(this.addForm.value.licenceName),
+      licenceName: this.caseService.capitalizeToUpper(
+        this.addForm.value.licenceName
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeToUpper(str: string) {
-    return str.toUpperCase();
   }
 
   clearInput1() {

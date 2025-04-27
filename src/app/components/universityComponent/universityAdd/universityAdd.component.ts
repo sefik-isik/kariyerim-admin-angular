@@ -13,6 +13,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Sector } from '../../../models/sector';
 import { UniversityService } from '../../../services/university.service';
 import { University } from '../../../models/university';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-universityAdd',
@@ -28,7 +29,8 @@ export class UniversityAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private universityService: UniversityService
+    private universityService: UniversityService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -59,24 +61,11 @@ export class UniversityAddComponent implements OnInit {
 
   getModel(): University {
     return Object.assign({
-      universityName: this.capitalizeFirstLetter(
+      universityName: this.caseService.capitalizeFirstLetter(
         this.addForm.value.universityName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   clearInput1() {

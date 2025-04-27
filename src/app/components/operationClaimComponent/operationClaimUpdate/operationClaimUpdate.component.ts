@@ -20,7 +20,7 @@ import { OperationClaim } from '../../../models/operationClaim';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class OperationClaimUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   operationClaimId: number;
   componentTitle = 'Operation Claim Update';
 
@@ -40,7 +40,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
@@ -48,7 +48,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   getSectorById(id: number) {
     this.operationClaimService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           name: response.data.name,
         });
         this.operationClaimId = id;
@@ -58,7 +58,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.operationClaimService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -76,7 +76,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   getModel(): OperationClaim {
     return Object.assign({
       id: this.operationClaimId,
-      name: this.uptadeForm.value.name,
+      name: this.updateForm.value.name,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -84,7 +84,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('name');
+    let value = this.updateForm.get('name');
     value.reset();
   }
 }

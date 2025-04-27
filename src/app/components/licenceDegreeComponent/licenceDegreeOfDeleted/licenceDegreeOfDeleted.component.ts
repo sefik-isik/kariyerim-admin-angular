@@ -23,10 +23,10 @@ export class LicenceDegreeOfDeletedComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getlicenceDegrees();
+    this.getLicenceDegrees();
   }
 
-  getlicenceDegrees() {
+  getLicenceDegrees() {
     this.licenceDegreeService.getAll().subscribe(
       (response) => {
         this.licenceDegrees = response.data.filter(
@@ -62,6 +62,6 @@ export class LicenceDegreeOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getlicenceDegrees();
+    this.getLicenceDegrees();
   }
 }

@@ -1,0 +1,170 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+  FormGroup,
+  FormBuilder,
+} from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
+import { UserDTO } from '../../../models/userDTO';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { UserOperationClaim } from '../../../models/userOperationClaim';
+import { UserService } from '../../../services/user.service';
+import { AuthService } from '../../../services/auth.service';
+import { OperationClaim } from '../../../models/operationClaim';
+import { OperationClaimService } from '../../../services/operationClaim.service';
+
+@Component({
+  selector: 'app-userOperationClaimUpdate',
+  templateUrl: './userOperationClaimUpdate.component.html',
+  styleUrls: ['./userOperationClaimUpdate.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+})
+export class UserOperationClaimUpdateComponent implements OnInit {
+  updateForm: FormGroup;
+  users: UserDTO[] = [];
+  operationClaims: OperationClaim[];
+  userId: number;
+  userOperationClaimId: number;
+  componentTitle = 'Update User Operation Claim Form';
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private toastrService: ToastrService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private userOperationClaimService: UserOperationClaimService,
+    private localStorageService: LocalStorageService,
+    private userService: UserService,
+    private authService: AuthService,
+    private operationClaimService: OperationClaimService
+  ) {}
+
+  ngOnInit() {
+    this.getUsers();
+    this.getOperaionClaims();
+    this.createUpdateForm();
+
+    this.activatedRoute.params.subscribe((params) => {
+      this.getById(params['useroperationclaimId']);
+    });
+  }
+
+  createUpdateForm() {
+    this.updateForm = this.formBuilder.group({
+      userEmail: ['', [Validators.required, Validators.minLength(3)]],
+      claimName: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
+
+  getById(id: number) {
+    this.userOperationClaimService.getById(id).subscribe(
+      (response) => {
+        this.updateForm.patchValue({
+          userEmail: this.getEmailByUserId(response.data.userId),
+          claimName: this.getOperationClaimByClaimId(
+            response.data.operationClaimId
+          ),
+        });
+        this.userOperationClaimId = response.data.id;
+      },
+      (error) => console.error
+    );
+  }
+
+  update() {
+    if (
+      this.updateForm.valid &&
+      this.getModel().id > 0 &&
+      this.getModel().userId > 0 &&
+      this.getModel().operationClaimId > 0
+    ) {
+      this.userOperationClaimService.update(this.getModel()).subscribe(
+        (response) => {
+          this.toastrService.success(response.message, 'Başarılı');
+          this.router.navigate(['/dashboard/useroperationclaims']);
+        },
+        (error) => {
+          this.toastrService.error(error.error.message);
+        }
+      );
+    } else {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+    }
+  }
+
+  getModel(): UserOperationClaim {
+    return Object.assign({
+      id: this.userOperationClaimId,
+      userId: this.getUserId(this.updateForm.value.userEmail),
+      operationClaimId: this.getOperaionClaimId(
+        this.updateForm.value.claimName
+      ),
+      createdDate: new Date(Date.now()).toJSON(),
+      updatedDate: new Date(Date.now()).toJSON(),
+      deletedDate: new Date(Date.now()).toJSON(),
+    });
+  }
+
+  getUsers() {
+    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+
+    this.userService.getAllDTO(this.userId).subscribe(
+      (response) => {
+        this.users = response.data.filter((f) => f.deletedDate == null);
+      },
+      (error) => console.error
+    );
+  }
+
+  getEmailByUserId(userId: number): string {
+    return this.users.find((u) => u.id == userId)?.email;
+  }
+
+  getOperationClaimByClaimId(operationClaimId: number): string {
+    return this.operationClaims.find((u) => u.id == operationClaimId)?.name;
+  }
+
+  getOperaionClaims() {
+    this.operationClaimService.getAll().subscribe(
+      (response) => {
+        this.operationClaims = response.data.filter(
+          (f) => f.deletedDate == null
+        );
+      },
+      (error) => console.error
+    );
+  }
+
+  getUserId(userEmail: string): number {
+    const userId = this.users.filter(
+      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
+    )[0]?.id;
+
+    return userId;
+  }
+
+  getOperaionClaimId(claimName: string): number {
+    const operaionClaimId = this.operationClaims.filter(
+      (c) => c.name.toLowerCase() === claimName.toLowerCase()
+    )[0]?.id;
+
+    return operaionClaimId;
+  }
+
+  clearInput1() {
+    let countryName = this.updateForm.get('userEmail');
+    countryName.reset();
+    this.getUsers();
+  }
+
+  clearInput2() {
+    let cityName = this.updateForm.get('claimName');
+    cityName.reset();
+    this.getOperaionClaims();
+  }
+}

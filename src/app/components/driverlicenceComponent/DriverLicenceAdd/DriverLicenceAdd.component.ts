@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { DriverLicence } from '../../../models/driverLicence';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-DriverLicenceAdd',
@@ -26,7 +27,8 @@ export class DriverLicenceAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private driverLicenceService: DriverLicenceService
+    private driverLicenceService: DriverLicenceService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -57,13 +59,11 @@ export class DriverLicenceAddComponent implements OnInit {
 
   getModel(): DriverLicence {
     return Object.assign({
-      licenceName: this.capitalizeToUpper(this.addForm.value.licenceName),
+      licenceName: this.caseService.capitalizeToUpper(
+        this.addForm.value.licenceName
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeToUpper(str: string) {
-    return str.toUpperCase();
   }
 
   clearInput1() {

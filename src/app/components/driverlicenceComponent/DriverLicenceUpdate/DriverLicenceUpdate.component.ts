@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { DriverLicence } from '../../../models/driverLicence';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-DriverLicenceUpdate',
@@ -20,7 +21,7 @@ import { DriverLicence } from '../../../models/driverLicence';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class DriverLicenceUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   driverLicenceId: number;
   componentTitle = 'Driver Licence Update';
 
@@ -29,7 +30,8 @@ export class DriverLicenceUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       licenceName: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
@@ -48,7 +50,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
   getSectorById(id: number) {
     this.driverLicenceService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           licenceName: response.data.licenceName,
         });
         this.driverLicenceId = id;
@@ -58,7 +60,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.driverLicenceService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -76,19 +78,17 @@ export class DriverLicenceUpdateComponent implements OnInit {
   getModel(): DriverLicence {
     return Object.assign({
       id: this.driverLicenceId,
-      licenceName: this.capitalizeToUpper(this.uptadeForm.value.licenceName),
+      licenceName: this.caseService.capitalizeToUpper(
+        this.updateForm.value.licenceName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  capitalizeToUpper(str: string) {
-    return str.toUpperCase();
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('licenceName');
+    let value = this.updateForm.get('licenceName');
     value.reset();
   }
 }

@@ -11,6 +11,7 @@ import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
 import { Region } from '../../../models/region';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-region',
@@ -34,7 +35,8 @@ export class RegionComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private regionService: RegionService,
-    private authService: AuthService
+    private authService: AuthService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -78,24 +80,11 @@ export class RegionComponent implements OnInit {
   //   return Object.assign({
   //     id: id,
   //     cityId: cityId,
-  //     regionName: this.capitalizeFirstLetter(regionName),
+  //     regionName: this.caseService.capitalizeFirstLetter(regionName),
   //     createdDate: new Date(Date.now()).toJSON(),
   //     updatedDate: new Date(Date.now()).toJSON(),
   //     deletedDate: new Date(Date.now()).toJSON(),
   //   });
-  // }
-
-  // capitalizeFirstLetter(str: string) {
-  //   let strs: string[] = str.split(' ');
-  //   let strText: string = '';
-
-  //   strs.forEach((str) => {
-  //     str = str.toLowerCase();
-  //     str = str[0].toUpperCase() + str.slice(1);
-  //     strText = strText + ' ' + str;
-  //     strText = strText.trim();
-  //   });
-  //   return strText;
   // }
 
   delete(regionDTO: RegionDTO) {

@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/language.service';
 import { Language } from '../../../models/language';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-languageUpdate',
@@ -20,7 +21,7 @@ import { Language } from '../../../models/language';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class LanguageUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   languageId: number;
   componentTitle = 'Language Update';
 
@@ -29,7 +30,8 @@ export class LanguageUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class LanguageUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       languageName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -48,7 +50,7 @@ export class LanguageUpdateComponent implements OnInit {
   getById(id: number) {
     this.languageService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           languageName: response.data.languageName,
         });
         this.languageId = id;
@@ -58,7 +60,7 @@ export class LanguageUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.languageService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -76,8 +78,8 @@ export class LanguageUpdateComponent implements OnInit {
   getModel(): Language {
     return Object.assign({
       id: this.languageId,
-      languageName: this.capitalizeFirstLetter(
-        this.uptadeForm.value.languageName
+      languageName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.languageName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -85,21 +87,8 @@ export class LanguageUpdateComponent implements OnInit {
     });
   }
 
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
-  }
-
   clearInput1() {
-    let value = this.uptadeForm.get('languageName');
+    let value = this.updateForm.get('languageName');
     value.reset();
   }
 }

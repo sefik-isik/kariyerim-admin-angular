@@ -87,6 +87,18 @@ import { UniversityComponent } from './components/universityComponent/university
 import { UniversityAddComponent } from './components/universityComponent/universityAdd/universityAdd.component';
 import { UniversityOfDeletedComponent } from './components/universityComponent/universityOfDeleted/universityOfDeleted.component';
 import { UniversityUpdateComponent } from './components/universityComponent/universityUpdate/universityUpdate.component';
+import { UniversityDepartmentComponent } from './components/universityDepartmentComponent/universityDepartment/universityDepartment.component';
+import { UniversityDepartmentAddComponent } from './components/universityDepartmentComponent/universityDepartmentAdd/universityDepartmentAdd.component';
+import { UniversityDepartmentOfDeletedComponent } from './components/universityDepartmentComponent/universityDepartmentOfDeleted/universityDepartmentOfDeleted.component';
+import { UniversityDepartmentUpdateComponent } from './components/universityDepartmentComponent/universityDepartmentUpdate/universityDepartmentUpdate.component';
+import { UserOperationClaimComponent } from './components/userOperationClaimComponent/userOperationClaim/userOperationClaim.component';
+import { UserOperationClaimAddComponent } from './components/userOperationClaimComponent/userOperationClaimAdd/userOperationClaimAdd.component';
+import { UserOperationClaimOfDeletedComponent } from './components/userOperationClaimComponent/userOperationClaimOfDeleted/userOperationClaimOfDeleted.component';
+import { UserOperationClaimUpdateComponent } from './components/userOperationClaimComponent/userOperationClaimUpdate/userOperationClaimUpdate.component';
+import { WorkingMethodComponent } from './components/workingMethodComponent/workingMethod/workingMethod.component';
+import { WorkingMethodAddComponent } from './components/workingMethodComponent/workingMethodAdd/workingMethodAdd.component';
+import { WorkingMethodOfDeletedComponent } from './components/workingMethodComponent/workingMethodOfDeleted/workingMethodOfDeleted.component';
+import { WorkingMethodUpdateComponent } from './components/workingMethodComponent/workingMethodUpdate/workingMethodUpdate.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -492,6 +504,66 @@ export const routes: Routes = [
       {
         path: 'universities/universityupdate/:universityId',
         component: UniversityUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universitydepartments',
+        component: UniversityDepartmentComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universitydepartments/universitydepartmentadd',
+        component: UniversityDepartmentAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universitydepartments/universitydepartmentofdeleted',
+        component: UniversityDepartmentOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'universitydepartments/universitydepartmentupdate/:universitydepartmentId',
+        component: UniversityDepartmentUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'useroperationclaims',
+        component: UserOperationClaimComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'useroperationclaims/useroperationclaimadd',
+        component: UserOperationClaimAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'useroperationclaims/useroperationclaimofdeleted',
+        component: UserOperationClaimOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'useroperationclaims/useroperationclaimupdate/:useroperationclaimId',
+        component: UserOperationClaimUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'workingmethods',
+        component: WorkingMethodComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'workingmethods/workingmethodadd',
+        component: WorkingMethodAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'workingmethods/workingmethodofdeleted',
+        component: WorkingMethodOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'workingmethods/workingmethodupdate/:workingmethodId',
+        component: WorkingMethodUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

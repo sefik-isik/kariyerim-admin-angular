@@ -26,7 +26,7 @@ import { HttpEventType } from '@angular/common/http';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CompanyUserFileUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   componentTitle = 'Company User File Update Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
@@ -53,7 +53,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   ngOnInit() {
     this.getUsers();
     this.getCompanyUsers();
-    this.createUptadeForm();
+    this.createupdateForm();
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
@@ -70,8 +70,8 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     }
   }
 
-  createUptadeForm() {
-    this.uptadeForm = this.formBuilder.group({
+  createupdateForm() {
+    this.updateForm = this.formBuilder.group({
       file: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -241,7 +241,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('file');
+    let value = this.updateForm.get('file');
     value.reset();
   }
 }

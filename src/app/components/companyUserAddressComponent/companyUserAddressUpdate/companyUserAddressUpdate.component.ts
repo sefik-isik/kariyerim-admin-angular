@@ -31,7 +31,7 @@ import { UserService } from '../../../services/user.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CompanyUserAddressUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   companyUsers: CompanyUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
@@ -76,7 +76,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       countryName: ['', [Validators.required, Validators.minLength(3)]],
       cityName: ['', [Validators.required, Validators.minLength(3)]],
       regionName: ['', [Validators.required, Validators.minLength(3)]],
@@ -87,7 +87,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getById(id: number) {
     this.companyUserAddressService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           countryName: this.getCountryNameById(response.data.countryId),
           cityName: this.getCityNameById(response.data.cityId),
           regionName: this.getRegionNameById(response.data.regionId),
@@ -109,7 +109,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
   update() {
     if (
-      this.uptadeForm.valid &&
+      this.updateForm.valid &&
       this.getModel().id > 0 &&
       this.getModel().userId > 0 &&
       this.getModel().companyUserId > 0 &&
@@ -137,10 +137,10 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
       userId: this.userId,
       companyUserId: this.companyUserId,
       companyUserName: this.companyUserName,
-      countryId: this.getCountryId(this.uptadeForm.value.countryName),
-      cityId: this.getCityId(this.uptadeForm.value.cityName),
-      regionId: this.getRegionId(this.uptadeForm.value.regionName),
-      addressDetail: this.uptadeForm.value.addressDetail,
+      countryId: this.getCountryId(this.updateForm.value.countryName),
+      cityId: this.getCityId(this.updateForm.value.cityName),
+      regionId: this.getRegionId(this.updateForm.value.regionName),
+      addressDetail: this.updateForm.value.addressDetail,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -164,7 +164,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   getCompanyUsers() {
-    const userId = this.getUserId(this.uptadeForm.value.userEmail);
+    const userId = this.getUserId(this.updateForm.value.userEmail);
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
         this.companyUsers = response.data
@@ -188,12 +188,12 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        if (this.uptadeForm.value.countryName) {
+        if (this.updateForm.value.countryName) {
           this.cities = response.data
             .filter(
               (f) =>
                 f.countryId ===
-                this.getCountryId(this.uptadeForm.value.countryName)
+                this.getCountryId(this.updateForm.value.countryName)
             )
             .filter((f) => f.deletedDate == null);
         } else {
@@ -208,10 +208,10 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getRegions() {
     this.regionService.getAll().subscribe(
       (response) => {
-        if (this.uptadeForm.value.cityName) {
+        if (this.updateForm.value.cityName) {
           this.regions = response.data
             .filter(
-              (f) => f.cityId === this.getCityId(this.uptadeForm.value.cityName)
+              (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
             )
             .filter((f) => f.deletedDate == null);
         } else {
@@ -276,25 +276,25 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let countryName = this.uptadeForm.get('countryName');
+    let countryName = this.updateForm.get('countryName');
     countryName.reset();
     this.getCountries();
   }
 
   clearInput2() {
-    let cityName = this.uptadeForm.get('cityName');
+    let cityName = this.updateForm.get('cityName');
     cityName.reset();
     this.getCities();
   }
 
   clearInput3() {
-    let cityName = this.uptadeForm.get('regionName');
+    let cityName = this.updateForm.get('regionName');
     cityName.reset();
     this.getRegions();
   }
 
   clearInput4() {
-    let cityName = this.uptadeForm.get('addressDetail');
+    let cityName = this.updateForm.get('addressDetail');
     cityName.reset();
   }
 }

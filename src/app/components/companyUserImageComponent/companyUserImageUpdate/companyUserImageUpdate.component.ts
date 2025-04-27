@@ -27,7 +27,7 @@ import { CompanyUserImage } from '../../../models/companyUserImage';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CompanyUserImageUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   componentTitle = 'Company User Image Update Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
@@ -73,7 +73,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   }
 
   createcUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       image: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -236,7 +236,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('image');
+    let value = this.updateForm.get('image');
     value.reset();
   }
 }

@@ -20,7 +20,7 @@ import { ModelMenu } from '../../../models/modelMenu';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class ModelMenuUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   modelMenuId: number;
   componentTitle = 'Model Menu Update';
 
@@ -40,7 +40,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       modelName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -48,7 +48,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   getById(id: number) {
     this.modelMenuService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           modelName: response.data.modelName,
         });
         this.modelMenuId = id;
@@ -58,7 +58,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid) {
+    if (this.updateForm.valid) {
       this.modelMenuService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -76,7 +76,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   getModel(): ModelMenu {
     return Object.assign({
       id: this.modelMenuId,
-      modelName: this.uptadeForm.value.modelName,
+      modelName: this.updateForm.value.modelName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -84,7 +84,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.uptadeForm.get('modelName');
+    let value = this.updateForm.get('modelName');
     value.reset();
   }
 }

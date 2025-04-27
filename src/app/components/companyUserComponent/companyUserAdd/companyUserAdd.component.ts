@@ -21,6 +21,7 @@ import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { UserService } from '../../../services/user.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { AuthService } from '../../../services/auth.service';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-companyUserAdd',
@@ -48,7 +49,8 @@ export class CompanyUserAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -110,7 +112,7 @@ export class CompanyUserAddComponent implements OnInit {
 
   getCModel(): CompanyUser {
     return Object.assign({
-      companyUserName: this.capitalizeFirstLetter(
+      companyUserName: this.caseService.capitalizeFirstLetter(
         this.addForm.value.companyUserName
       ),
       userId: this.getUserId(this.addForm.value.userEmail),
@@ -120,19 +122,6 @@ export class CompanyUserAddComponent implements OnInit {
       taxNumber: this.addForm.value.taxNumber,
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getUsers() {

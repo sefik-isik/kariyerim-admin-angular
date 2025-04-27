@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { UserOperationClaim } from '../models/userOperationClaim';
+import { UserOperationClaimDTO } from '../models/userOperationClaimDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,10 @@ export class UserOperationClaimService {
   getById(id: number): Observable<SingleResponseModel<UserOperationClaim>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<UserOperationClaim>>(path);
+  }
+
+  getAllDTO(): Observable<ListResponseModel<UserOperationClaimDTO>> {
+    let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<UserOperationClaimDTO>>(path);
   }
 }

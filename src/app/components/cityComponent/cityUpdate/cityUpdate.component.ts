@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { CountryService } from '../../../services/country.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-cityUpdate',
@@ -22,7 +23,7 @@ import { Router } from '@angular/router';
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
 export class CityUpdateComponent implements OnInit {
-  uptadeForm: FormGroup;
+  updateForm: FormGroup;
   countries: Country[];
   cities: City[];
   cityId: number;
@@ -35,7 +36,8 @@ export class CityUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private countryService: CountryService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -50,7 +52,7 @@ export class CityUpdateComponent implements OnInit {
   }
 
   createUpdateForm() {
-    this.uptadeForm = this.formBuilder.group({
+    this.updateForm = this.formBuilder.group({
       cityName: ['', [Validators.required, Validators.minLength(3)]],
       countryName: ['', [Validators.required, Validators.minLength(3)]],
     });
@@ -59,7 +61,7 @@ export class CityUpdateComponent implements OnInit {
   getById(id: number) {
     this.cityService.getById(id).subscribe(
       (response) => {
-        this.uptadeForm.patchValue({
+        this.updateForm.patchValue({
           cityName: response.data.cityName,
           countryName: this.getCountryById(response.data.countryId),
         });
@@ -71,7 +73,7 @@ export class CityUpdateComponent implements OnInit {
   }
 
   update() {
-    if (this.uptadeForm.valid && this.getModel().countryId > 0) {
+    if (this.updateForm.valid && this.getModel().countryId > 0) {
       this.cityService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -89,25 +91,14 @@ export class CityUpdateComponent implements OnInit {
   getModel(): City {
     return Object.assign({
       id: this.cityId,
-      countryId: this.getCountryId(this.uptadeForm.value.countryName),
-      cityName: this.capitalizeFirstLetter(this.uptadeForm.value.cityName),
+      countryId: this.getCountryId(this.updateForm.value.countryName),
+      cityName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.cityName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getCountries() {
@@ -130,13 +121,13 @@ export class CityUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let countryName = this.uptadeForm.get('countryName');
+    let countryName = this.updateForm.get('countryName');
     countryName.reset();
     this.getCountries();
   }
 
   clearInput2() {
-    let cityName = this.uptadeForm.get('cityName');
+    let cityName = this.updateForm.get('cityName');
     cityName.reset();
   }
 }

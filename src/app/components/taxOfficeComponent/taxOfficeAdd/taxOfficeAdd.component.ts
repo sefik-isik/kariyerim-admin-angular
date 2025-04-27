@@ -15,6 +15,7 @@ import { Router, RouterLink } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
 import { TaxOffice } from '../../../models/taxOffice';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-taxOfficeAdd',
@@ -34,7 +35,8 @@ export class TaxOfficeAddComponent implements OnInit {
     private cityService: CityService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -70,10 +72,12 @@ export class TaxOfficeAddComponent implements OnInit {
 
   getModel(): TaxOffice {
     return Object.assign({
-      regionName: this.capitalizeFirstLetter(this.addForm1.value.regionName),
+      regionName: this.caseService.capitalizeFirstLetter(
+        this.addForm1.value.regionName
+      ),
       cityId: this.getCityId(this.addForm1.value.cityName),
       taxOfficeCode: this.addForm1.value.taxOfficeCode,
-      taxOfficeName: this.capitalizeFirstLetter(
+      taxOfficeName: this.caseService.capitalizeFirstLetter(
         this.addForm1.value.taxOfficeName
       ),
       createDate: new Date(Date.now()).toJSON(),
@@ -87,19 +91,6 @@ export class TaxOfficeAddComponent implements OnInit {
       },
       (error) => console.error
     );
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   getRegions() {

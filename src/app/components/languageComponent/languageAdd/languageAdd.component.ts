@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { LanguageService } from '../../../services/language.service';
 import { Language } from '../../../models/language';
+import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-languageAdd',
@@ -26,7 +27,8 @@ export class LanguageAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit() {
@@ -57,22 +59,11 @@ export class LanguageAddComponent implements OnInit {
 
   getModel(): Language {
     return Object.assign({
-      languageName: this.capitalizeFirstLetter(this.addForm.value.languageName),
+      languageName: this.caseService.capitalizeFirstLetter(
+        this.addForm.value.languageName
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  capitalizeFirstLetter(str: string) {
-    let strs: string[] = str.split(' ');
-    let strText: string = '';
-
-    strs.forEach((str) => {
-      str = str.toLowerCase();
-      str = str[0].toUpperCase() + str.slice(1);
-      strText = strText + ' ' + str;
-      strText = strText.trim();
-    });
-    return strText;
   }
 
   clearInput1() {
