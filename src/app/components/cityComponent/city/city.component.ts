@@ -6,10 +6,11 @@ import { CityService } from '../../../services/city.service';
 import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CityDTO } from '../../../models/cityDTO';
+
 import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
 import { Country } from '../../../models/country';
 import { AuthService } from '../../../services/auth.service';
+import { CityDTO } from '../../../models/cityDTO';
 
 @Component({
   selector: 'app-city',

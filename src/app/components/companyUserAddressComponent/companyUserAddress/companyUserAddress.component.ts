@@ -9,6 +9,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
+import { CompanyUserCode, PersonelUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserAddress',
@@ -46,7 +47,9 @@ export class CompanyUserAddressComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.userDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -57,9 +60,9 @@ export class CompanyUserAddressComponent implements OnInit {
 
     this.companyUserAddressService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserAddressDTOs = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserAddressDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
         this.dataLoaded = true;
       },
       (error) => console.error

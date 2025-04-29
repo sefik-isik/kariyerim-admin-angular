@@ -1,8 +1,8 @@
 import { BasePersonelUserModel } from './basePersonelUserModel';
+import { BaseUserModel } from './baseUserModel';
 
-export interface PersonelUser extends BasePersonelUserModel {
-  cvId: number;
-  licenseId: number;
+export interface PersonelUser extends BaseUserModel {
+  licenceDegreeId: number;
   birthPlaceId: number;
   dateOfBirth: string;
   gender: boolean;

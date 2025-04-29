@@ -99,6 +99,12 @@ import { WorkingMethodComponent } from './components/workingMethodComponent/work
 import { WorkingMethodAddComponent } from './components/workingMethodComponent/workingMethodAdd/workingMethodAdd.component';
 import { WorkingMethodOfDeletedComponent } from './components/workingMethodComponent/workingMethodOfDeleted/workingMethodOfDeleted.component';
 import { WorkingMethodUpdateComponent } from './components/workingMethodComponent/workingMethodUpdate/workingMethodUpdate.component';
+import { PersonelUserMainComponent } from './components/personelUserMain/personelUserMain.component';
+import { CompanyUserMainComponent } from './components/companyUserMain/companyUserMain.component';
+import { PersonelUserComponent } from './components/personelUserComponent/personelUser/personelUser.component';
+import { PersonelUserAddComponent } from './components/personelUserComponent/personelUserAdd/personelUserAdd.component';
+import { PersonelUserOfDeletedComponent } from './components/personelUserComponent/personelUserOfDeleted/personelUserOfDeleted.component';
+import { PersonelUserUpdateComponent } from './components/personelUserComponent/personelUserUpdate/personelUserUpdate.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -114,6 +120,21 @@ export const routes: Routes = [
       {
         path: '',
         component: MainComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'main',
+        component: MainComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'main/personelusermain',
+        component: PersonelUserMainComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'main/companyusermain',
+        component: CompanyUserMainComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {
@@ -564,6 +585,26 @@ export const routes: Routes = [
       {
         path: 'workingmethods/workingmethodupdate/:workingmethodId',
         component: WorkingMethodUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusers',
+        component: PersonelUserComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusers/personeluseradd',
+        component: PersonelUserAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusers/personeluserofdeleted',
+        component: PersonelUserOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusers/personeluserupdate/:personeluserId',
+        component: PersonelUserUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

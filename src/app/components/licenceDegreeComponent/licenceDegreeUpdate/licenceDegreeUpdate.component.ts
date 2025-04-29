@@ -11,10 +11,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { LanguageService } from '../../../services/language.service';
-import { Language } from '../../../models/language';
-import { LicenceDegreeService } from '../../../services/licenseDegree.service';
+
 import { LicenceDegree } from '../../../models/licenceDegree';
+import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 
 @Component({
   selector: 'app-licenceDegreeUpdate',
@@ -45,7 +44,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
 
   createUpdateForm() {
     this.updateForm = this.formBuilder.group({
-      licenceName: ['', [Validators.required, Validators.minLength(3)]],
+      LicenceDegreeName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -53,7 +52,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
     this.licenceDegreeService.getById(id).subscribe(
       (response) => {
         this.updateForm.patchValue({
-          licenceName: response.data.licenceName,
+          LicenceDegreeName: response.data.licenceDegreeName,
         });
         this.licenceDegreeId = id;
       },
@@ -80,8 +79,8 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   getModel(): LicenceDegree {
     return Object.assign({
       id: this.licenceDegreeId,
-      licenceName: this.caseService.capitalizeToUpper(
-        this.updateForm.value.licenceName
+      LicenceDegreeName: this.caseService.capitalizeFirstLetter(
+        this.updateForm.value.LicenceDegreeName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -90,7 +89,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.updateForm.get('licenceName');
+    let value = this.updateForm.get('LicenceDegreeName');
     value.reset();
   }
 }

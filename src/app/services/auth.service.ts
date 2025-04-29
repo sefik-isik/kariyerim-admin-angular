@@ -9,6 +9,9 @@ import { TokenModel } from '../models/tokenModel';
 import { RegisterModel } from '../models/registerModel';
 import { PasswordModel } from '../models/passwordModel';
 import { Router } from '@angular/router';
+import { UserCodeModel } from '../models/userCodeModel';
+import { Observable } from 'rxjs';
+import { ListResponseModel } from '../models/listResponseModel';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +22,8 @@ export class AuthService implements OnInit {
   constructor(
     private HttpClient: HttpClient,
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit() {}
@@ -42,6 +46,13 @@ export class AuthService implements OnInit {
     return this.HttpClient.post<SingleResponseModel<PasswordModel>>(
       this.newUrlPath + 'updatepassword',
       passwordModel
+    );
+  }
+
+  updateCode(userCodeModel: UserCodeModel) {
+    return this.HttpClient.post<SingleResponseModel<UserCodeModel>>(
+      this.newUrlPath + 'updatecode',
+      userCodeModel
     );
   }
 

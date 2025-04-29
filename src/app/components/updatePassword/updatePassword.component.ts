@@ -46,21 +46,7 @@ export class UpdatePasswordComponent implements OnInit {
 
   updatePassword() {
     if (this.updatePasswordForm.valid) {
-      let updatePasswordModel: PasswordModel = Object.assign(
-        {
-          id: this.localStorageService.getFromLocalStorage('id'),
-          email: this.localStorageService.getFromLocalStorage('email'),
-          firstName: this.localStorageService.getFromLocalStorage('firstName'),
-          lastName: this.localStorageService.getFromLocalStorage('lastName'),
-          phoneNumber:
-            this.localStorageService.getFromLocalStorage('phoneNumber'),
-          createDate:
-            this.localStorageService.getFromLocalStorage('createdDate'),
-        },
-        this.updatePasswordForm.value
-      );
-
-      this.autService.updatePassword(updatePasswordModel).subscribe(
+      this.autService.updatePassword(this.getModel()).subscribe(
         (response) => {
           this.localStorageService.clearLocalStorage();
 
@@ -75,5 +61,15 @@ export class UpdatePasswordComponent implements OnInit {
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
     }
+  }
+
+  getModel() {
+    let updatePasswordModel: PasswordModel = Object.assign(
+      {
+        id: this.localStorageService.getFromLocalStorage('id'),
+      },
+      this.updatePasswordForm.value
+    );
+    return updatePasswordModel;
   }
 }

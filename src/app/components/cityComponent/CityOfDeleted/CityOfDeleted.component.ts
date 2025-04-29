@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
-import { CityDTO } from '../../../models/cityDTO';
 import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
+import { CityDTO } from '../../../models/cityDTO';
 
 @Component({
   selector: 'app-CityOfDeleted',

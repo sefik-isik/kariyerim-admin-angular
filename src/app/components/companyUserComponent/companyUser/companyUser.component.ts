@@ -11,6 +11,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUser',
@@ -43,7 +44,9 @@ export class CompanyUserComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.userDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -54,9 +57,9 @@ export class CompanyUserComponent implements OnInit {
     const userId = this.getUserId(this.filter1);
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.log(error)
     );

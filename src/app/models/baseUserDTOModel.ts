@@ -5,4 +5,5 @@ export interface BaseUserDTOModel extends BaseUserModel {
   lastName: string;
   phoneNumber: string;
   email: string;
+  code: string;
 }

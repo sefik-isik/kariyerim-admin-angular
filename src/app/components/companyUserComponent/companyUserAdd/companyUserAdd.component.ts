@@ -22,6 +22,7 @@ import { UserService } from '../../../services/user.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { AuthService } from '../../../services/auth.service';
 import { CaseService } from '../../../services/case.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserAdd',
@@ -91,12 +92,12 @@ export class CompanyUserAddComponent implements OnInit {
   add() {
     if (
       this.addForm.valid &&
-      this.getCModel().userId > 0 &&
-      this.getCModel().sectorId > 0 &&
-      this.getCModel().taxCityId > 0 &&
-      this.getCModel().taxOfficeId > 0
+      this.getModel().userId > 0 &&
+      this.getModel().sectorId > 0 &&
+      this.getModel().taxCityId > 0 &&
+      this.getModel().taxOfficeId > 0
     ) {
-      this.companyUserService.add(this.getCModel()).subscribe(
+      this.companyUserService.add(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyusers']);
@@ -110,7 +111,7 @@ export class CompanyUserAddComponent implements OnInit {
     }
   }
 
-  getCModel(): CompanyUser {
+  getModel(): CompanyUser {
     return Object.assign({
       companyUserName: this.caseService.capitalizeFirstLetter(
         this.addForm.value.companyUserName
@@ -129,7 +130,9 @@ export class CompanyUserAddComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );

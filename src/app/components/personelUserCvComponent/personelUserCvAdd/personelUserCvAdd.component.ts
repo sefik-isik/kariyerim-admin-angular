@@ -21,6 +21,7 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
+import { PersonelUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-personelUserCvAdd',
@@ -118,7 +119,9 @@ export class PersonelUserCvAddComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
     );
@@ -132,8 +135,9 @@ export class PersonelUserCvAddComponent implements OnInit {
     this.personelUserService.getAllDTO(this.userId).subscribe(
       (response) => {
         this.personelUsers = response.data
-          .filter((f) => f.personelUserId == userId)
-          .filter((f) => f.deletedDate == null);
+          .filter((f) => f.id == userId)
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
     );

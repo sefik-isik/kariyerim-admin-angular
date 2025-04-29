@@ -10,9 +10,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { DriverLicence } from '../../../models/driverLicence';
 import { CaseService } from '../../../services/case.service';
+import { DriverLicenceService } from '../../../services/driverLicense.service';
 
 @Component({
   selector: 'app-DriverLicenceUpdate',
@@ -43,7 +43,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
 
   createUpdateForm() {
     this.updateForm = this.formBuilder.group({
-      licenceName: ['', [Validators.required, Validators.minLength(1)]],
+      driverLicenceName: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
@@ -51,7 +51,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     this.driverLicenceService.getById(id).subscribe(
       (response) => {
         this.updateForm.patchValue({
-          licenceName: response.data.licenceName,
+          driverLicenceName: response.data.driverLicenceName,
         });
         this.driverLicenceId = id;
       },
@@ -78,8 +78,8 @@ export class DriverLicenceUpdateComponent implements OnInit {
   getModel(): DriverLicence {
     return Object.assign({
       id: this.driverLicenceId,
-      licenceName: this.caseService.capitalizeToUpper(
-        this.updateForm.value.licenceName
+      driverLicenceName: this.caseService.capitalizeToUpper(
+        this.updateForm.value.driverLicenceName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -88,7 +88,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let value = this.updateForm.get('licenceName');
+    let value = this.updateForm.get('driverLicenceName');
     value.reset();
   }
 }

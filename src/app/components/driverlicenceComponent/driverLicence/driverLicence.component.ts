@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { DriverLicenceService } from '../../../services/driverLicense.service';
+
 import { DriverLicence } from '../../../models/driverLicence';
+import { DriverLicenceService } from '../../../services/driverLicense.service';
 
 @Component({
   selector: 'app-driverLicence',

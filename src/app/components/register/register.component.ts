@@ -83,7 +83,7 @@ export class RegisterComponent implements OnInit {
               ' ' +
               response.data.lastName
           );
-          this.router.navigate(['main']);
+          this.router.navigate(['/dashboard/main']);
         },
         (error) => console.error
       );

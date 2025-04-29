@@ -9,9 +9,9 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
-import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { DriverLicence } from '../../../models/driverLicence';
 import { CaseService } from '../../../services/case.service';
+import { DriverLicenceService } from '../../../services/driverLicense.service';
 
 @Component({
   selector: 'app-DriverLicenceAdd',
@@ -37,7 +37,7 @@ export class DriverLicenceAddComponent implements OnInit {
 
   createAddForm() {
     this.addForm = this.formBuilder.group({
-      licenceName: ['', [Validators.required, Validators.minLength(1)]],
+      driverLicenceName: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
 
@@ -59,15 +59,15 @@ export class DriverLicenceAddComponent implements OnInit {
 
   getModel(): DriverLicence {
     return Object.assign({
-      licenceName: this.caseService.capitalizeToUpper(
-        this.addForm.value.licenceName
+      driverLicenceName: this.caseService.capitalizeToUpper(
+        this.addForm.value.driverLicenceName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   clearInput1() {
-    let value = this.addForm.get('licenceName');
+    let value = this.addForm.get('driverLicenceName');
     value.reset();
   }
 }

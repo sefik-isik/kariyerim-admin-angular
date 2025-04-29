@@ -10,6 +10,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImage',
@@ -48,7 +49,9 @@ export class CompanyUserImageComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.userDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -60,9 +63,9 @@ export class CompanyUserImageComponent implements OnInit {
 
     this.companyUserImageService.getAllDTO(userId).subscribe(
       (response) => {
-        this.companyUserImageDTOs = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserImageDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
         this.companyUserImagesLenght = this.companyUserImageDTOs.length;
         this.dataLoaded = true;
       },

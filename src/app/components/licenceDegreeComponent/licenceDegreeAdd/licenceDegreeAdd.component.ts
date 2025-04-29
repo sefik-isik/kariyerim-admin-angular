@@ -10,9 +10,8 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
-
-import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 import { CaseService } from '../../../services/case.service';
+import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 
 @Component({
   selector: 'app-licenceDegreeAdd',
@@ -38,7 +37,7 @@ export class LicenceDegreeAddComponent implements OnInit {
 
   createAddForm() {
     this.addForm = this.formBuilder.group({
-      licenceName: ['', [Validators.required, Validators.minLength(3)]],
+      licenceDegreeName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -49,9 +48,7 @@ export class LicenceDegreeAddComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/licencedegrees']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
-        }
+        (error) => console.error(error)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -60,15 +57,15 @@ export class LicenceDegreeAddComponent implements OnInit {
 
   getModel(): LicenceDegree {
     return Object.assign({
-      licenceName: this.caseService.capitalizeToUpper(
-        this.addForm.value.licenceName
+      licenceDegreeName: this.caseService.capitalizeFirstLetter(
+        this.addForm.value.licenceDegreeName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   clearInput1() {
-    let value = this.addForm.get('licenceName');
+    let value = this.addForm.get('licenceDegreeName');
     value.reset();
   }
 }

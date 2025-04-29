@@ -24,6 +24,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { AuthService } from '../../../services/auth.service';
 import { CaseService } from '../../../services/case.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserUpdate',
@@ -160,7 +161,9 @@ export class CompanyUserUpdateComponent implements OnInit {
     this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );

@@ -29,6 +29,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   users: UserDTO[] = [];
   operationClaims: OperationClaim[];
   userId: number;
+  userEmail: string;
   userOperationClaimId: number;
   componentTitle = 'Update User Operation Claim Form';
 
@@ -56,7 +57,6 @@ export class UserOperationClaimUpdateComponent implements OnInit {
 
   createUpdateForm() {
     this.updateForm = this.formBuilder.group({
-      userEmail: ['', [Validators.required, Validators.minLength(3)]],
       claimName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -65,12 +65,13 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     this.userOperationClaimService.getById(id).subscribe(
       (response) => {
         this.updateForm.patchValue({
-          userEmail: this.getEmailByUserId(response.data.userId),
           claimName: this.getOperationClaimByClaimId(
             response.data.operationClaimId
           ),
         });
         this.userOperationClaimId = response.data.id;
+        this.userId = response.data.userId;
+        this.userEmail = this.getEmailByUserId(response.data.userId);
       },
       (error) => console.error
     );
@@ -80,7 +81,6 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     if (
       this.updateForm.valid &&
       this.getModel().id > 0 &&
-      this.getModel().userId > 0 &&
       this.getModel().operationClaimId > 0
     ) {
       this.userOperationClaimService.update(this.getModel()).subscribe(
@@ -100,10 +100,10 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   getModel(): UserOperationClaim {
     return Object.assign({
       id: this.userOperationClaimId,
-      userId: this.getUserId(this.updateForm.value.userEmail),
       operationClaimId: this.getOperaionClaimId(
         this.updateForm.value.claimName
       ),
+      userId: this.userId,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -157,12 +157,6 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   }
 
   clearInput1() {
-    let countryName = this.updateForm.get('userEmail');
-    countryName.reset();
-    this.getUsers();
-  }
-
-  clearInput2() {
     let cityName = this.updateForm.get('claimName');
     cityName.reset();
     this.getOperaionClaims();

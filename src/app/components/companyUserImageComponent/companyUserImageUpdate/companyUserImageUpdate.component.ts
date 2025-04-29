@@ -19,6 +19,7 @@ import { HttpEventType } from '@angular/common/http';
 
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImageUpdate',
@@ -203,7 +204,9 @@ export class CompanyUserImageUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -212,7 +215,9 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   getCompanyUsers() {
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUsers = response.data.filter((f) => f.deletedDate == null);
+        this.companyUsers = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );

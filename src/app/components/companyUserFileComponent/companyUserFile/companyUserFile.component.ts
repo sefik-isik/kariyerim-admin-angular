@@ -10,6 +10,7 @@ import { CompanyUserFile } from '../../../models/companyUserFile';
 import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserFile',
@@ -47,7 +48,9 @@ export class CompanyUserFileComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.userDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -59,9 +62,9 @@ export class CompanyUserFileComponent implements OnInit {
 
     this.companyUserFileService.getAllDTO(userId).subscribe(
       (response) => {
-        this.companyUserFileDTOS = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserFileDTOS = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
         this.dataLoaded = true;
       },
       (error) => console.error

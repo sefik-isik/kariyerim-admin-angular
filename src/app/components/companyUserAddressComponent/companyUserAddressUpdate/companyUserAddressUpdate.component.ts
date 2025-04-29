@@ -23,6 +23,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
@@ -95,11 +96,11 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
         });
         this.id = response.data.id;
         this.userId = response.data.userId;
+        this.companyUserId = response.data.companyUserId;
         this.userEmail = this.getEmailByUserId(response.data.userId);
         this.companyUserName = this.getcompanyUserNameById(
           response.data.companyUserId
         );
-        this.companyUserId = response.data.companyUserId;
         this.addressDetail = response.data.addressDetail;
         this.addressDetailCount = this.count(response.data.addressDetail);
       },
@@ -156,7 +157,9 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
         this.getCompanyUsers();
       },
       (error) => console.error
@@ -168,8 +171,8 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
         this.companyUsers = response.data
-          .filter((f) => f.companyUserId == userId)
-          .filter((f) => f.deletedDate == null);
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -227,6 +230,8 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   getcompanyUserNameById(companyUserId: number): string {
+    console.log(this.companyUsers);
+    console.log(companyUserId);
     return this.companyUsers.filter((c) => c.id == companyUserId)[0]
       ?.companyUserName;
   }
@@ -244,9 +249,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email == userEmail)[0]?.id;
 
     return userId;
   }

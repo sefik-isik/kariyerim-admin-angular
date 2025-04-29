@@ -1,6 +1,9 @@
 import { BaseModel } from './baseModel';
 
 export interface UserDTO extends BaseModel {
-  id: number;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
   email: string;
+  code: string;
 }

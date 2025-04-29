@@ -1,4 +1,3 @@
-import { LocalStorageService } from './../../services/localStorage.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -28,7 +27,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private autService: AuthService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
+
     private router: Router,
     private addToLocalStorageService: AddToLocalStorageService
   ) {}
@@ -81,7 +80,7 @@ export class LoginComponent implements OnInit {
           );
           this.router.navigate(['']);
         },
-        (error) => console.error
+        (error) => console.log(error)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

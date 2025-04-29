@@ -18,6 +18,7 @@ import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CaseService } from '../../../services/case.service';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -127,7 +128,9 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -136,7 +139,9 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   getCompanyUsers() {
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUsers = response.data.filter((f) => f.deletedDate == null);
+        this.companyUsers = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );

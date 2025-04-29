@@ -11,6 +11,7 @@ import { UserService } from '../../../services/user.service';
 
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImageSlide',
@@ -44,28 +45,28 @@ export class CompanyUserImageSlideComponent implements OnInit {
     this.getUsers();
     this.getCompanyUserImages();
   }
+  getUsers() {
+    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
 
+    this.userService.getAllDTO(this.userId).subscribe(
+      (response) => {
+        this.userDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
+      },
+      (error) => console.error
+    );
+  }
   getCompanyUserImages() {
     let userId: number;
     userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
 
     this.companyUserImageService.getAllDTO(userId).subscribe(
       (response) => {
-        this.companyUserImageDTOs = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserImageDTOs = response.data
+          .filter((f) => f.deletedDate == null)
+          .filter((f) => f.code == CompanyUserCode);
         this.dataLoaded = true;
-      },
-      (error) => console.error
-    );
-  }
-
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.userDTOs = response.data.filter((f) => f.deletedDate == null);
       },
       (error) => console.error
     );
