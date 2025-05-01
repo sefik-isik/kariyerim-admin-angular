@@ -105,6 +105,9 @@ import { PersonelUserComponent } from './components/personelUserComponent/person
 import { PersonelUserAddComponent } from './components/personelUserComponent/personelUserAdd/personelUserAdd.component';
 import { PersonelUserOfDeletedComponent } from './components/personelUserComponent/personelUserOfDeleted/personelUserOfDeleted.component';
 import { PersonelUserUpdateComponent } from './components/personelUserComponent/personelUserUpdate/personelUserUpdate.component';
+import { AllUserComponent } from './components/allUserComponent/allUser/allUser.component';
+import { AllUserOfDeletedComponent } from './components/allUserComponent/allUserOfDeleted/allUserOfDeleted.component';
+import { AllUserUpdateComponent } from './components/allUserComponent/allUserUpdate/allUserUpdate.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -605,6 +608,21 @@ export const routes: Routes = [
       {
         path: 'personelusers/personeluserupdate/:personeluserId',
         component: PersonelUserUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'allusers',
+        component: AllUserComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'allusers/alluserofdeleted',
+        component: AllUserOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'allusers/alluserupdate/:alluserId',
+        component: AllUserUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

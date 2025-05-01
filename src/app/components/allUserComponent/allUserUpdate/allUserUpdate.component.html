@@ -1,0 +1,149 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div>
+      <form [formGroup]="updateForm">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">First Name</span>
+            <input
+              formControlName="firstName"
+              type="text"
+              class="form-control"
+              id="input1"
+              placeholder="First Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Last Name</span>
+            <input
+              formControlName="lastName"
+              type="text"
+              class="form-control"
+              id="input2"
+              placeholder="Last Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Email</span>
+            <input
+              formControlName="email"
+              type="text"
+              class="form-control"
+              id="input3"
+              placeholder="Email"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput3()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Phone Number</span>
+            <input
+              formControlName="phoneNumber"
+              type="text"
+              class="form-control"
+              id="input4"
+              placeholder="Phone Number"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput4()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">User Code</span>
+            <input
+              formControlName="code"
+              type="text"
+              class="form-control"
+              list="datalist1"
+              id="input5"
+              placeholder="Select Code..."
+            />
+            <datalist id="datalist1">
+              <option *ngFor="let code of codes" value="{{ code }}"></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput5()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">User Status</span>
+            <input
+              formControlName="status"
+              type="text"
+              class="form-control"
+              list="datalist2"
+              id="input5"
+              placeholder="Select Status..."
+            />
+            <datalist id="datalist2">
+              <option
+                *ngFor="let status of statuses"
+                value="{{ status }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput6()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-outline-primary"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              routerLink="/dashboard/allusers"
+              routerLinkActive="router-link-active"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -6,4 +6,7 @@ export interface UserDTO extends BaseModel {
   phoneNumber: string;
   email: string;
   code: string;
+  status: string;
+  passwordHash: string;
+  passwordSalt: string;
 }

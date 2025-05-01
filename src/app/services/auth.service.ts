@@ -10,20 +10,18 @@ import { RegisterModel } from '../models/registerModel';
 import { PasswordModel } from '../models/passwordModel';
 import { Router } from '@angular/router';
 import { UserCodeModel } from '../models/userCodeModel';
-import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
+import { UserDTO } from '../models/userDTO';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
-  newUrlPath: string = ApiUrl + 'UserAuth/';
+  newUrlPath: string = ApiUrl + 'Auths/';
 
   constructor(
     private HttpClient: HttpClient,
     private localStorageService: LocalStorageService,
-    private router: Router,
-    private httpClient: HttpClient
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -53,6 +51,27 @@ export class AuthService implements OnInit {
     return this.HttpClient.post<SingleResponseModel<UserCodeModel>>(
       this.newUrlPath + 'updatecode',
       userCodeModel
+    );
+  }
+
+  updateUser(user: UserDTO) {
+    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
+      this.newUrlPath + 'updateuser',
+      user
+    );
+  }
+
+  deleteUser(user: UserDTO) {
+    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
+      this.newUrlPath + 'deleteuser',
+      user
+    );
+  }
+
+  unDeleteUser(user: UserDTO) {
+    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
+      this.newUrlPath + 'undeleteuser',
+      user
     );
   }
 

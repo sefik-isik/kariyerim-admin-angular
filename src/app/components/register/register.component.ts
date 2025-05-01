@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { RegisterModel } from '../../models/registerModel';
 import { AddToLocalStorageService } from '../../services/addToLocalStorage.service';
+import { CaseService } from '../../services/case.service';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +29,8 @@ export class RegisterComponent implements OnInit {
     private autService: AuthService,
     private toastrService: ToastrService,
     private router: Router,
-    private addToLocalStorageService: AddToLocalStorageService
+    private addToLocalStorageService: AddToLocalStorageService,
+    private caseService: CaseService
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +52,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-      let registerModel: RegisterModel = Object.assign(
-        {},
-        this.registerForm.value
-      );
-      this.autService.register(registerModel).subscribe(
+      this.autService.register(this.getregisterModel()).subscribe(
         (response) => {
           this.addToLocalStorageService.addToken(response.data.token);
           this.addToLocalStorageService.addId(response.data.id.toString());
@@ -90,6 +88,26 @@ export class RegisterComponent implements OnInit {
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
     }
+  }
+
+  getregisterModel(): RegisterModel {
+    let registerModel: RegisterModel = Object.assign(
+      {
+        email: this.caseService.capitalizeToLower(
+          this.registerForm.get('email').value
+        ),
+        password: this.registerForm.get('password').value,
+        firstName: this.caseService.capitalizeFirstLetter(
+          this.registerForm.get('firstName').value
+        ),
+        lastName: this.caseService.capitalizeToUpper(
+          this.registerForm.get('lastName').value
+        ),
+        phoneNumber: this.registerForm.get('phoneNumber').value,
+      }
+      //this.registerForm.value
+    );
+    return registerModel;
   }
 
   login() {

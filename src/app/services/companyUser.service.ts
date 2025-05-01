@@ -1,4 +1,3 @@
-import { CompanyUserDTO } from '../models/companyUserDTO';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/apiUrl';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +6,7 @@ import { ResponseModel } from '../models/responseModel';
 import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
+import { CompanyUserDTO } from '../models/companyUserDTO';
 
 @Injectable({
   providedIn: 'root',
