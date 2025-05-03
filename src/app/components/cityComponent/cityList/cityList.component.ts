@@ -37,6 +37,11 @@ export class CityListComponent implements OnInit {
   ngOnInit() {
     this.getCities();
     this.getCountries();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getCities();
+      }
+    });
   }
 
   getCountries() {

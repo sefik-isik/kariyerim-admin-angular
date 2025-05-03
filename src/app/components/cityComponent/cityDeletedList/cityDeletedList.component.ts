@@ -36,6 +36,11 @@ export class CityDeletedListComponent implements OnInit {
   ngOnInit() {
     this.getCountries();
     this.getCities();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getCities();
+      }
+    });
   }
 
   getCountries() {
