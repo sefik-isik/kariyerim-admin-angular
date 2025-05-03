@@ -13,7 +13,7 @@ export class CodePipe implements PipeTransform {
     } else if (value == CompanyUserCode) {
       result = 'Company User';
     } else {
-      result = 'Unknown User';
+      result = 'Normal User';
     }
 
     return result;

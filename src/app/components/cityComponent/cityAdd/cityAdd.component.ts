@@ -1,5 +1,5 @@
 import { CaseService } from './../../../services/case.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -12,14 +12,15 @@ import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { City } from '../../../models/city';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-cityAdd',
   templateUrl: './cityAdd.component.html',
   styleUrls: ['./cityAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CityAddComponent implements OnInit {
   addForm1: FormGroup;
@@ -32,7 +33,8 @@ export class CityAddComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -97,7 +99,7 @@ export class CityAddComponent implements OnInit {
   }
 
   clearInput2() {
-    let cityName = this.addForm1.get('addressDetail');
+    let cityName = this.addForm1.get('cityName');
     cityName.reset();
   }
 }

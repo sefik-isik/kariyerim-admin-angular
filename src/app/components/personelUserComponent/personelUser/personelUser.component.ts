@@ -11,12 +11,21 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
 import { PersonelUserCode } from '../../../models/userCodes';
+import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
+import { GenderPipe } from '../../../pipes/gender.pipe';
 
 @Component({
   selector: 'app-personelUser',
   templateUrl: './personelUser.component.html',
   styleUrls: ['./personelUser.component.css'],
-  imports: [CommonModule, FormsModule, RouterLink, FilterPersonelUserPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    FilterPersonelUserPipe,
+    BoolenTextPipe,
+    GenderPipe,
+  ],
 })
 export class PersonelUserComponent implements OnInit {
   userDTOs: UserDTO[] = [];

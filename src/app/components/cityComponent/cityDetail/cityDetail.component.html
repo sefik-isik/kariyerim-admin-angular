@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ componentTitle }}</h4>
+</div>
+<div class="modal-body">
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text"><b>Id: </b>{{ cityDTO.id }}</p>
+      <p class="card-text"><b>countryId: </b>{{ cityDTO.countryId }}</p>
+      <p class="card-text"><b>countryName: </b>{{ cityDTO.countryName }}</p>
+      <p class="card-text"><b>countryIso: </b>{{ cityDTO.countryIso }}</p>
+      <p class="card-text"><b>cityName: </b>{{ cityDTO.cityName }}</p>
+      <p class="card-text">
+        <b>createdDate: </b
+        >{{ cityDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      </p>
+      <p class="card-text">
+        <b>updatedDate: </b
+        >{{ cityDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      </p>
+      <p class="card-text">
+        <b>deletedDate: </b
+        >{{ cityDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      </p>
+    </div>
+  </div>
+  <div class="d-grid gap-2 mt-3">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="activeModal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</div>

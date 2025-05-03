@@ -3,10 +3,6 @@ import { Routes } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
 import { CityComponent } from './components/cityComponent/city/city.component';
 
-import { CityAddComponent } from './components/cityComponent/cityAdd/cityAdd.component';
-import { CityUpdateComponent } from './components/cityComponent/cityUpdate/cityUpdate.component';
-import { CityOfDeletedComponent } from './components/cityComponent/CityOfDeleted/CityOfDeleted.component';
-
 import { LoginComponent } from './components/login/login.component';
 import { LoginGuard } from './guards/login.guard';
 import { RegisterComponent } from './components/register/register.component';
@@ -109,6 +105,10 @@ import { AllUserComponent } from './components/allUserComponent/allUser/allUser.
 import { AllUserOfDeletedComponent } from './components/allUserComponent/allUserOfDeleted/allUserOfDeleted.component';
 import { AllUserUpdateComponent } from './components/allUserComponent/allUserUpdate/allUserUpdate.component';
 
+import { CityListTab } from './components/cityComponent/city/cityListTab';
+import { CityOfDeletedTab } from './components/cityComponent/city/cityDeletedListTab';
+import { CityDeletedListComponent } from './components/cityComponent/cityDeletedList/cityDeletedList.component';
+
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -135,6 +135,7 @@ export const routes: Routes = [
         component: PersonelUserMainComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
+
       {
         path: 'main/companyusermain',
         component: CompanyUserMainComponent,
@@ -149,22 +150,20 @@ export const routes: Routes = [
         path: 'cities',
         component: CityComponent,
         canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'citylisttab',
+            component: CityListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'citydeletedlisttab',
+            component: CityDeletedListComponent,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
       },
-      {
-        path: 'cities/cityadd',
-        component: CityAddComponent,
-        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
-      },
-      {
-        path: 'cities/cityofdeleted',
-        component: CityOfDeletedComponent,
-        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
-      },
-      {
-        path: 'cities/cityupdate/:cityId',
-        component: CityUpdateComponent,
-        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
-      },
+
       {
         path: 'companyusers',
         component: CompanyUserComponent,

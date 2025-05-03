@@ -104,14 +104,14 @@
             <td>{{ personelUserDTO.email }}</td>
 
             <td>{{ personelUserDTO.identityNumber }}</td>
-            <td>{{ personelUserDTO.gender }}</td>
+            <td>{{ personelUserDTO.gender | gender }}</td>
             <td>{{ personelUserDTO.licenceDegreeId }}</td>
             <td>{{ personelUserDTO.licenceDegreeName }}</td>
             <td>{{ personelUserDTO.driverLicenceId }}</td>
             <td>{{ personelUserDTO.driverLicenceName }}</td>
-            <td>{{ personelUserDTO.militaryStatus }}</td>
-            <td>{{ personelUserDTO.nationalStatus }}</td>
-            <td>{{ personelUserDTO.retirementStatus }}</td>
+            <td>{{ personelUserDTO.militaryStatus | boolenText }}</td>
+            <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>
+            <td>{{ personelUserDTO.retirementStatus | boolenText }}</td>
             <td>{{ personelUserDTO.birthPlaceId }}</td>
             <td>{{ personelUserDTO.birthPlaceName }}</td>
             <td>
@@ -125,7 +125,7 @@
             </td>
             <td>
               <i
-                [routerLink]="['companyuserupdate/' + personelUserDTO.id]"
+                [routerLink]="['personeluserupdate/' + personelUserDTO.id]"
                 routerLinkActive="active"
                 ariaCurrentWhenActive="page"
                 class="bi bi-pencil-square"

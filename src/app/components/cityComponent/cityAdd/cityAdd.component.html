@@ -1,65 +1,66 @@
-<div class="card" style="width: 50rem">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
-  <div class="card-body">
-    <form [formGroup]="addForm1">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">Country Name</span>
-          <input
-            formControlName="countryName"
-            type="text"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select Country..."
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let country of countries"
-              value="{{ country.countryName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+<div class="modal-body" style="border: none">
+  <div class="card">
+    <div class="alert alert-dark" role="alert">
+      {{ componentTitle }}
+    </div>
+    <div class="card-body">
+      <form [formGroup]="addForm1">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Country Name</span>
+            <input
+              formControlName="countryName"
+              type="text"
+              class="form-control"
+              list="datalist1"
+              id="input1"
+              placeholder="Select Country..."
+            />
+            <datalist id="datalist1">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput1()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">City Name</span>
+            <input
+              formControlName="cityName"
+              type="text"
+              class="form-control"
+              id="input2"
+              placeholder="City Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">City Name</span>
-          <input
-            formControlName="cityName"
-            type="text"
-            class="form-control"
-            id="input2"
-            placeholder="City Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
+      </form>
+      <div class="d-grid gap-2">
+        <button (click)="add()" type="button" class="btn btn-outline-primary">
+          Add
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          (click)="activeModal.close('Close click')"
+        >
+          Close
+        </button>
       </div>
-    </form>
-    <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
-        Add
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        routerLink="/dashboard/cities"
-        routerLinkActive="router-link-active"
-      >
-        Back
-      </button>
     </div>
   </div>
 </div>

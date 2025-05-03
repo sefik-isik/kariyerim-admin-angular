@@ -3,26 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
 import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
 import { CityDTO } from '../../../models/cityDTO';
+import { City } from '../../../models/city';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
+import { CityDetailComponent } from '../cityDetail/cityDetail.component';
 
 @Component({
-  selector: 'app-CityOfDeleted',
-  templateUrl: './CityOfDeleted.component.html',
-  styleUrls: ['./CityOfDeleted.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    FilterCityPipe,
-    RouterLink,
-    FilterCityByCountryPipe,
-  ],
+  selector: 'app-cityDeletedList',
+  templateUrl: './cityDeletedList.component.html',
+  styleUrls: ['./cityDeletedList.component.css'],
+  imports: [CommonModule, FormsModule, FilterCityPipe, FilterCityByCountryPipe],
 })
-export class CityOfDeletedComponent implements OnInit {
+export class CityDeletedListComponent implements OnInit {
   cityDTOs: CityDTO[] = [];
   countries: Country[];
   dataLoaded = false;
@@ -32,7 +29,8 @@ export class CityOfDeletedComponent implements OnInit {
   constructor(
     private cityService: CityService,
     private toastrService: ToastrService,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -80,6 +78,32 @@ export class CityOfDeletedComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
     }, 500);
+  }
+
+  open(city: City) {
+    const modalRef = this.modalService.open(CityUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.city = city;
+  }
+
+  openDetail(cityDTO: CityDTO) {
+    const modalRef = this.modalService.open(CityDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.cityDTO = cityDTO;
   }
 
   clearInput1() {

@@ -27,7 +27,7 @@ export class AllUserUpdateComponent implements OnInit {
   updateForm: FormGroup;
   userId: number;
   componentTitle = 'User Update';
-  codes: string[] = ['Personel User', 'Company User', 'Unknown User'];
+  codes: string[] = ['Personel User', 'Company User', 'Normal User'];
   statuses: string[] = ['Admin', 'User'];
 
   constructor(
@@ -81,7 +81,7 @@ export class AllUserUpdateComponent implements OnInit {
     } else if (code === CompanyUserCode) {
       return 'Company User';
     } else {
-      return 'Unknown User';
+      return 'Normal User';
     }
   }
 
@@ -89,7 +89,7 @@ export class AllUserUpdateComponent implements OnInit {
     if (status === Status) {
       return 'Admin';
     } else {
-      return 'User';
+      return 'Normal User';
     }
   }
 

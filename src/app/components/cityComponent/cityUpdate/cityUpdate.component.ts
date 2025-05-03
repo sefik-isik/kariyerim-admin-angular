@@ -1,7 +1,6 @@
 import { City } from './../../../models/city';
 import { Country } from './../../../models/country';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -15,15 +14,17 @@ import { CountryService } from '../../../services/country.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-cityUpdate',
   templateUrl: './cityUpdate.component.html',
   styleUrls: ['./cityUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CityUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() city: City;
   countries: Country[];
   cities: City[];
   cityId: number;
@@ -32,12 +33,12 @@ export class CityUpdateComponent implements OnInit {
 
   constructor(
     private cityService: CityService,
-    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private countryService: CountryService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -45,10 +46,14 @@ export class CityUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['cityId']);
-      });
-    }, 500);
+      this.getById(this.city.id);
+    }, 200);
+
+    // setTimeout(() => {
+    //   this.activatedRoute.params.subscribe((params) => {
+    //     this.getById(params['cityId']);
+    //   });
+    // }, 500);
   }
 
   createUpdateForm() {
@@ -78,6 +83,9 @@ export class CityUpdateComponent implements OnInit {
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/cities']);
+          this.activeModal.close();
+
+          //this.router.navigate(['/dashboard/cities/citylisttab']);
         },
         (error) => {
           this.toastrService.error(error.error.message);

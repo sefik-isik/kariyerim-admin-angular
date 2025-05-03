@@ -9,8 +9,13 @@ export class StatusPipe implements PipeTransform {
     let result: string = '';
     if (value == Status) {
       result = 'Admin';
-    } else {
+    } else if (
+      value ==
+      'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9'
+    ) {
       result = 'Normal User';
+    } else {
+      result = 'Unknown User';
     }
 
     return result;
