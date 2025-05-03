@@ -1,7 +1,7 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
-      <div class="input-group mb-3">
+      <div class="input-group mb-2">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
@@ -60,9 +60,7 @@
           <tr>
             <th>Id</th>
             <th>City Name</th>
-            <th>Country Id</th>
             <th>Country name</th>
-            <th>Country Iso</th>
             <th>Deleted Date</th>
             <th></th>
             <th></th>
@@ -85,10 +83,8 @@
           >
             <td>{{ cityDTO.id }}</td>
             <td>{{ cityDTO.cityName }}</td>
-            <td>{{ cityDTO.countryId }}</td>
             <td>{{ cityDTO.countryName }}</td>
-            <td>{{ cityDTO.countryIso }}</td>
-            <td>{{ cityDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
+            <td>{{ cityDTO.deletedDate | date : "dd/MM/yyyy" }}</td>
             <td>
               <i
                 (click)="openDetail(cityDTO)"

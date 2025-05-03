@@ -1,34 +1,12 @@
 <div class="container">
   <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
-  <div class="d-grid gap-2">
-    <button type="button" class="btn btn-outline-primary" (click)="open()">
-      Add New City
-    </button>
-  </div>
-
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">City Add</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">city</div>
-      </div>
-    </div>
+    <i
+      (click)="open()"
+      class="bi bi-plus-circle"
+      style="color: black; font-size: 16px; cursor: pointer"
+    >
+      {{ componentTitle }}</i
+    >
   </div>
 
   <div class="nav nav-tabs d-flex mt-3" id="nav-tab" role="tablist">
@@ -50,6 +28,5 @@
       Deleted City List
     </a>
   </div>
-
-  <router-outlet></router-outlet>
 </div>
+<router-outlet></router-outlet>
