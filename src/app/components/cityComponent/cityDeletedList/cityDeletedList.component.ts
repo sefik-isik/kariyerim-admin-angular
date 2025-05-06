@@ -46,17 +46,16 @@ export class CityDeletedListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate == null);
-        this.dataLoaded = true;
+        this.countries = response.data;
       },
       (error) => console.error
     );
   }
 
   getCities() {
-    this.cityService.getAllDTO().subscribe(
+    this.cityService.getAllDeletedDTO().subscribe(
       (response) => {
-        this.cityDTOs = response.data.filter((f) => f.deletedDate != null);
+        this.cityDTOs = response.data;
       },
       (error) => console.error
     );

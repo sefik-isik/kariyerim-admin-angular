@@ -45,6 +45,11 @@ export class PersonelUserCvSummaryService {
     return this.httpClient.get<ListResponseModel<PersonelUserCvSummary>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserCvSummary>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserCvSummary>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<PersonelUserCvSummary>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<PersonelUserCvSummary>>(

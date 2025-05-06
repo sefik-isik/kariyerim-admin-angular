@@ -12,13 +12,13 @@
           class="form-control"
           list="datalist1"
           id="input1"
-          placeholder="Filter Personel By User..."
+          placeholder="Filter Personel User..."
           (change)="getPersonelUsers()"
         />
         <datalist id="datalist1">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">

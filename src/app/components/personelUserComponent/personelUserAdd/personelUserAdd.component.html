@@ -1,3 +1,232 @@
-<p>
-  personelUserAdd works!
-</p>
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let user of users"
+              value="{{ user.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">identity Number</span>
+          <input
+            formControlName="identityNumber"
+            type="text"
+            class="form-control"
+            id="input2"
+            placeholder="Type identity Number"
+            minlength="11"
+            maxlength="11"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            (keypress)="onlyNumberKey($event)"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">licence Degree Name</span>
+          <input
+            formControlName="licenceDegreeName"
+            type="text"
+            class="form-control"
+            list="datalist2"
+            id="input3"
+            placeholder="Select licence Degree..."
+            minlength="3"
+          />
+          <datalist id="datalist2">
+            <option
+              *ngFor="let licenceDegree of licenceDegrees"
+              value="{{ licenceDegree.licenceDegreeName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">driver Licence Name</span>
+          <input
+            formControlName="driverLicenceName"
+            type="text"
+            class="form-control"
+            list="datalist3"
+            id="input4"
+            placeholder="Select driver Licence..."
+            minlength="3"
+          />
+          <datalist id="datalist3">
+            <option
+              *ngFor="let driverLicence of driverLicences"
+              value="{{ driverLicence.driverLicenceName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput4()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">birth Place Name</span>
+          <input
+            formControlName="birthPlaceName"
+            type="text"
+            class="form-control"
+            list="datalist4"
+            id="input5"
+            placeholder="Select birth Place..."
+            minlength="3"
+          />
+          <datalist id="datalist4">
+            <option
+              *ngFor="let city of cities"
+              value="{{ city.cityName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput5()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">date Of Birth</span>
+          <input
+            formControlName="dateOfBirth"
+            type="date"
+            class="form-control"
+            id="input6"
+            placeholder="Date Of Birth"
+            min="1950-01-01"
+            max="2010-12-31"
+            minlength="10"
+            maxlength="10"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput6()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="militaryStatus"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input7"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked">
+              militaryStatus
+            </label>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="nationalStatus"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input8"
+            />
+            <label class="form-check-label" for="checkChecked">
+              nationalStatus
+            </label>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="retirementStatus"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input9"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked">
+              retirementStatus
+            </label>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="gender"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="input10"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked"> gender </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusers"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

@@ -39,6 +39,11 @@ export class CityService {
     return this.httpClient.get<ListResponseModel<City>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<City>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<City>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<City>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<City>>(path);
@@ -46,6 +51,11 @@ export class CityService {
 
   getAllDTO(): Observable<ListResponseModel<CityDTO>> {
     let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<CityDTO>>(path);
+  }
+
+  getAllDeletedDTO(): Observable<ListResponseModel<CityDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto';
     return this.httpClient.get<ListResponseModel<CityDTO>>(path);
   }
 }

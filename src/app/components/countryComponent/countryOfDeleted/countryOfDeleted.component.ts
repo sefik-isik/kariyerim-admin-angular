@@ -28,9 +28,9 @@ export class CountryOfDeletedComponent implements OnInit {
   }
 
   getCountries() {
-    this.countryService.getAll().subscribe(
+    this.countryService.getDeletedAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate != null);
+        this.countries = response.data;
       },
       (error) => console.error
     );

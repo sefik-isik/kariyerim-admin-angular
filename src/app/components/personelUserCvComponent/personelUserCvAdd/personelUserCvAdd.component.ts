@@ -70,7 +70,6 @@ export class PersonelUserCvAddComponent implements OnInit {
   createAddForm() {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      personelUserName: ['', [Validators.required, Validators.minLength(3)]],
       cvName: ['', [Validators.required, Validators.minLength(3)]],
       languageName: ['', [Validators.required, Validators.minLength(3)]],
       languageLevel: ['', [Validators.required, Validators.minLength(3)]],
@@ -99,11 +98,10 @@ export class PersonelUserCvAddComponent implements OnInit {
   }
 
   getModel(): PersonelUserCvDTO {
+    const userId = this.getUserId(this.addForm.value.userEmail);
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(
-        this.addForm.value.personelUserName
-      ),
+      personelUserId: this.getPersonelUserId(userId),
       cvName: this.addForm.value.cvName,
       languageId: this.getLanguageId(this.addForm.value.languageName),
       languageLevelId: this.getLanguageLevelId(
@@ -119,9 +117,7 @@ export class PersonelUserCvAddComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
+        this.users = response.data.filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
     );
@@ -136,7 +132,6 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.personelUsers = response.data
           .filter((f) => f.id == userId)
-          .filter((f) => f.deletedDate == null)
           .filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
@@ -146,7 +141,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data.filter((f) => f.deletedDate == null);
+        this.languages = response.data;
       },
       (error) => console.error
     );
@@ -155,27 +150,21 @@ export class PersonelUserCvAddComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.languageLevels = response.data;
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getPersonelUserId(personelUserName: string): number {
+  getPersonelUserId(userId: number): number {
     const personelUserId = this.personelUsers.filter(
-      (c) =>
-        (c.firstName + ' ' + c.lastName).toLowerCase() ===
-        personelUserName.toLowerCase()
+      (c) => c.userId === userId
     )[0]?.id;
 
     return personelUserId;
@@ -183,7 +172,7 @@ export class PersonelUserCvAddComponent implements OnInit {
 
   getLanguageId(languageName: string): number {
     const languageId = this.languages.filter(
-      (c) => c.languageName.toLowerCase() === languageName.toLowerCase()
+      (c) => c.languageName === languageName
     )[0]?.id;
 
     return languageId;
@@ -191,7 +180,7 @@ export class PersonelUserCvAddComponent implements OnInit {
 
   getLanguageLevelId(languageLevel: string): number {
     const cityId = this.languageLevels.filter(
-      (c) => c.levelTitle.toLowerCase() === languageLevel.toLowerCase()
+      (c) => c.levelTitle === languageLevel
     )[0]?.id;
 
     return cityId;

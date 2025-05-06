@@ -42,6 +42,11 @@ export class UserOperationClaimService {
     return this.httpClient.get<ListResponseModel<UserOperationClaim>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<UserOperationClaim>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<UserOperationClaim>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<UserOperationClaim>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<UserOperationClaim>>(path);
@@ -49,6 +54,11 @@ export class UserOperationClaimService {
 
   getAllDTO(): Observable<ListResponseModel<UserOperationClaimDTO>> {
     let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<UserOperationClaimDTO>>(path);
+  }
+
+  getAllDeletedDTO(): Observable<ListResponseModel<UserOperationClaimDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto';
     return this.httpClient.get<ListResponseModel<UserOperationClaimDTO>>(path);
   }
 }

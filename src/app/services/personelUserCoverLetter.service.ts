@@ -49,6 +49,13 @@ export class PersonelUserCoverLetterService {
     );
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserCoverLetter>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserCoverLetter>>(
+      path
+    );
+  }
+
   getById(
     id: number
   ): Observable<SingleResponseModel<PersonelUserCoverLetter>> {

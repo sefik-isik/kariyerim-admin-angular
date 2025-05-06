@@ -40,6 +40,10 @@ export class LanguageService {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<Language>>(path);
   }
+  getDeletedAll(): Observable<ListResponseModel<Language>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<Language>>(path);
+  }
 
   getById(id: number): Observable<SingleResponseModel<Language>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;

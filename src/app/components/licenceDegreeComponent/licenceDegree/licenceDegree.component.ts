@@ -30,9 +30,7 @@ export class LicenceDegreeComponent implements OnInit {
   getLicenceDegrees() {
     this.licenceDegreeService.getAll().subscribe(
       (response) => {
-        this.licenceDegrees = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.licenceDegrees = response.data;
       },
       (error) => console.error
     );

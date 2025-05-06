@@ -33,31 +33,6 @@
         </div>
 
         <div class="input-group mb-3">
-          <span class="input-group-text">Persoenel User Name</span>
-          <input
-            formControlName="personelUserName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input2"
-            placeholder="Select Personel User..."
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let personelUser of personelUsers"
-              value="{{ personelUser.firstName }} {{ personelUser.lastName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
           <span class="input-group-text">Cv Name</span>
           <input
             formControlName="cvName"

@@ -41,6 +41,11 @@ export class WorkingMethodService {
     return this.httpClient.get<ListResponseModel<WorkingMethod>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<WorkingMethod>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<WorkingMethod>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<WorkingMethod>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<WorkingMethod>>(path);

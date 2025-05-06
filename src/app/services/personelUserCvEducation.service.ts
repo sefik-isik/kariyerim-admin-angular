@@ -50,6 +50,13 @@ export class PersonelUserCvEducationService {
     );
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserCvEducation>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserCvEducation>>(
+      path
+    );
+  }
+
   getById(
     id: number
   ): Observable<SingleResponseModel<PersonelUserCvEducation>> {
@@ -63,6 +70,15 @@ export class PersonelUserCvEducationService {
     id: number
   ): Observable<ListResponseModel<PersonelUserCvEducationDTO>> {
     let path = this.newUrlPath + 'getalldto?id=' + id;
+    return this.httpClient.get<ListResponseModel<PersonelUserCvEducationDTO>>(
+      path
+    );
+  }
+
+  getAllDeletedDTO(
+    id: number
+  ): Observable<ListResponseModel<PersonelUserCvEducationDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
     return this.httpClient.get<ListResponseModel<PersonelUserCvEducationDTO>>(
       path
     );

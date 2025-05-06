@@ -42,6 +42,11 @@ export class PersonelUserCvService {
     return this.httpClient.get<ListResponseModel<PersonelUserCv>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserCv>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserCv>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<PersonelUserCv>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<PersonelUserCv>>(path);
@@ -49,6 +54,13 @@ export class PersonelUserCvService {
 
   getAllDTO(id: number): Observable<ListResponseModel<PersonelUserCvDTO>> {
     let path = this.newUrlPath + 'getalldto?id=' + id;
+    return this.httpClient.get<ListResponseModel<PersonelUserCvDTO>>(path);
+  }
+
+  getAllDeletedDTO(
+    id: number
+  ): Observable<ListResponseModel<PersonelUserCvDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
     return this.httpClient.get<ListResponseModel<PersonelUserCvDTO>>(path);
   }
 }

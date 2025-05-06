@@ -41,6 +41,11 @@ export class DriverLicenceService {
     return this.httpClient.get<ListResponseModel<DriverLicence>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<DriverLicence>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<DriverLicence>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<DriverLicence>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<DriverLicence>>(path);

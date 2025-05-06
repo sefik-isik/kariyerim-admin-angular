@@ -157,9 +157,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
+        this.users = response.data.filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
     );
@@ -170,9 +168,9 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
     this.personelUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.personelUsers = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
+        this.personelUsers = response.data.filter(
+          (f) => f.code == PersonelUserCode
+        );
       },
       (error) => console.error
     );
@@ -181,7 +179,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data.filter((f) => f.deletedDate == null);
+        this.languages = response.data;
       },
       (error) => console.error
     );
@@ -190,9 +188,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.languageLevels = response.data;
       },
       (error) => console.error
     );
@@ -219,16 +215,14 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getPersonelUserId(personelUserName: string): number {
     const companyUserId = this.personelUsers.filter(
-      (c) => c.firstName.toLowerCase() === personelUserName.toLowerCase()
+      (c) => c.firstName === personelUserName
     )[0]?.id;
 
     return companyUserId;
@@ -236,7 +230,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
   getLanguageId(languageName: string): number {
     const languageId = this.languages.filter(
-      (c) => c.languageName.toLowerCase() === languageName.toLowerCase()
+      (c) => c.languageName === languageName
     )[0]?.id;
 
     return languageId;
@@ -244,7 +238,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
   getLanguageLevelId(languageLevel: string): number {
     const cityId = this.languageLevels.filter(
-      (c) => c.levelTitle.toLowerCase() === languageLevel.toLowerCase()
+      (c) => c.levelTitle === languageLevel
     )[0]?.id;
 
     return cityId;

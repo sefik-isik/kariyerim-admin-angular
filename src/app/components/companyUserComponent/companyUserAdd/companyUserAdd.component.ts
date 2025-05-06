@@ -130,9 +130,7 @@ export class CompanyUserAddComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.users = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -141,9 +139,7 @@ export class CompanyUserAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.companyUserSectors = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.companyUserSectors = response.data;
       },
       (error) => console.error
     );
@@ -152,7 +148,7 @@ export class CompanyUserAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
@@ -164,42 +160,36 @@ export class CompanyUserAddComponent implements OnInit {
     }
     this.taxOfficeService.getAll().subscribe(
       (response) => {
-        this.taxOffices = response.data
-          .filter(
-            (f) => f.cityId === this.getCityId(this.addForm.value.cityName)
-          )
-          .filter((f) => f.deletedDate == null);
+        this.taxOffices = response.data.filter(
+          (f) => f.cityId === this.getCityId(this.addForm.value.cityName)
+        );
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getSectorId(sectorName: string): number {
     const companyUserSectorId = this.companyUserSectors.filter(
-      (c) => c.sectorName.toLowerCase() === sectorName.toLowerCase()
+      (c) => c.sectorName === sectorName
     )[0]?.id;
 
     return companyUserSectorId;
   }
 
   getCityId(cityName: string): number {
-    const cityId = this.cities.filter(
-      (c) => c.cityName.toLowerCase() === cityName.toLowerCase()
-    )[0]?.id;
+    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
     return cityId;
   }
 
   getTaxOfficeId(taxOfficeName: string): number {
     const taxOfficeId = this.taxOffices.filter(
-      (c) => c.taxOfficeName.toLowerCase() === taxOfficeName.toLowerCase()
+      (c) => c.taxOfficeName === taxOfficeName
     )[0]?.id;
 
     return taxOfficeId;

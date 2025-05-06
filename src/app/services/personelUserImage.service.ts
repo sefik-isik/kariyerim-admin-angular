@@ -41,6 +41,11 @@ export class PersonelUserImageService {
     return this.httpClient.get<ListResponseModel<PersonelUserImage>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserImage>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserImage>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<PersonelUserImage>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<PersonelUserImage>>(path);

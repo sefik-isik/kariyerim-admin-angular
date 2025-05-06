@@ -41,6 +41,11 @@ export class OperationClaimService {
     return this.httpClient.get<ListResponseModel<OperationClaim>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<OperationClaim>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<OperationClaim>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<OperationClaim>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<OperationClaim>>(path);

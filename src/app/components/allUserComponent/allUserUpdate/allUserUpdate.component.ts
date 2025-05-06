@@ -1,7 +1,7 @@
 import { AuthService } from './../../../services/auth.service';
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -16,35 +16,41 @@ import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { CompanyUserCode, PersonelUserCode } from '../../../models/userCodes';
 import { Status } from '../../../models/status';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-allUserUpdate',
   templateUrl: './allUserUpdate.component.html',
   styleUrls: ['./allUserUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class AllUserUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() userDTO: UserDTO;
   userId: number;
+  code: string;
   componentTitle = 'User Update';
-  codes: string[] = ['Personel User', 'Company User', 'Normal User'];
   statuses: string[] = ['Admin', 'User'];
 
   constructor(
     private userService: UserService,
-    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-
+    public activeModal: NgbActiveModal,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['alluserId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.userDTO.id);
+    }, 200);
+
+    // this.activatedRoute.params.subscribe((params) => {
+    //   this.getById(params['alluserId']);
+    // });
   }
 
   createUpdateForm() {
@@ -53,7 +59,6 @@ export class AllUserUpdateComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.minLength(3)]],
       phoneNumber: ['', [Validators.required, Validators.minLength(3)]],
-      code: ['', [Validators.required, Validators.minLength(3)]],
       status: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -61,28 +66,18 @@ export class AllUserUpdateComponent implements OnInit {
   getById(id: number) {
     this.userService.getById(id).subscribe(
       (response) => {
+        this.code = response.data.code;
         this.updateForm.patchValue({
           firstName: response.data.firstName,
           lastName: response.data.lastName,
           email: response.data.email,
           phoneNumber: response.data.phoneNumber,
-          code: this.checkCode(response.data.code),
           status: this.checkStatus(response.data.status),
         });
         this.userId = id;
       },
       (error) => console.error
     );
-  }
-
-  checkCode(code: string): string {
-    if (code === PersonelUserCode) {
-      return 'Personel User';
-    } else if (code === CompanyUserCode) {
-      return 'Company User';
-    } else {
-      return 'Normal User';
-    }
   }
 
   checkStatus(status: string): string {
@@ -98,7 +93,8 @@ export class AllUserUpdateComponent implements OnInit {
       this.authService.updateUser(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/allusers']);
+          this.router.navigate(['/dashboard/allusers/alluserlisttab']);
+          this.activeModal.close();
         },
         (error) => console.log(error)
       );
@@ -114,7 +110,7 @@ export class AllUserUpdateComponent implements OnInit {
       lastName: this.updateForm.value.lastName,
       email: this.updateForm.value.email,
       phoneNumber: this.updateForm.value.phoneNumber,
-      code: this.getCode(this.updateForm.value.code),
+      code: this.code,
       status: this.getStatus(this.updateForm.value.status),
       passwordHash: '',
       passwordSalt: '',
@@ -122,19 +118,6 @@ export class AllUserUpdateComponent implements OnInit {
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  getCode(code: string): string {
-    let userCode = '';
-    if (code == 'Personel User') {
-      userCode = PersonelUserCode;
-    } else if (code == 'Company User') {
-      userCode = CompanyUserCode;
-    } else {
-      userCode =
-        'VmaWsgScWeSUsiLCJhdWQiOiJzZWZpa2lzaWtAZ21haWwuY29tIn0.E53sJM4VSvSVE93feNe-XjwI5tmy2YntPeXTD_wavFn5mD6Vsk8';
-    }
-    return userCode;
   }
 
   getStatus(status: string): string {
@@ -167,11 +150,11 @@ export class AllUserUpdateComponent implements OnInit {
     value.reset();
   }
   clearInput5() {
-    let value = this.updateForm.get('code');
+    let value = this.updateForm.get('status');
     value.reset();
   }
   clearInput6() {
-    let value = this.updateForm.get('status');
+    let value = this.updateForm.get('code');
     value.reset();
   }
 }

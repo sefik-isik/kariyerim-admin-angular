@@ -204,9 +204,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.users = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -215,18 +213,16 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   getCompanyUsers() {
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUsers = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUsers = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }

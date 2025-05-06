@@ -42,6 +42,11 @@ export class CompanyUserService {
     return this.httpClient.get<ListResponseModel<CompanyUser>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<CompanyUser>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<CompanyUser>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<CompanyUserDTO>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<CompanyUserDTO>>(path);
@@ -49,6 +54,11 @@ export class CompanyUserService {
 
   getAllDTO(id: number): Observable<ListResponseModel<CompanyUserDTO>> {
     let path = this.newUrlPath + 'getalldto?id=' + id;
+    return this.httpClient.get<ListResponseModel<CompanyUserDTO>>(path);
+  }
+
+  getAllDeletedDTO(id: number): Observable<ListResponseModel<CompanyUserDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
     return this.httpClient.get<ListResponseModel<CompanyUserDTO>>(path);
   }
 }

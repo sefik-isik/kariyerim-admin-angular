@@ -32,7 +32,7 @@ export class SectorComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data.filter((f) => f.deletedDate == null);
+        this.sectors = response.data;
       },
       (error) => console.error
     );

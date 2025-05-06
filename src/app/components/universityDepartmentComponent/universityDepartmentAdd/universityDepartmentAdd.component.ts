@@ -76,7 +76,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data.filter((f) => f.deletedDate == null);
+        this.universities = response.data;
       },
       (error) => console.error
     );
@@ -84,7 +84,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
 
   getUniversityId(universityName: string): number {
     const universityId = this.universities.filter(
-      (c) => c.universityName.toLowerCase() === universityName.toLowerCase()
+      (c) => c.universityName === universityName
     )[0]?.id;
 
     return universityId;

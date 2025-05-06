@@ -49,9 +49,7 @@ export class CompanyUserDepartmentComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -61,10 +59,9 @@ export class CompanyUserDepartmentComponent implements OnInit {
 
     this.companyUserDepartmentService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserDepartmentDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
-        this.dataLoaded = true;
+        this.companyUserDepartmentDTOs = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.error
     );

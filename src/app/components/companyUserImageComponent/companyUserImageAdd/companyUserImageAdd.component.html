@@ -37,11 +37,11 @@
             formControlName="companyUserName"
             type="text"
             class="form-control"
-            list="datalist1"
+            list="datalist2"
             id="input2"
             placeholder="Select Company..."
           />
-          <datalist id="datalist1">
+          <datalist id="datalist2">
             <option
               *ngFor="let companyUser of companyUsers"
               value="{{ companyUser.companyUserName }}"

@@ -168,9 +168,7 @@ export class CompanyUserFileAddComponent {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.users = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -185,7 +183,7 @@ export class CompanyUserFileAddComponent {
       (response) => {
         this.companyUsers = response.data
           .filter((f) => f.companyUserId == userId)
-          .filter((f) => f.deletedDate == null)
+
           .filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
@@ -193,16 +191,14 @@ export class CompanyUserFileAddComponent {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getCompanyUserId(companyUserName: string): number {
     const companyId = this.companyUsers.filter(
-      (c) => c.companyUserName.toLowerCase() === companyUserName.toLowerCase()
+      (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
     return companyId;

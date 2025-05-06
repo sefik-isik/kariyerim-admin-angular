@@ -40,9 +40,9 @@ export class TaxOfficeOfDeletedComponent implements OnInit {
   }
 
   getCities() {
-    this.cityService.getAll().subscribe(
+    this.cityService.getAllDeletedDTO().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
@@ -51,7 +51,7 @@ export class TaxOfficeOfDeletedComponent implements OnInit {
   getTaxOffices() {
     this.taxOfficeService.getAllDTO().subscribe(
       (response) => {
-        this.taxOfficeDTOs = response.data.filter((f) => f.deletedDate != null);
+        this.taxOfficeDTOs = response.data;
       },
       (error) => console.error
     );

@@ -42,6 +42,11 @@ export class UniversityDepartmentService {
     return this.httpClient.get<ListResponseModel<UniversityDepartment>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<UniversityDepartment>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<UniversityDepartment>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<UniversityDepartment>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<UniversityDepartment>>(path);
@@ -49,6 +54,13 @@ export class UniversityDepartmentService {
 
   getAllDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
     let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<UniversityDepartmentDTO>>(
+      path
+    );
+  }
+
+  getAllDeletedDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto';
     return this.httpClient.get<ListResponseModel<UniversityDepartmentDTO>>(
       path
     );

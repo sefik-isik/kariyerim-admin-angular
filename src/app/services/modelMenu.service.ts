@@ -41,6 +41,11 @@ export class ModelMenuService {
     return this.httpClient.get<ListResponseModel<ModelMenu>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<ModelMenu>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<ModelMenu>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<ModelMenu>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<ModelMenu>>(path);

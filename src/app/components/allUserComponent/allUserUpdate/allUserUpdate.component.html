@@ -77,40 +77,17 @@
               ></i>
             </span>
           </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">User Code</span>
-            <input
-              formControlName="code"
-              type="text"
-              class="form-control"
-              list="datalist1"
-              id="input5"
-              placeholder="Select Code..."
-            />
-            <datalist id="datalist1">
-              <option *ngFor="let code of codes" value="{{ code }}"></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="clearInput5()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
           <div class="input-group mb-3">
             <span class="input-group-text">User Status</span>
             <input
               formControlName="status"
               type="text"
               class="form-control"
-              list="datalist2"
-              id="input5"
+              list="datalist3"
+              id="input4"
               placeholder="Select Status..."
             />
-            <datalist id="datalist2">
+            <datalist id="datalist3">
               <option
                 *ngFor="let status of statuses"
                 value="{{ status }}"
@@ -118,7 +95,7 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput6()"
+                (click)="clearInput5()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
@@ -135,11 +112,10 @@
             </button>
             <button
               type="button"
-              class="btn btn-outline-secondary"
-              routerLink="/dashboard/allusers"
-              routerLinkActive="router-link-active"
+              class="btn btn-outline-dark"
+              (click)="activeModal.close('Close click')"
             >
-              Back
+              Close
             </button>
           </div>
         </div>

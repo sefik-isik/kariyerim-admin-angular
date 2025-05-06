@@ -42,14 +42,14 @@ export class CompanyUserImageService {
     return this.httpClient.get<ListResponseModel<CompanyUserImage>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<CompanyUserImage>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<CompanyUserImage>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<CompanyUserImage>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<CompanyUserImage>>(path);
-  }
-
-  getAllDTO(id: number): Observable<ListResponseModel<CompanyUserImageDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserImageDTO>>(path);
   }
 
   uploadImage(formData: FormData, id: number): Observable<HttpEvent<File>> {
@@ -68,5 +68,17 @@ export class CompanyUserImageService {
       this.newUrlPath + 'deleteimage',
       companyUserImage
     );
+  }
+
+  getAllDTO(id: number): Observable<ListResponseModel<CompanyUserImageDTO>> {
+    let path = this.newUrlPath + 'getalldto?id=' + id;
+    return this.httpClient.get<ListResponseModel<CompanyUserImageDTO>>(path);
+  }
+
+  getAllDeletedDTO(
+    id: number
+  ): Observable<ListResponseModel<CompanyUserImageDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
+    return this.httpClient.get<ListResponseModel<CompanyUserImageDTO>>(path);
   }
 }

@@ -44,10 +44,12 @@ export class CityListComponent implements OnInit {
     });
   }
 
+  //UMAF3IDUH1WGX3FR
+
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate == null);
+        this.countries = response.data;
       },
       (error) => console.error
     );
@@ -56,7 +58,7 @@ export class CityListComponent implements OnInit {
   getCities() {
     this.cityService.getAllDTO().subscribe(
       (response) => {
-        this.cityDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.cityDTOs = response.data;
       },
       (error) => console.error
     );
@@ -102,9 +104,7 @@ export class CityListComponent implements OnInit {
   }
 
   getCountryId(countryName: string): number {
-    return this.countries.find(
-      (f) => f.countryName.toLowerCase() == countryName.toLowerCase()
-    )?.id;
+    return this.countries.find((f) => f.countryName == countryName)?.id;
   }
 
   open(city: City) {

@@ -31,9 +31,7 @@ export class DriverLicenceComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.driverLicences = response.data;
       },
       (error) => console.error
     );

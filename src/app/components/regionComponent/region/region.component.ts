@@ -47,7 +47,7 @@ export class RegionComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
@@ -56,7 +56,7 @@ export class RegionComponent implements OnInit {
   getRegions() {
     this.regionService.getAllDTO().subscribe(
       (response) => {
-        this.regionDTOs = response.data.filter((f) => f.deletedDate == null);
+        this.regionDTOs = response.data;
       },
       (error) => console.error
     );

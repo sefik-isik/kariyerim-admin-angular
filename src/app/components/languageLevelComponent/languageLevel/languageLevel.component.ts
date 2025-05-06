@@ -32,9 +32,7 @@ export class LanguageLevelComponent implements OnInit {
   getFaculties() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.languageLevels = response.data;
       },
       (error) => console.error
     );

@@ -27,11 +27,9 @@ export class WorkingMethodOfDeletedComponent implements OnInit {
   }
 
   getWorkingMethods() {
-    this.workingMethodService.getAll().subscribe(
+    this.workingMethodService.getDeletedAll().subscribe(
       (response) => {
-        this.workingMethods = response.data.filter(
-          (f) => f.deletedDate != null
-        );
+        this.workingMethods = response.data;
       },
       (error) => console.error
     );

@@ -38,6 +38,11 @@ export class SectorService {
     return this.httpClient.get<ListResponseModel<Sector>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<Sector>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<Sector>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<Sector>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<Sector>>(path);

@@ -28,9 +28,9 @@ export class FacultyOfDeletedComponent implements OnInit {
   }
 
   getFaculties() {
-    this.facultyService.getAll().subscribe(
+    this.facultyService.getDeletedAll().subscribe(
       (response) => {
-        this.faculties = response.data.filter((f) => f.deletedDate != null);
+        this.faculties = response.data;
       },
       (error) => console.error
     );

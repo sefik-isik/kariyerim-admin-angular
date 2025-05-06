@@ -41,6 +41,11 @@ export class LanguageLevelService {
     return this.httpClient.get<ListResponseModel<LanguageLevel>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<LanguageLevel>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<LanguageLevel>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<LanguageLevel>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<LanguageLevel>>(path);

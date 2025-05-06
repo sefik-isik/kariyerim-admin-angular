@@ -42,6 +42,11 @@ export class PersonelUserAddressService {
     return this.httpClient.get<ListResponseModel<PersonelUserAddress>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<PersonelUserAddress>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<PersonelUserAddress>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<PersonelUserAddress>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<PersonelUserAddress>>(path);
@@ -49,6 +54,13 @@ export class PersonelUserAddressService {
 
   getAllDTO(id: number): Observable<ListResponseModel<PersonelUserAddressDTO>> {
     let path = this.newUrlPath + 'getalldto?id=' + id;
+    return this.httpClient.get<ListResponseModel<PersonelUserAddressDTO>>(path);
+  }
+
+  getAllDeletedDTO(
+    id: number
+  ): Observable<ListResponseModel<PersonelUserAddressDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
     return this.httpClient.get<ListResponseModel<PersonelUserAddressDTO>>(path);
   }
 }

@@ -47,9 +47,7 @@ export class CompanyUserFileOfDeletedComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -58,12 +56,11 @@ export class CompanyUserFileOfDeletedComponent implements OnInit {
   getCompanyUserFiles() {
     this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
 
-    this.companyUserFileService.getAllDTO(this.userId).subscribe(
+    this.companyUserFileService.getAllDeletedDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserFileDTOs = response.data
-          .filter((f) => f.deletedDate != null)
-          .filter((f) => f.code == CompanyUserCode);
-        this.dataLoaded = true;
+        this.companyUserFileDTOs = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.error
     );

@@ -25,7 +25,7 @@ export class ModelMenuComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getAll().subscribe(
       (response) => {
-        this.modelMenus = response.data.filter((f) => f.deletedDate == null);
+        this.modelMenus = response.data;
         this.dataLoaded = true;
 
         this.getModelMenuClass(this.modelMenuFirst);

@@ -44,9 +44,7 @@ export class CompanyUserComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -57,18 +55,16 @@ export class CompanyUserComponent implements OnInit {
     const userId = this.getUserId(this.filter1);
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUserDTOs = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.log(error)
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.userDTOs.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }

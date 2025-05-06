@@ -32,7 +32,7 @@ export class UniversityComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data.filter((f) => f.deletedDate == null);
+        this.universities = response.data;
       },
       (error) => console.error
     );

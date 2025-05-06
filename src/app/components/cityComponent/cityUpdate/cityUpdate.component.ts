@@ -111,7 +111,7 @@ export class CityUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate == null);
+        this.countries = response.data;
       },
       (error) => console.error
     );
@@ -122,9 +122,7 @@ export class CityUpdateComponent implements OnInit {
   }
 
   getCountryId(countryName: string): number {
-    return this.countries.find(
-      (c) => c.countryName.toLowerCase() == countryName.toLowerCase()
-    )?.id;
+    return this.countries.find((c) => c.countryName == countryName)?.id;
   }
 
   clearInput1() {

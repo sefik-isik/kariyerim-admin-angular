@@ -41,6 +41,11 @@ export class FacultyService {
     return this.httpClient.get<ListResponseModel<Faculty>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<Faculty>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<Faculty>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<Faculty>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<Faculty>>(path);

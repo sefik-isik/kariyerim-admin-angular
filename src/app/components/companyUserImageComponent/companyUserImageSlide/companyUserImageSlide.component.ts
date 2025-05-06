@@ -50,9 +50,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -63,10 +61,9 @@ export class CompanyUserImageSlideComponent implements OnInit {
 
     this.companyUserImageService.getAllDTO(userId).subscribe(
       (response) => {
-        this.companyUserImageDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
-        this.dataLoaded = true;
+        this.companyUserImageDTOs = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.error
     );

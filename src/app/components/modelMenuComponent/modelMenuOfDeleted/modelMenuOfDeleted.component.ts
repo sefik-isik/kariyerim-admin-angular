@@ -28,9 +28,9 @@ export class ModelMenuOfDeletedComponent implements OnInit {
   }
 
   getModelMenus() {
-    this.modelMenuService.getAll().subscribe(
+    this.modelMenuService.getDeletedAll().subscribe(
       (response) => {
-        this.modelMenus = response.data.filter((f) => f.deletedDate != null);
+        this.modelMenus = response.data;
       },
       (error) => console.error
     );

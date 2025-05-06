@@ -56,29 +56,25 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data;
       },
       (error) => console.error
     );
   }
 
   getUserOperationClaims() {
-    this.userOperationClaimService.getAllDTO().subscribe(
+    this.userOperationClaimService.getAllDeletedDTO().subscribe(
       (response) => {
-        this.userOperationClaimDTOs = response.data.filter(
-          (f) => f.deletedDate != null
-        );
+        this.userOperationClaimDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
   getOperaionClaims() {
-    this.operationClaimService.getAll().subscribe(
+    this.operationClaimService.getDeletedAll().subscribe(
       (response) => {
-        this.operationClaims = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.operationClaims = response.data;
       },
       (error) => console.error
     );

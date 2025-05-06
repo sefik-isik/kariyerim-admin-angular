@@ -108,7 +108,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data.filter((f) => f.deletedDate == null);
+        this.universities = response.data;
       },
       (error) => console.error
     );
@@ -119,9 +119,8 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
   }
 
   getUniversityId(universityName: string): number {
-    return this.universities.find(
-      (c) => c.universityName.toLowerCase() == universityName.toLowerCase()
-    )?.id;
+    return this.universities.find((c) => c.universityName == universityName)
+      ?.id;
   }
 
   clearInput1() {

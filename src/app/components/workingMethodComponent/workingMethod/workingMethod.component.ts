@@ -30,9 +30,7 @@ export class WorkingMethodComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
-        this.workingMethods = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.workingMethods = response.data;
       },
       (error) => console.error
     );

@@ -43,19 +43,16 @@ export class UniversityDepartmentOfDeletedComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data.filter((f) => f.deletedDate == null);
-        this.dataLoaded = true;
+        this.universities = response.data;
       },
       (error) => console.error
     );
   }
 
   getUniversityDepartments() {
-    this.universityDepartmentService.getAllDTO().subscribe(
+    this.universityDepartmentService.getAllDeletedDTO().subscribe(
       (response) => {
-        this.universityDepartmentDTOs = response.data.filter(
-          (f) => f.deletedDate != null
-        );
+        this.universityDepartmentDTOs = response.data;
       },
       (error) => console.error
     );

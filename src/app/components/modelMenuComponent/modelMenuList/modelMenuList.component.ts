@@ -32,7 +32,7 @@ export class ModelMenuListComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getAll().subscribe(
       (response) => {
-        this.modelMenus = response.data.filter((f) => f.deletedDate == null);
+        this.modelMenus = response.data;
       },
       (error) => console.error
     );

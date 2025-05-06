@@ -39,12 +39,22 @@ export class RegionService {
     return this.httpClient.get<ListResponseModel<Region>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<Region>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<Region>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<Region>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<Region>>(path);
   }
   getAllDTO(): Observable<ListResponseModel<RegionDTO>> {
     let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<RegionDTO>>(path);
+  }
+
+  getAllDeletedDTO(): Observable<ListResponseModel<RegionDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto';
     return this.httpClient.get<ListResponseModel<RegionDTO>>(path);
   }
 }

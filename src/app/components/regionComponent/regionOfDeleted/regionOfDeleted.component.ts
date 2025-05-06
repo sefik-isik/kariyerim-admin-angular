@@ -43,17 +43,16 @@ export class RegionOfDeletedComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
-        this.dataLoaded = true;
+        this.cities = response.data;
       },
       (error) => console.error
     );
   }
 
   getRegions() {
-    this.regionService.getAllDTO().subscribe(
+    this.regionService.getAllDeletedDTO().subscribe(
       (response) => {
-        this.regionDTOs = response.data.filter((f) => f.deletedDate != null);
+        this.regionDTOs = response.data;
       },
       (error) => console.error
     );

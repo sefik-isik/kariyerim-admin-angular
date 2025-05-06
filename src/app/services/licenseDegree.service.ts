@@ -41,6 +41,11 @@ export class LicenceDegreeService {
     return this.httpClient.get<ListResponseModel<LicenceDegree>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<LicenceDegree>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<LicenceDegree>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<LicenceDegree>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<LicenceDegree>>(path);

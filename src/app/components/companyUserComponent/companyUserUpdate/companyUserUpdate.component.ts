@@ -161,9 +161,7 @@ export class CompanyUserUpdateComponent implements OnInit {
     this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.users = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -172,7 +170,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
@@ -181,7 +179,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data.filter((f) => f.deletedDate == null);
+        this.sectors = response.data;
       },
       (error) => console.error
     );
@@ -191,11 +189,9 @@ export class CompanyUserUpdateComponent implements OnInit {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
         if (this.updateForm.value.cityName) {
-          this.taxOffices = response.data
-            .filter(
-              (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
-            )
-            .filter((f) => f.deletedDate == null);
+          this.taxOffices = response.data.filter(
+            (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
+          );
         } else {
           this.taxOffices = response.data;
         }

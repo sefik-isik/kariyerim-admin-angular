@@ -45,7 +45,7 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
 
   ngOnInit() {
     this.getUsers();
-    this.getCompanyUsers();
+
     this.getCompanyUserDepartments();
   }
 
@@ -54,37 +54,14 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    const userId = this.getUserId(this.filter1);
-    this.companyUserService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        if (userId) {
-          this.companyUserDTOs = response.data
-            .filter((f) => f.companyUserId == userId)
-            .filter((f) => f.deletedDate == null);
-        } else {
-          this.companyUserDTOs = response.data
-            .filter((f) => f.deletedDate == null)
-            .filter((f) => f.code == CompanyUserCode);
-        }
-      },
-      (error) => console.log(error)
-    );
-  }
-
   getUserId(userEmail: string): number {
-    const userId = this.userDTOs.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
@@ -92,12 +69,11 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
   getCompanyUserDepartments() {
     this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
 
-    this.companyUserDepartmentService.getAllDTO(this.userId).subscribe(
+    this.companyUserDepartmentService.getAllDeletedDTO(this.userId).subscribe(
       (response) => {
         this.companyUserDepartmentDTOs = response.data.filter(
-          (f) => f.deletedDate != null
+          (f) => f.code == CompanyUserCode
         );
-        this.dataLoaded = true;
       },
       (error) => console.error
     );

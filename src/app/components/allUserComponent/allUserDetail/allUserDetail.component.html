@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ userDTO.id }}</p>
+    <p class="card-text"><b>firstName: </b>{{ userDTO.firstName }}</p>
+    <p class="card-text"><b>lastName: </b>{{ userDTO.lastName }}</p>
+    <p class="card-text"><b>email: </b>{{ userDTO.email }}</p>
+    <p class="card-text"><b>phoneNumber: </b>{{ userDTO.phoneNumber }}</p>
+    <p class="card-text"><b>status: </b>{{ userDTO.status | status }}</p>
+    <p class="card-text"><b>code: </b>{{ userDTO.code | code }}</p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ userDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ userDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ userDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

@@ -74,16 +74,14 @@ export class RegionAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
   }
 
   getCityId(cityName: string): number {
-    const cityId = this.cities.filter(
-      (c) => c.cityName.toLowerCase() === cityName.toLowerCase()
-    )[0]?.id;
+    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
 
     return cityId;
   }

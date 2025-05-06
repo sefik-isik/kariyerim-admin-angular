@@ -157,9 +157,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.users = response.data.filter((f) => f.code == CompanyUserCode);
         this.getCompanyUsers();
       },
       (error) => console.error
@@ -170,9 +168,9 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     const userId = this.getUserId(this.updateForm.value.userEmail);
     this.companyUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.companyUsers = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUsers = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.error
     );
@@ -181,7 +179,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate == null);
+        this.countries = response.data;
         this.getCities();
       },
       (error) => console.error
@@ -192,15 +190,13 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     this.cityService.getAll().subscribe(
       (response) => {
         if (this.updateForm.value.countryName) {
-          this.cities = response.data
-            .filter(
-              (f) =>
-                f.countryId ===
-                this.getCountryId(this.updateForm.value.countryName)
-            )
-            .filter((f) => f.deletedDate == null);
+          this.cities = response.data.filter(
+            (f) =>
+              f.countryId ===
+              this.getCountryId(this.updateForm.value.countryName)
+          );
         } else {
-          this.cities = response.data.filter((f) => f.deletedDate == null);
+          this.cities = response.data;
         }
         this.getRegions();
       },
@@ -212,13 +208,11 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     this.regionService.getAll().subscribe(
       (response) => {
         if (this.updateForm.value.cityName) {
-          this.regions = response.data
-            .filter(
-              (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
-            )
-            .filter((f) => f.deletedDate == null);
+          this.regions = response.data.filter(
+            (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
+          );
         } else {
-          this.regions = response.data.filter((f) => f.deletedDate == null);
+          this.regions = response.data;
         }
       },
       (error) => console.error
@@ -256,26 +250,20 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
   getCompanyUserId(companyUserName: string): number {
     return this.companyUsers.filter(
-      (c) => c.companyUserName.toLowerCase() == companyUserName.toLowerCase()
+      (c) => c.companyUserName == companyUserName
     )[0]?.id;
   }
 
   getCountryId(countryName: string): number {
-    return this.countries.filter(
-      (c) => c.countryName.toLowerCase() == countryName.toLowerCase()
-    )[0]?.id;
+    return this.countries.filter((c) => c.countryName == countryName)[0]?.id;
   }
 
   getCityId(cityName: string): number {
-    return this.cities.filter(
-      (c) => c.cityName.toLowerCase() == cityName.toLowerCase()
-    )[0]?.id;
+    return this.cities.filter((c) => c.cityName == cityName)[0]?.id;
   }
 
   getRegionId(regionName: string): number {
-    return this.regions.filter(
-      (c) => c.regionName.toLowerCase() == regionName.toLowerCase()
-    )[0]?.id;
+    return this.regions.filter((c) => c.regionName == regionName)[0]?.id;
   }
 
   clearInput1() {

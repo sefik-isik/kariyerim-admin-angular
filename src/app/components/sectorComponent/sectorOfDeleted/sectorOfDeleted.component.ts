@@ -30,9 +30,9 @@ export class SectorOfDeletedComponent implements OnInit {
   }
 
   getSectors() {
-    this.sectorService.getAll().subscribe(
+    this.sectorService.getDeletedAll().subscribe(
       (response) => {
-        this.sectors = response.data.filter((f) => f.deletedDate != null);
+        this.sectors = response.data;
       },
       (error) => console.error
     );

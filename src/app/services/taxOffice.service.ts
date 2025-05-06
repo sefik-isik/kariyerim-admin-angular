@@ -42,6 +42,11 @@ export class TaxOfficeService {
     return this.httpClient.get<ListResponseModel<TaxOffice>>(path);
   }
 
+  getDeletedAll(): Observable<ListResponseModel<TaxOffice>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<TaxOffice>>(path);
+  }
+
   getById(id: number): Observable<SingleResponseModel<TaxOffice>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<TaxOffice>>(path);
@@ -49,6 +54,11 @@ export class TaxOfficeService {
 
   getAllDTO(): Observable<ListResponseModel<TaxOfficeDTO>> {
     let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<TaxOfficeDTO>>(path);
+  }
+
+  getAllDeletedDTO(): Observable<ListResponseModel<TaxOfficeDTO>> {
+    let path = this.newUrlPath + 'getalldeleteddto';
     return this.httpClient.get<ListResponseModel<TaxOfficeDTO>>(path);
   }
 }

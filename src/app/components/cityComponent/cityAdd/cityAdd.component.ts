@@ -78,7 +78,7 @@ export class CityAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data.filter((f) => f.deletedDate == null);
+        this.countries = response.data;
       },
       (error) => console.error
     );
@@ -86,7 +86,7 @@ export class CityAddComponent implements OnInit {
 
   getCountryId(countryName: string): number {
     const countryId = this.countries.filter(
-      (c) => c.countryName.toLowerCase() === countryName.toLowerCase()
+      (c) => c.countryName === countryName
     )[0]?.id;
 
     return countryId;

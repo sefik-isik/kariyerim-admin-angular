@@ -26,11 +26,9 @@ export class OperationClaimOfDeletedComponent implements OnInit {
   }
 
   getOperationClaims() {
-    this.operationClaimService.getAll().subscribe(
+    this.operationClaimService.getDeletedAll().subscribe(
       (response) => {
-        this.operationClaims = response.data.filter(
-          (f) => f.deletedDate != null
-        );
+        this.operationClaims = response.data;
       },
       (error) => console.error
     );

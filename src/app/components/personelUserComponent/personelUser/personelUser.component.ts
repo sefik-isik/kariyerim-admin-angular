@@ -43,25 +43,7 @@ export class PersonelUserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getUsers();
     this.getPersonelUsers();
-  }
-
-  //allUsersComponent
-  //updateCode
-  //updateStatus
-
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
-      },
-      (error) => console.error
-    );
   }
 
   getPersonelUsers() {
@@ -69,9 +51,9 @@ export class PersonelUserComponent implements OnInit {
 
     this.personelUserService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.personelUserDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
+        this.personelUserDTOs = response.data.filter(
+          (f) => f.code == PersonelUserCode
+        );
       },
       (error) => console.log(error)
     );

@@ -44,7 +44,7 @@ export class UniversityDepartmentComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data.filter((f) => f.deletedDate == null);
+        this.universities = response.data;
       },
       (error) => console.error
     );
@@ -53,9 +53,7 @@ export class UniversityDepartmentComponent implements OnInit {
   getUniversityDepartments() {
     this.universityDepartmentService.getAllDTO().subscribe(
       (response) => {
-        this.universityDepartmentDTOs = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.universityDepartmentDTOs = response.data;
       },
       (error) => console.error
     );
@@ -103,9 +101,8 @@ export class UniversityDepartmentComponent implements OnInit {
   }
 
   getUniversityId(universityName: string): number {
-    return this.universities.find(
-      (f) => f.universityName.toLowerCase() == universityName.toLowerCase()
-    )?.id;
+    return this.universities.find((f) => f.universityName == universityName)
+      ?.id;
   }
 
   clearInput1() {

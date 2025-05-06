@@ -1,7 +1,6 @@
 import { CompanyUserComponent } from './components/companyUserComponent/companyUser/companyUser.component';
 import { Routes } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
-import { CityComponent } from './components/cityComponent/city/city.component';
 
 import { LoginComponent } from './components/login/login.component';
 import { LoginGuard } from './guards/login.guard';
@@ -62,7 +61,6 @@ import { LicenceDegreeComponent } from './components/licenceDegreeComponent/lice
 import { LicenceDegreeAddComponent } from './components/licenceDegreeComponent/licenceDegreeAdd/licenceDegreeAdd.component';
 import { LicenceDegreeOfDeletedComponent } from './components/licenceDegreeComponent/licenceDegreeOfDeleted/licenceDegreeOfDeleted.component';
 import { LicenceDegreeUpdateComponent } from './components/licenceDegreeComponent/licenceDegreeUpdate/licenceDegreeUpdate.component';
-import { ModelMenuComponent } from './components/modelMenu/modelMenu.component';
 import { ModelMenuAddComponent } from './components/modelMenuComponent/modelMenuAdd/modelMenuAdd.component';
 import { ModelMenuOfDeletedComponent } from './components/modelMenuComponent/modelMenuOfDeleted/modelMenuOfDeleted.component';
 import { ModelMenuUpdateComponent } from './components/modelMenuComponent/modelMenuUpdate/modelMenuUpdate.component';
@@ -101,13 +99,20 @@ import { PersonelUserComponent } from './components/personelUserComponent/person
 import { PersonelUserAddComponent } from './components/personelUserComponent/personelUserAdd/personelUserAdd.component';
 import { PersonelUserOfDeletedComponent } from './components/personelUserComponent/personelUserOfDeleted/personelUserOfDeleted.component';
 import { PersonelUserUpdateComponent } from './components/personelUserComponent/personelUserUpdate/personelUserUpdate.component';
-import { AllUserComponent } from './components/allUserComponent/allUser/allUser.component';
-import { AllUserOfDeletedComponent } from './components/allUserComponent/allUserOfDeleted/allUserOfDeleted.component';
-import { AllUserUpdateComponent } from './components/allUserComponent/allUserUpdate/allUserUpdate.component';
 
+//-----------------
+import { AllUserComponent } from './components/allUserComponent/allUser/allUser.component';
+import { AllUserListTab } from './components/allUserComponent/allUser/allUserListTab';
+import { AllUserDeletedListTab } from './components/allUserComponent/allUser/allUserDeletedListTab';
+//-----------------
+import { CityComponent } from './components/cityComponent/city/city.component';
 import { CityListTab } from './components/cityComponent/city/cityListTab';
-import { CityOfDeletedTab } from './components/cityComponent/city/cityDeletedListTab';
 import { CityDeletedListComponent } from './components/cityComponent/cityDeletedList/cityDeletedList.component';
+import { PersonelUserAddressComponent } from './components/personelUserAddressComponent/personelUserAddress/personelUserAddress.component';
+import { PersonelUserAddressAddComponent } from './components/personelUserAddressComponent/personelUserAddressAdd/personelUserAddressAdd.component';
+import { PersonelUserAddressOfDeletedComponent } from './components/personelUserAddressComponent/personelUserAddressOfDeleted/personelUserAddressOfDeleted.component';
+import { PersonelUserAddressUpdateComponent } from './components/personelUserAddressComponent/personelUserAddressUpdate/personelUserAddressUpdate.component';
+//-----------------
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -145,6 +150,23 @@ export const routes: Routes = [
         path: 'updatepassword',
         component: UpdatePasswordComponent,
         canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'allusers',
+        component: AllUserComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'alluserlisttab',
+            component: AllUserListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'alluserdeletedlisttab',
+            component: AllUserDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
       },
       {
         path: 'cities',
@@ -610,18 +632,23 @@ export const routes: Routes = [
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {
-        path: 'allusers',
-        component: AllUserComponent,
+        path: 'personeluseraddresses',
+        component: PersonelUserAddressComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {
-        path: 'allusers/alluserofdeleted',
-        component: AllUserOfDeletedComponent,
+        path: 'personeluseraddresses/personeluseraddressadd',
+        component: PersonelUserAddressAddComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {
-        path: 'allusers/alluserupdate/:alluserId',
-        component: AllUserUpdateComponent,
+        path: 'personeluseraddresses/personeluseraddressofdeleted',
+        component: PersonelUserAddressOfDeletedComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluseraddresses/personeluseraddressupdate/:personeluseraddressId',
+        component: PersonelUserAddressUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

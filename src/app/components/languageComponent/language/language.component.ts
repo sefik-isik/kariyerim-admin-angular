@@ -32,7 +32,7 @@ export class LanguageComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data.filter((f) => f.deletedDate == null);
+        this.languages = response.data;
       },
       (error) => console.error
     );

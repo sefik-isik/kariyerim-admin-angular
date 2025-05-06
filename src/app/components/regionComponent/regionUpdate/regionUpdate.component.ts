@@ -104,7 +104,7 @@ export class RegionUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data.filter((f) => f.deletedDate == null);
+        this.cities = response.data;
       },
       (error) => console.error
     );
@@ -114,9 +114,7 @@ export class RegionUpdateComponent implements OnInit {
     this.regionService.getAll().subscribe(
       (response) => {
         if (this.cityId) {
-          this.regions = response.data
-            .filter((f) => f.deletedDate == null)
-            .filter((f) => f.cityId == this.cityId);
+          this.regions = response.data.filter((f) => f.cityId == this.cityId);
         }
       },
       (error) => console.error
@@ -128,9 +126,7 @@ export class RegionUpdateComponent implements OnInit {
   }
 
   getCityId(cityName: string): number {
-    return this.cities.find(
-      (c) => c.cityName.toLowerCase() == cityName.toLowerCase()
-    )?.id;
+    return this.cities.find((c) => c.cityName == cityName)?.id;
   }
 
   clearInput1() {

@@ -47,9 +47,7 @@ export class PersonelUserCvComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == PersonelUserCode);
       },
       (error) => console.error
     );
@@ -60,10 +58,9 @@ export class PersonelUserCvComponent implements OnInit {
 
     this.personelUserCvService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.personelUserCvDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == PersonelUserCode);
-        this.dataLoaded = true;
+        this.personelUserCvDTOs = response.data.filter(
+          (f) => f.code == PersonelUserCode
+        );
       },
       (error) => console.error
     );

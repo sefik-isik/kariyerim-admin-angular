@@ -27,11 +27,9 @@ export class LanguageLevelOfDeletedComponent implements OnInit {
   }
 
   getLanguageLevels() {
-    this.languageLevelService.getAll().subscribe(
+    this.languageLevelService.getDeletedAll().subscribe(
       (response) => {
-        this.languageLevels = response.data.filter(
-          (f) => f.deletedDate != null
-        );
+        this.languageLevels = response.data;
       },
       (error) => console.error
     );

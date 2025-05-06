@@ -115,7 +115,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.deletedDate == null);
+        this.users = response.data;
       },
       (error) => console.error
     );
@@ -132,25 +132,21 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
-        this.operationClaims = response.data.filter(
-          (f) => f.deletedDate == null
-        );
+        this.operationClaims = response.data;
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )[0]?.id;
+    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getOperaionClaimId(claimName: string): number {
     const operaionClaimId = this.operationClaims.filter(
-      (c) => c.name.toLowerCase() === claimName.toLowerCase()
+      (c) => c.name === claimName
     )[0]?.id;
 
     return operaionClaimId;

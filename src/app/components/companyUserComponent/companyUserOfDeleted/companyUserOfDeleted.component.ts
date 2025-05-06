@@ -43,9 +43,7 @@ export class CompanyUserOfDeletedComponent implements OnInit {
 
     this.userService.getAllDTO(this.userId).subscribe(
       (response) => {
-        this.userDTOs = response.data
-          .filter((f) => f.deletedDate == null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
       },
       (error) => console.error
     );
@@ -54,20 +52,18 @@ export class CompanyUserOfDeletedComponent implements OnInit {
   getCompanyUsers() {
     this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
     const userId = this.getUserId(this.filter1);
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+    this.companyUserService.getAllDeletedDTO(this.userId).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data
-          .filter((f) => f.deletedDate != null)
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUserDTOs = response.data.filter(
+          (f) => f.code == CompanyUserCode
+        );
       },
       (error) => console.log(error)
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.userDTOs.find(
-      (c) => c.email.toLowerCase() === userEmail.toLowerCase()
-    )?.id;
+    const userId = this.userDTOs.find((c) => c.email === userEmail)?.id;
 
     return userId;
   }
