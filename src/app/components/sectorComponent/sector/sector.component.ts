@@ -16,6 +16,7 @@ import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
 })
 export class SectorComponent implements OnInit {
   sectors: Sector[] = [];
+
   componentTitle = 'Sectors';
   filter1: string;
 

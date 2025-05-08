@@ -21,6 +21,7 @@ import { AddToLocalStorageService } from '../../services/addToLocalStorage.servi
 })
 export class LoginComponent implements OnInit {
   loginFom: FormGroup;
+
   componentTitle = 'Please sign in';
 
   constructor(

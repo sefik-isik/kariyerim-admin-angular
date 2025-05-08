@@ -1,18 +1,19 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { UserService } from '../../../services/user.service';
+
 import { UserDTO } from '../../../models/userDTO';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
-import { PersonelUserCode } from '../../../models/userCodes';
 import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
 import { GenderPipe } from '../../../pipes/gender.pipe';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-personelUserOfDeleted',
@@ -32,28 +33,44 @@ export class PersonelUserOfDeletedComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+
   componentTitle = 'Personel Users';
   userId: number;
 
   constructor(
-    private userService: UserService,
     private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService
+    private adminService: AdminService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getPersonelUsers();
+    this.getAdminValues();
   }
 
-  getPersonelUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.personelUserService.getAllDeletedDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.personelUserDTOs = response.data.filter(
-          (f) => f.code == PersonelUserCode
-        );
+        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDeletedDTO(adminModel).subscribe(
+      (response) => {
+        this.personelUserDTOs = response.data;
       },
       (error) => console.log(error)
     );

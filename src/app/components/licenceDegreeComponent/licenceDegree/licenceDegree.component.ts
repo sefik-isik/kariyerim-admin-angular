@@ -15,6 +15,7 @@ import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 })
 export class LicenceDegreeComponent implements OnInit {
   licenceDegrees: LicenceDegree[] = [];
+
   componentTitle = 'Licence Degree';
 
   constructor(

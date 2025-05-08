@@ -14,6 +14,7 @@ import { LanguageLevelService } from '../../../services/languageLevel.service';
 })
 export class LanguageLevelOfDeletedComponent implements OnInit {
   languageLevels: LanguageLevel[] = [];
+
   componentTitle = 'Language Levels Of Deleted';
   filter1: string;
 

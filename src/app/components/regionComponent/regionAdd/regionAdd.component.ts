@@ -24,6 +24,7 @@ import { CaseService } from '../../../services/case.service';
 export class RegionAddComponent implements OnInit {
   addForm1: FormGroup;
   cities: City[];
+
   componentTitle = 'Region Add Form';
 
   constructor(

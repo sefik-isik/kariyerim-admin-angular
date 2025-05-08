@@ -21,6 +21,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 })
 export class DriverLicenceAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Driver Licence Form';
 
   constructor(

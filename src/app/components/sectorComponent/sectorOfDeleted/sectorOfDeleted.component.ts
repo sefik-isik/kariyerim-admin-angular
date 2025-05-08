@@ -16,6 +16,7 @@ import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
 })
 export class SectorOfDeletedComponent implements OnInit {
   sectors: Sector[] = [];
+
   componentTitle = 'Sectors Of Deleted';
   filter1: string;
 

@@ -29,6 +29,7 @@ export class CityUpdateComponent implements OnInit {
   cities: City[];
   cityId: number;
   countryId: number;
+
   componentTitle = 'City Update';
 
   constructor(

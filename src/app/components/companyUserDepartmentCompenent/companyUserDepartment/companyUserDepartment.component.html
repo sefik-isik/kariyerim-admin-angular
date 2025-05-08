@@ -13,7 +13,6 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Company User Departments By User..."
-          (change)="getUsers()"
         />
         <datalist id="datalist1">
           <option
@@ -60,11 +59,6 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>userId</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>phoneNumber</th>
-            <th>email</th>
             <th>companyUserId</th>
             <th>companyUserName</th>
             <th>departmenName</th>
@@ -88,11 +82,6 @@
             "
           >
             <td>{{ companyUserDepartmentDTO.id }}</td>
-            <td>{{ companyUserDepartmentDTO.userId }}</td>
-            <td>{{ companyUserDepartmentDTO.firstName }}</td>
-            <td>{{ companyUserDepartmentDTO.lastName }}</td>
-            <td>{{ companyUserDepartmentDTO.phoneNumber }}</td>
-            <td>{{ companyUserDepartmentDTO.email }}</td>
             <td>{{ companyUserDepartmentDTO.companyUserId }}</td>
             <td>{{ companyUserDepartmentDTO.companyUserName }}</td>
             <td>{{ companyUserDepartmentDTO.departmentName }}</td>

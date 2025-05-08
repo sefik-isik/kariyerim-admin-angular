@@ -19,11 +19,11 @@ import { City } from '../../../models/city';
 import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
 import { CompanyUserAddress } from '../../../models/companyUserAddress';
 import { Region } from '../../../models/region';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserAddressAdd',
@@ -33,14 +33,15 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserAddressAddComponent implements OnInit {
   addForm: FormGroup;
+  userDTOs: UserDTO[] = [];
   companyUserDTOs: CompanyUserDTO[] = [];
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
   addressDetail: string;
+
   componentTitle = 'Company Address Add Form';
   userId: number;
-  users: UserDTO[] = [];
   isAdmin: boolean = false;
 
   constructor(
@@ -48,26 +49,19 @@ export class CompanyUserAddressAddComponent implements OnInit {
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
-    private companyUserService: CompanyUserService,
+    private userService: UserService,
     private companyUserAddressService: CompanyUserAddressService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
-    private userService: UserService,
-    private authService: AuthService
+    private adminService: AdminService,
+    private authService: AuthService,
+    private companyUserService: CompanyUserService
   ) {}
 
   ngOnInit() {
     this.createAddForm();
+    this.getAdminValues();
     this.getCountries();
-    this.getUsers();
-    this.checkAdmin();
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   createAddForm() {
@@ -114,7 +108,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getModel(): CompanyUserAddress {
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
-      companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
+      companyUserId: this.getCompanyUserId(this.addForm.value.userEmail),
       countryId: this.getCountryId(this.addForm.value.countryName),
       cityId: this.getCityId(this.addForm.value.cityName),
 
@@ -124,27 +118,31 @@ export class CompanyUserAddressAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
+  getCompanyUsers(adminModel: AdminModel) {
     const userId = this.getUserId(this.addForm.value.userEmail);
 
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+    this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data
-          .filter((f) => f.companyUserId == userId)
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
       },
       (error) => console.error
     );
@@ -188,8 +186,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
-
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
     return userId;
   }
 
@@ -214,10 +211,8 @@ export class CompanyUserAddressAddComponent implements OnInit {
     return regionId;
   }
 
-  getCompanyUserId(companyUserName: string): number {
-    const companyUserId = this.companyUserDTOs.filter(
-      (c) => c.companyUserName === companyUserName
-    )[0]?.id;
+  getCompanyUserId(email: string): number {
+    const companyUserId = this.userDTOs.filter((c) => c.email === email)[0]?.id;
 
     return companyUserId;
   }
@@ -225,13 +220,13 @@ export class CompanyUserAddressAddComponent implements OnInit {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     let value = this.addForm.get('companyUserName');
     value.reset();
-    this.getCompanyUsers();
+    this.getAdminValues();
   }
 
   clearInput3() {

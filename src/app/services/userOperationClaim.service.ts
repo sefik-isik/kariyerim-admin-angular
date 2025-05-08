@@ -1,3 +1,4 @@
+import { AdminModel } from './../models/adminModel';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/apiUrl';
 import { HttpClient } from '@angular/common/http';
@@ -37,14 +38,22 @@ export class UserOperationClaimService {
     );
   }
 
-  getAll(): Observable<ListResponseModel<UserOperationClaim>> {
-    let path = this.newUrlPath + 'getall';
-    return this.httpClient.get<ListResponseModel<UserOperationClaim>>(path);
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserOperationClaim>> {
+    return this.httpClient.post<ListResponseModel<UserOperationClaim>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<UserOperationClaim>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<UserOperationClaim>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserOperationClaim>> {
+    return this.httpClient.post<ListResponseModel<UserOperationClaim>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<UserOperationClaim>> {
@@ -52,13 +61,21 @@ export class UserOperationClaimService {
     return this.httpClient.get<SingleResponseModel<UserOperationClaim>>(path);
   }
 
-  getAllDTO(): Observable<ListResponseModel<UserOperationClaimDTO>> {
-    let path = this.newUrlPath + 'getalldto';
-    return this.httpClient.get<ListResponseModel<UserOperationClaimDTO>>(path);
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserOperationClaimDTO>> {
+    return this.httpClient.post<ListResponseModel<UserOperationClaimDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
   }
 
-  getAllDeletedDTO(): Observable<ListResponseModel<UserOperationClaimDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto';
-    return this.httpClient.get<ListResponseModel<UserOperationClaimDTO>>(path);
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserOperationClaimDTO>> {
+    return this.httpClient.post<ListResponseModel<UserOperationClaimDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

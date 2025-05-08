@@ -15,12 +15,12 @@
             id="input1"
             placeholder="Select User..."
             minlength="3"
-            (change)="getCompanyUsers()"
+            (change)="getAdminValues()"
           />
           <datalist id="datalist1">
             <option
-              *ngFor="let user of users"
-              value="{{ user.email }}"
+              *ngFor="let userDTO of userDTOs"
+              value="{{ userDTO.email }}"
             ></option>
           </datalist>
           <span class="input-group-text">
@@ -43,8 +43,8 @@
           />
           <datalist id="datalist2">
             <option
-              *ngFor="let companyUser of companyUsers"
-              value="{{ companyUser.companyUserName }}"
+              *ngFor="let companyUserDTO of companyUserDTOs"
+              value="{{ companyUserDTO.companyUserName }}"
             ></option>
           </datalist>
           <span class="input-group-text">

@@ -15,6 +15,7 @@ import { FacultyService } from '../../../services/faculty.service';
 })
 export class FacultyOfDeletedComponent implements OnInit {
   faculties: Faculty[] = [];
+
   componentTitle = 'Faculties Of Deleted';
   filter1: string;
 

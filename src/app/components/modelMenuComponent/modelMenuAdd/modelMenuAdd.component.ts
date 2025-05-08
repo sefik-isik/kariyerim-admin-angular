@@ -20,6 +20,7 @@ import { ModelMenu } from '../../../models/modelMenu';
 })
 export class ModelMenuAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Model Menu Form';
 
   constructor(

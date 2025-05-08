@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -11,15 +13,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { HttpEventType } from '@angular/common/http';
-
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
-import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImageUpdate',
@@ -29,12 +28,13 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserImageUpdateComponent implements OnInit {
   updateForm: FormGroup;
+
   componentTitle = 'Company User Image Update Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
   users: UserDTO[] = [];
-  companyUsers: CompanyUserDTO[] = [];
+  companyUserDTOs: CompanyUserDTO[] = [];
   companyUserId: number;
   companyUserName: string;
   userEmail: string;
@@ -49,13 +49,12 @@ export class CompanyUserImageUpdateComponent implements OnInit {
     private companyUserImageService: CompanyUserImageService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUsers();
+    this.getAdminValues();
     this.createcUpdateForm();
 
     this.activatedRoute.params.subscribe((params) => {
@@ -199,23 +198,29 @@ export class CompanyUserImageUpdateComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUsers = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.users = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserDTOs = response.data;
       },
       (error) => console.error
     );
@@ -232,7 +237,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   }
 
   getCompanyUserById(companyUserId: number): string {
-    return this.companyUsers.find((c) => c.id == companyUserId)
+    return this.companyUserDTOs.find((c) => c.id == companyUserId)
       ?.companyUserName;
   }
 

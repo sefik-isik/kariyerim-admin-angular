@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { LanguageLevelService } from './../../../services/languageLevel.service';
 import { LanguageService } from './../../../services/language.service';
 import { AuthService } from './../../../services/auth.service';
@@ -12,7 +14,6 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -21,7 +22,6 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
-import { PersonelUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-personelUserCvAdd',
@@ -31,13 +31,14 @@ import { PersonelUserCode } from '../../../models/userCodes';
 })
 export class PersonelUserCvAddComponent implements OnInit {
   addForm: FormGroup;
-  personelUsers: PersonelUserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
   addressDetailText: string;
+
   componentTitle = 'Personel User Cv Add Form';
   userId: number;
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   isAdmin: boolean = false;
 
   constructor(
@@ -48,23 +49,17 @@ export class PersonelUserCvAddComponent implements OnInit {
     private languageLevelService: LanguageLevelService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.createAddForm();
-    this.getUsers();
+    this.getAdminValues();
+
     this.getLanguages();
     this.getLanguageLevels();
-    this.checkAdmin();
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   createAddForm() {
@@ -98,10 +93,9 @@ export class PersonelUserCvAddComponent implements OnInit {
   }
 
   getModel(): PersonelUserCvDTO {
-    const userId = this.getUserId(this.addForm.value.userEmail);
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(userId),
+      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
       cvName: this.addForm.value.cvName,
       languageId: this.getLanguageId(this.addForm.value.languageName),
       languageLevelId: this.getLanguageLevelId(
@@ -112,27 +106,29 @@ export class PersonelUserCvAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getPersonelUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    const userId = this.getUserId(this.addForm.value.userEmail);
-
-    this.personelUserService.getAllDTO(this.userId).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.personelUsers = response.data
-          .filter((f) => f.id == userId)
-          .filter((f) => f.code == PersonelUserCode);
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.personelUserDTOs = response.data;
       },
       (error) => console.error
     );
@@ -157,14 +153,14 @@ export class PersonelUserCvAddComponent implements OnInit {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getPersonelUserId(userId: number): number {
-    const personelUserId = this.personelUsers.filter(
-      (c) => c.userId === userId
+  getPersonelUserId(email: string): number {
+    const personelUserId = this.personelUserDTOs.filter(
+      (c) => c.email === email
     )[0]?.id;
 
     return personelUserId;
@@ -189,13 +185,13 @@ export class PersonelUserCvAddComponent implements OnInit {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     let value = this.addForm.get('personelUserName');
     value.reset();
-    this.getPersonelUsers();
+    this.getAdminValues();
   }
 
   clearInput3() {

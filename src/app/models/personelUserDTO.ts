@@ -1,6 +1,6 @@
-import { BaseUserDTOModel } from './baseUserDTOModel';
+import { BaseUserModel } from './baseUserModel';
 
-export interface PersonelUserDTO extends BaseUserDTOModel {
+export interface PersonelUserDTO extends BaseUserModel {
   identityNumber: string;
   dateOfBirth: string;
   gender: boolean;

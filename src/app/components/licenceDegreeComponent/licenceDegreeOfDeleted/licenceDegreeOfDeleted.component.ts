@@ -14,6 +14,7 @@ import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 })
 export class LicenceDegreeOfDeletedComponent implements OnInit {
   licenceDegrees: LicenceDegree[] = [];
+
   componentTitle = 'Licence Degree Of Deleted';
   filter1: string;
 

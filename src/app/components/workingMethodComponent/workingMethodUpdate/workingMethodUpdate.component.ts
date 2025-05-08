@@ -23,6 +23,7 @@ import { WorkingMethod } from '../../../models/workingMethod';
 export class WorkingMethodUpdateComponent implements OnInit {
   updateForm: FormGroup;
   workingMethodId: number;
+
   componentTitle = ' Working Method Update';
 
   constructor(

@@ -10,7 +10,8 @@ import { CompanyUserFile } from '../../../models/companyUserFile';
 import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserFile',
@@ -28,41 +29,44 @@ export class CompanyUserFileComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+
   componentTitle = 'Company User Files';
   userId: number;
 
   constructor(
     private toastrService: ToastrService,
     private companyUserFileService: CompanyUserFileService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUserFiles();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUserFiles(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUserFiles() {
-    let userId: number;
-    userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.companyUserFileService.getAllDTO(userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserFileDTOS = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUserFiles(adminModel: AdminModel) {
+    this.companyUserFileService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserFileDTOS = response.data;
       },
       (error) => console.error
     );
@@ -101,6 +105,6 @@ export class CompanyUserFileComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyUserFiles();
+    this.getAdminValues();
   }
 }

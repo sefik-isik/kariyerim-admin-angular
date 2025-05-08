@@ -13,7 +13,6 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Personel User Cvs By User..."
-          (change)="getUsers()"
         />
         <datalist id="datalist1">
           <option
@@ -49,11 +48,6 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>userId</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>phoneNumber</th>
-            <th>email</th>
             <th>personelUserId</th>
             <th>cvName</th>
             <th>birthPlaceId</th>
@@ -85,11 +79,6 @@
             "
           >
             <td>{{ personelUserCvDTO.id }}</td>
-            <td>{{ personelUserCvDTO.userId }}</td>
-            <td>{{ personelUserCvDTO.firstName }}</td>
-            <td>{{ personelUserCvDTO.lastName }}</td>
-            <td>{{ personelUserCvDTO.phoneNumber }}</td>
-            <td>{{ personelUserCvDTO.email }}</td>
             <td>{{ personelUserCvDTO.personelUserId }}</td>
             <td>{{ personelUserCvDTO.cvName }}</td>
             <td>{{ personelUserCvDTO.birthPlaceId }}</td>

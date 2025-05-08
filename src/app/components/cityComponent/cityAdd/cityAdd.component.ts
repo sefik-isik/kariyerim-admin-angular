@@ -25,6 +25,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class CityAddComponent implements OnInit {
   addForm1: FormGroup;
   countries: Country[];
+
   componentTitle = 'City Add Form';
 
   constructor(

@@ -1,26 +1,31 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from './localStorage.service';
 import { UserService } from './user.service';
-import { AuthService } from './auth.service';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CompanyUserCode, PersonelUserCode } from '../models/userCodes';
+import { AdminService } from './admin.service';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CodeService {
   constructor(
-    private localStorageService: LocalStorageService,
     private router: Router,
     private userService: UserService,
-    private authService: AuthService,
-    private toastrService: ToastrService
+    private adminService: AdminService
   ) {}
 
-  getCode() {
-    let id = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    this.userService.getCode(id).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getCode(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getCode(adminModel: AdminModel) {
+    this.userService.getCode(adminModel).subscribe(
       (response) => {
         let code = response.data[0].code;
         this.checkCode(code);

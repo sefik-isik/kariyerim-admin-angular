@@ -10,14 +10,21 @@
         </div>
         <div class="form-group">
           <div class="input-group mb-3">
-            <span class="input-group-text">Company User Name</span>
+            <span class="input-group-text">Company Name</span>
             <input
               formControlName="companyUserName"
               type="text"
               class="form-control"
+              list="datalist1"
               id="input1"
-              placeholder="Company User Name"
+              placeholder="Select Company..."
             />
+            <datalist id="datalist1">
+              <option
+                *ngFor="let companyUserDTO of companyUserDTOs"
+                value="{{ companyUserDTO.companyUserName }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
                 (click)="clearInput1()"
@@ -26,19 +33,18 @@
               ></i>
             </span>
           </div>
-
           <div class="input-group mb-3">
             <span class="input-group-text">Sector Name</span>
             <input
               formControlName="sectorName"
               type="text"
               class="form-control"
-              list="datalist1"
+              list="datalist2"
               id="input2"
               placeholder="Select Company Sector..."
               (change)="getSectors()"
             />
-            <datalist id="datalist1">
+            <datalist id="datalist2">
               <option
                 *ngFor="let sector of sectors"
                 value="{{ sector.sectorName }}"
@@ -59,12 +65,12 @@
               formControlName="cityName"
               type="text"
               class="form-control"
-              list="datalist2"
+              list="datalist3"
               id="input3"
               placeholder="Select Tax City..."
               (change)="getTaxOffices()"
             />
-            <datalist id="datalist2">
+            <datalist id="datalist3">
               <option
                 *ngFor="let city of cities"
                 value="{{ city.cityName }}"
@@ -85,12 +91,12 @@
               formControlName="taxOfficeName"
               type="text"
               class="form-control"
-              list="datalist3"
+              list="datalist4"
               id="input4"
               placeholder="Select Tax Office..."
               (input)="getTaxOffices()"
             />
-            <datalist id="datalist3">
+            <datalist id="datalist4">
               <option
                 *ngFor="let taxOffice of taxOffices"
                 value="{{ taxOffice.taxOfficeName }}"

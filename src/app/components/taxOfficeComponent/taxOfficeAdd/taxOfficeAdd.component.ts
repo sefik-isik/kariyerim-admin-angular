@@ -27,6 +27,7 @@ export class TaxOfficeAddComponent implements OnInit {
   addForm1: FormGroup;
   cities: City[];
   regions: Region[];
+
   componentTitle = 'Tax Office Add Form';
 
   constructor(

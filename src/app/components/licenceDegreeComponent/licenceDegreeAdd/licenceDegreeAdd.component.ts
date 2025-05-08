@@ -21,6 +21,7 @@ import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 })
 export class LicenceDegreeAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Licence Degree Form';
 
   constructor(

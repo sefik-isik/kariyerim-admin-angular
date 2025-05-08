@@ -13,7 +13,7 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Cities By Users..."
-          (change)="getUsers()"
+          (change)="getAdminValues()"
         />
         <datalist id="datalist1">
           <option *ngFor="let user of users" value="{{ user.email }}"></option>

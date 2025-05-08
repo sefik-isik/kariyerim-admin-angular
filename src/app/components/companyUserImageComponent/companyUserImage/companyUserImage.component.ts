@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { LocalStorageService } from './../../../services/localStorage.service';
 import { FilterCompanyUserImageByUserPipe } from '../../../pipes/filterCompanyUserImageByUser.pipe';
 import { Component, OnInit } from '@angular/core';
@@ -8,9 +10,7 @@ import { RouterLink } from '@angular/router';
 import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
-import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImage',
@@ -28,42 +28,47 @@ export class CompanyUserImageComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+
   componentTitle = 'Company User Images';
   userId: number;
+
   companyUserImagesLenght: number = 0;
 
   constructor(
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private localStorageService: LocalStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUserImages();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUserImages(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUserImages() {
-    let userId: number;
-    userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.companyUserImageService.getAllDTO(userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserImageDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUserImages(adminModel: AdminModel) {
+    this.companyUserImageService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserImageDTOs = response.data;
         this.companyUserImagesLenght = this.companyUserImageDTOs.length;
       },
       (error) => console.error
@@ -103,6 +108,6 @@ export class CompanyUserImageComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyUserImages();
+    this.getAdminValues();
   }
 }

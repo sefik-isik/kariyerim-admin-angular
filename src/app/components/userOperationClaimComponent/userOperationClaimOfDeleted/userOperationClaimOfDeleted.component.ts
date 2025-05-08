@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { UserService } from './../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -5,10 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserDTO } from '../../../models/userDTO';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/operationClaim';
@@ -34,6 +35,7 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
   users: UserDTO[];
   operationClaims: OperationClaim[];
   userId: number;
+
   componentTitle = 'Deleted User Operation Claims';
 
   constructor(
@@ -42,19 +44,25 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
     private authService: AuthService,
     private userOperationClaimService: UserOperationClaimService,
     private operationClaimService: OperationClaimService,
-    private localStorageService: LocalStorageService
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getUserOperationClaims();
-    this.getOperaionClaims();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getUsers(response);
+        this.getUserOperationClaims(response);
+      },
+      (error) => console.error
+    );
+  }
 
-    this.userService.getAllDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.users = response.data;
       },
@@ -62,19 +70,10 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
     );
   }
 
-  getUserOperationClaims() {
-    this.userOperationClaimService.getAllDeletedDTO().subscribe(
+  getUserOperationClaims(adminModel: AdminModel) {
+    this.userOperationClaimService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
         this.userOperationClaimDTOs = response.data;
-      },
-      (error) => console.error
-    );
-  }
-
-  getOperaionClaims() {
-    this.operationClaimService.getDeletedAll().subscribe(
-      (response) => {
-        this.operationClaims = response.data;
       },
       (error) => console.error
     );
@@ -105,11 +104,11 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     this.filter2 = null;
-    this.getUserOperationClaims();
+    this.getAdminValues();
   }
 }

@@ -7,6 +7,7 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUser } from '../models/personelUser';
 import { PersonelUserDTO } from '../models/personelUserDTO';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +38,20 @@ export class PersonelUserService {
     );
   }
 
-  getAll(id: number): Observable<ListResponseModel<PersonelUser>> {
-    let path = this.newUrlPath + 'getall?id=' + id;
-    return this.httpClient.get<ListResponseModel<PersonelUser>>(path);
+  getAll(adminModel: AdminModel): Observable<ListResponseModel<PersonelUser>> {
+    return this.httpClient.post<ListResponseModel<PersonelUser>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<PersonelUser>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<PersonelUser>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUser>> {
+    return this.httpClient.post<ListResponseModel<PersonelUser>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<PersonelUser>> {
@@ -52,13 +59,21 @@ export class PersonelUserService {
     return this.httpClient.get<SingleResponseModel<PersonelUser>>(path);
   }
 
-  getAllDTO(id: number): Observable<ListResponseModel<PersonelUserDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<ListResponseModel<PersonelUserDTO>>(path);
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
   }
 
-  getAllDeletedDTO(id: number): Observable<ListResponseModel<PersonelUserDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
-    return this.httpClient.get<ListResponseModel<PersonelUserDTO>>(path);
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

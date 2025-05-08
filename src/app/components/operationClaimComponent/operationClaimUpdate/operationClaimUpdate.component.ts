@@ -22,6 +22,7 @@ import { OperationClaim } from '../../../models/operationClaim';
 export class OperationClaimUpdateComponent implements OnInit {
   updateForm: FormGroup;
   operationClaimId: number;
+
   componentTitle = 'Operation Claim Update';
 
   constructor(

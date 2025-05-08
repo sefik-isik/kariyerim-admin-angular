@@ -14,6 +14,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 })
 export class DriverLicenceOfDeletedComponent implements OnInit {
   driverLicences: DriverLicence[] = [];
+
   componentTitle = 'Driver Licences Of Deleted';
 
   constructor(

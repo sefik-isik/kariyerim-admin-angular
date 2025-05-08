@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-operationClaimOfDeleted',
@@ -14,19 +16,30 @@ import { OperationClaimService } from '../../../services/operationClaim.service'
 })
 export class OperationClaimOfDeletedComponent implements OnInit {
   operationClaims: OperationClaim[] = [];
+
   componentTitle = 'Operation Claims Of Deleted';
 
   constructor(
     private toastrService: ToastrService,
-    private operationClaimService: OperationClaimService
+    private operationClaimService: OperationClaimService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getOperationClaims();
+    this.getAdminValues();
   }
 
-  getOperationClaims() {
-    this.operationClaimService.getDeletedAll().subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getOperationClaims(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getOperationClaims(adminModel: AdminModel) {
+    this.operationClaimService.getDeletedAll(adminModel).subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

@@ -16,6 +16,7 @@ import { LanguageLevel } from '../../../models/languageLevel';
 })
 export class LanguageLevelComponent implements OnInit {
   languageLevels: LanguageLevel[] = [];
+
   componentTitle = 'Language Levels';
   filter1: string;
 

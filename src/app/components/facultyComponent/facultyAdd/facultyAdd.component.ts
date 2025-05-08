@@ -22,6 +22,7 @@ import { CaseService } from '../../../services/case.service';
 })
 export class FacultyAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Faculty Form';
 
   constructor(

@@ -1,12 +1,13 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
-import { PersonelUserCode } from '../../../models/userCodes';
 import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
@@ -27,40 +28,44 @@ export class PersonelUserAddressComponent implements OnInit {
   personelUserAddressDTOs: PersonelUserAddressDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+
   componentTitle = 'Personel User Addresses';
   userId: number;
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getPersonelAddresses();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
+        this.getPersonelAddresses(response);
       },
       (error) => console.error
     );
   }
 
-  getPersonelAddresses() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.personelUserAddressService.getAllDTO(this.userId).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserAddressDTOs = response.data.filter(
-          (f) => f.code == PersonelUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getPersonelAddresses(adminModel: AdminModel) {
+    this.personelUserAddressService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.personelUserAddressDTOs = response.data;
       },
       (error) => console.error
     );
@@ -99,6 +104,6 @@ export class PersonelUserAddressComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getPersonelAddresses();
+    this.getAdminValues();
   }
 }

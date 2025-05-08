@@ -7,6 +7,7 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { CompanyUserImage } from '../models/companyUserImage';
 import { CompanyUserImageDTO } from '../models/companyUserImageDTO';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +38,22 @@ export class CompanyUserImageService {
     );
   }
 
-  getAll(id: number): Observable<ListResponseModel<CompanyUserImage>> {
-    let path = this.newUrlPath + 'getall?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserImage>>(path);
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserImage>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserImage>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<CompanyUserImage>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<CompanyUserImage>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserImage>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserImage>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<CompanyUserImage>> {
@@ -70,15 +79,21 @@ export class CompanyUserImageService {
     );
   }
 
-  getAllDTO(id: number): Observable<ListResponseModel<CompanyUserImageDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserImageDTO>>(path);
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserImageDTO>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserImageDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
   }
 
   getAllDeletedDTO(
-    id: number
+    adminModel: AdminModel
   ): Observable<ListResponseModel<CompanyUserImageDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserImageDTO>>(path);
+    return this.httpClient.post<ListResponseModel<CompanyUserImageDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

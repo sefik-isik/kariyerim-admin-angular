@@ -14,6 +14,7 @@ import { WorkingMethodService } from '../../../services/workingMethod.service';
 })
 export class WorkingMethodOfDeletedComponent implements OnInit {
   workingMethods: WorkingMethod[] = [];
+
   componentTitle = 'Working Methods Of Deleted';
   filter1: string;
 

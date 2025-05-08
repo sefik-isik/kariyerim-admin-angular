@@ -6,29 +6,7 @@
     <form [formGroup]="updateForm">
       <div class="form-group">
         <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let user of users"
-              value="{{ user.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
         </div>
 
         <div class="input-group mb-3">

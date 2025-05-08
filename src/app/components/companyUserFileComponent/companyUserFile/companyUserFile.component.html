@@ -13,7 +13,6 @@
           list="datalist1"
           id="input"
           placeholder="Filter Company User Files By User..."
-          (change)="getUsers()"
         />
         <datalist id="datalist1">
           <option
@@ -59,11 +58,6 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>userId</th>
-              <th>firstName</th>
-              <th>lastName</th>
-              <th>phoneNumber</th>
-              <th>email</th>
               <th>companyUserId</th>
               <th>companyUserName</th>
               <th>file</th>
@@ -87,11 +81,6 @@
               "
             >
               <td>{{ companyUserFileDTO.id }}</td>
-              <td>{{ companyUserFileDTO.userId }}</td>
-              <td>{{ companyUserFileDTO.firstName }}</td>
-              <td>{{ companyUserFileDTO.lastName }}</td>
-              <td>{{ companyUserFileDTO.phoneNumber }}</td>
-              <td>{{ companyUserFileDTO.email }}</td>
               <td>{{ companyUserFileDTO.companyUserId }}</td>
               <td>{{ companyUserFileDTO.companyUserName }}</td>
               <td *ngIf="companyUserFileDTO.fileName != 'noFile'">

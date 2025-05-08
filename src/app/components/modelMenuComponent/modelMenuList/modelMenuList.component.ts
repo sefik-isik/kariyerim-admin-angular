@@ -16,6 +16,7 @@ import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
 })
 export class ModelMenuListComponent implements OnInit {
   modelMenus: ModelMenu[] = [];
+
   componentTitle = 'Model Menus';
   filter1: string;
 

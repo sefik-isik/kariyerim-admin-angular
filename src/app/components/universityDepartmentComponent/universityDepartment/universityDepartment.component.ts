@@ -28,6 +28,7 @@ export class UniversityDepartmentComponent implements OnInit {
   universities: University[] = [];
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'University Departments';
   constructor(
     private universityDepartmentService: UniversityDepartmentService,

@@ -7,6 +7,7 @@ import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserCvWorkExperience } from '../models/personelUserCvWorkExperience';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -43,18 +44,20 @@ export class PersonelUserCvWorkExperienceService {
     );
   }
 
-  getAll(): Observable<ListResponseModel<PersonelUserCvWorkExperience>> {
-    let path = this.newUrlPath + 'getall';
-    return this.httpClient.get<ListResponseModel<PersonelUserCvWorkExperience>>(
-      path
-    );
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvWorkExperience>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserCvWorkExperience>
+    >(this.newUrlPath + 'getall', adminModel);
   }
 
-  getDeletedAll(): Observable<ListResponseModel<PersonelUserCvWorkExperience>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<PersonelUserCvWorkExperience>>(
-      path
-    );
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvWorkExperience>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserCvWorkExperience>
+    >(this.newUrlPath + 'getdeletedall', adminModel);
   }
 
   getById(
@@ -67,20 +70,18 @@ export class PersonelUserCvWorkExperienceService {
   }
 
   getAllDTO(
-    id: number
+    adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserCvWorkExperienceDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<
+    return this.httpClient.post<
       ListResponseModel<PersonelUserCvWorkExperienceDTO>
-    >(path);
+    >(this.newUrlPath + 'getalldto', adminModel);
   }
 
   getAllDeletedDTO(
-    id: number
+    adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserCvWorkExperienceDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
-    return this.httpClient.get<
+    return this.httpClient.post<
       ListResponseModel<PersonelUserCvWorkExperienceDTO>
-    >(path);
+    >(this.newUrlPath + 'getalldeleteddto', adminModel);
   }
 }

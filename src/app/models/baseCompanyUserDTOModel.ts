@@ -1,6 +1,6 @@
-import { BaseUserDTOModel } from './baseUserDTOModel';
+import { BaseUserModel } from './baseUserModel';
 
-export interface BaseCompanyUserDTOModel extends BaseUserDTOModel {
+export interface BaseCompanyUserDTOModel extends BaseUserModel {
   companyUserId: number;
   companyUserName: string;
 }

@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
-import { CompanyUserCode, PersonelUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserAddress',
@@ -33,34 +33,38 @@ export class CompanyUserAddressComponent implements OnInit {
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyAddresses();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUserAddresses(response);
       },
-      (error) => console.error
+      (error) => console.log(error)
     );
   }
 
-  getCompanyAddresses() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.companyUserAddressService.getAllDTO(this.userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserAddressDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getCompanyUserAddresses(adminModel: AdminModel) {
+    this.companyUserAddressService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserAddressDTOs = response.data;
+        this.dataLoaded = true;
       },
       (error) => console.error
     );
@@ -99,6 +103,6 @@ export class CompanyUserAddressComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyAddresses();
+    this.getAdminValues();
   }
 }

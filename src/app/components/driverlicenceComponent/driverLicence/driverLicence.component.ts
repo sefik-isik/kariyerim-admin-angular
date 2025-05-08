@@ -16,6 +16,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 })
 export class DriverLicenceComponent implements OnInit {
   driverLicences: DriverLicence[] = [];
+
   componentTitle = 'Driver Licences';
 
   constructor(

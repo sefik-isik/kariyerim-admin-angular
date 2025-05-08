@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import e from 'express';
+import { AdminService } from '../../services/admin.service';
+import { AdminModel } from '../../models/adminModel';
 
 @Component({
   selector: 'app-main',
@@ -21,14 +23,28 @@ export class MainComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private toastrService: ToastrService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
+    this.getAdminValues();
+  }
+
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getCode(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getCode(adminModel: AdminModel) {
     if (this.localStorageService.getFromLocalStorage('id') == null) {
       this.router.navigate(['login']);
     } else {
-      this.codeService.getCode();
+      this.codeService.getCode(adminModel);
     }
   }
 
@@ -51,7 +67,7 @@ export class MainComponent implements OnInit {
   updateUserCode(code: string) {
     this.authService.updateCode(this.getModel(code)).subscribe(
       (response) => {
-        this.codeService.getCode();
+        this.codeService.getAdminValues();
         this.toastrService.success('Seçiminizi başarıyla yaptınız', 'Başarılı');
       },
       (error) => console.log(error)

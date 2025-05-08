@@ -7,6 +7,7 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { CompanyUserAddressDTO } from '../models/CompanyUserAddressDTO';
 import { ResponseModel } from '../models/responseModel';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +38,22 @@ export class CompanyUserAddressService {
     );
   }
 
-  getAll(id: number): Observable<ListResponseModel<CompanyUserAddress>> {
-    let path = this.newUrlPath + 'getall?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserAddress>>(path);
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserAddress>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserAddress>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<CompanyUserAddress>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<CompanyUserAddress>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserAddress>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserAddress>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<CompanyUserAddress>> {
@@ -52,15 +61,21 @@ export class CompanyUserAddressService {
     return this.httpClient.get<SingleResponseModel<CompanyUserAddress>>(path);
   }
 
-  getAllDTO(id: number): Observable<ListResponseModel<CompanyUserAddressDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserAddressDTO>>(path);
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<CompanyUserAddressDTO>> {
+    return this.httpClient.post<ListResponseModel<CompanyUserAddressDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
   }
 
   getAllDeletedDTO(
-    id: number
+    adminModel: AdminModel
   ): Observable<ListResponseModel<CompanyUserAddressDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
-    return this.httpClient.get<ListResponseModel<CompanyUserAddressDTO>>(path);
+    return this.httpClient.post<ListResponseModel<CompanyUserAddressDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

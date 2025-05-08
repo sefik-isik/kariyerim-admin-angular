@@ -1,4 +1,3 @@
-import { CompanyUserService } from './../../../services/companyUser.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { CountryService } from './../../../services/country.service';
 import { City } from './../../../models/city';
@@ -19,11 +18,8 @@ import { Country } from '../../../models/country';
 import { Region } from '../../../models/region';
 import { RegionService } from '../../../services/region.service';
 import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
-import { UserService } from '../../../services/user.service';
-import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
@@ -47,26 +43,22 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   regionId: number;
   addressDetail: string;
   addressDetailCount: number;
+
   componentTitle = 'Company User Address Update';
-  userId: number;
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
-    private companyUserService: CompanyUserService,
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router,
-    private localStorageService: LocalStorageService,
-    private userService: UserService
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.getUsers();
     this.getCountries();
 
     setTimeout(() => {
@@ -95,13 +87,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           addressDetail: response.data.addressDetail,
         });
         this.id = response.data.id;
-        this.userId = response.data.userId;
         this.companyUserId = response.data.companyUserId;
-        this.userEmail = this.getEmailByUserId(response.data.userId);
-        this.companyUserName = this.getcompanyUserNameById(
-          response.data.companyUserId
-        );
-        this.addressDetail = response.data.addressDetail;
         this.addressDetailCount = this.count(response.data.addressDetail);
       },
       (error) => console.error
@@ -112,7 +98,6 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     if (
       this.updateForm.valid &&
       this.getModel().id > 0 &&
-      this.getModel().userId > 0 &&
       this.getModel().companyUserId > 0 &&
       this.getModel().countryId > 0 &&
       this.getModel().cityId > 0 &&
@@ -135,9 +120,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getModel(): CompanyUserAddressDTO {
     return Object.assign({
       id: this.id,
-      userId: this.userId,
       companyUserId: this.companyUserId,
-      companyUserName: this.companyUserName,
       countryId: this.getCountryId(this.updateForm.value.countryName),
       cityId: this.getCityId(this.updateForm.value.cityName),
       regionId: this.getRegionId(this.updateForm.value.regionName),
@@ -150,30 +133,6 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
   count(text: string) {
     return text.length;
-  }
-
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
-        this.getCompanyUsers();
-      },
-      (error) => console.error
-    );
-  }
-
-  getCompanyUsers() {
-    const userId = this.getUserId(this.updateForm.value.userEmail);
-    this.companyUserService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.companyUsers = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
-      },
-      (error) => console.error
-    );
   }
 
   getCountries() {
@@ -219,17 +178,6 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     );
   }
 
-  getEmailByUserId(userId: number): string {
-    return this.users.find((u) => u.id == userId)?.email;
-  }
-
-  getcompanyUserNameById(companyUserId: number): string {
-    console.log(this.companyUsers);
-    console.log(companyUserId);
-    return this.companyUsers.filter((c) => c.id == companyUserId)[0]
-      ?.companyUserName;
-  }
-
   getCountryNameById(countryId: number): string {
     return this.countries.filter((c) => c.id == countryId)[0]?.countryName;
   }
@@ -240,18 +188,6 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
   getRegionNameById(regionId: number): string {
     return this.regions.filter((r) => r.id == regionId)[0]?.regionName;
-  }
-
-  getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email == userEmail)[0]?.id;
-
-    return userId;
-  }
-
-  getCompanyUserId(companyUserName: string): number {
-    return this.companyUsers.filter(
-      (c) => c.companyUserName == companyUserName
-    )[0]?.id;
   }
 
   getCountryId(countryName: string): number {

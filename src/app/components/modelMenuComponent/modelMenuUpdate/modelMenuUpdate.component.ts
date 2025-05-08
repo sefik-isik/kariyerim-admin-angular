@@ -22,6 +22,7 @@ import { ModelMenu } from '../../../models/modelMenu';
 export class ModelMenuUpdateComponent implements OnInit {
   updateForm: FormGroup;
   modelMenuId: number;
+
   componentTitle = 'Model Menu Update';
 
   constructor(

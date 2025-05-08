@@ -28,6 +28,7 @@ export class RegionOfDeletedComponent implements OnInit {
   dataLoaded = false;
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Deleted Regions';
   constructor(
     private cityService: CityService,

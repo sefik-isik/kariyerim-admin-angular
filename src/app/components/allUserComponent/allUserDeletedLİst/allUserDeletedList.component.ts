@@ -1,9 +1,10 @@
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterAllUserPipe } from '../../../pipes/filterAllUser.pipe';
@@ -13,6 +14,8 @@ import { AuthService } from '../../../services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AllUserDetailComponent } from '../allUserDetail/allUserDetail.component';
 import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-allUserDeletedList',
@@ -24,6 +27,7 @@ export class AllUserDeletedListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+
   componentTitle = 'All User Deleted List';
   userId: number;
   status: string;
@@ -33,23 +37,32 @@ export class AllUserDeletedListComponent implements OnInit {
     private toastrService: ToastrService,
     private localStorageService: LocalStorageService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
+    this.getAdminValues();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getUsers();
+        this.getAdminValues();
       }
     });
     this.status = this.localStorageService.getFromLocalStorage('status');
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getUsers(response);
+      },
+      (error) => console.error
+    );
+  }
 
-    this.userService.getAllDeletedDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
       },

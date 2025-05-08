@@ -11,14 +11,15 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { CompanyUserFileService } from '../../../services/companyUserFile.service';
 import { CompanyUserFile } from '../../../models/companyUserFile';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { HttpEventType } from '@angular/common/http';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserFileUpdate',
@@ -28,6 +29,7 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserFileUpdateComponent implements OnInit {
   updateForm: FormGroup;
+
   componentTitle = 'Company User File Update Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
@@ -48,12 +50,11 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUsers();
+    this.getAdminValues();
     this.createupdateForm();
 
     setTimeout(() => {
@@ -204,23 +205,29 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUsers = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.users = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUsers = response.data;
       },
       (error) => console.error
     );

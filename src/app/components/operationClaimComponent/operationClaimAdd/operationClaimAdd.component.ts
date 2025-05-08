@@ -20,6 +20,7 @@ import { OperationClaim } from '../../../models/operationClaim';
 })
 export class OperationClaimAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Operation Claim Form';
 
   constructor(

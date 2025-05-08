@@ -21,6 +21,7 @@ import { CaseService } from '../../../services/case.service';
 })
 export class LanguageAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Language Form';
 
   constructor(

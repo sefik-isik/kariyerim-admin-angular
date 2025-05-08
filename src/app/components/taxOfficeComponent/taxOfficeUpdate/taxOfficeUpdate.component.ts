@@ -33,6 +33,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
   cityId: number;
   regionId: number;
   taxOfficeId: number;
+
   componentTitle = 'Tax Office Update';
 
   constructor(

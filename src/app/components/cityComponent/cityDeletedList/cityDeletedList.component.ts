@@ -25,6 +25,7 @@ export class CityDeletedListComponent implements OnInit {
   dataLoaded = false;
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Deleted Cities';
   constructor(
     private cityService: CityService,

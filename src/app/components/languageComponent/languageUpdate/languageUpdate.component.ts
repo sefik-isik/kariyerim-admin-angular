@@ -23,6 +23,7 @@ import { CaseService } from '../../../services/case.service';
 export class LanguageUpdateComponent implements OnInit {
   updateForm: FormGroup;
   languageId: number;
+
   componentTitle = 'Language Update';
 
   constructor(

@@ -1,3 +1,4 @@
+import { AdminService } from './../../../services/admin.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -5,11 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserAddressOfDeleted',
@@ -27,40 +27,44 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+
   componentTitle = 'Company User Addresses Of Deleted';
   userId: number;
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUserAddresses();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUserAddresses(response);
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  getCompanyUserAddresses() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.companyUserAddressService.getAllDeletedDTO(this.userId).subscribe(
+  getCompanyUserAddresses(adminModel: AdminModel) {
+    this.companyUserAddressService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserAddressDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.companyUserAddressDTOs = response.data;
       },
       (error) => console.error
     );
@@ -91,6 +95,6 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyUserAddresses();
+    this.getAdminValues();
   }
 }

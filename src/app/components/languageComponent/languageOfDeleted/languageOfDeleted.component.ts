@@ -15,6 +15,7 @@ import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 })
 export class LanguageOfDeletedComponent implements OnInit {
   languages: Language[] = [];
+
   componentTitle = 'Languages Of Deleted';
   filter1: string;
 

@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { DriverLicenceService } from './../../../services/driverLicense.service';
 import { LicenceDegree } from './../../../models/licenceDegree';
 import { LicenceDegreeService } from './../../../services/licenseDegree.service';
@@ -16,9 +18,6 @@ import { Router, RouterLink } from '@angular/router';
 import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AuthService } from '../../../services/auth.service';
-import { PersonelUserCode } from '../../../models/userCodes';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
 
@@ -30,7 +29,7 @@ import { DriverLicence } from '../../../models/driverLicence';
 })
 export class PersonelUserAddComponent implements OnInit {
   componentTitle = 'Personel User Add Form';
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   cities: City[] = [];
   licenceDegrees: LicenceDegree[] = [];
   driverLicences: DriverLicence[] = [];
@@ -45,15 +44,14 @@ export class PersonelUserAddComponent implements OnInit {
     private router: Router,
     private cityService: CityService,
     private userService: UserService,
-    private localStorageService: LocalStorageService,
-    private authService: AuthService,
+    private adminService: AdminService,
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService
   ) {}
 
   ngOnInit() {
     this.createAddForm();
-    this.getUsers();
+    this.getAdminValues();
     this.getCities();
     this.getLicenceDegrees();
     this.getLDriverLicences();
@@ -120,22 +118,29 @@ export class PersonelUserAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
   getBooleanValue(value: string): boolean {
-    if (value == '') {
-      return false;
-    } else {
+    if (value == 'true') {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -151,7 +156,9 @@ export class PersonelUserAddComponent implements OnInit {
   getLicenceDegrees() {
     this.licenceDegreeService.getAll().subscribe(
       (response) => {
-        this.licenceDegrees = response.data;
+        this.licenceDegrees = response.data.filter(
+          (f) => f.deletedDate == null
+        );
       },
       (error) => console.error
     );
@@ -160,14 +167,16 @@ export class PersonelUserAddComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.deletedDate == null
+        );
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
@@ -204,7 +213,7 @@ export class PersonelUserAddComponent implements OnInit {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {

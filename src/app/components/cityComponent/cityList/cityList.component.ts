@@ -25,6 +25,7 @@ export class CityListComponent implements OnInit {
   countries: Country[] = [];
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Cities';
   constructor(
     private cityService: CityService,

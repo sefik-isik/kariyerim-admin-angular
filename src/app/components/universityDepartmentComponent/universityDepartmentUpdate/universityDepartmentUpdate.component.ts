@@ -32,6 +32,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
   universityDepartments: UniversityDepartment[];
   universityDepartmentId: number;
   universityId: number;
+
   componentTitle = 'University Department Update';
 
   constructor(

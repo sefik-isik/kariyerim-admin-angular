@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { DriverLicenceService } from './../../../services/driverLicense.service';
 import { LicenceDegree } from './../../../models/licenceDegree';
 import { LicenceDegreeService } from './../../../services/licenseDegree.service';
@@ -16,7 +18,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { PersonelUserCode } from '../../../models/userCodes';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
@@ -29,7 +31,7 @@ import { DriverLicence } from '../../../models/driverLicence';
 })
 export class PersonelUserUpdateComponent implements OnInit {
   componentTitle = 'Personel User Update Form';
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   cities: City[] = [];
   id: number;
   userEmail: string;
@@ -51,7 +53,7 @@ export class PersonelUserUpdateComponent implements OnInit {
     private router: Router,
     private cityService: CityService,
     private userService: UserService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
 
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService,
@@ -60,7 +62,7 @@ export class PersonelUserUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.createAddForm();
-    this.getUsers();
+    this.getAdminValues();
     this.getCities();
     this.getLicenceDegrees();
     this.getLDriverLicences();
@@ -74,7 +76,6 @@ export class PersonelUserUpdateComponent implements OnInit {
 
   createAddForm() {
     this.updateForm = this.formBuilder.group({
-      userEmail: [''],
       identityNumber: [''],
       licenceDegreeName: [''],
       driverLicenceName: [''],
@@ -100,7 +101,6 @@ export class PersonelUserUpdateComponent implements OnInit {
         this.dateOfBirth = this.formatDate(response.data.dateOfBirth);
 
         this.updateForm.patchValue({
-          userEmail: this.userEmail,
           identityNumber: response.data.identityNumber,
           licenceDegreeName: this.getLicenceDegreeName(this.licenceDegreeId),
           driverLicenceName: this.getDriverLicenceName(this.driverLicenceId),
@@ -141,7 +141,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   getModel(): PersonelUser {
     return Object.assign({
       id: this.id,
-      userId: this.getUserId(this.updateForm.value.userEmail),
+      userId: this.userId,
       identityNumber: this.updateForm.value.identityNumber,
       licenceDegreeId: this.getLicenceDegreeId(
         this.updateForm.value.licenceDegreeName
@@ -161,19 +161,26 @@ export class PersonelUserUpdateComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
   getUserEmailById(userId: number): string {
-    return this.users.find((c) => c.id == userId)?.email;
+    return this.userDTOs.find((c) => c.id == userId)?.email;
   }
 
   getLicenceDegreeName(licenceDegreeId: number) {
@@ -202,7 +209,9 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLicenceDegrees() {
     this.licenceDegreeService.getAll().subscribe(
       (response) => {
-        this.licenceDegrees = response.data;
+        this.licenceDegrees = response.data.filter(
+          (f) => f.deletedDate == null
+        );
       },
       (error) => console.error
     );
@@ -211,14 +220,16 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.deletedDate == null
+        );
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
@@ -263,7 +274,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   clearInput1() {
     let value = this.updateForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {

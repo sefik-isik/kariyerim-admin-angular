@@ -7,11 +7,12 @@ import { CompanyUserService } from '../../../services/companyUser.service';
 
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { CompanyUser } from '../../../models/companyUser';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUser',
@@ -24,6 +25,7 @@ export class CompanyUserComponent implements OnInit {
   companyUserDTOs: CompanyUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+
   componentTitle = 'Company Users';
   userId: number;
 
@@ -31,33 +33,36 @@ export class CompanyUserComponent implements OnInit {
     private userService: UserService,
     private companyUserService: CompanyUserService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUsers();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    const userId = this.getUserId(this.filter1);
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserDTOs = response.data;
       },
       (error) => console.log(error)
     );

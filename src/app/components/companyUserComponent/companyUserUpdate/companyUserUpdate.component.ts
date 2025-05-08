@@ -1,3 +1,4 @@
+import { AdminModel } from './../../../models/adminModel';
 import { Sector } from '../../../models/sector';
 import { City } from './../../../models/city';
 import { Component, OnInit } from '@angular/core';
@@ -20,11 +21,11 @@ import { TaxOffice } from '../../../models/taxOffice';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { AuthService } from '../../../services/auth.service';
 import { CaseService } from '../../../services/case.service';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-companyUserUpdate',
@@ -34,11 +35,11 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserUpdateComponent implements OnInit {
   updateForm: FormGroup;
-  companyUsers: CompanyUserDTO[];
+  companyUserDTOs: CompanyUserDTO[];
   sectors: Sector[];
   cities: City[];
   taxOffices: TaxOffice[];
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   id: number;
   sectorId: number;
   taxCityId: number;
@@ -59,13 +60,14 @@ export class CompanyUserUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private authService: AuthService,
     private caseService: CaseService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
+    this.getAdminValues();
+
     this.getSectors();
     this.getCities();
     this.createUpdateForm();
@@ -76,12 +78,6 @@ export class CompanyUserUpdateComponent implements OnInit {
         this.getById(params['companyUserId']);
       });
     }, 500);
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   createUpdateForm() {
@@ -157,13 +153,31 @@ export class CompanyUserUpdateComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
+    );
+  }
+
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserDTOs = response.data;
+      },
+      (error) => console.log(error)
     );
   }
 
@@ -201,7 +215,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   getUserEmailById(userId: number): string {
-    return this.users.find((c) => c.id == userId)?.email;
+    return this.userDTOs.find((c) => c.id == userId)?.email;
   }
 
   getSectorNameById(sectorId: number): string {
@@ -217,7 +231,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   getUserId(email: string): number {
-    return this.users.find(
+    return this.userDTOs.find(
       (c) => c.email.toLocaleLowerCase() == email.toLocaleLowerCase()
     )?.id;
   }

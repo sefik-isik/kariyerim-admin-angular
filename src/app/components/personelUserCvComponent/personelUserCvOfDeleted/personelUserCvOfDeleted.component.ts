@@ -1,9 +1,11 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -12,6 +14,7 @@ import { FilterPersonelUserCvByUserPipe } from '../../../pipes/filterPersonelUse
 
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { PersonelUserCode } from '../../../models/userCodes';
+import { PersonelUserService } from '../../../services/personelUser.service';
 
 @Component({
   selector: 'app-personelUserCvOfDeleted',
@@ -31,41 +34,44 @@ export class PersonelUserCvOfDeletedComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+
   componentTitle = 'Personel User Cvs Of Deleted';
   userId: number;
 
   constructor(
     private personelUserCvService: PersonelUserCvService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-
-    this.getPersonelUserCvs();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
+        this.getPersonelUserCvs(response);
       },
       (error) => console.error
     );
   }
 
-  getPersonelUserCvs() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.personelUserCvService.getAllDeletedDTO(this.userId).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserCvDTOs = response.data.filter(
-          (f) => f.code == PersonelUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getPersonelUserCvs(adminModel: AdminModel) {
+    this.personelUserCvService.getAllDeletedDTO(adminModel).subscribe(
+      (response) => {
+        this.personelUserCvDTOs = response.data;
       },
       (error) => console.error
     );
@@ -96,6 +102,6 @@ export class PersonelUserCvOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getPersonelUserCvs();
+    this.getAdminValues();
   }
 }

@@ -28,6 +28,7 @@ export class RegionUpdateComponent implements OnInit {
   cities: City[];
   cityId: number;
   regionId: number;
+
   componentTitle = 'Region Update';
 
   constructor(

@@ -15,12 +15,11 @@
             id="input1"
             placeholder="Select User..."
             minlength="3"
-            (change)="getPersonelUsers()"
           />
           <datalist id="datalist1">
             <option
-              *ngFor="let user of users"
-              value="{{ user.email }}"
+              *ngFor="let userDTO of userDTOs"
+              value="{{ userDTO.email }}"
             ></option>
           </datalist>
           <span class="input-group-text">

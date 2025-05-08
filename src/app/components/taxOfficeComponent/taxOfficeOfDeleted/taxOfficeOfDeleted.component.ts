@@ -27,6 +27,7 @@ export class TaxOfficeOfDeletedComponent implements OnInit {
   cities: City[] = [];
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Deleted Tax Offices';
   constructor(
     private cityService: CityService,

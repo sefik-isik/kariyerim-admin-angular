@@ -13,7 +13,6 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Company User Addresses By User..."
-          (change)="getUsers()"
         />
         <datalist id="datalist1">
           <option
@@ -59,11 +58,6 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>userId</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>phoneNumber</th>
-            <th>email</th>
             <th>companyUserId</th>
             <th>companyUserName</th>
             <th>countryId</th>
@@ -93,11 +87,6 @@
             "
           >
             <td>{{ companyUserAddressDTO.id }}</td>
-            <td>{{ companyUserAddressDTO.userId }}</td>
-            <td>{{ companyUserAddressDTO.firstName }}</td>
-            <td>{{ companyUserAddressDTO.lastName }}</td>
-            <td>{{ companyUserAddressDTO.phoneNumber }}</td>
-            <td>{{ companyUserAddressDTO.email }}</td>
             <td>{{ companyUserAddressDTO.companyUserId }}</td>
             <td>{{ companyUserAddressDTO.companyUserName }}</td>
             <td>{{ companyUserAddressDTO.countryId }}</td>

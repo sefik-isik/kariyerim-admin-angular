@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { AuthService } from './../../../services/auth.service';
 import { RegionService } from './../../../services/region.service';
 import { CityService } from './../../../services/city.service';
@@ -16,10 +18,9 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserCode } from '../../../models/userCodes';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
@@ -38,9 +39,10 @@ export class PersonelUserAddressAddComponent implements OnInit {
   cities: City[] = [];
   regions: Region[] = [];
   addressDetail: string;
+
   componentTitle = 'Personel Address Add Form';
   userId: number;
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   isAdmin: boolean = false;
 
   constructor(
@@ -52,22 +54,15 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.createAddForm();
+    this.getAdminValues();
     this.getCountries();
-    this.getUsers();
-    this.checkAdmin();
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   createAddForm() {
@@ -118,10 +113,9 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   getModel(): PersonelUserAddress {
-    const userId = this.getUserId(this.addForm.value.userEmail);
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(userId),
+      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
 
       countryId: this.getCountryId(this.addForm.value.countryName),
 
@@ -133,27 +127,19 @@ export class PersonelUserAddressAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == PersonelUserCode);
+        this.getAllPersonelUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getPersonelUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    const userId = this.getUserId(this.addForm.value.userEmail);
-
-    this.personelUserService.getAllDTO(this.userId).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserDTOs = response.data
-          .filter((f) => f.userId == userId)
-          .filter((f) => f.code == PersonelUserCode);
+        this.userDTOs = response.data;
       },
       (error) => console.error
     );
@@ -197,7 +183,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
@@ -223,9 +209,9 @@ export class PersonelUserAddressAddComponent implements OnInit {
     return regionId;
   }
 
-  getPersonelUserId(userId: number): number {
+  getPersonelUserId(email: string): number {
     const personelUserId = this.personelUserDTOs.filter(
-      (c) => c.userId === userId
+      (c) => c.email === email
     )[0]?.id;
 
     return personelUserId;
@@ -234,13 +220,13 @@ export class PersonelUserAddressAddComponent implements OnInit {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     let value = this.addForm.get('personelUserName');
     value.reset();
-    this.getPersonelUsers();
+    this.getCountries();
   }
 
   clearInput3() {

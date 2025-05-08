@@ -16,6 +16,7 @@ import { FilterFacultyPipe } from '../../../pipes/filterFaculty.pipe';
 })
 export class FacultyComponent implements OnInit {
   faculties: Faculty[] = [];
+
   componentTitle = 'Faculties';
   filter1: string;
 

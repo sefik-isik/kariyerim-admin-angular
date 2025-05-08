@@ -7,6 +7,7 @@ import { UserDTO } from '../models/userDTO';
 import { UserCodeModel } from '../models/userCodeModel';
 import { ResponseModel } from '../models/responseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -29,23 +30,53 @@ export class UserService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<UserDTO>> {
-    let path = this.newUrlPath + 'getbyiddto?id=' + id;
-    return this.httpClient.get<SingleResponseModel<UserDTO>>(path);
+  getById(adminModel: AdminModel): Observable<SingleResponseModel<UserDTO>> {
+    return this.httpClient.post<SingleResponseModel<UserDTO>>(
+      this.newUrlPath + 'getbyiddto',
+      adminModel
+    );
   }
 
-  getCode(id: number): Observable<ListResponseModel<UserCodeModel>> {
-    let path = this.newUrlPath + 'getcode?userId=' + id;
-    return this.httpClient.get<ListResponseModel<UserCodeModel>>(path);
+  getCode(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserCodeModel>> {
+    return this.httpClient.post<ListResponseModel<UserCodeModel>>(
+      this.newUrlPath + 'getcode',
+      adminModel
+    );
   }
 
-  getAllDTO(id: number): Observable<ListResponseModel<UserDTO>> {
-    let path = this.newUrlPath + 'getalldto?id=' + id;
-    return this.httpClient.get<ListResponseModel<UserDTO>>(path);
+  getAllDTO(adminModel: AdminModel): Observable<ListResponseModel<UserDTO>> {
+    return this.httpClient.post<ListResponseModel<UserDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
   }
 
-  getAllDeletedDTO(id: number): Observable<ListResponseModel<UserDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto?id=' + id;
-    return this.httpClient.get<ListResponseModel<UserDTO>>(path);
+  getAllCompanyUserDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserDTO>> {
+    return this.httpClient.post<ListResponseModel<UserDTO>>(
+      this.newUrlPath + 'getallcompanyuserdto',
+      adminModel
+    );
+  }
+
+  getAllPersonelUserDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserDTO>> {
+    return this.httpClient.post<ListResponseModel<UserDTO>>(
+      this.newUrlPath + 'getallpersoneluserdto',
+      adminModel
+    );
+  }
+
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<UserDTO>> {
+    return this.httpClient.post<ListResponseModel<UserDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

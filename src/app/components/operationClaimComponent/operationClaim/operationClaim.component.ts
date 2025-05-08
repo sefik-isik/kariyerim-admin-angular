@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-operationClaim',
@@ -15,20 +17,31 @@ import { OperationClaimService } from '../../../services/operationClaim.service'
 })
 export class OperationClaimComponent implements OnInit {
   operationClaims: OperationClaim[] = [];
+
   componentTitle = 'Operation Claims';
 
   constructor(
     private toastrService: ToastrService,
     private authService: AuthService,
-    private operationClaimService: OperationClaimService
+    private operationClaimService: OperationClaimService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getOperationClaims();
+    this.getAdminValues();
   }
 
-  getOperationClaims() {
-    this.operationClaimService.getAll().subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getOperationClaims(response);
+      },
+      (error) => console.error
+    );
+  }
+
+  getOperationClaims(adminModel: AdminModel) {
+    this.operationClaimService.getAll(adminModel).subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

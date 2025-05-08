@@ -15,6 +15,7 @@ import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
 })
 export class ModelMenuOfDeletedComponent implements OnInit {
   modelMenus: ModelMenu[] = [];
+
   componentTitle = 'Model Menus Of Deleted';
   filter1: string;
 

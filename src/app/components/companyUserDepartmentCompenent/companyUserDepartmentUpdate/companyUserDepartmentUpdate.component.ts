@@ -1,5 +1,4 @@
 import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
-import { CompanyUserService } from './../../../services/companyUser.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -13,12 +12,9 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
-import { UserService } from '../../../services/user.service';
 import { CaseService } from '../../../services/case.service';
-import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -32,26 +28,21 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   id: number;
   companyUserId: number;
   companyUserName: string;
+
   componentTitle = 'Company User Department Update';
-  userId: number;
   userEmail: string;
   users: UserDTO[] = [];
 
   constructor(
-    private companyUserService: CompanyUserService,
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
-    private userService: UserService,
     private caseService: CaseService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUsers();
     this.createUpdateForm();
 
     setTimeout(() => {
@@ -71,14 +62,8 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     this.companyUserDepartmentService.getById(id).subscribe(
       (response) => {
         this.id = response.data.id;
-        this.userId = response.data.userId;
-        this.userEmail = this.getEmailByUserId(this.userId);
-
         this.companyUserId = response.data.companyUserId;
-        this.companyUserName = this.getCompanyUserById(this.userId);
-
         this.updateForm.patchValue({
-          userEmail: this.userEmail,
           departmentName: response.data.departmentName,
         });
       },
@@ -109,11 +94,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   getModel(): CompanyUserDepartment {
     return Object.assign({
       id: this.id,
-      userId: this.userId,
       companyUserId: this.companyUserId,
-      companyUserName: this.caseService.capitalizeFirstLetter(
-        this.companyUserName
-      ),
       departmentName: this.caseService.capitalizeFirstLetter(
         this.updateForm.value.departmentName
       ),
@@ -123,50 +104,6 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
-      },
-      (error) => console.error
-    );
-  }
-
-  getCompanyUsers() {
-    this.companyUserService.getAllDTO(this.userId).subscribe(
-      (response) => {
-        this.companyUsers = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
-      },
-      (error) => console.error
-    );
-  }
-
-  getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
-
-    return userId;
-  }
-
-  getEmailByUserId(userId: number): string {
-    return this.users.find((u) => u.id == userId)?.email;
-  }
-
-  getCompanyUserById(companyUserId: number): string {
-    return this.companyUsers.find((c) => c.companyUserId == companyUserId)
-      ?.companyUserName;
-  }
-
-  getCompanyUserId(companyUserName: string): number {
-    return this.companyUsers.find(
-      (c) =>
-        c.companyUserName.toLocaleLowerCase() ==
-        companyUserName.toLocaleLowerCase()
-    )?.id;
-  }
   clearInput1() {
     let value = this.updateForm.get('departmentName');
     value.reset();

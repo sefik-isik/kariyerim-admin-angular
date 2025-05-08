@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 })
 export class UpdatePasswordComponent implements OnInit {
   updatePasswordForm: FormGroup;
+
   componentTitle = 'Change Password';
   passwordModel: PasswordModel;
 

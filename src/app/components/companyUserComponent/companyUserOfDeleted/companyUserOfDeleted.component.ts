@@ -6,11 +6,11 @@ import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { UserService } from '../../../services/user.service';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserOfDeleted',
@@ -23,42 +23,46 @@ export class CompanyUserOfDeletedComponent implements OnInit {
   companyUserDTOs: CompanyUserDTO[] = [];
   dataLoaded = false;
   filter1 = '';
+
   componentTitle = 'Company Users Of Deleted';
   userId: number;
 
   constructor(
+    private userService: UserService,
     private companyUserService: CompanyUserService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
-    private userService: UserService
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUsers();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    const userId = this.getUserId(this.filter1);
-    this.companyUserService.getAllDeletedDTO(this.userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
       },
-      (error) => console.log(error)
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAllDeletedDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserDTOs = response.data;
+      },
+      (error) => console.error
     );
   }
 

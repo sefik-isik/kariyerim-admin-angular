@@ -24,6 +24,7 @@ import { University } from '../../../models/university';
 export class UniversityDepartmentAddComponent implements OnInit {
   addForm1: FormGroup;
   universities: University[];
+
   componentTitle = 'University Department Add Form';
 
   constructor(

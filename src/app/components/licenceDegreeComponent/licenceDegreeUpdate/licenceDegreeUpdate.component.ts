@@ -24,6 +24,7 @@ import { LicenceDegreeService } from '../../../services/licenseDegree.service';
 export class LicenceDegreeUpdateComponent implements OnInit {
   updateForm: FormGroup;
   licenceDegreeId: number;
+
   componentTitle = 'Licence Degree Update';
 
   constructor(

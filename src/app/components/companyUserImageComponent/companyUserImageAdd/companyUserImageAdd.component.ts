@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -11,14 +13,13 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
-import { CompanyUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-companyUserImageAdd',
@@ -28,14 +29,15 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserImageAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Company User Image Add Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
-  companyUsers: CompanyUserDTO[] = [];
+  companyUserDTOs: CompanyUserDTO[] = [];
   companyUserId: number;
   userId: number;
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   isAdmin: boolean;
 
   constructor(
@@ -44,14 +46,13 @@ export class CompanyUserImageAddComponent implements OnInit {
     private companyUserImageService: CompanyUserImageService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService,
     private authService: AuthService
   ) {}
   ngOnInit() {
     this.createAddForm();
-    this.getUsers();
-    this.checkAdmin();
+    this.getAdminValues();
   }
 
   createAddForm() {
@@ -60,12 +61,6 @@ export class CompanyUserImageAddComponent implements OnInit {
       image: ['', [Validators.required, Validators.minLength(3)]],
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
     });
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   onImageSelected(event: any) {
@@ -155,40 +150,43 @@ export class CompanyUserImageAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    const userId = this.getUserId(this.addForm.value.userEmail);
-
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUsers = response.data
-          .filter((f) => f.companyUserId == userId)
-          .filter((f) => f.code == CompanyUserCode);
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    const userId = this.getUserId(this.addForm.value.userEmail);
+    this.companyUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getCompanyUserId(companyUserName: string): number {
-    const companyId = this.companyUsers.filter(
+    const companyId = this.companyUserDTOs.filter(
       (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
@@ -198,13 +196,13 @@ export class CompanyUserImageAddComponent implements OnInit {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     let value = this.addForm.get('companyUserName');
     value.reset();
-    this.getCompanyUsers();
+    this.getAdminValues();
   }
 
   clearInput3() {

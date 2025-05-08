@@ -21,6 +21,7 @@ import { WorkingMethod } from '../../../models/workingMethod';
 })
 export class WorkingMethodAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Working Method Form';
 
   constructor(

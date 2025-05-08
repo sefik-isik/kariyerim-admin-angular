@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LocalStorageService } from '../../../services/localStorage.service';
 import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
 import { CompanyUserFileService } from '../../../services/companyUserFile.service';
 import { FilterCompanyUserFileByUserPipe } from '../../../pipes/filterCompanyUserFileByUser.pipe';
-import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { UserDTO } from '../../../models/userDTO';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserFileOfDeleted',
@@ -27,40 +27,44 @@ export class CompanyUserFileOfDeletedComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+
   componentTitle = 'Company User Files Of Deleted';
   userId: number;
 
   constructor(
     private companyUserFileService: CompanyUserFileService,
     private toastrService: ToastrService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getCompanyUserFiles();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.userDTOs = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUserFiles(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUserFiles() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.companyUserFileService.getAllDeletedDTO(this.userId).subscribe(
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserFileDTOs = response.data.filter(
-          (f) => f.code == CompanyUserCode
-        );
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getCompanyUserFiles(adminModel: AdminModel) {
+    this.companyUserFileService.getAllDeletedDTO(adminModel).subscribe(
+      (response) => {
+        this.companyUserFileDTOs = response.data;
       },
       (error) => console.error
     );
@@ -91,6 +95,6 @@ export class CompanyUserFileOfDeletedComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getCompanyUserFiles();
+    this.getAdminValues();
   }
 }

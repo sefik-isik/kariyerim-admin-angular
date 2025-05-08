@@ -23,6 +23,7 @@ import { CaseService } from '../../../services/case.service';
 export class UniversityUpdateComponent implements OnInit {
   updateForm: FormGroup;
   universityId: number;
+
   componentTitle = 'University Update';
 
   constructor(

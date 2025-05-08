@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { UserService } from './../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,7 +10,7 @@ import { AuthService } from '../../../services/auth.service';
 import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserDTO } from '../../../models/userDTO';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/operationClaim';
@@ -34,6 +36,7 @@ export class UserOperationClaimComponent implements OnInit {
   users: UserDTO[];
   operationClaims: OperationClaim[];
   userId: number;
+
   componentTitle = 'User Operation Claims';
 
   constructor(
@@ -42,19 +45,25 @@ export class UserOperationClaimComponent implements OnInit {
     private authService: AuthService,
     private userOperationClaimService: UserOperationClaimService,
     private operationClaimService: OperationClaimService,
-    private localStorageService: LocalStorageService
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getUserOperationClaims();
-    this.getOperaionClaims();
+    this.getAdminValues();
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getUsers(response);
+        this.getUserOperationClaims(response);
+      },
+      (error) => console.error
+    );
+  }
 
-    this.userService.getAllDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.users = response.data;
       },
@@ -62,8 +71,8 @@ export class UserOperationClaimComponent implements OnInit {
     );
   }
 
-  getUserOperationClaims() {
-    this.userOperationClaimService.getAllDTO().subscribe(
+  getUserOperationClaims(adminModel: AdminModel) {
+    this.userOperationClaimService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
@@ -71,8 +80,8 @@ export class UserOperationClaimComponent implements OnInit {
     );
   }
 
-  getOperaionClaims() {
-    this.operationClaimService.getAll().subscribe(
+  getOperaionClaims(adminModel: AdminModel) {
+    this.operationClaimService.getAll(adminModel).subscribe(
       (response) => {
         this.operationClaims = response.data;
       },
@@ -121,11 +130,11 @@ export class UserOperationClaimComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     this.filter2 = null;
-    this.getUserOperationClaims();
+    this.getAdminValues();
   }
 }

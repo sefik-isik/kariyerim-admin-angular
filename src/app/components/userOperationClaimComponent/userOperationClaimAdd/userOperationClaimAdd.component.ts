@@ -1,3 +1,5 @@
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -11,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserDTO } from '../../../models/userDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
@@ -29,6 +31,7 @@ export class UserOperationClaimAddComponent implements OnInit {
   users: UserDTO[] = [];
   operationClaims: OperationClaim[];
   userId: number;
+
   componentTitle = 'Add User Operation Claim Form';
 
   constructor(
@@ -36,16 +39,15 @@ export class UserOperationClaimAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private userOperationClaimService: UserOperationClaimService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService,
     private authService: AuthService,
     private operationClaimService: OperationClaimService
   ) {}
 
   ngOnInit() {
-    this.getUsers();
-    this.getOperaionClaims();
     this.createAddForm();
+    this.getAdminValues();
   }
 
   createAddForm() {
@@ -84,10 +86,18 @@ export class UserOperationClaimAddComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
+      (response) => {
+        this.getUsers(response);
+        this.getUserOperationClaims(response);
+      },
+      (error) => console.error
+    );
+  }
 
-    this.userService.getAllDTO(this.userId).subscribe(
+  getUsers(adminModel: AdminModel) {
+    this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.users = response.data;
       },
@@ -95,8 +105,8 @@ export class UserOperationClaimAddComponent implements OnInit {
     );
   }
 
-  getOperaionClaims() {
-    this.operationClaimService.getAll().subscribe(
+  getUserOperationClaims(adminModel: AdminModel) {
+    this.operationClaimService.getAll(adminModel).subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

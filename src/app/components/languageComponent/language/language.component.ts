@@ -16,6 +16,7 @@ import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 })
 export class LanguageComponent implements OnInit {
   languages: Language[] = [];
+
   componentTitle = 'Languages';
   filter1: string;
 

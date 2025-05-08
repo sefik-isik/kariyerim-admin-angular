@@ -13,7 +13,6 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Company User Images By User..."
-          (change)="getUsers()"
         />
         <datalist id="datalist1">
           <option
@@ -59,7 +58,6 @@
               />
               <div class="carousel-caption d-none d-md-block">
                 <h3>{{ companyUserImageDTO.companyUserName }}</h3>
-                <p>{{ companyUserImageDTO.email }}</p>
               </div>
             </slide>
           </carousel>

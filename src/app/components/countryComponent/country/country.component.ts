@@ -16,6 +16,7 @@ import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 })
 export class CountryComponent implements OnInit {
   countries: Country[] = [];
+
   componentTitle = 'Countries';
   filter1: string;
 

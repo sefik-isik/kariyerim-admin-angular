@@ -21,6 +21,7 @@ import { CaseService } from '../../../services/case.service';
 })
 export class SectorAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Add Sector Form';
 
   constructor(

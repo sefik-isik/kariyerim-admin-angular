@@ -29,6 +29,7 @@ export class TaxOfficeComponent implements OnInit {
   cities: City[] = [];
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Tax Offices';
   constructor(
     private cityService: CityService,

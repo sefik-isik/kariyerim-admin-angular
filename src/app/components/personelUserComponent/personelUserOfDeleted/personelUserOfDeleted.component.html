@@ -13,12 +13,12 @@
           list="datalist1"
           id="input1"
           placeholder="Filter Personel User..."
-          (change)="getPersonelUsers()"
+          (change)="getAdminValues()"
         />
         <datalist id="datalist1">
           <option
-            *ngFor="let personelUserDTO of personelUserDTOs"
-            value="{{ personelUserDTO.email }}"
+            *ngFor="let userDTO of userDTOs"
+            value="{{ userDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -48,11 +48,6 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>userId</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>phoneNumber</th>
-            <th>email</th>
 
             <th>identityNumber</th>
             <th>gender</th>
@@ -86,12 +81,6 @@
             "
           >
             <td>{{ personelUserDTO.id }}</td>
-            <td>{{ personelUserDTO.userId }}</td>
-            <td>{{ personelUserDTO.firstName }}</td>
-            <td>{{ personelUserDTO.lastName }}</td>
-            <td>{{ personelUserDTO.phoneNumber }}</td>
-            <td>{{ personelUserDTO.email }}</td>
-
             <td>{{ personelUserDTO.identityNumber }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
             <td>{{ personelUserDTO.licenceDegreeId }}</td>

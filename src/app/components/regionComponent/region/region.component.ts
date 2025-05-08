@@ -30,6 +30,7 @@ export class RegionComponent implements OnInit {
   cities: City[] = [];
   filter1 = '';
   filter2 = '';
+
   componentTitle = 'Regions';
   constructor(
     private cityService: CityService,

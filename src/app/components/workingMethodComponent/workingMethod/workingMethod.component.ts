@@ -15,6 +15,7 @@ import { WorkingMethodService } from '../../../services/workingMethod.service';
 })
 export class WorkingMethodComponent implements OnInit {
   workingMethods: WorkingMethod[] = [];
+
   componentTitle = 'Working Methods';
 
   constructor(

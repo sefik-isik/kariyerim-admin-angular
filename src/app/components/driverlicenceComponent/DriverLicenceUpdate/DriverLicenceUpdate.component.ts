@@ -23,6 +23,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 export class DriverLicenceUpdateComponent implements OnInit {
   updateForm: FormGroup;
   driverLicenceId: number;
+
   componentTitle = 'Driver Licence Update';
 
   constructor(

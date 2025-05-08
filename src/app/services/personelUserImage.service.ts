@@ -6,6 +6,7 @@ import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserImage } from '../models/personelUserImage';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -36,14 +37,22 @@ export class PersonelUserImageService {
     );
   }
 
-  getAll(): Observable<ListResponseModel<PersonelUserImage>> {
-    let path = this.newUrlPath + 'getall';
-    return this.httpClient.get<ListResponseModel<PersonelUserImage>>(path);
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserImage>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserImage>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<PersonelUserImage>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<PersonelUserImage>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserImage>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserImage>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<PersonelUserImage>> {

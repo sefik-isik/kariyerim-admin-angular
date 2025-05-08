@@ -22,6 +22,7 @@ import { CaseService } from '../../../services/case.service';
 })
 export class LanguageLevelAddComponent implements OnInit {
   addForm: FormGroup;
+
   componentTitle = 'Language Level Add Form';
 
   constructor(

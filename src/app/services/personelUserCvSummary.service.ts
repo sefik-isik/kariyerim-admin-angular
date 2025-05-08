@@ -6,6 +6,7 @@ import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserCvSummary } from '../models/personelUserCvSummary';
+import { AdminModel } from '../models/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -40,14 +41,22 @@ export class PersonelUserCvSummaryService {
     );
   }
 
-  getAll(id: number): Observable<ListResponseModel<PersonelUserCvSummary>> {
-    let path = this.newUrlPath + 'getall?id=' + id;
-    return this.httpClient.get<ListResponseModel<PersonelUserCvSummary>>(path);
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvSummary>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCvSummary>>(
+      this.newUrlPath + 'getall',
+      adminModel
+    );
   }
 
-  getDeletedAll(): Observable<ListResponseModel<PersonelUserCvSummary>> {
-    let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<PersonelUserCvSummary>>(path);
+  getDeletedAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvSummary>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCvSummary>>(
+      this.newUrlPath + 'getdeletedall',
+      adminModel
+    );
   }
 
   getById(id: number): Observable<SingleResponseModel<PersonelUserCvSummary>> {

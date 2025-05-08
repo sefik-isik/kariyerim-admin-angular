@@ -1,5 +1,5 @@
-import { BaseUserDTOModel } from './baseUserDTOModel';
+import { BaseUserModel } from './baseUserModel';
 
-export interface BasePersonelUserDTOModel extends BaseUserDTOModel {
+export interface BasePersonelUserDTOModel extends BaseUserModel {
   personelUserId: number;
 }

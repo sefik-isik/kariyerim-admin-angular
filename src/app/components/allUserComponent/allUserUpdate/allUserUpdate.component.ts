@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AuthService } from './../../../services/auth.service';
 
 import { Component, Input, OnInit } from '@angular/core';
@@ -14,9 +15,9 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
-import { CompanyUserCode, PersonelUserCode } from '../../../models/userCodes';
 import { Status } from '../../../models/status';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-allUserUpdate',
@@ -29,6 +30,7 @@ export class AllUserUpdateComponent implements OnInit {
   @Input() userDTO: UserDTO;
   userId: number;
   code: string;
+
   componentTitle = 'User Update';
   statuses: string[] = ['Admin', 'User'];
 
@@ -38,14 +40,15 @@ export class AllUserUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     public activeModal: NgbActiveModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.getById(this.userDTO.id);
+      this.getAdminValues(this.userDTO.id);
     }, 200);
 
     // this.activatedRoute.params.subscribe((params) => {
@@ -63,8 +66,17 @@ export class AllUserUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.userService.getById(id).subscribe(
+  getAdminValues(userId: number) {
+    const adminModel = {
+      userId: userId,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.userService.getById(adminModel).subscribe(
       (response) => {
         this.code = response.data.code;
         this.updateForm.patchValue({
@@ -74,7 +86,7 @@ export class AllUserUpdateComponent implements OnInit {
           phoneNumber: response.data.phoneNumber,
           status: this.checkStatus(response.data.status),
         });
-        this.userId = id;
+        this.userId = adminModel.userId;
       },
       (error) => console.error
     );

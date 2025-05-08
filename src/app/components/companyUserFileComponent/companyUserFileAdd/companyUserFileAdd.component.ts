@@ -13,12 +13,13 @@ import { HttpEventType } from '@angular/common/http';
 import { CompanyUserFile } from '../../../models/companyUserFile';
 import { Router, RouterLink } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';
-import { CompanyUserCode } from '../../../models/userCodes';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserFileAdd',
@@ -28,14 +29,15 @@ import { CompanyUserCode } from '../../../models/userCodes';
 })
 export class CompanyUserFileAddComponent {
   addForm: FormGroup;
+
   componentTitle = 'Company User File Add Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
-  companyUsers: CompanyUserDTO[] = [];
+  companyUserDTOs: CompanyUserDTO[] = [];
   companyUserId: number;
   userId: number;
-  users: UserDTO[] = [];
+  userDTOs: UserDTO[] = [];
   isAdmin: boolean;
 
   constructor(
@@ -44,14 +46,13 @@ export class CompanyUserFileAddComponent {
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private localStorageService: LocalStorageService,
+    private adminService: AdminService,
     private userService: UserService,
     private authService: AuthService
   ) {}
   ngOnInit() {
     this.createAddForm();
-    this.getUsers();
-    this.checkAdmin();
+    this.getAdminValues();
   }
 
   createAddForm() {
@@ -60,12 +61,6 @@ export class CompanyUserFileAddComponent {
       file: ['', [Validators.required, Validators.minLength(3)]],
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
     });
-  }
-
-  checkAdmin() {
-    if (this.authService.isAdmin('status')) {
-      this.isAdmin = true;
-    }
   }
 
   onFileSelected(event: any) {
@@ -163,41 +158,44 @@ export class CompanyUserFileAddComponent {
     });
   }
 
-  getUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
-
-    this.userService.getAllDTO(this.userId).subscribe(
+  getAdminValues() {
+    this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.users = response.data.filter((f) => f.code == CompanyUserCode);
+        this.getAllCompanyUsers(response);
+        this.getCompanyUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers() {
-    this.userId = parseInt(this.localStorageService.getFromLocalStorage('id'));
+  getAllCompanyUsers(adminModel: AdminModel) {
+    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+      (response) => {
+        this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
 
+  getCompanyUsers(adminModel: AdminModel) {
     const userId = this.getUserId(this.addForm.value.userEmail);
 
-    this.companyUserService.getAllDTO(this.userId).subscribe(
+    this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUsers = response.data
-          .filter((f) => f.companyUserId == userId)
-
-          .filter((f) => f.code == CompanyUserCode);
+        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
       },
       (error) => console.error
     );
   }
 
   getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
+    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
   getCompanyUserId(companyUserName: string): number {
-    const companyId = this.companyUsers.filter(
+    const companyId = this.companyUserDTOs.filter(
       (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
@@ -207,13 +205,13 @@ export class CompanyUserFileAddComponent {
   clearInput1() {
     let value = this.addForm.get('userEmail');
     value.reset();
-    this.getUsers();
+    this.getAdminValues();
   }
 
   clearInput2() {
     let value = this.addForm.get('companyUserName');
     value.reset();
-    this.getCompanyUsers();
+    this.getAdminValues();
   }
 
   clearInput3() {

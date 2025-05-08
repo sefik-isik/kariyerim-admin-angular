@@ -22,6 +22,7 @@ import { CaseService } from '../../services/case.service';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+
   componentTitle = 'Please Register';
 
   constructor(
