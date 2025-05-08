@@ -1,4 +1,3 @@
-import { SectorService } from './../../../services/sectorService';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {

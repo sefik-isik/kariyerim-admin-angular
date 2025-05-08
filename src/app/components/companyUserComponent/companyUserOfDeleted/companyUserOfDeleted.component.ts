@@ -24,7 +24,7 @@ export class CompanyUserOfDeletedComponent implements OnInit {
   dataLoaded = false;
   filter1 = '';
 
-  componentTitle = 'Company Users Of Deleted';
+  componentTitle = 'Deleted Company Users';
   userId: number;
 
   constructor(

@@ -78,7 +78,7 @@ export class AllUserDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -88,7 +88,7 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordSalt = 'passwordSalt';
       this.authService.unDeleteUser(userDTO).subscribe(
         (response) => {},
-        (error) => console.log(error)
+        (error) => console.error
       );
     });
     setTimeout(() => {

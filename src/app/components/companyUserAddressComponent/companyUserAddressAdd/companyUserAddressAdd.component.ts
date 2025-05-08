@@ -1,4 +1,3 @@
-import { AuthService } from './../../../services/auth.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { RegionService } from './../../../services/region.service';
 import { CityService } from './../../../services/city.service';
@@ -54,7 +53,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
-    private authService: AuthService,
+
     private companyUserService: CompanyUserService
   ) {}
 
@@ -124,7 +123,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 

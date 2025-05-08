@@ -18,8 +18,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
-
-import { PersonelUserCode } from '../../../models/userCodes';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
 
@@ -54,7 +52,6 @@ export class PersonelUserUpdateComponent implements OnInit {
     private cityService: CityService,
     private userService: UserService,
     private adminService: AdminService,
-
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService,
     private activatedRoute: ActivatedRoute

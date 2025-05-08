@@ -16,7 +16,6 @@ import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { CompanyUserFileService } from '../../../services/companyUserFile.service';
 import { CompanyUserFile } from '../../../models/companyUserFile';
 import { UserDTO } from '../../../models/userDTO';
-import { UserService } from '../../../services/user.service';
 import { HttpEventType } from '@angular/common/http';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
@@ -50,8 +49,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private adminService: AdminService,
-    private userService: UserService
+    private adminService: AdminService
   ) {}
   ngOnInit() {
     this.getAdminValues();
@@ -82,13 +80,10 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     this.companyUserFileService.getById(id).subscribe(
       (response) => {
         this.id = response.data.id;
-        this.userId = response.data.userId;
-        this.userEmail = this.getEmailByUserId(response.data.userId);
         this.companyUserId = response.data.companyUserId;
         this.companyUserName = this.getCompanyUserById(this.companyUserId);
         this.filePath = response.data.filePath;
         this.fileName = response.data.fileName;
-
         this.checkFile(this.fileName);
       },
       (error) => console.error
@@ -136,7 +131,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -145,7 +140,6 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.selectedFile, this.selectedFile.name);
       formData.append('companyUserId', this.companyUserId.toString());
-      formData.append('userId', this.userId.toString());
 
       this.companyUserFileService
         .uploadFile(formData, this.companyUserId)
@@ -160,7 +154,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
               this.fileName = event.body.name;
               this.filePath = event.body.type;
 
-              this.add();
+              this.update();
 
               this.toastrService.success(
                 'Company User File Added Successfully',
@@ -169,7 +163,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            console.error;
             this.toastrService.error('Error uploading file', error);
           }
         );
@@ -181,7 +175,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     }
   }
 
-  add() {
+  update() {
     this.companyUserFileService.update(this.getModel()).subscribe(
       (response) => {
         this.router.navigate(['/dashboard/companyuserfiles']);
@@ -195,7 +189,6 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   getModel(): CompanyUserFile {
     return Object.assign({
       id: this.id,
-      userId: this.userId,
       companyUserId: this.companyUserId,
       filePath: this.filePath,
       fileName: this.fileName,
@@ -208,17 +201,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   getAdminValues() {
     this.adminService.getAdminValues().subscribe(
       (response) => {
-        this.getUsers(response);
         this.getCompanyUsers(response);
-      },
-      (error) => console.error
-    );
-  }
-
-  getUsers(adminModel: AdminModel) {
-    this.userService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.users = response.data;
       },
       (error) => console.error
     );
@@ -231,16 +214,6 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       },
       (error) => console.error
     );
-  }
-
-  getUserId(userEmail: string): number {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
-
-    return userId;
-  }
-
-  getEmailByUserId(userId: number): string {
-    return this.users.find((u) => u.id == userId)?.email;
   }
 
   getCompanyUserById(companyUserId: number): string {

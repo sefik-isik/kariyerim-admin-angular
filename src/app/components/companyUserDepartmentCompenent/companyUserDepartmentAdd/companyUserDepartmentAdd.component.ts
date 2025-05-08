@@ -13,9 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
 import { CompanyUserService } from '../../../services/companyUser.service';
-
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { AuthService } from '../../../services/auth.service';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CaseService } from '../../../services/case.service';
@@ -42,7 +40,6 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private authService: AuthService,
     private caseService: CaseService,
     private userService: UserService
   ) {}

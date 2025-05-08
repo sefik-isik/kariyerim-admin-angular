@@ -6,12 +6,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/auth.service';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
-
 import { UserDTO } from '../../../models/userDTO';
-import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/operationClaim';
 import { FilterUserOperationClaimByUserPipe } from '../../../pipes/filterUserOperationClaimByUser.pipe';
 import { FilterUserOperationClaimPipe } from '../../../pipes/filterUserOperationClaim.pipe';
@@ -41,9 +38,7 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private userService: UserService,
-    private authService: AuthService,
     private userOperationClaimService: UserOperationClaimService,
-    private operationClaimService: OperationClaimService,
     private adminService: AdminService
   ) {}
 

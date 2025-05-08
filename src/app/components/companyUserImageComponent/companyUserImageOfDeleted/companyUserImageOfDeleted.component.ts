@@ -1,6 +1,5 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { LocalStorageService } from './../../../services/localStorage.service';
 import { FilterCompanyUserImageByUserPipe } from '../../../pipes/filterCompanyUserImageByUser.pipe';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -29,7 +28,7 @@ export class CompanyUserImageOfDeletedComponent implements OnInit {
   dataLoaded = false;
   filter1: string = '';
 
-  componentTitle = 'Company User Images Of Deleted';
+  componentTitle = 'Deleted Company User Images';
   userId: number;
   companyUserImagesLenght: number = 0;
 

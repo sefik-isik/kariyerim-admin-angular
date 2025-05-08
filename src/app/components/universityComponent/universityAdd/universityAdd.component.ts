@@ -1,4 +1,3 @@
-import { SectorService } from './../../../services/sectorService';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -10,7 +9,6 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
-import { Sector } from '../../../models/sector';
 import { UniversityService } from '../../../services/university.service';
 import { University } from '../../../models/university';
 import { CaseService } from '../../../services/case.service';

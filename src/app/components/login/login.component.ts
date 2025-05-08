@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private autService: AuthService,
     private toastrService: ToastrService,
-
     private router: Router,
     private addToLocalStorageService: AddToLocalStorageService
   ) {}
@@ -81,7 +80,7 @@ export class LoginComponent implements OnInit {
           );
           this.router.navigate(['']);
         },
-        (error) => console.log(error)
+        (error) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

@@ -64,7 +64,7 @@ export class CompanyUserComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -85,7 +85,7 @@ export class CompanyUserComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -98,7 +98,7 @@ export class CompanyUserComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.delete(companyUser).subscribe(
         (response) => {},
-        (error) => console.log(error)
+        (error) => console.error
       );
     });
     setTimeout(() => {

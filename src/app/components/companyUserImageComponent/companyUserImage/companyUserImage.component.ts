@@ -1,6 +1,5 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { LocalStorageService } from './../../../services/localStorage.service';
 import { FilterCompanyUserImageByUserPipe } from '../../../pipes/filterCompanyUserImageByUser.pipe';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -37,7 +36,6 @@ export class CompanyUserImageComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
-    private localStorageService: LocalStorageService,
     private userService: UserService,
     private adminService: AdminService
   ) {}

@@ -1,4 +1,3 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserFileService } from './../../../services/companyUserFile.service';
 import { FilterCompanyUserFileByUserPipe } from '../../../pipes/filterCompanyUserFileByUser.pipe';
 import { Component, OnInit } from '@angular/core';

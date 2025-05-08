@@ -66,7 +66,7 @@ export class OperationClaimUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/operationclaims']);
         },
         (error) => {
-          console.log(error);
+          console.error;
         }
       );
     } else {

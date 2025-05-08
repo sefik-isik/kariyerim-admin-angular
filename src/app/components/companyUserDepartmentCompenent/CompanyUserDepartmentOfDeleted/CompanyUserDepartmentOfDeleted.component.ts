@@ -29,7 +29,7 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   filter1: string = '';
 
-  componentTitle = 'Company User Departments Of Deleted';
+  componentTitle = 'Deleted Company User Departments';
   userId: number;
 
   constructor(

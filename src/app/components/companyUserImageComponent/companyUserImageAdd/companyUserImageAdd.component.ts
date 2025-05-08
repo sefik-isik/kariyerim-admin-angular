@@ -13,11 +13,9 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { AuthService } from '../../../services/auth.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
 
@@ -47,8 +45,7 @@ export class CompanyUserImageAddComponent implements OnInit {
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private userService: UserService,
-    private authService: AuthService
+    private userService: UserService
   ) {}
   ngOnInit() {
     this.createAddForm();
@@ -91,34 +88,39 @@ export class CompanyUserImageAddComponent implements OnInit {
 
   onUpload() {
     if (this.selectedImage && this.addForm.valid) {
-      this.userId = this.getUserId(this.addForm.value.userEmail);
+      this.companyUserId = this.getCompanyUserId(
+        this.addForm.value.companyUserName
+      );
 
       const formData = new FormData();
       formData.append('image', this.selectedImage, this.selectedImage.name);
+      formData.append('companyUserId', this.companyUserId.toString());
 
-      formData.append('userId', this.userId.toString());
+      this.companyUserImageService
+        .uploadImage(formData, this.companyUserId)
+        .subscribe(
+          (event) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              const percentDone = Math.round(
+                event.loaded / (event.total * 100)
+              );
+              console.log(`Image is ${percentDone}% uploaded.`);
+            } else if (event.type === HttpEventType.Response) {
+              this.imageName = event.body.name;
+              this.imagePath = event.body.type;
 
-      this.companyUserImageService.uploadImage(formData, this.userId).subscribe(
-        (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            const percentDone = Math.round(event.loaded / (event.total * 100));
-            console.log(`Image is ${percentDone}% uploaded.`);
-          } else if (event.type === HttpEventType.Response) {
-            this.imageName = event.body.name;
-            this.imagePath = event.body.type;
+              this.add(this.imagePath, this.imageName);
 
-            this.add(this.imagePath, this.imageName);
-
-            this.toastrService.success(
-              'Company User Image Added Successfully',
-              'Success'
-            );
+              this.toastrService.success(
+                'Company User Image Added Successfully',
+                'Success'
+              );
+            }
+          },
+          (error) => {
+            console.error;
           }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
     }
@@ -142,7 +144,6 @@ export class CompanyUserImageAddComponent implements OnInit {
     imageName: string | null
   ): CompanyUserImage {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
       companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
       imagePath: imagePath,
       imageName: imageName,

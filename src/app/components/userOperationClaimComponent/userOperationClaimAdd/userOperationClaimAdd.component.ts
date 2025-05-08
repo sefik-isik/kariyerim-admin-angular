@@ -13,7 +13,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserDTO } from '../../../models/userDTO';
-
 import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserService } from '../../../services/user.service';
 import { AuthService } from '../../../services/auth.service';

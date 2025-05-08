@@ -16,7 +16,7 @@ import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 export class CountryOfDeletedComponent implements OnInit {
   countries: Country[] = [];
 
-  componentTitle = 'Countries Of Deleted';
+  componentTitle = 'Deleted Countries';
   filter1: string;
 
   constructor(

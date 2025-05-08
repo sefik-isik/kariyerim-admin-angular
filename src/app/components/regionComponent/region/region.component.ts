@@ -10,8 +10,6 @@ import { City } from '../../../models/city';
 import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
-import { Region } from '../../../models/region';
-import { CaseService } from '../../../services/case.service';
 
 @Component({
   selector: 'app-region',
@@ -36,8 +34,7 @@ export class RegionComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private regionService: RegionService,
-    private authService: AuthService,
-    private caseService: CaseService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -71,7 +68,7 @@ export class RegionComponent implements OnInit {
   //       )
   //       .subscribe(
   //         (response) => {},
-  //         (error) => console.log(error)
+  //         (error) => console.error
   //       );
   //   });
   // }

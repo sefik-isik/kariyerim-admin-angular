@@ -108,7 +108,7 @@ export class AllUserUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/allusers/alluserlisttab']);
           this.activeModal.close();
         },
-        (error) => console.log(error)
+        (error) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

@@ -129,7 +129,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -138,7 +138,6 @@ export class CompanyUserImageUpdateComponent implements OnInit {
       const formData = new FormData();
       formData.append('image', this.selectedImage, this.selectedImage.name);
       formData.append('companyUserId', this.companyUserId.toString());
-      formData.append('userId', this.userId.toString());
 
       this.companyUserImageService
         .uploadImage(formData, this.companyUserId)
@@ -153,7 +152,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
               this.imageName = event.body.name;
               this.imagePath = event.body.type;
 
-              this.add();
+              this.update();
 
               this.toastrService.success(
                 'Company User Image Added Successfully',
@@ -162,7 +161,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
             }
           },
           (error) => {
-            console.log(error);
+            console.error;
             this.toastrService.error('Error uploading image', error);
           }
         );
@@ -174,7 +173,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
     }
   }
 
-  add() {
+  update() {
     this.companyUserImageService.update(this.getModel()).subscribe(
       (response) => {
         this.router.navigate(['/dashboard/companyuserimages']);
@@ -188,7 +187,6 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   getModel(): CompanyUserImage {
     return Object.assign({
       id: this.id,
-      userId: this.userId,
       companyUserId: this.companyUserId,
       imagePath: this.imagePath,
       imageName: this.imageName,

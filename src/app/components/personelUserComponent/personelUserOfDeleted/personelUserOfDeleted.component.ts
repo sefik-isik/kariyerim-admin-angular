@@ -72,7 +72,7 @@ export class PersonelUserOfDeletedComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -82,7 +82,7 @@ export class PersonelUserOfDeletedComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -90,7 +90,7 @@ export class PersonelUserOfDeletedComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.update(personelUserDTO).subscribe(
         (response) => {},
-        (error) => console.log(error)
+        (error) => console.error
       );
     });
     setTimeout(() => {

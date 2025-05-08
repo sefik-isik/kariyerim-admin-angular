@@ -16,7 +16,6 @@ import { UserDTO } from '../../../models/userDTO';
 
 import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserService } from '../../../services/user.service';
-import { AuthService } from '../../../services/auth.service';
 import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 

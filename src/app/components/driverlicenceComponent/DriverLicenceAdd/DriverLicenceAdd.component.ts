@@ -50,7 +50,7 @@ export class DriverLicenceAddComponent implements OnInit {
           this.router.navigate(['/dashboard/driverlicences']);
         },
         (error) => {
-          console.log(error);
+          console.error;
         }
       );
     } else {

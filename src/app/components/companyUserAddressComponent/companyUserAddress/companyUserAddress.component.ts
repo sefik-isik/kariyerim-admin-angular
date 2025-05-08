@@ -47,7 +47,7 @@ export class CompanyUserAddressComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -56,7 +56,7 @@ export class CompanyUserAddressComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 

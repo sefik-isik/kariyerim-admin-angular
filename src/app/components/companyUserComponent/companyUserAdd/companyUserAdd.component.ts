@@ -19,8 +19,6 @@ import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { UserService } from '../../../services/user.service';
-
-import { AuthService } from '../../../services/auth.service';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
@@ -51,7 +49,6 @@ export class CompanyUserAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private userService: UserService,
     private adminService: AdminService,
-    private authService: AuthService,
     private caseService: CaseService
   ) {}
 

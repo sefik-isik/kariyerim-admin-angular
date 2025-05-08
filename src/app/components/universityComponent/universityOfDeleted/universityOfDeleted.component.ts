@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/auth.service';
 import { University } from '../../../models/university';
 import { UniversityService } from '../../../services/university.service';
 import { FilterUniversityPipe } from '../../../pipes/filterUniversity.pipe';
@@ -22,7 +21,6 @@ export class UniversityOfDeletedComponent implements OnInit {
 
   constructor(
     private toastrService: ToastrService,
-    private authService: AuthService,
     private universityService: UniversityService
   ) {}
 

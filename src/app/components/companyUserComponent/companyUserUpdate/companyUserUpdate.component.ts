@@ -21,9 +21,7 @@ import { TaxOffice } from '../../../models/taxOffice';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { AuthService } from '../../../services/auth.service';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
 
@@ -61,7 +59,6 @@ export class CompanyUserUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
-    private authService: AuthService,
     private caseService: CaseService
   ) {}
 
@@ -177,7 +174,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 

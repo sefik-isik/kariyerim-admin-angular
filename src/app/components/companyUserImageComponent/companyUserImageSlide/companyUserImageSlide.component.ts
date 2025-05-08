@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
 import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { AdminService } from '../../../services/admin.service';

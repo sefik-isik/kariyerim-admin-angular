@@ -78,7 +78,7 @@ export class AllUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -93,7 +93,7 @@ export class AllUserListComponent implements OnInit {
       userDTO.passwordSalt = 'passwordSalt';
       this.authService.deleteUser(userDTO).subscribe(
         (response) => {},
-        (error) => console.log(error)
+        (error) => console.error
       );
     });
     setTimeout(() => {

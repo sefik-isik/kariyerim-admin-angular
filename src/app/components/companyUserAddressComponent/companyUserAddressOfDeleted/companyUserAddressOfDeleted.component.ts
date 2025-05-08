@@ -28,7 +28,7 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
   dataLoaded = false;
   filter1: string = '';
 
-  componentTitle = 'Company User Addresses Of Deleted';
+  componentTitle = 'Deleted Company User Addresses';
   userId: number;
 
   constructor(
@@ -48,7 +48,7 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 

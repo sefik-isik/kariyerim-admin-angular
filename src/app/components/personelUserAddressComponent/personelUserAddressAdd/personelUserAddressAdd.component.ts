@@ -1,6 +1,5 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { AuthService } from './../../../services/auth.service';
 import { RegionService } from './../../../services/region.service';
 import { CityService } from './../../../services/city.service';
 import { Component, OnInit } from '@angular/core';
@@ -22,9 +21,9 @@ import { Region } from '../../../models/region';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
-import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { PersonelUserAddress } from '../../../models/personelUserAddress';
+import { PersonelUserService } from '../../../services/personelUser.service';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
@@ -50,13 +49,12 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
-    private personelUserService: PersonelUserService,
     private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
     private userService: UserService,
-    private authService: AuthService
+    private personelUserService: PersonelUserService
   ) {}
 
   ngOnInit() {
@@ -115,7 +113,9 @@ export class PersonelUserAddressAddComponent implements OnInit {
   getModel(): PersonelUserAddress {
     return Object.assign({
       userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
+      personelUserId: this.getPersonelUserId(
+        this.getUserId(this.addForm.value.userEmail)
+      ),
 
       countryId: this.getCountryId(this.addForm.value.countryName),
 
@@ -131,6 +131,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
     this.adminService.getAdminValues().subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
       },
       (error) => console.error
     );
@@ -140,6 +141,15 @@ export class PersonelUserAddressAddComponent implements OnInit {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.personelUserDTOs = response.data;
       },
       (error) => console.error
     );
@@ -209,9 +219,9 @@ export class PersonelUserAddressAddComponent implements OnInit {
     return regionId;
   }
 
-  getPersonelUserId(email: string): number {
+  getPersonelUserId(userId: number): number {
     const personelUserId = this.personelUserDTOs.filter(
-      (c) => c.email === email
+      (c) => c.userId === userId
     )[0]?.id;
 
     return personelUserId;

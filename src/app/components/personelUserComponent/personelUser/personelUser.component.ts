@@ -12,7 +12,6 @@ import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
-import { PersonelUserCode } from '../../../models/userCodes';
 import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
 import { GenderPipe } from '../../../pipes/gender.pipe';
 
@@ -88,7 +87,7 @@ export class PersonelUserComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 
@@ -101,7 +100,7 @@ export class PersonelUserComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.delete(personelUserDTO).subscribe(
         (response) => {},
-        (error) => console.log(error)
+        (error) => console.error
       );
     });
     setTimeout(() => {

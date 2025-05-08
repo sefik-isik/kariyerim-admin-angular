@@ -2,7 +2,6 @@ import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { LanguageLevelService } from './../../../services/languageLevel.service';
 import { LanguageService } from './../../../services/language.service';
-import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -14,7 +13,6 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -23,7 +21,6 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
-import { PersonelUserCode } from '../../../models/userCodes';
 
 @Component({
   selector: 'app-personelUserCvUpdate',
@@ -58,7 +55,6 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private authService: AuthService,
     private router: Router
   ) {}
 

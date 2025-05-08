@@ -28,7 +28,7 @@ export class CompanyUserFileOfDeletedComponent implements OnInit {
   dataLoaded = false;
   filter1: string = '';
 
-  componentTitle = 'Company User Files Of Deleted';
+  componentTitle = 'Deleted Company User Files';
   userId: number;
 
   constructor(

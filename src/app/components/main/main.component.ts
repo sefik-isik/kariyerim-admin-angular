@@ -7,7 +7,6 @@ import { UserCodeModel } from '../../models/userCodeModel';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import e from 'express';
 import { AdminService } from '../../services/admin.service';
 import { AdminModel } from '../../models/adminModel';
 
@@ -70,7 +69,7 @@ export class MainComponent implements OnInit {
         this.codeService.getAdminValues();
         this.toastrService.success('Seçiminizi başarıyla yaptınız', 'Başarılı');
       },
-      (error) => console.log(error)
+      (error) => console.error
     );
   }
 

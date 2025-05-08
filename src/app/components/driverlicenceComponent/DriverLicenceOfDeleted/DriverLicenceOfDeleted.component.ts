@@ -19,7 +19,6 @@ export class DriverLicenceOfDeletedComponent implements OnInit {
 
   constructor(
     private toastrService: ToastrService,
-
     private driverLicenceService: DriverLicenceService
   ) {}
 

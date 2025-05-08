@@ -82,7 +82,7 @@ export class RegionUpdateComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/regions']);
         },
-        (error) => console.log(error)
+        (error) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

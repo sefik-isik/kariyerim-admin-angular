@@ -13,11 +13,9 @@ import { HttpEventType } from '@angular/common/http';
 import { CompanyUserFile } from '../../../models/companyUserFile';
 import { Router, RouterLink } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { AuthService } from '../../../services/auth.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
 
@@ -47,8 +45,7 @@ export class CompanyUserFileAddComponent {
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private userService: UserService,
-    private authService: AuthService
+    private userService: UserService
   ) {}
   ngOnInit() {
     this.createAddForm();
@@ -58,8 +55,8 @@ export class CompanyUserFileAddComponent {
   createAddForm() {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      file: ['', [Validators.required, Validators.minLength(3)]],
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
+      file: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -100,38 +97,46 @@ export class CompanyUserFileAddComponent {
   }
 
   onUpload() {
-    if (this.selectedFile && this.addForm.valid) {
-      this.userId = this.getUserId(this.addForm.value.userEmail);
+    if (this.selectedFile) {
+      this.companyUserId = this.getCompanyUserId(
+        this.addForm.value.companyUserName
+      );
 
       const formData = new FormData();
       formData.append('file', this.selectedFile, this.selectedFile.name);
+      formData.append('companyUserId', this.companyUserId.toString());
 
-      formData.append('userId', this.userId.toString());
+      this.companyUserFileService
+        .uploadFile(formData, this.companyUserId)
+        .subscribe(
+          (event) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              const percentDone = Math.round(
+                event.loaded / (event.total * 100)
+              );
+              console.log(`File is ${percentDone}% uploaded.`);
+            } else if (event.type === HttpEventType.Response) {
+              this.fileName = event.body.name;
+              this.filePath = event.body.type;
 
-      this.companyUserFileService.uploadFile(formData, this.userId).subscribe(
-        (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            const percentDone = Math.round(event.loaded / (event.total * 100));
-            console.log(`File is ${percentDone}% uploaded.`);
-          } else if (event.type === HttpEventType.Response) {
-            this.fileName = event.body.name;
-            this.filePath = event.body.type;
+              this.add(this.filePath, this.fileName);
 
-            this.add(this.filePath, this.fileName);
-
-            this.toastrService.success(
-              'Company User File Added Successfully',
-              'Success'
-            );
+              this.toastrService.success(
+                'Company User File Added Successfully',
+                'Success'
+              );
+            }
+          },
+          (error) => {
+            console.error;
+            this.toastrService.error('Error uploading file', error);
           }
-        },
-        (error) => {
-          console.log(error);
-          this.toastrService.error('Error uploading file', error);
-        }
-      );
+        );
     } else {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      this.toastrService.error(
+        'Please select a file to upload',
+        'No file selected'
+      );
     }
   }
 
@@ -150,7 +155,6 @@ export class CompanyUserFileAddComponent {
 
   getModel(filePath: string | null, fileName: string | null): CompanyUserFile {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
       companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
       filePath: filePath,
       fileName: fileName,
@@ -195,11 +199,11 @@ export class CompanyUserFileAddComponent {
   }
 
   getCompanyUserId(companyUserName: string): number {
-    const companyId = this.companyUserDTOs.filter(
+    const companyUserId = this.companyUserDTOs.filter(
       (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
-    return companyId;
+    return companyUserId;
   }
 
   clearInput1() {

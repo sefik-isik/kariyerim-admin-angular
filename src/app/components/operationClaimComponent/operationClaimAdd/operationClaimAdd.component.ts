@@ -20,7 +20,6 @@ import { OperationClaim } from '../../../models/operationClaim';
 })
 export class OperationClaimAddComponent implements OnInit {
   addForm: FormGroup;
-
   componentTitle = 'Add Operation Claim Form';
 
   constructor(
@@ -48,7 +47,7 @@ export class OperationClaimAddComponent implements OnInit {
           this.router.navigate(['/dashboard/operationclaims']);
         },
         (error) => {
-          console.log(error);
+          console.error;
         }
       );
     } else {
