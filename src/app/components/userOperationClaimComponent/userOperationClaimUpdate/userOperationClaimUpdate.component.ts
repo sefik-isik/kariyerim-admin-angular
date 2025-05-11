@@ -18,6 +18,7 @@ import { UserOperationClaim } from '../../../models/userOperationClaim';
 import { UserService } from '../../../services/user.service';
 import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-userOperationClaimUpdate',
@@ -31,8 +32,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   operationClaims: OperationClaim[];
   userId: number;
   userEmail: string;
-  userOperationClaimId: number;
-
+  id: number;
   componentTitle = 'Update User Operation Claim Form';
 
   constructor(
@@ -43,15 +43,17 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     private userOperationClaimService: UserOperationClaimService,
     private adminService: AdminService,
     private userService: UserService,
-    private operationClaimService: OperationClaimService
+    private operationClaimService: OperationClaimService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
+    this.getOperaionClaims();
     this.getAdminValues();
     this.createUpdateForm();
 
     this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['useroperationclaimId']);
+      this.getUserValues(params['useroperationclaimId']);
     });
   }
 
@@ -61,17 +63,28 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.userOperationClaimService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.userOperationClaimService.getById(adminModel).subscribe(
       (response) => {
+        this.id = response.data.id;
+        this.userId = response.data.userId;
+        this.userEmail = this.getEmailByUserId(this.userId);
+
         this.updateForm.patchValue({
           claimName: this.getOperationClaimByClaimId(
             response.data.operationClaimId
           ),
         });
-        this.userOperationClaimId = response.data.id;
-        this.userId = response.data.userId;
-        this.userEmail = this.getEmailByUserId(response.data.userId);
       },
       (error) => console.error
     );
@@ -99,7 +112,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
 
   getModel(): UserOperationClaim {
     return Object.assign({
-      id: this.userOperationClaimId,
+      id: this.id,
       operationClaimId: this.getOperaionClaimId(
         this.updateForm.value.claimName
       ),
@@ -111,9 +124,10 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
         this.getUsers(response);
+        this.getOperaionClaims();
       },
       (error) => console.error
     );
@@ -132,12 +146,12 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     return this.users.find((u) => u.id == userId)?.email;
   }
 
-  getOperationClaimByClaimId(operationClaimId: number): string {
-    return this.operationClaims.find((u) => u.id == operationClaimId)?.name;
+  getOperationClaimByClaimId(userOperationClaimId: number): string {
+    return this.operationClaims.find((u) => u.id == userOperationClaimId)?.name;
   }
 
-  getOperaionClaims(adminModel: AdminModel) {
-    this.operationClaimService.getAll(adminModel).subscribe(
+  getOperaionClaims() {
+    this.operationClaimService.getAll().subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserFileService } from './../../../services/companyUserFile.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -45,7 +46,8 @@ export class CompanyUserFileAddComponent {
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
   ngOnInit() {
     this.createAddForm();
@@ -163,7 +165,8 @@ export class CompanyUserFileAddComponent {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);

@@ -1,0 +1,92 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email</span>
+          <input
+            formControlName="userEmail"
+            type="email"
+            class="form-control"
+            list="datalist1"
+            id="input1"
+            placeholder="Select User..."
+            minlength="3"
+            (change)="getAdminValues()"
+          />
+          <datalist id="datalist1">
+            <option
+              *ngFor="let userDTO of userDTOs"
+              value="{{ userDTO.email }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Title</span>
+          <input
+            formControlName="title"
+            type="text"
+            class="form-control"
+            id="input2"
+            placeholder="Title"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >Description <br />{{ description }} \ 250</span
+          >
+
+          <textarea
+            formControlName="description"
+            class="form-control"
+            id="input3"
+            style="height: 120px"
+            placeholder="description"
+            minlength="50"
+            maxlength="250"
+            (input)="count()"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercoverletters"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -34,7 +35,8 @@ export class CompanyUserAddressComponent implements OnInit {
     private companyUserAddressService: CompanyUserAddressService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,8 @@ export class CompanyUserAddressComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);

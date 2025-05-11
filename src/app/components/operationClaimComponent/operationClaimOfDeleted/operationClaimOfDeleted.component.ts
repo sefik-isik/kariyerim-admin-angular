@@ -7,6 +7,7 @@ import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-operationClaimOfDeleted',
@@ -22,7 +23,8 @@ export class OperationClaimOfDeletedComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private operationClaimService: OperationClaimService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -30,16 +32,17 @@ export class OperationClaimOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getOperationClaims(response);
+        this.getOperationClaims();
       },
       (error) => console.error
     );
   }
 
-  getOperationClaims(adminModel: AdminModel) {
-    this.operationClaimService.getDeletedAll(adminModel).subscribe(
+  getOperationClaims() {
+    this.operationClaimService.getDeletedAll().subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

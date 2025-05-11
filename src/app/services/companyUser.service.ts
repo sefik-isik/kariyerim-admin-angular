@@ -54,9 +54,13 @@ export class CompanyUserService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<CompanyUserDTO>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyUserDTO>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<CompanyUserDTO>> {
+    return this.httpClient.post<SingleResponseModel<CompanyUserDTO>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   getAllDTO(

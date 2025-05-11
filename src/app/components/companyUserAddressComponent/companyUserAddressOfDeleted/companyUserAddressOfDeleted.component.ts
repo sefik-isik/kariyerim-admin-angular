@@ -10,6 +10,7 @@ import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserAddressOfDeleted',
@@ -35,7 +36,8 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
     private companyUserAddressService: CompanyUserAddressService,
     private toastrService: ToastrService,
     private userService: UserService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -43,7 +45,8 @@ export class CompanyUserAddressOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);

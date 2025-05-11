@@ -61,11 +61,11 @@
             formControlName="languageLevel"
             type="text"
             class="form-control"
-            list="datalist1"
+            list="datalist2"
             id="input3"
             placeholder="Select Language Level..."
           />
-          <datalist id="datalist1">
+          <datalist id="datalist2">
             <option
               *ngFor="let languageLevel of languageLevels"
               value="{{ languageLevel.levelTitle }}"

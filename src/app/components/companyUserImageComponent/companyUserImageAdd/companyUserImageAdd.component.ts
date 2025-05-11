@@ -18,6 +18,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserImageAdd',
@@ -45,7 +46,8 @@ export class CompanyUserImageAddComponent implements OnInit {
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
   ngOnInit() {
     this.createAddForm();
@@ -152,7 +154,8 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);

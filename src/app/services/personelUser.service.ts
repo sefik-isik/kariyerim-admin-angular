@@ -54,9 +54,13 @@ export class PersonelUserService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<PersonelUser>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUser>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<PersonelUser>> {
+    return this.httpClient.post<SingleResponseModel<PersonelUser>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   getAllDTO(

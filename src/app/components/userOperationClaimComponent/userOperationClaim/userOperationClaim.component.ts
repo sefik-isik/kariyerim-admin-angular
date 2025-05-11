@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { UserService } from './../../../services/user.service';
@@ -45,7 +46,8 @@ export class UserOperationClaimComponent implements OnInit {
     private authService: AuthService,
     private userOperationClaimService: UserOperationClaimService,
     private operationClaimService: OperationClaimService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -53,10 +55,12 @@ export class UserOperationClaimComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getUsers(response);
         this.getUserOperationClaims(response);
+        this.getOperaionClaims();
       },
       (error) => console.error
     );
@@ -80,8 +84,8 @@ export class UserOperationClaimComponent implements OnInit {
     );
   }
 
-  getOperaionClaims(adminModel: AdminModel) {
-    this.operationClaimService.getAll(adminModel).subscribe(
+  getOperaionClaims() {
+    this.operationClaimService.getAll().subscribe(
       (response) => {
         this.operationClaims = response.data;
       },

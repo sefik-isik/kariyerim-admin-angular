@@ -1,6 +1,6 @@
-import { BasePersonelUserDTOModel } from './basePersonelUserDTOModel';
+import { BasePersonelUserModel } from './basePersonelUserModel';
 
-export interface BasePersonelUserCvDTOModel extends BasePersonelUserDTOModel {
+export interface BasePersonelUserCvDTOModel extends BasePersonelUserModel {
   cvId: number;
   cvName: string;
 }

@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { RegionService } from './../../../services/region.service';
@@ -17,7 +18,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
-
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -54,7 +54,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private router: Router,
     private adminService: AdminService,
     private userService: UserService,
-    private personelUserService: PersonelUserService
+    private personelUserService: PersonelUserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -128,7 +129,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);

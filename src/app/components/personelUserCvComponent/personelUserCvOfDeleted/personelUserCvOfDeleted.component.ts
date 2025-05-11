@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
@@ -42,7 +43,8 @@ export class PersonelUserCvOfDeletedComponent implements OnInit {
     private personelUserCvService: PersonelUserCvService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -50,7 +52,8 @@ export class PersonelUserCvOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCvs(response);

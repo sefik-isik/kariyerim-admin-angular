@@ -7,6 +7,7 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserCoverLetter } from '../models/personelUserCoverLetter';
 import { AdminModel } from '../models/adminModel';
+import { PersonelUserCoverLetterDTO } from '../models/PersonelUserCoverLetterDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -62,11 +63,29 @@ export class PersonelUserCoverLetterService {
   }
 
   getById(
-    id: number
+    adminModel: AdminModel
   ): Observable<SingleResponseModel<PersonelUserCoverLetter>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUserCoverLetter>>(
-      path
+    return this.httpClient.post<SingleResponseModel<PersonelUserCoverLetter>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
+  }
+
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCoverLetterDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCoverLetterDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
+  }
+
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCoverLetterDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCoverLetterDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
     );
   }
 }

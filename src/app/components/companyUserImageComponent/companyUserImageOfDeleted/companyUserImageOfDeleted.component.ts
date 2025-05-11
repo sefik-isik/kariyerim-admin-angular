@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { FilterCompanyUserImageByUserPipe } from '../../../pipes/filterCompanyUserImageByUser.pipe';
@@ -36,7 +37,8 @@ export class CompanyUserImageOfDeletedComponent implements OnInit {
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,8 @@ export class CompanyUserImageOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);

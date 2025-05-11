@@ -22,6 +22,7 @@ import { UserService } from '../../../services/user.service';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserAdd',
@@ -49,7 +50,8 @@ export class CompanyUserAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private userService: UserService,
     private adminService: AdminService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -117,7 +119,8 @@ export class CompanyUserAddComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
       },

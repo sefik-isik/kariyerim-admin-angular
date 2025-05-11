@@ -56,9 +56,13 @@ export class CompanyUserAddressService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<CompanyUserAddress>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyUserAddress>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<CompanyUserAddress>> {
+    return this.httpClient.post<SingleResponseModel<CompanyUserAddress>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   getAllDTO(

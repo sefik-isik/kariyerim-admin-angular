@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { UserService } from './../../../services/user.service';
@@ -12,6 +13,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { OperationClaim } from '../../../models/operationClaim';
 import { FilterUserOperationClaimByUserPipe } from '../../../pipes/filterUserOperationClaimByUser.pipe';
 import { FilterUserOperationClaimPipe } from '../../../pipes/filterUserOperationClaim.pipe';
+import { OperationClaimService } from '../../../services/operationClaim.service';
 
 @Component({
   selector: 'app-userOperationClaimOfDeleted',
@@ -38,8 +40,10 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private userService: UserService,
+    private operationClaimService: OperationClaimService,
     private userOperationClaimService: UserOperationClaimService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -47,10 +51,12 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getUsers(response);
         this.getUserOperationClaims(response);
+        this.getOperaionClaims();
       },
       (error) => console.error
     );
@@ -69,6 +75,15 @@ export class UserOperationClaimOfDeletedComponent implements OnInit {
     this.userOperationClaimService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
         this.userOperationClaimDTOs = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getOperaionClaims() {
+    this.operationClaimService.getAll().subscribe(
+      (response) => {
+        this.operationClaims = response.data;
       },
       (error) => console.error
     );

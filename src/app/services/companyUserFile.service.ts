@@ -56,9 +56,13 @@ export class CompanyUserFileService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<CompanyUserFile>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyUserFile>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<CompanyUserFile>> {
+    return this.httpClient.post<SingleResponseModel<CompanyUserFile>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   uploadFile(formData: FormData, id: number): Observable<HttpEvent<File>> {

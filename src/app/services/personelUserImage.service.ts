@@ -8,6 +8,8 @@ import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserImage } from '../models/personelUserImage';
 import { AdminModel } from '../models/adminModel';
 
+import { PersonelUserImageDTO } from '../models/personelUserImageDTO';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -55,8 +57,30 @@ export class PersonelUserImageService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<PersonelUserImage>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUserImage>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<PersonelUserImage>> {
+    return this.httpClient.post<SingleResponseModel<PersonelUserImage>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
+  }
+
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserImageDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserImageDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
+  }
+
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserImageDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserImageDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
+      adminModel
+    );
   }
 }

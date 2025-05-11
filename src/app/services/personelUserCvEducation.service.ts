@@ -63,11 +63,11 @@ export class PersonelUserCvEducationService {
   }
 
   getById(
-    id: number
+    adminModel: AdminModel
   ): Observable<SingleResponseModel<PersonelUserCvEducation>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUserCvEducation>>(
-      path
+    return this.httpClient.post<SingleResponseModel<PersonelUserCvEducation>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
     );
   }
 

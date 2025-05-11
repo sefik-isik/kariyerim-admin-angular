@@ -20,6 +20,7 @@ import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-personelUserUpdate',
@@ -54,7 +55,8 @@ export class PersonelUserUpdateComponent implements OnInit {
     private adminService: AdminService,
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class PersonelUserUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['personeluserId']);
+        this.getUserValues(params['personeluserId']);
       });
     }, 500);
   }
@@ -84,9 +86,18 @@ export class PersonelUserUpdateComponent implements OnInit {
       dateOfBirth: [''],
     });
   }
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
 
-  getById(id: number) {
-    this.personelUserService.getById(id).subscribe(
+  getById(adminModel: AdminModel) {
+    this.personelUserService.getById(adminModel).subscribe(
       (response) => {
         this.id = response.data.id;
         this.userId = response.data.userId;
@@ -159,7 +170,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
       },

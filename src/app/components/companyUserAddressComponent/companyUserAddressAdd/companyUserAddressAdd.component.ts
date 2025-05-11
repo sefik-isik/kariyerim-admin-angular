@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { RegionService } from './../../../services/region.service';
 import { CityService } from './../../../services/city.service';
@@ -53,6 +54,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
+    private localStorageService: LocalStorageService,
 
     private companyUserService: CompanyUserService
   ) {}
@@ -118,7 +120,8 @@ export class CompanyUserAddressAddComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);

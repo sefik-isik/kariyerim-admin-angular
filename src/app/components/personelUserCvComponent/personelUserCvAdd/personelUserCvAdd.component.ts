@@ -2,7 +2,6 @@ import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { LanguageLevelService } from './../../../services/languageLevel.service';
 import { LanguageService } from './../../../services/language.service';
-import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -22,6 +21,7 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-personelUserCvAdd',
@@ -51,7 +51,7 @@ export class PersonelUserCvAddComponent implements OnInit {
     private router: Router,
     private adminService: AdminService,
     private userService: UserService,
-    private authService: AuthService
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -107,7 +107,8 @@ export class PersonelUserCvAddComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);

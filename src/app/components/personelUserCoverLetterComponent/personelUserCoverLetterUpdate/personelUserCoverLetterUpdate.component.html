@@ -1,0 +1,69 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="updateForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Title</span>
+          <input
+            formControlName="title"
+            type="text"
+            class="form-control"
+            id="input1"
+            placeholder="Title"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >Description <br />{{ descriptionText }} \ 250</span
+          >
+
+          <textarea
+            formControlName="description"
+            class="form-control"
+            id="input2"
+            style="height: 120px"
+            placeholder="description"
+            minlength="50"
+            maxlength="250"
+            (input)="count(descriptionText)"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="update()" type="button" class="btn btn-outline-primary">
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercoverletters"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

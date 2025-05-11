@@ -66,9 +66,10 @@ export class AllUserUpdateComponent implements OnInit {
     });
   }
 
-  getAdminValues(userId: number) {
+  getAdminValues(id: number) {
     const adminModel = {
-      userId: userId,
+      id: id,
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
       email: this.localStorageService.getFromLocalStorage('email'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
@@ -86,7 +87,7 @@ export class AllUserUpdateComponent implements OnInit {
           phoneNumber: response.data.phoneNumber,
           status: this.checkStatus(response.data.status),
         });
-        this.userId = adminModel.userId;
+        this.userId = response.data.id;
       },
       (error) => console.error
     );

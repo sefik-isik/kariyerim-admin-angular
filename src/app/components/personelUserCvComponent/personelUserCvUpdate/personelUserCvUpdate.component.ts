@@ -21,6 +21,7 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-personelUserCvUpdate',
@@ -55,7 +56,8 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['personelusercvId']);
+        this.getUserValues(params['personelusercvId']);
       });
     }, 500);
   }
@@ -80,8 +82,18 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.personelUserCvService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.personelUserCvService.getById(adminModel).subscribe(
       (response) => {
         this.updateForm.patchValue({
           cvName: response.data.cvName,
@@ -92,7 +104,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
           isPrivate: response.data.isPrivate,
         });
         this.id = response.data.id;
-        this.personelUserId = response.data.personelUserId;
+
         this.userEmail = this.getEmailByUserId(this.personelUserId);
         this.cvName = response.data.cvName;
       },
@@ -104,7 +116,6 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     if (
       this.updateForm.valid &&
       this.getModel().id > 0 &&
-      this.getModel().userId > 0 &&
       this.getModel().languageId > 0 &&
       this.getModel().languageLevelId > 0
     ) {
@@ -125,7 +136,6 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getModel(): PersonelUserCvDTO {
     return Object.assign({
       id: this.id,
-      userId: this.userId,
       personelUserId: this.personelUserId,
       cvName: this.updateForm.value.cvName,
       languageId: this.getLanguageId(this.updateForm.value.languageName),
@@ -140,7 +150,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);

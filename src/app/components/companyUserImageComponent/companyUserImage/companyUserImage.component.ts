@@ -10,6 +10,7 @@ import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserImage',
@@ -37,7 +38,8 @@ export class CompanyUserImageComponent implements OnInit {
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private userService: UserService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,8 @@ export class CompanyUserImageComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);

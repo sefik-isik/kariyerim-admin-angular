@@ -56,9 +56,13 @@ export class CompanyUserImageService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<CompanyUserImage>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyUserImage>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<CompanyUserImage>> {
+    return this.httpClient.post<SingleResponseModel<CompanyUserImage>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   uploadImage(formData: FormData, id: number): Observable<HttpEvent<File>> {

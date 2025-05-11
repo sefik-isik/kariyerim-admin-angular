@@ -59,10 +59,12 @@ export class PersonelUserCvSummaryService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<PersonelUserCvSummary>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUserCvSummary>>(
-      path
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<PersonelUserCvSummary>> {
+    return this.httpClient.post<SingleResponseModel<PersonelUserCvSummary>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
     );
   }
 }

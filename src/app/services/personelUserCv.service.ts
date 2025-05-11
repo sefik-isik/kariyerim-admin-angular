@@ -56,9 +56,13 @@ export class PersonelUserCvService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<PersonelUserCv>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<PersonelUserCv>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<PersonelUserCv>> {
+    return this.httpClient.post<SingleResponseModel<PersonelUserCv>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   getAllDTO(

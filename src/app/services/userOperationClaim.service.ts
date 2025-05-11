@@ -56,9 +56,13 @@ export class UserOperationClaimService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<UserOperationClaim>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<UserOperationClaim>>(path);
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<UserOperationClaim>> {
+    return this.httpClient.post<SingleResponseModel<UserOperationClaim>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
+    );
   }
 
   getAllDTO(

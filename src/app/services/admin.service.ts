@@ -9,8 +9,9 @@ import { Injectable } from '@angular/core';
 export class AdminService {
   constructor(private localStorageService: LocalStorageService) {}
 
-  getAdminValues(): Observable<AdminModel> {
+  getAdminValues(id: number): Observable<AdminModel> {
     const adminModel = {
+      id: id,
       userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
       email: this.localStorageService.getFromLocalStorage('email'),
       status: this.localStorageService.getFromLocalStorage('status'),

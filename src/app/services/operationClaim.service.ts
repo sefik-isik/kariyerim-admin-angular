@@ -37,21 +37,15 @@ export class OperationClaimService {
     );
   }
 
-  getAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<OperationClaim>> {
-    return this.httpClient.post<ListResponseModel<OperationClaim>>(
-      this.newUrlPath + 'getall',
-      adminModel
+  getAll(): Observable<ListResponseModel<OperationClaim>> {
+    return this.httpClient.get<ListResponseModel<OperationClaim>>(
+      this.newUrlPath + 'getall'
     );
   }
 
-  getDeletedAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<OperationClaim>> {
-    return this.httpClient.post<ListResponseModel<OperationClaim>>(
-      this.newUrlPath + 'getdeletedall',
-      adminModel
+  getDeletedAll(): Observable<ListResponseModel<OperationClaim>> {
+    return this.httpClient.get<ListResponseModel<OperationClaim>>(
+      this.newUrlPath + 'getdeletedall'
     );
   }
 

@@ -61,12 +61,11 @@ export class PersonelUserCvWorkExperienceService {
   }
 
   getById(
-    id: number
+    adminModel: AdminModel
   ): Observable<SingleResponseModel<PersonelUserCvWorkExperience>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<
+    return this.httpClient.post<
       SingleResponseModel<PersonelUserCvWorkExperience>
-    >(path);
+    >(this.newUrlPath + 'getbyid', adminModel);
   }
 
   getAllDTO(

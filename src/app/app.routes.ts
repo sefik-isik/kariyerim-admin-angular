@@ -112,6 +112,14 @@ import { PersonelUserAddressComponent } from './components/personelUserAddressCo
 import { PersonelUserAddressAddComponent } from './components/personelUserAddressComponent/personelUserAddressAdd/personelUserAddressAdd.component';
 import { PersonelUserAddressOfDeletedComponent } from './components/personelUserAddressComponent/personelUserAddressOfDeleted/personelUserAddressOfDeleted.component';
 import { PersonelUserAddressUpdateComponent } from './components/personelUserAddressComponent/personelUserAddressUpdate/personelUserAddressUpdate.component';
+import { PersonelUserCoverLetterListComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterList/personelUserCoverLetterList.component';
+import { PersonelUserCoverLetterAddComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterAdd/personelUserCoverLetterAdd.component';
+import { PersonelUserCoverLetterDeletedListComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterDeletedList/personelUserCoverLetterDeletedList.component';
+import { PersonelUserCoverLetterUpdateComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
+import { PersonelUserCvEducationListComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationList/personelUserCvEducationList.component';
+import { PersonelUserCvEducationAddComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationAdd/personelUserCvEducationAdd.component';
+import { PersonelUserCvEducationDeletedListComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationDeletedList/personelUserCvEducationDeletedList.component';
+import { PersonelUserCvEducationUpdateComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
 //-----------------
 
 export const routes: Routes = [
@@ -649,6 +657,46 @@ export const routes: Routes = [
       {
         path: 'personeluseraddresses/personeluseraddressupdate/:personeluseraddressId',
         component: PersonelUserAddressUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercoverletters',
+        component: PersonelUserCoverLetterListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercoverletters/personelusercoverletteradd',
+        component: PersonelUserCoverLetterAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercoverletters/personelusercoverletterdeletedlist',
+        component: PersonelUserCoverLetterDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercoverletters/personelusercoverletterupdate/:personelusercoverletterId',
+        component: PersonelUserCoverLetterUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercveducations',
+        component: PersonelUserCvEducationListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercveducations/personelusercveducationadd',
+        component: PersonelUserCvEducationAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercveducations/personelusercveducationdeletedlist',
+        component: PersonelUserCvEducationDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercveducations/personelusercveducationupdate/:personelusercveducationId',
+        component: PersonelUserCvEducationUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

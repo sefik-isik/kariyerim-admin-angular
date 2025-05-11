@@ -13,6 +13,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUser',
@@ -33,7 +34,8 @@ export class CompanyUserComponent implements OnInit {
     private userService: UserService,
     private companyUserService: CompanyUserService,
     private toastrService: ToastrService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,8 @@ export class CompanyUserComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);

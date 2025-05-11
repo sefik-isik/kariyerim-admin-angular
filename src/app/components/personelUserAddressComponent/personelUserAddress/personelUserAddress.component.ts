@@ -10,6 +10,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-personelUserAddress',
@@ -35,7 +36,8 @@ export class PersonelUserAddressComponent implements OnInit {
     private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -43,7 +45,8 @@ export class PersonelUserAddressComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelAddresses(response);

@@ -24,6 +24,7 @@ import { UserService } from '../../../services/user.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserUpdate',
@@ -59,7 +60,8 @@ export class CompanyUserUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class CompanyUserUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['companyUserId']);
+        this.getUserValues(params['companyUserId']);
       });
     }, 500);
   }
@@ -87,8 +89,18 @@ export class CompanyUserUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.companyUserService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.companyUserService.getById(adminModel).subscribe(
       (response) => {
         this.id = response.data.id;
         this.userId = response.data.userId;
@@ -151,7 +163,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);

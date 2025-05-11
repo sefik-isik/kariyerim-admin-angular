@@ -11,6 +11,7 @@ import { CompanyUserImageService } from '../../../services/companyUserImage.serv
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserImageSlide',
@@ -38,7 +39,8 @@ export class CompanyUserImageSlideComponent implements OnInit {
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,8 @@ export class CompanyUserImageSlideComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);

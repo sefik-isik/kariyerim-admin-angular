@@ -60,10 +60,12 @@ export class CompanyUserDepartmentService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<CompanyUserDepartment>> {
-    let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyUserDepartment>>(
-      path
+  getById(
+    adminModel: AdminModel
+  ): Observable<SingleResponseModel<CompanyUserDepartment>> {
+    return this.httpClient.post<SingleResponseModel<CompanyUserDepartment>>(
+      this.newUrlPath + 'getbyid',
+      adminModel
     );
   }
 

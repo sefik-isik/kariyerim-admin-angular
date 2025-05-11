@@ -1,3 +1,4 @@
+import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { CountryService } from './../../../services/country.service';
 import { City } from './../../../models/city';
@@ -20,6 +21,7 @@ import { RegionService } from '../../../services/region.service';
 import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
@@ -54,7 +56,8 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -63,7 +66,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['companyuseraddressId']);
+        this.getUserValues(params['companyuseraddressId']);
       });
     }, 500);
   }
@@ -77,8 +80,18 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.companyUserAddressService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.companyUserAddressService.getById(adminModel).subscribe(
       (response) => {
         this.updateForm.patchValue({
           countryName: this.getCountryNameById(response.data.countryId),

@@ -15,6 +15,8 @@ import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { CaseService } from '../../../services/case.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -39,7 +41,8 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -47,7 +50,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['companyuseraddressId']);
+        this.getUserValues(params['companyuseraddressId']);
       });
     }, 500);
   }
@@ -58,8 +61,18 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.companyUserDepartmentService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.companyUserDepartmentService.getById(adminModel).subscribe(
       (response) => {
         this.id = response.data.id;
         this.companyUserId = response.data.companyUserId;

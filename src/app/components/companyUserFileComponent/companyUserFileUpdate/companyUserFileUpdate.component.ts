@@ -19,6 +19,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { HttpEventType } from '@angular/common/http';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-companyUserFileUpdate',
@@ -49,7 +50,8 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
     private companyUserService: CompanyUserService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private localStorageService: LocalStorageService
   ) {}
   ngOnInit() {
     this.getAdminValues();
@@ -57,7 +59,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['companyuserfileId']);
+        this.getUserValues(params['companyuserfileId']);
       });
     }, 500);
   }
@@ -76,8 +78,19 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     });
   }
 
-  getById(id: number) {
-    this.companyUserFileService.getById(id).subscribe(
+  getUserValues(id: number) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.companyUserFileService.getById(adminModel).subscribe(
       (response) => {
         this.id = response.data.id;
         this.companyUserId = response.data.companyUserId;
@@ -199,7 +212,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
         this.getCompanyUsers(response);
       },

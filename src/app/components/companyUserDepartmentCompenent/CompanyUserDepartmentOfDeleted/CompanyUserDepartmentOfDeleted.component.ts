@@ -10,6 +10,7 @@ import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
   selector: 'app-CompanyUserDepartmentOfDeleted',
@@ -36,7 +37,8 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,8 @@ export class CompanyUserDepartmentOfDeletedComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues().subscribe(
+    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserDepartments(response);
