@@ -47,17 +47,13 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>personelUserId</th>
             <th>email</th>
-            <th>countryId</th>
             <th>countryName</th>
-            <th>cityId</th>
             <th>cityName</th>
-            <th>regionId</th>
             <th>regionName</th>
             <th>addressDetail</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+            <th>deleted Date</th>
+
             <th></th>
             <th>
               <i
@@ -76,26 +72,16 @@
             "
           >
             <td>{{ personelUserAddressDTO.id }}</td>
-            <td>{{ personelUserAddressDTO.personelUserId }}</td>
             <td>{{ personelUserAddressDTO.email }}</td>
-            <td>{{ personelUserAddressDTO.countryId }}</td>
             <td>{{ personelUserAddressDTO.countryName }}</td>
-            <td>{{ personelUserAddressDTO.cityId }}</td>
             <td>{{ personelUserAddressDTO.cityName }}</td>
-            <td>{{ personelUserAddressDTO.regionId }}</td>
             <td>{{ personelUserAddressDTO.regionName }}</td>
             <td>
               {{ personelUserAddressDTO.addressDetail.substring(0, 20) }}...
             </td>
             <td>
               {{
-                personelUserAddressDTO.createdDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
-            <td>
-              {{
-                personelUserAddressDTO.updatedDate
+                personelUserAddressDTO.deletedDate
                   | date : "dd/MM/yyyy hh:mm:ss"
               }}
             </td>

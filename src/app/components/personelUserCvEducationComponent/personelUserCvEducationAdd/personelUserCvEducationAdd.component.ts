@@ -2,8 +2,6 @@ import { PersonelUserCvService } from './../../../services/personelUserCv.servic
 import { LocalStorageService } from './../../../services/localStorage.service';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { RegionService } from './../../../services/region.service';
-import { CityService } from './../../../services/city.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -13,17 +11,12 @@ import {
   FormGroup,
   FormBuilder,
 } from '@angular/forms';
-import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/country';
+
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterLink } from '@angular/router';
-import { City } from '../../../models/city';
-import { Region } from '../../../models/region';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
-import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
-import { PersonelUserAddress } from '../../../models/personelUserAddress';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDTO } from '../../../models/personelUserCvEducationDTO';

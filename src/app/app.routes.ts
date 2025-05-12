@@ -86,7 +86,6 @@ import { UniversityDepartmentAddComponent } from './components/universityDepartm
 import { UniversityDepartmentOfDeletedComponent } from './components/universityDepartmentComponent/universityDepartmentOfDeleted/universityDepartmentOfDeleted.component';
 import { UniversityDepartmentUpdateComponent } from './components/universityDepartmentComponent/universityDepartmentUpdate/universityDepartmentUpdate.component';
 import { UserOperationClaimComponent } from './components/userOperationClaimComponent/userOperationClaim/userOperationClaim.component';
-import { UserOperationClaimAddComponent } from './components/userOperationClaimComponent/userOperationClaimAdd/userOperationClaimAdd.component';
 import { UserOperationClaimOfDeletedComponent } from './components/userOperationClaimComponent/userOperationClaimOfDeleted/userOperationClaimOfDeleted.component';
 import { UserOperationClaimUpdateComponent } from './components/userOperationClaimComponent/userOperationClaimUpdate/userOperationClaimUpdate.component';
 import { WorkingMethodComponent } from './components/workingMethodComponent/workingMethod/workingMethod.component';
@@ -582,11 +581,6 @@ export const routes: Routes = [
       {
         path: 'useroperationclaims',
         component: UserOperationClaimComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
-      },
-      {
-        path: 'useroperationclaims/useroperationclaimadd',
-        component: UserOperationClaimAddComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {

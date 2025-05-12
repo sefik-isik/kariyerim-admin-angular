@@ -1,3 +1,4 @@
+import { PrivatePipe } from './../../../pipes/private.pipe';
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
@@ -21,6 +22,8 @@ import { LocalStorageService } from '../../../services/localStorage.service';
     FormsModule,
     RouterLink,
     FilterPersonelUserCvByUserPipe,
+
+    PrivatePipe,
   ],
 })
 export class PersonelUserCvComponent implements OnInit {

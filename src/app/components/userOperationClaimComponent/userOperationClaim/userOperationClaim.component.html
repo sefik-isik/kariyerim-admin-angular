@@ -52,25 +52,18 @@
         </span>
       </div>
       <div class="mt-3">
-        <button
-          [routerLink]="['useroperationclaimadd']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-success"
-        >
-          Add New User Operation Claim <i class="bi bi-plus-circle"></i>
-        </button>
-        <button
-          [routerLink]="['useroperationclaimofdeleted']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-secondary"
-          style="margin-left: 10px"
-        >
-          Deleted User Operation Claims <i class="bi bi-arrow-right"></i>
-        </button>
+        <div class="d-grid gap-2">
+          <button
+            [routerLink]="['useroperationclaimofdeleted']"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            type="button"
+            class="btn btn-outline-secondary"
+            style="margin-left: 10px"
+          >
+            Deleted User Operation Claims <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
       </div>
       <div class="mt-3 table-responsive-xxl">
         <table
@@ -82,7 +75,6 @@
               <th>Id</th>
               <th>user Id</th>
               <th>email</th>
-              <th>operationClaimId</th>
               <th>operationClaimName</th>
               <th>Created Date</th>
               <th>Updated Date</th>
@@ -107,7 +99,6 @@
               <td>{{ userOperationClaimDTO.id }}</td>
               <td>{{ userOperationClaimDTO.userId }}</td>
               <td>{{ userOperationClaimDTO.email }}</td>
-              <td>{{ userOperationClaimDTO.operationClaimId }}</td>
               <td>{{ userOperationClaimDTO.operationClaimName }}</td>
               <td>
                 {{

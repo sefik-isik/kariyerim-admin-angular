@@ -50,14 +50,11 @@
             <th>Id</th>
             <th>email</th>
             <th>gender</th>
-            <th>licenceDegreeId</th>
             <th>licenceDegreeName</th>
-            <th>driverLicenceId</th>
             <th>driverLicenceName</th>
             <th>militaryStatus</th>
             <th>nationalStatus</th>
             <th>retirementStatus</th>
-            <th>birthPlaceId</th>
             <th>birthPlaceName</th>
             <th>dateOfBirth</th>
             <th>Created Date</th>
@@ -82,14 +79,11 @@
             <td>{{ personelUserDTO.id }}</td>
             <td>{{ personelUserDTO.email }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
-            <td>{{ personelUserDTO.licenceDegreeId }}</td>
             <td>{{ personelUserDTO.licenceDegreeName }}</td>
-            <td>{{ personelUserDTO.driverLicenceId }}</td>
             <td>{{ personelUserDTO.driverLicenceName }}</td>
             <td>{{ personelUserDTO.militaryStatus | boolenText }}</td>
             <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>
             <td>{{ personelUserDTO.retirementStatus | boolenText }}</td>
-            <td>{{ personelUserDTO.birthPlaceId }}</td>
             <td>{{ personelUserDTO.birthPlaceName }}</td>
             <td>
               {{ personelUserDTO.dateOfBirth | date : "dd/MM/yyyy" }}

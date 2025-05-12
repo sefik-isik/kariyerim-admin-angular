@@ -1,4 +1,4 @@
-import { CaseService } from './../../../services/case.service';
+import { CaseService } from '../../../services/case.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {

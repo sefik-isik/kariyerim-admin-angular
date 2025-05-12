@@ -6,16 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 import { FilterPersonelUserCvByUserPipe } from '../../../pipes/filterPersonelUserCvByUser.pipe';
-
 import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
-import { PersonelUserCode } from '../../../models/userCodes';
-import { PersonelUserService } from '../../../services/personelUser.service';
 
 @Component({
   selector: 'app-personelUserCvOfDeleted',

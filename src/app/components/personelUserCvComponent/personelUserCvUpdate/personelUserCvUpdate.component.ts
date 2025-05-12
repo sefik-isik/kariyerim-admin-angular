@@ -104,7 +104,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
           isPrivate: response.data.isPrivate,
         });
         this.id = response.data.id;
-
+        this.personelUserId = response.data.personelUserId;
         this.userEmail = this.getEmailByUserId(this.personelUserId);
         this.cvName = response.data.cvName;
       },

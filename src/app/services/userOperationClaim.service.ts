@@ -17,13 +17,6 @@ export class UserOperationClaimService {
 
   constructor(private httpClient: HttpClient) {}
 
-  add(userOperationClaim: UserOperationClaim): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(
-      this.newUrlPath + 'add',
-      userOperationClaim
-    );
-  }
-
   update(userOperationClaim: UserOperationClaim): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'update',

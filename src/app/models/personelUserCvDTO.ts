@@ -4,7 +4,6 @@ export interface PersonelUserCvDTO extends BasePersonelUserCvDTOModel {
   languageId: number;
   languageName: string;
   languageLevelId: number;
-  gender: boolean;
   level: number;
   levelTitle: string;
   levelDescription: string;

@@ -47,8 +47,7 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>companyUserId</th>
-            <th>companyUserName</th>
+            <th>email</th>
             <th>file</th>
             <th>deletedDate Date</th>
             <th></th>
@@ -69,8 +68,7 @@
             "
           >
             <td>{{ companyUserFileDTO.id }}</td>
-            <td>{{ companyUserFileDTO.companyUserId }}</td>
-            <td>{{ companyUserFileDTO.companyUserName }}</td>
+            <td>{{ companyUserFileDTO.email }}</td>
             <td *ngIf="companyUserFileDTO.fileName != 'noFile'">
               <a
                 href="{{

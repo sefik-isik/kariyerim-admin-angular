@@ -59,18 +59,11 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>personelUserId</th>
-            <th>email</th>
             <th>cvId</th>
             <th>cvName</th>
-            <th>gender</th>
-            <th>birthPlaceId</th>
             <th>birthPlaceName</th>
             <th>isPrivate</th>
-            <th>languageId</th>
             <th>languageName</th>
-            <th>languageLevelId</th>
-            <th>level</th>
             <th>levelTitle</th>
             <th>levelDescription</th>
             <th>Created Date</th>
@@ -93,19 +86,11 @@
             "
           >
             <td>{{ personelUserCvDTO.id }}</td>
-
-            <td>{{ personelUserCvDTO.personelUserId }}</td>
             <td>{{ personelUserCvDTO.email }}</td>
-            <td>{{ personelUserCvDTO.cvId }}</td>
             <td>{{ personelUserCvDTO.cvName }}</td>
-            <td>{{ personelUserCvDTO.gender }}</td>
-            <td>{{ personelUserCvDTO.birthPlaceId }}</td>
             <td>{{ personelUserCvDTO.birthPlaceName }}</td>
-            <td>{{ personelUserCvDTO.isPrivate }}</td>
-            <td>{{ personelUserCvDTO.languageId }}</td>
+            <td>{{ personelUserCvDTO.isPrivate | private }}</td>
             <td>{{ personelUserCvDTO.languageName }}</td>
-            <td>{{ personelUserCvDTO.languageLevelId }}</td>
-            <td>{{ personelUserCvDTO.level }}</td>
             <td>{{ personelUserCvDTO.levelTitle }}</td>
             <td>{{ personelUserCvDTO.levelDescription }}</td>
             <td>

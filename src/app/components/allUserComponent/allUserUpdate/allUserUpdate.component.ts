@@ -30,7 +30,7 @@ export class AllUserUpdateComponent implements OnInit {
   @Input() userDTO: UserDTO;
   userId: number;
   code: string;
-
+  status: string;
   componentTitle = 'User Update';
   statuses: string[] = ['Admin', 'User'];
 
@@ -62,7 +62,6 @@ export class AllUserUpdateComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.minLength(3)]],
       phoneNumber: ['', [Validators.required, Validators.minLength(3)]],
-      status: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -80,6 +79,7 @@ export class AllUserUpdateComponent implements OnInit {
     this.userService.getById(adminModel).subscribe(
       (response) => {
         this.code = response.data.code;
+        this.status = response.data.status;
         this.updateForm.patchValue({
           firstName: response.data.firstName,
           lastName: response.data.lastName,
@@ -124,7 +124,7 @@ export class AllUserUpdateComponent implements OnInit {
       email: this.updateForm.value.email,
       phoneNumber: this.updateForm.value.phoneNumber,
       code: this.code,
-      status: this.getStatus(this.updateForm.value.status),
+      status: this.status,
       passwordHash: '',
       passwordSalt: '',
       createdDate: new Date(Date.now()).toJSON(),

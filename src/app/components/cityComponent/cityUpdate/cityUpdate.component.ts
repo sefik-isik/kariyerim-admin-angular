@@ -1,5 +1,5 @@
-import { City } from './../../../models/city';
-import { Country } from './../../../models/country';
+import { City } from '../../../models/city';
+import { Country } from '../../../models/country';
 import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
 import {

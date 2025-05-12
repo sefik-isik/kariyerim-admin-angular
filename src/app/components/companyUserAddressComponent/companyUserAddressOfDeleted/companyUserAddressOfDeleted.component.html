@@ -47,13 +47,9 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>companyUserId</th>
-            <th>companyUserName</th>
-            <th>countryId</th>
+            <th>email</th>
             <th>countryName</th>
-            <th>cityId</th>
             <th>cityName</th>
-            <th>regionId</th>
             <th>regionName</th>
             <th>addressDetail</th>
             <th>deletedDate Date</th>
@@ -76,13 +72,9 @@
             "
           >
             <td>{{ companyUserAddressDTO.id }}</td>
-            <td>{{ companyUserAddressDTO.companyUserId }}</td>
-            <td>{{ companyUserAddressDTO.companyUserName }}</td>
-            <td>{{ companyUserAddressDTO.countryId }}</td>
+            <td>{{ companyUserAddressDTO.email }}</td>
             <td>{{ companyUserAddressDTO.countryName }}</td>
-            <td>{{ companyUserAddressDTO.cityId }}</td>
             <td>{{ companyUserAddressDTO.cityName }}</td>
-            <td>{{ companyUserAddressDTO.regionId }}</td>
             <td>{{ companyUserAddressDTO.regionName }}</td>
             <td>
               {{ companyUserAddressDTO.addressDetail.substring(0, 20) }}...

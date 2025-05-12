@@ -77,30 +77,6 @@
               ></i>
             </span>
           </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text">User Status</span>
-            <input
-              formControlName="status"
-              type="text"
-              class="form-control"
-              list="datalist3"
-              id="input4"
-              placeholder="Select Status..."
-            />
-            <datalist id="datalist3">
-              <option
-                *ngFor="let status of statuses"
-                value="{{ status }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="clearInput5()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
 
           <div class="d-grid gap-2">
             <button
