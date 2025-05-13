@@ -45,8 +45,6 @@ export class CityListComponent implements OnInit {
     });
   }
 
-  //UMAF3IDUH1WGX3FR
-
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
@@ -63,6 +61,10 @@ export class CityListComponent implements OnInit {
       },
       (error) => console.error
     );
+  }
+
+  getCountryId(countryName: string): number {
+    return this.countries.find((f) => f.countryName == countryName)?.id;
   }
 
   delete(city: CityDTO) {
@@ -102,10 +104,6 @@ export class CityListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
-  }
-
-  getCountryId(countryName: string): number {
-    return this.countries.find((f) => f.countryName == countryName)?.id;
   }
 
   open(city: City) {

@@ -7,6 +7,7 @@ import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { PersonelUserCvSummary } from '../models/personelUserCvSummary';
 import { AdminModel } from '../models/adminModel';
+import { PersonelUserCvSummaryDTO } from '../models/personelUserCvSummaryDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +65,24 @@ export class PersonelUserCvSummaryService {
   ): Observable<SingleResponseModel<PersonelUserCvSummary>> {
     return this.httpClient.post<SingleResponseModel<PersonelUserCvSummary>>(
       this.newUrlPath + 'getbyid',
+      adminModel
+    );
+  }
+
+  getAllDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvSummaryDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCvSummaryDTO>>(
+      this.newUrlPath + 'getalldto',
+      adminModel
+    );
+  }
+
+  getAllDeletedDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserCvSummaryDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserCvSummaryDTO>>(
+      this.newUrlPath + 'getalldeleteddto',
       adminModel
     );
   }

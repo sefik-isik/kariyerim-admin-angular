@@ -1,6 +1,6 @@
 import { BasePersonelUserCvModel } from './basePersonelUserCvModel';
 
-export interface PersonelUserCvSummary extends BasePersonelUserCvModel {
+export interface PersonelUserCvSummaryDTO extends BasePersonelUserCvModel {
   cvSummaryTitle: string;
   cvSummaryDescription: string;
 }

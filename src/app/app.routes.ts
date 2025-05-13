@@ -1,124 +1,128 @@
-import { CompanyUserComponent } from './components/companyUserComponent/companyUser/companyUser.component';
+import { CompanyUserComponent } from './pages/companyUser/companyUser/companyUser.component';
 import { Routes } from '@angular/router';
-import { MainComponent } from './components/main/main.component';
 
-import { LoginComponent } from './components/login/login.component';
-import { LoginGuard } from './guards/login.guard';
-import { RegisterComponent } from './components/register/register.component';
-import { UpdatePasswordComponent } from './components/updatePassword/updatePassword.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { CompanyUserAddComponent } from './components/companyUserComponent/companyUserAdd/companyUserAdd.component';
+import { CompanyUserAddComponent } from './pages/companyUser/companyUserAdd/companyUserAdd.component';
 import { ExpirationGuard } from './guards/expiration.guard';
 import { StatusGuard } from './guards/status.guard';
-import { CompanyUserUpdateComponent } from './components/companyUserComponent/companyUserUpdate/companyUserUpdate.component';
-import { CompanyUserOfDeletedComponent } from './components/companyUserComponent/companyUserOfDeleted/companyUserOfDeleted.component';
-import { CompanyUserAddressComponent } from './components/companyUserAddressComponent/companyUserAddress/companyUserAddress.component';
-import { CompanyUserAddressOfDeletedComponent } from './components/companyUserAddressComponent/companyUserAddressOfDeleted/companyUserAddressOfDeleted.component';
-import { CompanyUserAddressAddComponent } from './components/companyUserAddressComponent/companyUserAddressAdd/companyUserAddressAdd.component';
-import { CompanyUserAddressUpdateComponent } from './components/companyUserAddressComponent/companyUserAddressUpdate/companyUserAddressUpdate.component';
-import { CompanyUserDepartmentComponent } from './components/companyUserDepartmentCompenent/companyUserDepartment/companyUserDepartment.component';
-import { CompanyUserDepartmentAddComponent } from './components/companyUserDepartmentCompenent/companyUserDepartmentAdd/companyUserDepartmentAdd.component';
-import { CompanyUserDepartmentOfDeletedComponent } from './components/companyUserDepartmentCompenent/CompanyUserDepartmentOfDeleted/CompanyUserDepartmentOfDeleted.component';
-import { CompanyUserDepartmentUpdateComponent } from './components/companyUserDepartmentCompenent/companyUserDepartmentUpdate/companyUserDepartmentUpdate.component';
-import { CompanyUserFileComponent } from './components/companyUserFileComponent/companyUserFile/companyUserFile.component';
-import { CompanyUserFileAddComponent } from './components/companyUserFileComponent/companyUserFileAdd/companyUserFileAdd.component';
-import { CompanyUserFileOfDeletedComponent } from './components/companyUserFileComponent/companyUserFileOfDeleted/companyUserFileOfDeleted.component';
-import { CompanyUserFileUpdateComponent } from './components/companyUserFileComponent/companyUserFileUpdate/companyUserFileUpdate.component';
-import { CompanyUserImageComponent } from './components/companyUserImageComponent/companyUserImage/companyUserImage.component';
-import { CompanyUserImageAddComponent } from './components/companyUserImageComponent/companyUserImageAdd/companyUserImageAdd.component';
-import { CompanyUserImageOfDeletedComponent } from './components/companyUserImageComponent/companyUserImageOfDeleted/companyUserImageOfDeleted.component';
-import { CompanyUserImageUpdateComponent } from './components/companyUserImageComponent/companyUserImageUpdate/companyUserImageUpdate.component';
-import { CompanyUserImageSlideComponent } from './components/companyUserImageComponent/companyUserImageSlide/companyUserImageSlide.component';
-import { SectorComponent } from './components/sectorComponent/sector/sector.component';
-import { SectorOfDeletedComponent } from './components/sectorComponent/sectorOfDeleted/sectorOfDeleted.component';
-import { SectorAddComponent } from './components/sectorComponent/sectorAdd/sectorAdd.component';
-import { SectorUpdateComponent } from './components/sectorComponent/sectorUpdate/sectorUpdate.component';
-import { CountryComponent } from './components/countryComponent/country/country.component';
-import { CountryAddComponent } from './components/countryComponent/countryAdd/countryAdd.component';
-import { CountryOfDeletedComponent } from './components/countryComponent/countryOfDeleted/countryOfDeleted.component';
-import { CountryUpdateComponent } from './components/countryComponent/countryUpdate/countryUpdate.component';
-import { PersonelUserCvComponent } from './components/personelUserCvComponent/personelUserCv/personelUserCv.component';
-import { PersonelUserCvAddComponent } from './components/personelUserCvComponent/personelUserCvAdd/personelUserCvAdd.component';
-import { PersonelUserCvOfDeletedComponent } from './components/personelUserCvComponent/personelUserCvOfDeleted/personelUserCvOfDeleted.component';
-import { PersonelUserCvUpdateComponent } from './components/personelUserCvComponent/personelUserCvUpdate/personelUserCvUpdate.component';
-import { DriverLicenceComponent } from './components/driverlicenceComponent/driverLicence/driverLicence.component';
-import { DriverLicenceAddComponent } from './components/driverlicenceComponent/DriverLicenceAdd/DriverLicenceAdd.component';
-import { DriverLicenceOfDeletedComponent } from './components/driverlicenceComponent/DriverLicenceOfDeleted/DriverLicenceOfDeleted.component';
-import { DriverLicenceUpdateComponent } from './components/driverlicenceComponent/DriverLicenceUpdate/DriverLicenceUpdate.component';
-import { FacultyComponent } from './components/facultyComponent/faculty/faculty.component';
-import { FacultyAddComponent } from './components/facultyComponent/facultyAdd/facultyAdd.component';
-import { FacultyOfDeletedComponent } from './components/facultyComponent/facultyOfDeleted/facultyOfDeleted.component';
-import { FacultyUpdateComponent } from './components/facultyComponent/facultyUpdate/facultyUpdate.component';
-import { LanguageLevelComponent } from './components/languageLevelComponent/languageLevel/languageLevel.component';
-import { LanguageLevelAddComponent } from './components/languageLevelComponent/languageLevelAdd/languageLevelAdd.component';
-import { LanguageLevelOfDeletedComponent } from './components/languageLevelComponent/languageLevelOfDeleted/languageLevelOfDeleted.component';
-import { LanguageLevelUpdateComponent } from './components/languageLevelComponent/languageLevelUpdate/languageLevelUpdate.component';
-import { LanguageComponent } from './components/languageComponent/language/language.component';
-import { LanguageAddComponent } from './components/languageComponent/languageAdd/languageAdd.component';
-import { LanguageOfDeletedComponent } from './components/languageComponent/languageOfDeleted/languageOfDeleted.component';
-import { LanguageUpdateComponent } from './components/languageComponent/languageUpdate/languageUpdate.component';
-import { LicenceDegreeComponent } from './components/licenceDegreeComponent/licenceDegree/licenceDegree.component';
-import { LicenceDegreeAddComponent } from './components/licenceDegreeComponent/licenceDegreeAdd/licenceDegreeAdd.component';
-import { LicenceDegreeOfDeletedComponent } from './components/licenceDegreeComponent/licenceDegreeOfDeleted/licenceDegreeOfDeleted.component';
-import { LicenceDegreeUpdateComponent } from './components/licenceDegreeComponent/licenceDegreeUpdate/licenceDegreeUpdate.component';
-import { ModelMenuAddComponent } from './components/modelMenuComponent/modelMenuAdd/modelMenuAdd.component';
-import { ModelMenuOfDeletedComponent } from './components/modelMenuComponent/modelMenuOfDeleted/modelMenuOfDeleted.component';
-import { ModelMenuUpdateComponent } from './components/modelMenuComponent/modelMenuUpdate/modelMenuUpdate.component';
-import { ModelMenuListComponent } from './components/modelMenuComponent/modelMenuList/modelMenuList.component';
-import { OperationClaimComponent } from './components/operationClaimComponent/operationClaim/operationClaim.component';
-import { OperationClaimAddComponent } from './components/operationClaimComponent/operationClaimAdd/operationClaimAdd.component';
-import { OperationClaimOfDeletedComponent } from './components/operationClaimComponent/operationClaimOfDeleted/operationClaimOfDeleted.component';
-import { OperationClaimUpdateComponent } from './components/operationClaimComponent/operationClaimUpdate/operationClaimUpdate.component';
-import { RegionComponent } from './components/regionComponent/region/region.component';
-import { RegionAddComponent } from './components/regionComponent/regionAdd/regionAdd.component';
-import { RegionOfDeletedComponent } from './components/regionComponent/regionOfDeleted/regionOfDeleted.component';
-import { RegionUpdateComponent } from './components/regionComponent/regionUpdate/regionUpdate.component';
-import { TaxOfficeComponent } from './components/taxOfficeComponent/taxOffice/taxOffice.component';
-import { TaxOfficeAddComponent } from './components/taxOfficeComponent/taxOfficeAdd/taxOfficeAdd.component';
-import { TaxOfficeOfDeletedComponent } from './components/taxOfficeComponent/taxOfficeOfDeleted/taxOfficeOfDeleted.component';
-import { TaxOfficeUpdateComponent } from './components/taxOfficeComponent/taxOfficeUpdate/taxOfficeUpdate.component';
-import { UniversityComponent } from './components/universityComponent/university/university.component';
-import { UniversityAddComponent } from './components/universityComponent/universityAdd/universityAdd.component';
-import { UniversityOfDeletedComponent } from './components/universityComponent/universityOfDeleted/universityOfDeleted.component';
-import { UniversityUpdateComponent } from './components/universityComponent/universityUpdate/universityUpdate.component';
-import { UniversityDepartmentComponent } from './components/universityDepartmentComponent/universityDepartment/universityDepartment.component';
-import { UniversityDepartmentAddComponent } from './components/universityDepartmentComponent/universityDepartmentAdd/universityDepartmentAdd.component';
-import { UniversityDepartmentOfDeletedComponent } from './components/universityDepartmentComponent/universityDepartmentOfDeleted/universityDepartmentOfDeleted.component';
-import { UniversityDepartmentUpdateComponent } from './components/universityDepartmentComponent/universityDepartmentUpdate/universityDepartmentUpdate.component';
-import { UserOperationClaimComponent } from './components/userOperationClaimComponent/userOperationClaim/userOperationClaim.component';
-import { UserOperationClaimOfDeletedComponent } from './components/userOperationClaimComponent/userOperationClaimOfDeleted/userOperationClaimOfDeleted.component';
-import { UserOperationClaimUpdateComponent } from './components/userOperationClaimComponent/userOperationClaimUpdate/userOperationClaimUpdate.component';
-import { WorkingMethodComponent } from './components/workingMethodComponent/workingMethod/workingMethod.component';
-import { WorkingMethodAddComponent } from './components/workingMethodComponent/workingMethodAdd/workingMethodAdd.component';
-import { WorkingMethodOfDeletedComponent } from './components/workingMethodComponent/workingMethodOfDeleted/workingMethodOfDeleted.component';
-import { WorkingMethodUpdateComponent } from './components/workingMethodComponent/workingMethodUpdate/workingMethodUpdate.component';
-import { PersonelUserMainComponent } from './components/personelUserMain/personelUserMain.component';
-import { CompanyUserMainComponent } from './components/companyUserMain/companyUserMain.component';
-import { PersonelUserComponent } from './components/personelUserComponent/personelUser/personelUser.component';
-import { PersonelUserAddComponent } from './components/personelUserComponent/personelUserAdd/personelUserAdd.component';
-import { PersonelUserOfDeletedComponent } from './components/personelUserComponent/personelUserOfDeleted/personelUserOfDeleted.component';
-import { PersonelUserUpdateComponent } from './components/personelUserComponent/personelUserUpdate/personelUserUpdate.component';
+import { CompanyUserUpdateComponent } from './pages/companyUser/companyUserUpdate/companyUserUpdate.component';
+import { CompanyUserOfDeletedComponent } from './pages/companyUser/companyUserOfDeleted/companyUserOfDeleted.component';
+import { CompanyUserAddressComponent } from './pages/companyUserAddress/companyUserAddress/companyUserAddress.component';
+import { CompanyUserAddressOfDeletedComponent } from './pages/companyUserAddress/companyUserAddressOfDeleted/companyUserAddressOfDeleted.component';
+import { CompanyUserAddressAddComponent } from './pages/companyUserAddress/companyUserAddressAdd/companyUserAddressAdd.component';
+import { CompanyUserAddressUpdateComponent } from './pages/companyUserAddress/companyUserAddressUpdate/companyUserAddressUpdate.component';
+import { CompanyUserDepartmentComponent } from './pages/companyUserDepartment/companyUserDepartment/companyUserDepartment.component';
+import { CompanyUserDepartmentAddComponent } from './pages/companyUserDepartment/companyUserDepartmentAdd/companyUserDepartmentAdd.component';
+import { CompanyUserDepartmentOfDeletedComponent } from './pages/companyUserDepartment/CompanyUserDepartmentOfDeleted/CompanyUserDepartmentOfDeleted.component';
+import { CompanyUserDepartmentUpdateComponent } from './pages/companyUserDepartment/companyUserDepartmentUpdate/companyUserDepartmentUpdate.component';
+import { CompanyUserFileComponent } from './pages/companyUserFile/companyUserFile/companyUserFile.component';
+import { CompanyUserFileAddComponent } from './pages/companyUserFile/companyUserFileAdd/companyUserFileAdd.component';
+import { CompanyUserFileOfDeletedComponent } from './pages/companyUserFile/companyUserFileOfDeleted/companyUserFileOfDeleted.component';
+import { CompanyUserFileUpdateComponent } from './pages/companyUserFile/companyUserFileUpdate/companyUserFileUpdate.component';
+import { CompanyUserImageComponent } from './pages/companyUserImage/companyUserImage/companyUserImage.component';
+import { CompanyUserImageAddComponent } from './pages/companyUserImage/companyUserImageAdd/companyUserImageAdd.component';
+import { CompanyUserImageOfDeletedComponent } from './pages/companyUserImage/companyUserImageOfDeleted/companyUserImageOfDeleted.component';
+import { CompanyUserImageUpdateComponent } from './pages/companyUserImage/companyUserImageUpdate/companyUserImageUpdate.component';
+import { CompanyUserImageSlideComponent } from './pages/companyUserImage/companyUserImageSlide/companyUserImageSlide.component';
+import { SectorComponent } from './pages/sector/sector/sector.component';
+import { SectorOfDeletedComponent } from './pages/sector/sectorOfDeleted/sectorOfDeleted.component';
+import { SectorAddComponent } from './pages/sector/sectorAdd/sectorAdd.component';
+import { SectorUpdateComponent } from './pages/sector/sectorUpdate/sectorUpdate.component';
+import { CountryComponent } from './pages/country/country/country.component';
+import { CountryAddComponent } from './pages/country/countryAdd/countryAdd.component';
+import { CountryOfDeletedComponent } from './pages/country/countryOfDeleted/countryOfDeleted.component';
+import { CountryUpdateComponent } from './pages/country/countryUpdate/countryUpdate.component';
+import { PersonelUserCvComponent } from './pages/personelUserCv/personelUserCv/personelUserCv.component';
+import { PersonelUserCvAddComponent } from './pages/personelUserCv/personelUserCvAdd/personelUserCvAdd.component';
+import { PersonelUserCvOfDeletedComponent } from './pages/personelUserCv/personelUserCvOfDeleted/personelUserCvOfDeleted.component';
+import { PersonelUserCvUpdateComponent } from './pages/personelUserCv/personelUserCvUpdate/personelUserCvUpdate.component';
+import { DriverLicenceComponent } from './pages/driverlicence/driverLicence/driverLicence.component';
+import { DriverLicenceAddComponent } from './pages/driverlicence/DriverLicenceAdd/DriverLicenceAdd.component';
+import { DriverLicenceOfDeletedComponent } from './pages/driverlicence/DriverLicenceOfDeleted/DriverLicenceOfDeleted.component';
+import { DriverLicenceUpdateComponent } from './pages/driverlicence/DriverLicenceUpdate/DriverLicenceUpdate.component';
+import { FacultyComponent } from './pages/faculty/faculty/faculty.component';
+import { FacultyAddComponent } from './pages/faculty/facultyAdd/facultyAdd.component';
+import { FacultyOfDeletedComponent } from './pages/faculty/facultyOfDeleted/facultyOfDeleted.component';
+import { FacultyUpdateComponent } from './pages/faculty/facultyUpdate/facultyUpdate.component';
+import { LanguageLevelComponent } from './pages/languageLevel/languageLevel/languageLevel.component';
+import { LanguageLevelAddComponent } from './pages/languageLevel/languageLevelAdd/languageLevelAdd.component';
+import { LanguageLevelOfDeletedComponent } from './pages/languageLevel/languageLevelOfDeleted/languageLevelOfDeleted.component';
+import { LanguageLevelUpdateComponent } from './pages/languageLevel/languageLevelUpdate/languageLevelUpdate.component';
+import { LanguageComponent } from './pages/language/language/language.component';
+import { LanguageAddComponent } from './pages/language/languageAdd/languageAdd.component';
+import { LanguageOfDeletedComponent } from './pages/language/languageOfDeleted/languageOfDeleted.component';
+import { LanguageUpdateComponent } from './pages/language/languageUpdate/languageUpdate.component';
+import { LicenceDegreeComponent } from './pages/licenceDegree/licenceDegree/licenceDegree.component';
+import { LicenceDegreeAddComponent } from './pages/licenceDegree/licenceDegreeAdd/licenceDegreeAdd.component';
+import { LicenceDegreeOfDeletedComponent } from './pages/licenceDegree/licenceDegreeOfDeleted/licenceDegreeOfDeleted.component';
+import { LicenceDegreeUpdateComponent } from './pages/licenceDegree/licenceDegreeUpdate/licenceDegreeUpdate.component';
+import { ModelMenuAddComponent } from './pages/modelMenu/modelMenuAdd/modelMenuAdd.component';
+import { ModelMenuOfDeletedComponent } from './pages/modelMenu/modelMenuOfDeleted/modelMenuOfDeleted.component';
+import { ModelMenuUpdateComponent } from './pages/modelMenu/modelMenuUpdate/modelMenuUpdate.component';
+import { ModelMenuListComponent } from './pages/modelMenu/modelMenuList/modelMenuList.component';
+import { OperationClaimComponent } from './pages/operationClaim/operationClaim/operationClaim.component';
+import { OperationClaimAddComponent } from './pages/operationClaim/operationClaimAdd/operationClaimAdd.component';
+import { OperationClaimOfDeletedComponent } from './pages/operationClaim/operationClaimOfDeleted/operationClaimOfDeleted.component';
+import { OperationClaimUpdateComponent } from './pages/operationClaim/operationClaimUpdate/operationClaimUpdate.component';
+import { RegionComponent } from './pages/region/region/region.component';
+import { RegionAddComponent } from './pages/region/regionAdd/regionAdd.component';
+import { RegionOfDeletedComponent } from './pages/region/regionOfDeleted/regionOfDeleted.component';
+import { RegionUpdateComponent } from './pages/region/regionUpdate/regionUpdate.component';
+import { TaxOfficeComponent } from './pages/taxOffice/taxOffice/taxOffice.component';
+import { TaxOfficeAddComponent } from './pages/taxOffice/taxOfficeAdd/taxOfficeAdd.component';
+import { TaxOfficeOfDeletedComponent } from './pages/taxOffice/taxOfficeOfDeleted/taxOfficeOfDeleted.component';
+import { TaxOfficeUpdateComponent } from './pages/taxOffice/taxOfficeUpdate/taxOfficeUpdate.component';
+import { UniversityComponent } from './pages/university/university/university.component';
+import { UniversityAddComponent } from './pages/university/universityAdd/universityAdd.component';
+import { UniversityOfDeletedComponent } from './pages/university/universityOfDeleted/universityOfDeleted.component';
+import { UniversityUpdateComponent } from './pages/university/universityUpdate/universityUpdate.component';
+import { UniversityDepartmentComponent } from './pages/universityDepartment/universityDepartment/universityDepartment.component';
+import { UniversityDepartmentAddComponent } from './pages/universityDepartment/universityDepartmentAdd/universityDepartmentAdd.component';
+import { UniversityDepartmentOfDeletedComponent } from './pages/universityDepartment/universityDepartmentOfDeleted/universityDepartmentOfDeleted.component';
+import { UniversityDepartmentUpdateComponent } from './pages/universityDepartment/universityDepartmentUpdate/universityDepartmentUpdate.component';
+import { UserOperationClaimComponent } from './pages/userOperationClaim/userOperationClaim/userOperationClaim.component';
+import { UserOperationClaimOfDeletedComponent } from './pages/userOperationClaim/userOperationClaimOfDeleted/userOperationClaimOfDeleted.component';
+import { UserOperationClaimUpdateComponent } from './pages/userOperationClaim/userOperationClaimUpdate/userOperationClaimUpdate.component';
+import { WorkingMethodComponent } from './pages/workingMethod/workingMethod/workingMethod.component';
+import { WorkingMethodAddComponent } from './pages/workingMethod/workingMethodAdd/workingMethodAdd.component';
+import { WorkingMethodOfDeletedComponent } from './pages/workingMethod/workingMethodOfDeleted/workingMethodOfDeleted.component';
+import { WorkingMethodUpdateComponent } from './pages/workingMethod/workingMethodUpdate/workingMethodUpdate.component';
+import { PersonelUserMainComponent } from './pages/personelUser/personelUserMain/personelUserMain.component';
+import { CompanyUserMainComponent } from './pages/companyUser/companyUserMain/companyUserMain.component';
+import { PersonelUserComponent } from './pages/personelUser/personelUser/personelUser.component';
+import { PersonelUserAddComponent } from './pages/personelUser/personelUserAdd/personelUserAdd.component';
+import { PersonelUserOfDeletedComponent } from './pages/personelUser/personelUserOfDeleted/personelUserOfDeleted.component';
+import { PersonelUserUpdateComponent } from './pages/personelUser/personelUserUpdate/personelUserUpdate.component';
 
 //-----------------
-import { AllUserComponent } from './components/allUserComponent/allUser/allUser.component';
-import { AllUserListTab } from './components/allUserComponent/allUser/allUserListTab';
-import { AllUserDeletedListTab } from './components/allUserComponent/allUser/allUserDeletedListTab';
+import { AllUserComponent } from './pages/allUser/allUser/allUser.component';
+import { AllUserListTab } from './pages/allUser/allUser/allUserListTab';
+import { AllUserDeletedListTab } from './pages/allUser/allUser/allUserDeletedListTab';
 //-----------------
-import { CityComponent } from './components/cityComponent/city/city.component';
-import { CityListTab } from './components/cityComponent/city/cityListTab';
-import { CityDeletedListComponent } from './components/cityComponent/cityDeletedList/cityDeletedList.component';
-import { PersonelUserAddressComponent } from './components/personelUserAddressComponent/personelUserAddress/personelUserAddress.component';
-import { PersonelUserAddressAddComponent } from './components/personelUserAddressComponent/personelUserAddressAdd/personelUserAddressAdd.component';
-import { PersonelUserAddressOfDeletedComponent } from './components/personelUserAddressComponent/personelUserAddressOfDeleted/personelUserAddressOfDeleted.component';
-import { PersonelUserAddressUpdateComponent } from './components/personelUserAddressComponent/personelUserAddressUpdate/personelUserAddressUpdate.component';
-import { PersonelUserCoverLetterListComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterList/personelUserCoverLetterList.component';
-import { PersonelUserCoverLetterAddComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterAdd/personelUserCoverLetterAdd.component';
-import { PersonelUserCoverLetterDeletedListComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterDeletedList/personelUserCoverLetterDeletedList.component';
-import { PersonelUserCoverLetterUpdateComponent } from './components/personelUserCoverLetterComponent/personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
-import { PersonelUserCvEducationListComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationList/personelUserCvEducationList.component';
-import { PersonelUserCvEducationAddComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationAdd/personelUserCvEducationAdd.component';
-import { PersonelUserCvEducationDeletedListComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationDeletedList/personelUserCvEducationDeletedList.component';
-import { PersonelUserCvEducationUpdateComponent } from './components/personelUserCvEducationComponent/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { CityComponent } from './pages/city/city/city.component';
+import { CityListTab } from './pages/city/city/cityListTab';
+import { CityDeletedListComponent } from './pages/city/cityDeletedList/cityDeletedList.component';
+import { PersonelUserAddressComponent } from './pages/personelUserAddress/personelUserAddress/personelUserAddress.component';
+import { PersonelUserAddressAddComponent } from './pages/personelUserAddress/personelUserAddressAdd/personelUserAddressAdd.component';
+import { PersonelUserAddressOfDeletedComponent } from './pages/personelUserAddress/personelUserAddressOfDeleted/personelUserAddressOfDeleted.component';
+import { PersonelUserAddressUpdateComponent } from './pages/personelUserAddress/personelUserAddressUpdate/personelUserAddressUpdate.component';
+import { PersonelUserCoverLetterListComponent } from './pages/personelUserCoverLetter/personelUserCoverLetterList/personelUserCoverLetterList.component';
+import { PersonelUserCoverLetterAddComponent } from './pages/personelUserCoverLetter/personelUserCoverLetterAdd/personelUserCoverLetterAdd.component';
+import { PersonelUserCoverLetterDeletedListComponent } from './pages/personelUserCoverLetter/personelUserCoverLetterDeletedList/personelUserCoverLetterDeletedList.component';
+import { PersonelUserCoverLetterUpdateComponent } from './pages/personelUserCoverLetter/personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
+import { PersonelUserCvEducationListComponent } from './pages/personelUserCvEducation/personelUserCvEducationList/personelUserCvEducationList.component';
+import { PersonelUserCvEducationAddComponent } from './pages/personelUserCvEducation/personelUserCvEducationAdd/personelUserCvEducationAdd.component';
+import { PersonelUserCvEducationDeletedListComponent } from './pages/personelUserCvEducation/personelUserCvEducationDeletedList/personelUserCvEducationDeletedList.component';
+import { PersonelUserCvEducationUpdateComponent } from './pages/personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MainComponent } from './components/main/main.component';
+import { LoginGuard } from './guards/login.guard';
+import { UpdatePasswordComponent } from './components/updatePassword/updatePassword.component';
+import { PersonelUserCvSummaryListComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryList/PersonelUserCvSummaryList.component';
+import { PersonelUserCvSummaryAddComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryAdd/PersonelUserCvSummaryAdd.component';
+import { PersonelUserCvSummaryDeletedListComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryDeletedList/PersonelUserCvSummaryDeletedList.component';
+import { PersonelUserCvSummaryUpdateComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryUpdate/PersonelUserCvSummaryUpdate.component';
 //-----------------
 
 export const routes: Routes = [
@@ -691,6 +695,26 @@ export const routes: Routes = [
       {
         path: 'personelusercveducations/personelusercveducationupdate/:personelusercveducationId',
         component: PersonelUserCvEducationUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvsummaries',
+        component: PersonelUserCvSummaryListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvsummaries/personelusercvsummaryadd',
+        component: PersonelUserCvSummaryAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvsummaries/personelusercvsummarydeletedlist',
+        component: PersonelUserCvSummaryDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvsummaries/personelusercvsummaryupdate/:personelusercvsummaryId',
+        component: PersonelUserCvSummaryUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

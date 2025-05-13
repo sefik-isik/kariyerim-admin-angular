@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from '../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
 import { Router } from '@angular/router';
-import { CodeService } from '../../services/code.service';
-import { AdminService } from '../../services/admin.service';
-import { AdminModel } from '../../models/adminModel';
+import { CodeService } from '../../../services/code.service';
+import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/adminModel';
 
 @Component({
-  selector: 'app-companyUserMain',
-  templateUrl: './companyUserMain.component.html',
-  styleUrls: ['./companyUserMain.component.css'],
+  selector: 'app-personelUserMain',
+  templateUrl: './personelUserMain.component.html',
+  styleUrls: ['./personelUserMain.component.css'],
 })
-export class CompanyUserMainComponent implements OnInit {
+export class PersonelUserMainComponent implements OnInit {
   constructor(
     private localStorageService: LocalStorageService,
     private router: Router,
-    private adminService: AdminService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {

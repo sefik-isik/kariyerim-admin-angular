@@ -1,0 +1,95 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="updateForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Cv Name</span>
+          <input
+            formControlName="cvName"
+            type="text"
+            class="form-control"
+            list="datalistCv"
+            id="input3"
+            placeholder="Select Cv..."
+            minlength="3"
+          />
+          <datalist id="datalistCv">
+            <option
+              *ngFor="let personelUserCv of personelUserCvs"
+              value="{{ personelUserCv.cvName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">cvSummaryTitle</span>
+          <input
+            formControlName="cvSummaryTitle"
+            type="text"
+            class="form-control"
+            id="cvSummaryTitle"
+            placeholder="cvSummaryTitle"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >cvSummaryDescription <br />{{ detailCount }} \ 250</span
+          >
+
+          <textarea
+            formControlName="cvSummaryDescription"
+            class="form-control"
+            id="cvSummaryDescription"
+            style="height: 120px"
+            placeholder="cvSummaryDescription"
+            minlength="50"
+            maxlength="250"
+            (input)="count(detailText)"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="update()" type="button" class="btn btn-outline-primary">
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercvsummaries"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>
