@@ -1,0 +1,340 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="updateForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">User Email : {{ userEmail }}</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Cv Name</span>
+          <input
+            formControlName="cvName"
+            type="text"
+            class="form-control"
+            list="datalistCv"
+            id="input3"
+            placeholder="Select Cv..."
+            minlength="3"
+          />
+          <datalist id="datalistCv">
+            <option
+              *ngFor="let personelUserCv of personelUserCvs"
+              value="{{ personelUserCv.cvName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Company Name</span>
+          <input
+            formControlName="companyName"
+            type="text"
+            class="form-control"
+            id="companyName"
+            placeholder="Company Name"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Sector Name</span>
+          <input
+            formControlName="companySectorName"
+            type="text"
+            class="form-control"
+            list="datalist4"
+            id="input4"
+            placeholder="Select Sector..."
+            minlength="3"
+          />
+          <datalist id="datalist4">
+            <option
+              *ngFor="let companySector of companySectors"
+              value="{{ companySector.sectorName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput4()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">department Name</span>
+          <input
+            formControlName="departmentName"
+            type="text"
+            class="form-control"
+            list="departmentNameData"
+            id="input5"
+            placeholder="Select department..."
+          />
+          <datalist id="departmentNameData">
+            <option
+              *ngFor="let companyUserDepartment of companyUserDepartments"
+              value="{{ companyUserDepartment.departmentName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput5()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Working Method Name</span>
+          <input
+            formControlName="workingMethodName"
+            type="text"
+            class="form-control"
+            list="workingMethodData"
+            id="workingMethod"
+            placeholder="Select Working Method..."
+          />
+          <datalist id="workingMethodData">
+            <option
+              *ngFor="let workingMethod of workingMethods"
+              value="{{ workingMethod.methodName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput6()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Country Name</span>
+          <input
+            formControlName="countryName"
+            type="text"
+            class="form-control"
+            list="countryNameData"
+            id="input3"
+            placeholder="Select Country..."
+            minlength="3"
+            (change)="getCities()"
+          />
+          <datalist id="countryNameData">
+            <option
+              *ngFor="let country of countries"
+              value="{{ country.countryName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput7()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">City Name</span>
+          <input
+            formControlName="cityName"
+            type="text"
+            class="form-control"
+            list="cityNameData"
+            id="cityName"
+            placeholder="Select City..."
+            minlength="3"
+            (change)="getRegions()"
+          />
+          <datalist id="cityNameData">
+            <option
+              *ngFor="let city of cities"
+              value="{{ city.cityName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput8()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Region Name</span>
+          <input
+            formControlName="regionName"
+            type="text"
+            class="form-control"
+            list="regionNameData"
+            id="regionName"
+            placeholder="Region Name..."
+          />
+          <datalist id="regionNameData">
+            <option
+              *ngFor="let region of regions"
+              value="{{ region.regionName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput9()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Start Date</span>
+          <input
+            formControlName="startDate"
+            type="date"
+            class="form-control"
+            id="input6"
+            placeholder="Start Date"
+            min="1980-01-01"
+            max="2025-12-31"
+            minlength="10"
+            maxlength="10"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput10()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">End Date</span>
+          <input
+            formControlName="endDate"
+            type="date"
+            class="form-control"
+            id="input7"
+            placeholder="End Date"
+            min="1980-01-01"
+            max="2025-12-31"
+            minlength="10"
+            maxlength="10"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput11()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Position</span>
+          <input
+            formControlName="position"
+            type="text"
+            class="form-control"
+            id="position"
+            placeholder="Position"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput12()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >Detail <br />{{ detailCount }} \ 250</span
+          >
+
+          <textarea
+            formControlName="detail"
+            class="form-control"
+            id="detail"
+            style="height: 120px"
+            placeholder="Detail"
+            minlength="50"
+            maxlength="250"
+            (input)="count(detailText)"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput13()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="foundJobInHere"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="foundJobInHere"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked">
+              Found Job In Here
+            </label>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="form-check">
+            <input
+              formControlName="working"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="working"
+              checked
+            />
+            <label class="form-check-label" for="checkChecked"> Working </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="update()" type="button" class="btn btn-outline-primary">
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        routerLink="/dashboard/personelusercvworkexperiences"
+        routerLinkActive="router-link-active"
+      >
+        Back
+      </button>
+    </div>
+  </div>
+</div>

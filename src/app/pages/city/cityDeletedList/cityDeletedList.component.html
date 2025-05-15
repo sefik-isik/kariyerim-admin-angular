@@ -7,11 +7,11 @@
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
+          list="CountryData"
+          id="Country"
           placeholder="Filter Cities By Country..."
         />
-        <datalist id="datalist1">
+        <datalist id="CountryData">
           <option
             *ngFor="let country of countries"
             value="{{ country.countryName }}"
@@ -31,11 +31,11 @@
           type="text"
           [(ngModel)]="filter2"
           class="form-control"
-          list="datalist2"
-          id="input2"
+          list="CityData"
+          id="City"
           placeholder="Filter Cities By Name..."
         />
-        <datalist id="datalist2">
+        <datalist id="CityData">
           <option
             *ngFor="let cityDTO of cityDTOs"
             value="{{ cityDTO.cityName }}"

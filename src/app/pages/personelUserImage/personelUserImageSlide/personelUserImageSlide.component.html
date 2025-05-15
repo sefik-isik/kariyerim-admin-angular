@@ -1,0 +1,69 @@
+<div class="card">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="datalist1"
+          id="input1"
+          placeholder="Filter Personel User Images By User..."
+        />
+        <datalist id="datalist1">
+          <option
+            *ngFor="let userDTO of userDTOs"
+            value="{{ userDTO.email }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          routerLink="/dashboard/personeluserimages"
+          routerLinkActive="router-link-active"
+        >
+          Back
+        </button>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <carousel>
+            <slide
+              *ngFor="
+                let personelUserImageDTO of personelUserImageDTOs
+                  | filterPersonelUserImageByUserPipe : filter1
+              "
+            >
+              <img
+                src="{{
+                  personelUserImageDTO.imagePath +
+                    personelUserImageDTO.imageName
+                }}"
+                alt="first slide"
+                style="display: block; width: 100%"
+              />
+              <div class="carousel-caption d-none d-md-block">
+                <h3>{{ personelUserImageDTO.email }}</h3>
+              </div>
+            </slide>
+          </carousel>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -123,6 +123,19 @@ import { PersonelUserCvSummaryListComponent } from './pages/personelUserCvSummar
 import { PersonelUserCvSummaryAddComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryAdd/PersonelUserCvSummaryAdd.component';
 import { PersonelUserCvSummaryDeletedListComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryDeletedList/PersonelUserCvSummaryDeletedList.component';
 import { PersonelUserCvSummaryUpdateComponent } from './pages/personelUserCvSummary/PersonelUserCvSummaryUpdate/PersonelUserCvSummaryUpdate.component';
+import { PersonelUserFileListComponent } from './pages/personelUserFile/personelUserFileList/personelUserFileList.component';
+import { PersonelUserFileAddComponent } from './pages/personelUserFile/personelUserFileAdd/personelUserFileAdd.component';
+import { PersonelUserFileDeletedListComponent } from './pages/personelUserFile/personelUserFileDeletedList/personelUserFileDeletedList.component';
+import { PersonelUserFileUpdateComponent } from './pages/personelUserFile/personelUserFileUpdate/personelUserFileUpdate.component';
+import { PersonelUserCvWorkExperienceListComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperienceList/personelUserCvWorkExperienceList.component';
+import { PersonelUserCvWorkExperienceAddComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperienceAdd/personelUserCvWorkExperienceAdd.component';
+import { PersonelUserCvWorkExperienceDeletedListComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperienceDeletedList/personelUserCvWorkExperienceDeletedList.component';
+import { PersonelUserCvWorkExperienceUpdateComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
+import { PersonelUserImageListComponent } from './pages/personelUserImage/personelUserImageList/personelUserImageList.component';
+import { PersonelUserImageAddComponent } from './pages/personelUserImage/personelUserImageAdd/personelUserImageAdd.component';
+import { PersonelUserImageDeletedListComponent } from './pages/personelUserImage/personelUserImageDeletedList/personelUserImageDeletedList.component';
+import { PersonelUserImageUpdateComponent } from './pages/personelUserImage/personelUserImageUpdate/personelUserImageUpdate.component';
+import { PersonelUserImageSlideComponent } from './pages/personelUserImage/personelUserImageSlide/personelUserImageSlide.component';
 //-----------------
 
 export const routes: Routes = [
@@ -715,6 +728,71 @@ export const routes: Routes = [
       {
         path: 'personelusercvsummaries/personelusercvsummaryupdate/:personelusercvsummaryId',
         component: PersonelUserCvSummaryUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserfiles',
+        component: PersonelUserFileListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserfiles/personeluserfileadd',
+        component: PersonelUserFileAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserfiles/personeluserfiledeletedlist',
+        component: PersonelUserFileDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserfiles/personeluserfileupdate/:personeluserfileId',
+        component: PersonelUserFileUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserimages',
+        component: PersonelUserImageListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserimages/personeluserimageadd',
+        component: PersonelUserImageAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserimages/personeluserimagedeletedlist',
+        component: PersonelUserImageDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserimages/personeluserimageupdate/:personeluserimageId',
+        component: PersonelUserImageUpdateComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personeluserimages/personeluserimageslide',
+        component: PersonelUserImageSlideComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvworkexperiences',
+        component: PersonelUserCvWorkExperienceListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvworkexperiences/personelusercvworkexperienceadd',
+        component: PersonelUserCvWorkExperienceAddComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvworkexperiences/personelusercvworkexperiencedeletedlist',
+        component: PersonelUserCvWorkExperienceDeletedListComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+      },
+      {
+        path: 'personelusercvworkexperiences/personelusercvworkexperienceupdate/:personelusercvworkexperienceId',
+        component: PersonelUserCvWorkExperienceUpdateComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
     ],

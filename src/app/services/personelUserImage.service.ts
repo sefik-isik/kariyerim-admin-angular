@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/apiUrl';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
@@ -35,6 +35,24 @@ export class PersonelUserImageService {
   delete(personelUserImage: PersonelUserImage): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      personelUserImage
+    );
+  }
+
+  uploadImage(formData: FormData, id: number): Observable<HttpEvent<File>> {
+    return this.httpClient.post<File>(
+      this.newUrlPath + 'uploadimage?id=' + id,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      }
+    );
+  }
+
+  deleteImage(personelUserImage: PersonelUserImage): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'deleteimage',
       personelUserImage
     );
   }

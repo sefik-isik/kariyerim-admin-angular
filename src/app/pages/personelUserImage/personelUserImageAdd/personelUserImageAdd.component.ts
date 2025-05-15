@@ -12,28 +12,28 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
-import { CompanyUserService } from '../../../services/companyUser.service';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
-import { CompanyUserImageService } from '../../../services/companyUserImage.service';
-import { CompanyUserImage } from '../../../models/companyUserImage';
+import { PersonelUserImageService } from '../../../services/personelUserImage.service';
+import { PersonelUserImage } from '../../../models/personelUserImage';
 import { LocalStorageService } from '../../../services/localStorage.service';
 
 @Component({
-  selector: 'app-companyUserImageAdd',
-  templateUrl: './companyUserImageAdd.component.html',
-  styleUrls: ['./companyUserImageAdd.component.css'],
+  selector: 'app-personelUserImageAdd',
+  templateUrl: './personelUserImageAdd.component.html',
+  styleUrls: ['./personelUserImageAdd.component.css'],
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
-export class CompanyUserImageAddComponent implements OnInit {
+export class PersonelUserImageAddComponent implements OnInit {
   addForm: FormGroup;
-  componentTitle = 'Company User Image Add Form';
+  componentTitle = 'Personel User Image Add Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
-  companyUserDTOs: CompanyUserDTO[] = [];
-  companyUserId: number;
+  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUserId: number;
   userId: number;
   userDTOs: UserDTO[] = [];
   isAdmin: boolean;
@@ -41,9 +41,9 @@ export class CompanyUserImageAddComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private companyUserImageService: CompanyUserImageService,
+    private personelUserImageService: PersonelUserImageService,
     private router: Router,
-    private companyUserService: CompanyUserService,
+    private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService
@@ -57,7 +57,7 @@ export class CompanyUserImageAddComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
       image: ['', [Validators.required, Validators.minLength(3)]],
-      companyUserName: ['', [Validators.required, Validators.minLength(3)]],
+      personelUserName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -89,16 +89,16 @@ export class CompanyUserImageAddComponent implements OnInit {
 
   onUpload() {
     if (this.selectedImage && this.addForm.valid) {
-      this.companyUserId = this.getCompanyUserId(
-        this.addForm.value.companyUserName
+      this.personelUserId = this.getPersonelUserId(
+        this.addForm.value.personelUserName
       );
 
       const formData = new FormData();
       formData.append('image', this.selectedImage, this.selectedImage.name);
-      formData.append('companyUserId', this.companyUserId.toString());
+      formData.append('personelUserId', this.personelUserId.toString());
 
-      this.companyUserImageService
-        .uploadImage(formData, this.companyUserId)
+      this.personelUserImageService
+        .uploadImage(formData, this.personelUserId)
         .subscribe(
           (event) => {
             if (event.type === HttpEventType.UploadProgress) {
@@ -113,7 +113,7 @@ export class CompanyUserImageAddComponent implements OnInit {
               this.add(this.imagePath, this.imageName);
 
               this.toastrService.success(
-                'Company User Image Added Successfully',
+                'Personel User Image Added Successfully',
                 'Success'
               );
             }
@@ -128,11 +128,11 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   add(imagePath: string | null, imageName: string | null) {
-    this.companyUserImageService
+    this.personelUserImageService
       .add(this.getModel(this.imagePath, this.imageName))
       .subscribe(
         (response) => {
-          this.router.navigate(['/dashboard/companyuserimages']);
+          this.router.navigate(['/dashboard/personeluserimages']);
         },
         (error) => {
           this.toastrService.error(error.error.message);
@@ -143,9 +143,11 @@ export class CompanyUserImageAddComponent implements OnInit {
   getModel(
     imagePath: string | null,
     imageName: string | null
-  ): CompanyUserImage {
+  ): PersonelUserImage {
     return Object.assign({
-      companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
+      personelUserId: this.getPersonelUserId(
+        this.addForm.value.personelUserName
+      ),
       imagePath: imagePath,
       imageName: imageName,
       createDate: new Date(Date.now()).toJSON(),
@@ -156,15 +158,15 @@ export class CompanyUserImageAddComponent implements OnInit {
     const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllCompanyUsers(response);
-        this.getCompanyUsers(response);
+        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getAllCompanyUsers(adminModel: AdminModel) {
-    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
       },
@@ -172,11 +174,13 @@ export class CompanyUserImageAddComponent implements OnInit {
     );
   }
 
-  getCompanyUsers(adminModel: AdminModel) {
+  getPersonelUsers(adminModel: AdminModel) {
     const userId = this.getUserId(this.addForm.value.userEmail);
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
+        this.personelUserDTOs = response.data.filter(
+          (f) => f.userId === userId
+        );
       },
       (error) => console.error
     );
@@ -188,12 +192,11 @@ export class CompanyUserImageAddComponent implements OnInit {
     return userId;
   }
 
-  getCompanyUserId(companyUserName: string): number {
-    const companyId = this.companyUserDTOs.filter(
-      (c) => c.companyUserName === companyUserName
-    )[0]?.id;
+  getPersonelUserId(email: string): number {
+    const personelId = this.personelUserDTOs.filter((c) => c.email === email)[0]
+      ?.id;
 
-    return companyId;
+    return personelId;
   }
 
   clearInput1() {
@@ -203,7 +206,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   clearInput2() {
-    let value = this.addForm.get('companyUserName');
+    let value = this.addForm.get('personelUserName');
     value.reset();
     this.getAdminValues();
   }

@@ -11,11 +11,11 @@
             formControlName="countryName"
             type="text"
             class="form-control"
-            list="datalist1"
-            id="input1"
+            list="CountryData"
+            id="Country"
             placeholder="Select Country..."
           />
-          <datalist id="datalist1">
+          <datalist id="CountryData">
             <option
               *ngFor="let country of countries"
               value="{{ country.countryName }}"
@@ -35,7 +35,7 @@
             formControlName="cityName"
             type="text"
             class="form-control"
-            id="input2"
+            id="City"
             placeholder="City Name"
           />
           <span class="input-group-text">

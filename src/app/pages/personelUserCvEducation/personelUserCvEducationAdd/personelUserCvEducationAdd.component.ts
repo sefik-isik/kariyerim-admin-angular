@@ -39,10 +39,9 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   universities: University[] = [];
   faculties: Faculty[] = [];
-  personelUserCvs: PersonelUserCv[] = [];
   universityDepartments: UniversityDepartment[] = [];
+  personelUserCvs: PersonelUserCv[] = [];
   detailText: string;
-
   componentTitle = 'Personel User Cv Education Add Form';
   userId: number;
   userDTOs: UserDTO[] = [];

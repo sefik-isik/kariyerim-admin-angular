@@ -1,4 +1,3 @@
-import { CompanyUserService } from './../../../services/companyUser.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
@@ -11,32 +10,32 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { CompanyUserFileService } from '../../../services/companyUserFile.service';
-import { CompanyUserFile } from '../../../models/companyUserFile';
 import { UserDTO } from '../../../models/userDTO';
 import { HttpEventType } from '@angular/common/http';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserFileService } from '../../../services/personelUserFile.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserFile } from '../../../models/personelUserFile';
 
 @Component({
-  selector: 'app-companyUserFileUpdate',
-  templateUrl: './companyUserFileUpdate.component.html',
-  styleUrls: ['./companyUserFileUpdate.component.css'],
+  selector: 'app-personelUserFileUpdate',
+  templateUrl: './personelUserFileUpdate.component.html',
+  styleUrls: ['./personelUserFileUpdate.component.css'],
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
-export class CompanyUserFileUpdateComponent implements OnInit {
+export class PersonelUserFileUpdateComponent implements OnInit {
   updateForm: FormGroup;
-  componentTitle = 'Company User File Update Form';
+  componentTitle = 'Personel User File Update Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
   users: UserDTO[] = [];
-  companyUsers: CompanyUserDTO[] = [];
-  companyUserId: number;
-  companyUserName: string;
+  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUserId: number;
+  personelUserName: string;
   userEmail: string;
   userId: number;
   id: number;
@@ -46,9 +45,9 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private companyUserFileService: CompanyUserFileService,
+    private personelUserFileService: PersonelUserFileService,
     private router: Router,
-    private companyUserService: CompanyUserService,
+    private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService
   ) {}
@@ -58,7 +57,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
 
     setTimeout(() => {
       this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['companyuserfileId']);
+        this.getUserValues(params['personeluserfileId']);
       });
     }, 500);
   }
@@ -89,11 +88,11 @@ export class CompanyUserFileUpdateComponent implements OnInit {
 
   getById(adminModel: AdminModel) {
     const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    this.companyUserFileService.getById(adminModel).subscribe(
+    this.personelUserFileService.getById(adminModel).subscribe(
       (response) => {
         this.id = response.data.id;
-        this.companyUserId = response.data.companyUserId;
-        this.companyUserName = this.getCompanyUserById(this.companyUserId);
+        this.personelUserId = response.data.personelUserId;
+        this.userEmail = this.getPersonelUserById(this.personelUserId);
         this.filePath = response.data.filePath;
         this.fileName = response.data.fileName;
         this.checkFile(this.fileName);
@@ -138,7 +137,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   deleteFile() {
-    this.companyUserFileService.deleteFile(this.getModel()).subscribe(
+    this.personelUserFileService.deleteFile(this.getModel()).subscribe(
       (response) => {
         this.result = false;
       },
@@ -150,10 +149,10 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile, this.selectedFile.name);
-      formData.append('companyUserId', this.companyUserId.toString());
+      formData.append('personelUserId', this.personelUserId.toString());
 
-      this.companyUserFileService
-        .uploadFile(formData, this.companyUserId)
+      this.personelUserFileService
+        .uploadFile(formData, this.personelUserId)
         .subscribe(
           (event) => {
             if (event.type === HttpEventType.UploadProgress) {
@@ -168,7 +167,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
               this.update();
 
               this.toastrService.success(
-                'Company User File Added Successfully',
+                'Personel User File Added Successfully',
                 'Success'
               );
             }
@@ -187,9 +186,9 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   update() {
-    this.companyUserFileService.update(this.getModel()).subscribe(
+    this.personelUserFileService.update(this.getModel()).subscribe(
       (response) => {
-        this.router.navigate(['/dashboard/companyuserfiles']);
+        this.router.navigate(['/dashboard/personeluserfiles']);
       },
       (error) => {
         this.toastrService.error(error.error.message);
@@ -197,10 +196,10 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     );
   }
 
-  getModel(): CompanyUserFile {
+  getModel(): PersonelUserFile {
     return Object.assign({
       id: this.id,
-      companyUserId: this.companyUserId,
+      personelUserId: this.personelUserId,
       filePath: this.filePath,
       fileName: this.fileName,
       createdDate: new Date(Date.now()).toJSON(),
@@ -212,24 +211,23 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   getAdminValues() {
     this.adminService.getAdminValues(this.id).subscribe(
       (response) => {
-        this.getCompanyUsers(response);
+        this.getPersonelUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUsers = response.data;
+        this.personelUserDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  getCompanyUserById(companyUserId: number): string {
-    return this.companyUsers.find((c) => c.id == companyUserId)
-      ?.companyUserName;
+  getPersonelUserById(personelUserId: number): string {
+    return this.personelUserDTOs.find((c) => c.id == personelUserId)?.email;
   }
 
   clearInput1() {

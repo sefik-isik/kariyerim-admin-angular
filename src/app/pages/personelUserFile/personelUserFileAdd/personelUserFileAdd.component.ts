@@ -1,6 +1,5 @@
 import { LocalStorageService } from './../../../services/localStorage.service';
-import { CompanyUserFileService } from './../../../services/companyUserFile.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -11,39 +10,40 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
-import { CompanyUserFile } from '../../../models/companyUserFile';
 import { Router, RouterLink } from '@angular/router';
-import { CompanyUserService } from '../../../services/companyUser.service';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserFileService } from '../../../services/personelUserFile.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserFile } from '../../../models/personelUserFile';
 
 @Component({
-  selector: 'app-companyUserFileAdd',
-  templateUrl: './companyUserFileAdd.component.html',
-  styleUrls: ['./companyUserFileAdd.component.css'],
+  selector: 'app-personelUserFileAdd',
+  templateUrl: './personelUserFileAdd.component.html',
+  styleUrls: ['./personelUserFileAdd.component.css'],
   imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
 })
-export class CompanyUserFileAddComponent {
+export class PersonelUserFileAddComponent implements OnInit {
   addForm: FormGroup;
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
-  companyUserDTOs: CompanyUserDTO[] = [];
-  companyUserId: number;
+  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUserId: number;
   userId: number;
   userDTOs: UserDTO[] = [];
   isAdmin: boolean;
-  componentTitle = 'Company User File Add Form';
+  componentTitle = 'Personel User File Add Form';
 
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private companyUserFileService: CompanyUserFileService,
+    private personelUserFileService: PersonelUserFileService,
     private router: Router,
-    private companyUserService: CompanyUserService,
+    private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService
@@ -56,7 +56,6 @@ export class CompanyUserFileAddComponent {
   createAddForm() {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      companyUserName: ['', [Validators.required, Validators.minLength(3)]],
       file: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -99,16 +98,16 @@ export class CompanyUserFileAddComponent {
 
   onUpload() {
     if (this.selectedFile) {
-      this.companyUserId = this.getCompanyUserId(
-        this.addForm.value.companyUserName
+      this.personelUserId = this.getPersonelUserId(
+        this.addForm.value.userEmail
       );
 
       const formData = new FormData();
       formData.append('file', this.selectedFile, this.selectedFile.name);
-      formData.append('companyUserId', this.companyUserId.toString());
+      formData.append('personelUserId', this.personelUserId.toString());
 
-      this.companyUserFileService
-        .uploadFile(formData, this.companyUserId)
+      this.personelUserFileService
+        .uploadFile(formData, this.personelUserId)
         .subscribe(
           (event) => {
             if (event.type === HttpEventType.UploadProgress) {
@@ -123,7 +122,7 @@ export class CompanyUserFileAddComponent {
               this.add(this.filePath, this.fileName);
 
               this.toastrService.success(
-                'Company User File Added Successfully',
+                'Personel User File Added Successfully',
                 'Success'
               );
             }
@@ -142,11 +141,11 @@ export class CompanyUserFileAddComponent {
   }
 
   add(filePath: string | null, fileName: string | null) {
-    this.companyUserFileService
+    this.personelUserFileService
       .add(this.getModel(this.filePath, this.fileName))
       .subscribe(
         (response) => {
-          this.router.navigate(['/dashboard/companyuserfiles']);
+          this.router.navigate(['/dashboard/personeluserfiles']);
         },
         (error) => {
           this.toastrService.error(error.error.message);
@@ -154,9 +153,9 @@ export class CompanyUserFileAddComponent {
       );
   }
 
-  getModel(filePath: string | null, fileName: string | null): CompanyUserFile {
+  getModel(filePath: string | null, fileName: string | null): PersonelUserFile {
     return Object.assign({
-      companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
+      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
       filePath: filePath,
       fileName: fileName,
       createDate: new Date(Date.now()).toJSON(),
@@ -167,15 +166,15 @@ export class CompanyUserFileAddComponent {
     const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllCompanyUsers(response);
-        this.getCompanyUsers(response);
+        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
       },
       (error) => console.error
     );
   }
 
-  getAllCompanyUsers(adminModel: AdminModel) {
-    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
+  getAllPersonelUsers(adminModel: AdminModel) {
+    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
       },
@@ -183,12 +182,14 @@ export class CompanyUserFileAddComponent {
     );
   }
 
-  getCompanyUsers(adminModel: AdminModel) {
+  getPersonelUsers(adminModel: AdminModel) {
     const userId = this.getUserId(this.addForm.value.userEmail);
 
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
+        this.personelUserDTOs = response.data.filter(
+          (f) => f.userId === userId
+        );
       },
       (error) => console.error
     );
@@ -200,12 +201,12 @@ export class CompanyUserFileAddComponent {
     return userId;
   }
 
-  getCompanyUserId(companyUserName: string): number {
-    const companyUserId = this.companyUserDTOs.filter(
-      (c) => c.companyUserName === companyUserName
+  getPersonelUserId(userEmail: string): number {
+    const personelUserId = this.personelUserDTOs.filter(
+      (c) => c.email === userEmail
     )[0]?.id;
 
-    return companyUserId;
+    return personelUserId;
   }
 
   clearInput1() {
@@ -215,7 +216,7 @@ export class CompanyUserFileAddComponent {
   }
 
   clearInput2() {
-    let value = this.addForm.get('companyUserName');
+    let value = this.addForm.get('personelUserName');
     value.reset();
     this.getAdminValues();
   }

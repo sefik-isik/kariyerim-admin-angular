@@ -10,7 +10,7 @@ export interface PersonelUserCvWorkExperience extends BasePersonelUserCvModel {
   departmentId: number;
   departmentName: string;
   foundJobInHere: boolean;
-  workingMethodId: boolean;
+  workingMethodId: number;
   countryId: number;
   countryName: string;
   cityId: number;

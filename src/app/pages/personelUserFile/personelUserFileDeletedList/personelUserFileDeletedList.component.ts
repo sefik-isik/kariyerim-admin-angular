@@ -1,5 +1,4 @@
 import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,36 +6,37 @@ import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
+import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
-import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
-import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
-import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
+import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelUserFileByUser.pipe';
+import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
+import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 
 @Component({
-  selector: 'app-personelUserAddressOfDeleted',
-  templateUrl: './personelUserAddressOfDeleted.component.html',
-  styleUrls: ['./personelUserAddressOfDeleted.component.css'],
+  selector: 'app-personelUserFileDeletedList',
+  templateUrl: './personelUserFileDeletedList.component.html',
+  styleUrls: ['./personelUserFileDeletedList.component.css'],
   imports: [
     CommonModule,
     FormsModule,
     RouterLink,
-    FilterPersonelUserAddressByUserPipe,
+    FilterPersonelUserFileByUserPipe,
   ],
 })
-export class PersonelUserAddressOfDeletedComponent implements OnInit {
-  personelUserAddressDTOs: PersonelUserAddressDTO[] = [];
+export class PersonelUserFileDeletedListComponent implements OnInit {
+  personelUserFileDTOs: PersonelUserFileDTO[] = [];
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
 
-  componentTitle = 'Deleted Personel User Addresses';
+  componentTitle = 'Personel User Files Deleted List';
   userId: number;
 
   constructor(
-    private personelUserAddressService: PersonelUserAddressService,
+    private personelUserFileService: PersonelUserFileService,
     private toastrService: ToastrService,
-    private userService: UserService,
     private adminService: AdminService,
+    private userService: UserService,
     private localStorageService: LocalStorageService
   ) {}
 
@@ -49,7 +49,7 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
-        this.getPersonelUserAddresses(response);
+        this.getPersonelUserFiles(response);
       },
       (error) => console.error
     );
@@ -64,17 +64,18 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
     );
   }
 
-  getPersonelUserAddresses(adminModel: AdminModel) {
-    this.personelUserAddressService.getAllDeletedDTO(adminModel).subscribe(
+  getPersonelUserFiles(adminModel: AdminModel) {
+    this.personelUserFileService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserAddressDTOs = response.data;
+        console.log(response.data);
+        this.personelUserFileDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  unDelete(personelUserAddressDTO: PersonelUserAddressDTO) {
-    this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
+  unDelete(personelUserFileDTO: PersonelUserFileDTO) {
+    this.personelUserFileService.update(personelUserFileDTO).subscribe(
       (response) => {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
@@ -84,8 +85,8 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
   }
 
   unDeleteAll() {
-    this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
-      this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
+    this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
+      this.personelUserFileService.update(personelUserFileDTO).subscribe(
         (response) => {},
         (error) => console.error
       );

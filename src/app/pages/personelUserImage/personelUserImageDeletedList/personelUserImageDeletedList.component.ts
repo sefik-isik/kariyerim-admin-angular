@@ -1,42 +1,43 @@
 import { LocalStorageService } from './../../../services/localStorage.service';
+import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
+import { RouterLink } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
-import { AdminModel } from '../../../models/adminModel';
-import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
-import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
-import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
+import { UserService } from '../../../services/user.service';
+import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
+import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
+import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 
 @Component({
-  selector: 'app-personelUserAddressOfDeleted',
-  templateUrl: './personelUserAddressOfDeleted.component.html',
-  styleUrls: ['./personelUserAddressOfDeleted.component.css'],
+  selector: 'app-personelUserImageDeletedList',
+  templateUrl: './personelUserImageDeletedList.component.html',
+  styleUrls: ['./personelUserImageDeletedList.component.css'],
   imports: [
     CommonModule,
     FormsModule,
     RouterLink,
-    FilterPersonelUserAddressByUserPipe,
+    FilterPersonelUserImageByUserPipe,
   ],
 })
-export class PersonelUserAddressOfDeletedComponent implements OnInit {
-  personelUserAddressDTOs: PersonelUserAddressDTO[] = [];
+export class PersonelUserImageDeletedListComponent implements OnInit {
+  personelUserImageDTOs: PersonelUserImageDTO[] = [];
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
 
-  componentTitle = 'Deleted Personel User Addresses';
+  componentTitle = 'Personel User Images Deleted List';
   userId: number;
+  personelUserImagesLenght: number = 0;
 
   constructor(
-    private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
-    private userService: UserService,
+    private personelUserImageService: PersonelUserImageService,
     private adminService: AdminService,
+    private userService: UserService,
     private localStorageService: LocalStorageService
   ) {}
 
@@ -49,7 +50,7 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
-        this.getPersonelUserAddresses(response);
+        this.getPersonelUserImages(response);
       },
       (error) => console.error
     );
@@ -64,17 +65,18 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
     );
   }
 
-  getPersonelUserAddresses(adminModel: AdminModel) {
-    this.personelUserAddressService.getAllDeletedDTO(adminModel).subscribe(
+  getPersonelUserImages(adminModel: AdminModel) {
+    this.personelUserImageService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserAddressDTOs = response.data;
+        this.personelUserImageDTOs = response.data;
+        this.personelUserImagesLenght = this.personelUserImageDTOs.length;
       },
       (error) => console.error
     );
   }
 
-  unDelete(personelUserAddressDTO: PersonelUserAddressDTO) {
-    this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
+  unDelete(personelUserImageDTO: PersonelUserImageDTO) {
+    this.personelUserImageService.update(personelUserImageDTO).subscribe(
       (response) => {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
@@ -84,8 +86,8 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
   }
 
   unDeleteAll() {
-    this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
-      this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
+    this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
+      this.personelUserImageService.update(personelUserImageDTO).subscribe(
         (response) => {},
         (error) => console.error
       );
@@ -96,7 +98,7 @@ export class PersonelUserAddressOfDeletedComponent implements OnInit {
     }, 500);
   }
 
-  clearInput1() {
+  clear1Input1() {
     this.filter1 = null;
     this.getAdminValues();
   }
