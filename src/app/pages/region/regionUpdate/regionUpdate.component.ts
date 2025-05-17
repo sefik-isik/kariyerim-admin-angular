@@ -16,6 +16,7 @@ import { Region } from '../../../models/region';
 import { RegionService } from '../../../services/region.service';
 import { CaseService } from '../../../services/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegionDTO } from '../../../models/regionDTO';
 
 @Component({
   selector: 'app-regionUpdate',
@@ -25,7 +26,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class RegionUpdateComponent implements OnInit {
   updateForm: FormGroup;
-  @Input() region: Region;
+  @Input() regionDTO: RegionDTO;
   regions: Region[];
   cities: City[];
   cityId: number;
@@ -50,7 +51,7 @@ export class RegionUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.getById(this.region.id);
+      this.getById(this.regionDTO.id);
     }, 200);
   }
 

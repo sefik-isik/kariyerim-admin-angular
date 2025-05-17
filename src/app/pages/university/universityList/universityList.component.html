@@ -35,8 +35,7 @@
             <tr>
               <th>Id</th>
               <th>University Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -56,12 +55,7 @@
             >
               <td>{{ university.id }}</td>
               <td>{{ university.universityName }}</td>
-              <td>
-                {{ university.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ university.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(university)"

@@ -13,8 +13,7 @@ import { PersonelUserCvSummary } from '../../../models/personelUserCvSummary';
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
 import { PersonelUserCvSummaryDTO } from '../../../models/personelUserCvSummaryDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+
 import { PersonelUserCvSummaryUpdateComponent } from '../personelUserCvSummaryUpdate/personelUserCvSummaryUpdate.component';
 import { PersonelUserCvSummaryDetailComponent } from '../personelUserCvSummaryDetail/personelUserCvSummaryDetail.component';
 

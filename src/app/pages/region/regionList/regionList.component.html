@@ -65,8 +65,7 @@
               <th>City Id</th>
               <th>City Name</th>
               <th>Region Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -92,12 +91,7 @@
               <td>{{ regionDTO.cityId }}</td>
               <td>{{ regionDTO.cityName }}</td>
               <td>{{ regionDTO.regionName }}</td>
-              <td>
-                {{ regionDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ regionDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(regionDTO)"

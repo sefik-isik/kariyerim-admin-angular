@@ -59,7 +59,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   }
 
   getTaxOffices() {
-    this.taxOfficeService.getAllDTO().subscribe(
+    this.taxOfficeService.getAllDeletedDTO().subscribe(
       (response) => {
         this.taxOfficeDTOs = response.data;
       },

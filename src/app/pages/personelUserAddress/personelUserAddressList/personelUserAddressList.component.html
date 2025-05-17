@@ -40,8 +40,7 @@
             <th>cityName</th>
             <th>regionName</th>
             <th>addressDetail</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -68,18 +67,7 @@
             <td>
               {{ personelUserAddressDTO.addressDetail.substring(0, 20) }}...
             </td>
-            <td>
-              {{
-                personelUserAddressDTO.createdDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
-            <td>
-              {{
-                personelUserAddressDTO.updatedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(personelUserAddressDTO)"

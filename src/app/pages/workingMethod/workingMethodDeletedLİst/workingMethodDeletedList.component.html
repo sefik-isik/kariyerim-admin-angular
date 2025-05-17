@@ -10,7 +10,7 @@
             <tr>
               <th>Id</th>
               <th>method Name</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -26,9 +26,6 @@
             <tr *ngFor="let workingMethod of workingMethods">
               <td>{{ workingMethod.id }}</td>
               <td>{{ workingMethod.methodName }}</td>
-              <td>
-                {{ workingMethod.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
 
               <td>
                 <i

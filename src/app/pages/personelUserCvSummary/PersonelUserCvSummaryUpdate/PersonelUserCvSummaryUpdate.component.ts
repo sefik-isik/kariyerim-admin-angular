@@ -117,7 +117,7 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/personelusercvsummaries']);
         },
         (error) => {
-          console.log(error);
+          console.error;
         }
       );
     } else {

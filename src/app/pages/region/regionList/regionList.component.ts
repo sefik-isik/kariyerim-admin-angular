@@ -11,8 +11,8 @@ import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+import { RegionUpdateComponent } from '../regionUpdate/regionUpdate.component';
+import { RegionDetailComponent } from '../regionDetail/regionDetail.component';
 
 @Component({
   selector: 'app-regionList',
@@ -133,34 +133,28 @@ export class RegionListComponent implements OnInit {
   }
 
   open(regionDTO: RegionDTO) {
-    const modalRef = this.modalService.open(
-      PersonelUserCvEducationUpdateComponent,
-      {
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        centered: true,
-        scrollable: true,
-        windowClass: 'modal-holder',
-        backdropClass: 'modal-backdrop',
-      }
-    );
+    const modalRef = this.modalService.open(RegionUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
     modalRef.componentInstance.regionDTO = regionDTO;
   }
 
   openDetail(regionDTO: RegionDTO) {
-    const modalRef = this.modalService.open(
-      PersonelUserCvEducationDetailComponent,
-      {
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        centered: true,
-        scrollable: true,
-        windowClass: 'modal-holder',
-        backdropClass: 'modal-backdrop',
-      }
-    );
+    const modalRef = this.modalService.open(RegionDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
     modalRef.componentInstance.regionDTO = regionDTO;
   }
 

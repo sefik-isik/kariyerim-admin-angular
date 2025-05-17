@@ -35,8 +35,7 @@
             <tr>
               <th>Id</th>
               <th>faculty Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -52,8 +51,7 @@
             <tr *ngFor="let faculty of faculties | filterFaculty : filter1">
               <td>{{ faculty.id }}</td>
               <td>{{ faculty.facultyName }}</td>
-              <td>{{ faculty.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
-              <td>{{ faculty.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
+
               <td>
                 <i
                   (click)="openDetail(faculty)"

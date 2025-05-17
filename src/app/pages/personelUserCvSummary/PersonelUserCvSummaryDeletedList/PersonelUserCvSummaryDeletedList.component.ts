@@ -13,8 +13,9 @@ import { PersonelUserCvSummary } from '../../../models/personelUserCvSummary';
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
 import { PersonelUserCvSummaryDTO } from '../../../models/personelUserCvSummaryDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+
+import { PersonelUserCvSummaryUpdateComponent } from '../personelUserCvSummaryUpdate/personelUserCvSummaryUpdate.component';
+import { PersonelUserCvSummaryDetailComponent } from '../personelUserCvSummaryDetail/personelUserCvSummaryDetail.component';
 
 @Component({
   selector: 'app-personelUserCvSummaryDeletedList',
@@ -105,7 +106,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
 
   open(personelUserCvSummaryDTO: PersonelUserCvSummaryDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationUpdateComponent,
+      PersonelUserCvSummaryUpdateComponent,
       {
         size: 'lg',
         backdrop: 'static',
@@ -122,7 +123,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
 
   openDetail(personelUserCvSummaryDTO: PersonelUserCvSummaryDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationDetailComponent,
+      PersonelUserCvSummaryDetailComponent,
       {
         size: 'lg',
         backdrop: 'static',

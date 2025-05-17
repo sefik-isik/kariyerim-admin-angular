@@ -1,19 +1,20 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <p class="card-text"><b>Id: </b>{{ region.id }}</p>
-    <p class="card-text"><b>cityId: </b>{{ region.cityId }}</p>
-    <p class="card-text"><b>regionName: </b>{{ region.regionName }}</p>
+    <p class="card-text"><b>Id: </b>{{ regionDTO.id }}</p>
+    <p class="card-text"><b>cityId: </b>{{ regionDTO.cityId }}</p>
+    <p class="card-text"><b>cityId: </b>{{ regionDTO.cityName }}</p>
+    <p class="card-text"><b>regionName: </b>{{ regionDTO.regionName }}</p>
     <p class="card-text">
       <b>createdDate: </b
-      >{{ region.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ regionDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>updatedDate: </b
-      >{{ region.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ regionDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>deletedDate: </b
-      >{{ region.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ regionDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
   </div>
 </div>

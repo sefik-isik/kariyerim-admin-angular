@@ -10,7 +10,7 @@
             <tr>
               <th>Id</th>
               <th>operationClaim Name</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -26,9 +26,6 @@
             <tr *ngFor="let operationClaim of operationClaims">
               <td>{{ operationClaim.id }}</td>
               <td>{{ operationClaim.name }}</td>
-              <td>
-                {{ operationClaim.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
               <td>
                 <i
                   (click)="openDetail(operationClaim)"

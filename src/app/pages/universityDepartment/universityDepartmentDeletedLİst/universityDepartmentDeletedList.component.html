@@ -60,7 +60,7 @@
           <tr>
             <th>Id</th>
             <th>Department Name</th>
-            <th>Deleted Date</th>
+            <th></th>
             <th></th>
             <th>
               <i
@@ -82,12 +82,6 @@
             <td>{{ universityDepartmentDTO.id }}</td>
             <td>{{ universityDepartmentDTO.departmentName }}</td>
 
-            <td>
-              {{
-                universityDepartmentDTO.deletedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
             <td>
               <i
                 (click)="openDetail(universityDepartmentDTO)"

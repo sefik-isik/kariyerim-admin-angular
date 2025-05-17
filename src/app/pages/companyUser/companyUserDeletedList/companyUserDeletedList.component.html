@@ -41,7 +41,7 @@
             <th>taxCityName</th>
             <th>taxOfficeName</th>
             <th>taxNumber</th>
-            <th>deletedDate Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -66,9 +66,7 @@
             <td>{{ companyUserDTO.taxCityName }}</td>
             <td>{{ companyUserDTO.taxOfficeName }}</td>
             <td>{{ companyUserDTO.taxNumber }}</td>
-            <td>
-              {{ companyUserDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(companyUserDTO)"

@@ -39,7 +39,6 @@
             <th>cityName</th>
             <th>regionName</th>
             <th>addressDetail</th>
-            <th>deletedDate Date</th>
             <th></th>
             <th></th>
             <th>
@@ -66,11 +65,7 @@
             <td>
               {{ companyUserAddressDTO.addressDetail.substring(0, 20) }}...
             </td>
-            <td>
-              {{
-                companyUserAddressDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(companyUserAddressDTO)"

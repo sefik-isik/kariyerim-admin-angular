@@ -54,9 +54,6 @@
               <td>{{ university.id }}</td>
               <td>{{ university.universityName }}</td>
               <td>
-                {{ university.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
                 <i
                   (click)="openDetail(university)"
                   class="bi bi-journal-text"

@@ -45,8 +45,7 @@
             <th>retirementStatus</th>
             <th>birthPlaceName</th>
             <th>dateOfBirth</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -77,12 +76,7 @@
             <td>
               {{ personelUserDTO.dateOfBirth | date : "dd/MM/yyyy" }}
             </td>
-            <td>
-              {{ personelUserDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
-            <td>
-              {{ personelUserDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(personelUserDTO)"

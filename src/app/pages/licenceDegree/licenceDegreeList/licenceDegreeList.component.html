@@ -10,8 +10,7 @@
             <tr>
               <th>Id</th>
               <th>licenceDegree Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -27,12 +26,7 @@
             <tr *ngFor="let licenceDegree of licenceDegrees">
               <td>{{ licenceDegree.id }}</td>
               <td>{{ licenceDegree.licenceDegreeName }}</td>
-              <td>
-                {{ licenceDegree.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ licenceDegree.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(licenceDegree)"

@@ -35,15 +35,14 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>cvId</th>
+            <th>email</th>
             <th>cvName</th>
             <th>birthPlaceName</th>
             <th>isPrivate</th>
             <th>languageName</th>
             <th>levelTitle</th>
             <th>levelDescription</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -70,13 +69,6 @@
             <td>{{ personelUserCvDTO.languageName }}</td>
             <td>{{ personelUserCvDTO.levelTitle }}</td>
             <td>{{ personelUserCvDTO.levelDescription }}</td>
-            <td>
-              {{ personelUserCvDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
-            <td>
-              {{ personelUserCvDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCvDTO)"

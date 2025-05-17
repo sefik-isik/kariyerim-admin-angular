@@ -39,7 +39,7 @@
             <th>email</th>
             <th>companyUserName</th>
             <th>departmenName</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -62,12 +62,7 @@
             <td>{{ companyUserDepartmentDTO.email }}</td>
             <td>{{ companyUserDepartmentDTO.companyUserName }}</td>
             <td>{{ companyUserDepartmentDTO.departmentName }}</td>
-            <td>
-              {{
-                companyUserDepartmentDTO.deletedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(companyUserDepartmentDTO)"

@@ -65,8 +65,7 @@
               <th>Region Name</th>
               <th>Tax Office Code</th>
               <th>Tax Office Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -92,12 +91,7 @@
               <td>{{ taxOfficeDTO.regionName }}</td>
               <td>{{ taxOfficeDTO.taxOfficeCode }}</td>
               <td>{{ taxOfficeDTO.taxOfficeName }}</td>
-              <td>
-                {{ taxOfficeDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ taxOfficeDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(taxOfficeDTO)"

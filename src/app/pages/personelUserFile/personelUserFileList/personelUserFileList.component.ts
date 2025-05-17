@@ -13,8 +13,6 @@ import { PersonelUserFileService } from '../../../services/personelUserFile.serv
 import { PersonelUserFile } from '../../../models/personelUserFile';
 import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelUserFileByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
 import { PersonelUserFileDetailComponent } from '../personelUserFileDetail/personelUserFileDetail.component';
 

@@ -87,6 +87,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
       userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
+
     this.getById(adminModel);
   }
 

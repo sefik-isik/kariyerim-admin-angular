@@ -35,8 +35,7 @@
             <tr>
               <th>Id</th>
               <th>sector Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -52,8 +51,7 @@
             <tr *ngFor="let sector of sectors | filterSector : filter1">
               <td>{{ sector.id }}</td>
               <td>{{ sector.sectorName }}</td>
-              <td>{{ sector.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
-              <td>{{ sector.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
+
               <td>
                 <i
                   (click)="openDetail(sector)"

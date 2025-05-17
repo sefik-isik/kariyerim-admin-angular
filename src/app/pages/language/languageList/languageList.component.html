@@ -35,8 +35,7 @@
             <tr>
               <th>Id</th>
               <th>language Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -52,8 +51,7 @@
             <tr *ngFor="let language of languages | filterLanguage : filter1">
               <td>{{ language.id }}</td>
               <td>{{ language.languageName }}</td>
-              <td>{{ language.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
-              <td>{{ language.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
+
               <td>
                 <i
                   (click)="openDetail(language)"

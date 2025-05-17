@@ -37,7 +37,7 @@
             <th>Id</th>
             <th>email</th>
             <th>file</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -69,12 +69,6 @@
             </td>
 
             <td *ngIf="companyUserFileDTO.fileName == 'noFile'">No File</td>
-
-            <td>
-              {{
-                companyUserFileDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
 
             <td>
               <i

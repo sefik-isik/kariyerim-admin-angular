@@ -35,8 +35,7 @@
             <tr>
               <th>Id</th>
               <th>modelMenu Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -54,12 +53,7 @@
             >
               <td>{{ modelMenu.id }}</td>
               <td>{{ modelMenu.modelName }}</td>
-              <td>
-                {{ modelMenu.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ modelMenu.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(modelMenu)"

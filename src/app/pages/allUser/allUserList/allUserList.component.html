@@ -40,8 +40,6 @@
             <th>Status</th>
             <th>Code</th>
 
-            <th>Created Date</th>
-            <th>Updated Date</th>
             <th></th>
             <th></th>
             <th>
@@ -62,12 +60,6 @@
             <td>{{ userDTO.status | status }}</td>
             <td>{{ userDTO.code | code }}</td>
 
-            <td>
-              {{ userDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
-            <td>
-              {{ userDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
             <td>
               <i
                 (click)="openDetail(userDTO)"

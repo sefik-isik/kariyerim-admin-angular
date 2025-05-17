@@ -12,8 +12,6 @@ import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelU
 import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
 import { PersonelUserFileDetailComponent } from '../personelUserFileDetail/personelUserFileDetail.component';
 
@@ -73,7 +71,6 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   getPersonelUserFiles(adminModel: AdminModel) {
     this.personelUserFileService.getAllDeletedDTO(adminModel).subscribe(
       (response) => {
-        console.log(response.data);
         this.personelUserFileDTOs = response.data;
       },
       (error) => console.error

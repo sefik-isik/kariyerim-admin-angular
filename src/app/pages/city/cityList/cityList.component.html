@@ -61,8 +61,7 @@
             <th>Id</th>
             <th>City Name</th>
             <th>Country Name</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -85,8 +84,6 @@
             <td>{{ cityDTO.id }}</td>
             <td>{{ cityDTO.cityName }}</td>
             <td>{{ cityDTO.countryName }}</td>
-            <td>{{ cityDTO.createdDate | date : "dd/MM/yyyy" }}</td>
-            <td>{{ cityDTO.updatedDate | date : "dd/MM/yyyy" }}</td>
             <td>
               <i
                 (click)="openDetail(cityDTO)"

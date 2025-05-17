@@ -38,8 +38,7 @@
             <th>email</th>
             <th>title</th>
             <th>description</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -64,18 +63,7 @@
             <td>
               {{ personelUserCoverLetterDTO.description.substring(0, 20) }}...
             </td>
-            <td>
-              {{
-                personelUserCoverLetterDTO.createdDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
-            <td>
-              {{
-                personelUserCoverLetterDTO.updatedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(personelUserCoverLetterDTO)"

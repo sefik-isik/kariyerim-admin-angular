@@ -61,7 +61,7 @@
             <th>Id</th>
             <th>City Name</th>
             <th>Country name</th>
-            <th>Deleted Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -84,7 +84,6 @@
             <td>{{ cityDTO.id }}</td>
             <td>{{ cityDTO.cityName }}</td>
             <td>{{ cityDTO.countryName }}</td>
-            <td>{{ cityDTO.deletedDate | date : "dd/MM/yyyy" }}</td>
             <td>
               <i
                 (click)="openDetail(cityDTO)"

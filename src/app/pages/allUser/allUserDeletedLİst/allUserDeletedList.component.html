@@ -40,7 +40,7 @@
             <th>email</th>
             <th>Status</th>
             <th>Code</th>
-            <th>deleted Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -61,9 +61,6 @@
             <td>{{ userDTO.status | status }}</td>
             <td>{{ userDTO.code | code }}</td>
 
-            <td>
-              {{ userDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-            </td>
             <td>
               <i
                 (click)="openDetail(userDTO)"

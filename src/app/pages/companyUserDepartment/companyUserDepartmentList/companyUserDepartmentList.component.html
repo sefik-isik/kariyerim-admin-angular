@@ -38,8 +38,7 @@
             <th>email</th>
             <th>companyUserName</th>
             <th>departmenName</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
+
             <th></th>
             <th></th>
             <th>
@@ -62,18 +61,7 @@
             <td>{{ companyUserDepartmentDTO.email }}</td>
             <td>{{ companyUserDepartmentDTO.companyUserName }}</td>
             <td>{{ companyUserDepartmentDTO.departmentName }}</td>
-            <td>
-              {{
-                companyUserDepartmentDTO.createdDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
-            <td>
-              {{
-                companyUserDepartmentDTO.updatedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(companyUserDepartmentDTO)"

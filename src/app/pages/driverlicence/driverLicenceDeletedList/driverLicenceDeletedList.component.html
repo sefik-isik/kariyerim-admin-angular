@@ -10,7 +10,7 @@
             <tr>
               <th>Id</th>
               <th>driver Licence Name</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -26,9 +26,7 @@
             <tr *ngFor="let driverLicence of driverLicences">
               <td>{{ driverLicence.id }}</td>
               <td>{{ driverLicence.driverLicenceName }}</td>
-              <td>
-                {{ driverLicence.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(driverLicence)"

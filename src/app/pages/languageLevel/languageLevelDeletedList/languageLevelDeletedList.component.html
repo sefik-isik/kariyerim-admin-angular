@@ -12,8 +12,7 @@
               <th>level</th>
               <th>levelTitle</th>
               <th>levelDescription</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -31,12 +30,7 @@
               <td>{{ languageLevel.level }}</td>
               <td>{{ languageLevel.levelTitle }}</td>
               <td>{{ languageLevel.levelDescription }}</td>
-              <td>
-                {{ languageLevel.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
-              <td>
-                {{ languageLevel.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(languageLevel)"

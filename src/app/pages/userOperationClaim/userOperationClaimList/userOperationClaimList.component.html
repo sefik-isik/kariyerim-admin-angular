@@ -60,8 +60,7 @@
               <th>user Id</th>
               <th>email</th>
               <th>operationClaimName</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
+
               <th></th>
               <th></th>
               <th>
@@ -85,18 +84,7 @@
               <td>{{ userOperationClaimDTO.userId }}</td>
               <td>{{ userOperationClaimDTO.email }}</td>
               <td>{{ userOperationClaimDTO.operationClaimName }}</td>
-              <td>
-                {{
-                  userOperationClaimDTO.createdDate
-                    | date : "dd/MM/yyyy hh:mm:ss"
-                }}
-              </td>
-              <td>
-                {{
-                  userOperationClaimDTO.updatedDate
-                    | date : "dd/MM/yyyy hh:mm:ss"
-                }}
-              </td>
+
               <td>
                 <i
                   (click)="openDetail(userOperationClaimDTO)"

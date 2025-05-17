@@ -48,14 +48,14 @@
             <th>regionName</th>
             <th>startDate</th>
             <th>endDate</th>
-            <th>deletedDate</th>
+
             <th></th>
             <th></th>
             <th>
               <i
                 (click)="unDeleteAll()"
-                class="bi bi-trash"
-                style="color: crimson"
+                class="bi bi-arrow-up-right-square"
+                style="color: green"
               ></i>
             </th>
           </tr>
@@ -89,12 +89,6 @@
                 personelUserCvWorkExperienceDTO.endDate | date : "dd/MM/yyyy"
               }}
             </td>
-            <td>
-              {{
-                personelUserCvWorkExperienceDTO.deletedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
 
             <td>
               <i
@@ -113,8 +107,8 @@
             <td>
               <i
                 (click)="unDelete(personelUserCvWorkExperienceDTO)"
-                class="bi bi-trash"
-                style="color: crimson"
+                class="bi bi-arrow-up-right-square"
+                style="color: green"
               ></i>
             </td>
           </tr>

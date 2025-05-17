@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Region } from '../../../models/region';
+import { RegionDTO } from '../../../models/regionDTO';
 
 @Component({
   selector: 'app-regionDetail',
@@ -10,7 +10,7 @@ import { Region } from '../../../models/region';
   imports: [CommonModule],
 })
 export class RegionDetailComponent implements OnInit {
-  @Input() region: Region;
+  @Input() regionDTO: RegionDTO;
   componentTitle: string = 'Region Detail';
 
   constructor(public activeModal: NgbActiveModal) {}

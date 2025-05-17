@@ -48,8 +48,7 @@
             <th>regionName</th>
             <th>startDate</th>
             <th>endDate</th>
-            <th>createdDate</th>
-            <th>updatedDate</th>
+
             <th></th>
             <th></th>
             <th>
@@ -90,18 +89,7 @@
                 personelUserCvWorkExperienceDTO.endDate | date : "dd/MM/yyyy"
               }}
             </td>
-            <td>
-              {{
-                personelUserCvWorkExperienceDTO.createdDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
-            <td>
-              {{
-                personelUserCvWorkExperienceDTO.updatedDate
-                  | date : "dd/MM/yyyy hh:mm:ss"
-              }}
-            </td>
+
             <td>
               <i
                 (click)="openDetail(personelUserCvWorkExperienceDTO)"
