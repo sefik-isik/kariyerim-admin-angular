@@ -14,6 +14,8 @@ import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/fil
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
 import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
+import { PersonelUserCvWorkExperienceDetailComponent } from '../personelUserCvWorkExperienceDetail/personelUserCvWorkExperienceDetail.component';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceList',
@@ -121,7 +123,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
 
   open(personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationUpdateComponent,
+      PersonelUserCvWorkExperienceUpdateComponent,
       {
         size: 'lg',
         backdrop: 'static',
@@ -138,7 +140,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
 
   openDetail(personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationDetailComponent,
+      PersonelUserCvWorkExperienceDetailComponent,
       {
         size: 'lg',
         backdrop: 'static',

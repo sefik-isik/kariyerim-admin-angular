@@ -104,7 +104,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  open(personelUserCoverLetter: PersonelUserCoverLetter) {
+  open(personelUserCoverLetterDTO: PersonelUserCoverLetterDTO) {
     const modalRef = this.modalService.open(
       PersonelUserCoverLetterUpdateComponent,
       {
@@ -117,11 +117,11 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         backdropClass: 'modal-backdrop',
       }
     );
-    modalRef.componentInstance.personelUserCoverLetter =
-      personelUserCoverLetter;
+    modalRef.componentInstance.personelUserCoverLetterDTO =
+      personelUserCoverLetterDTO;
   }
 
-  openDetail(personelUserCoverLetter: PersonelUserCoverLetter) {
+  openDetail(personelUserCoverLetterDTO: PersonelUserCoverLetterDTO) {
     const modalRef = this.modalService.open(
       PersonelUserCoverLetterDetailComponent,
       {
@@ -134,8 +134,8 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         backdropClass: 'modal-backdrop',
       }
     );
-    modalRef.componentInstance.personelUserCoverLetter =
-      personelUserCoverLetter;
+    modalRef.componentInstance.personelUserCoverLetterDTO =
+      personelUserCoverLetterDTO;
   }
 
   clearInput1() {

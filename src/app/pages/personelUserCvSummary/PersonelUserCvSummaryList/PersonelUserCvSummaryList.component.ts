@@ -15,6 +15,8 @@ import { PersonelUserCvSummaryDTO } from '../../../models/personelUserCvSummaryD
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
 import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+import { PersonelUserCvSummaryUpdateComponent } from '../personelUserCvSummaryUpdate/personelUserCvSummaryUpdate.component';
+import { PersonelUserCvSummaryDetailComponent } from '../personelUserCvSummaryDetail/personelUserCvSummaryDetail.component';
 
 @Component({
   selector: 'app-personelUserCvSummaryList',
@@ -113,7 +115,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
 
   open(personelUserCvSummaryDTO: PersonelUserCvSummaryDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationUpdateComponent,
+      PersonelUserCvSummaryUpdateComponent,
       {
         size: 'lg',
         backdrop: 'static',
@@ -130,7 +132,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
 
   openDetail(personelUserCvSummaryDTO: PersonelUserCvSummaryDTO) {
     const modalRef = this.modalService.open(
-      PersonelUserCvEducationDetailComponent,
+      PersonelUserCvSummaryDetailComponent,
       {
         size: 'lg',
         backdrop: 'static',

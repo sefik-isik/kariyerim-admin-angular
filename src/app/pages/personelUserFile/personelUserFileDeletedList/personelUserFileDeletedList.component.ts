@@ -14,6 +14,8 @@ import { PersonelUserFileService } from '../../../services/personelUserFile.serv
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
 import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
+import { PersonelUserFileDetailComponent } from '../personelUserFileDetail/personelUserFileDetail.component';
 
 @Component({
   selector: 'app-personelUserFileDeletedList',
@@ -102,34 +104,28 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   }
 
   open(personelUserFileDTO: PersonelUserFileDTO) {
-    const modalRef = this.modalService.open(
-      PersonelUserCvEducationUpdateComponent,
-      {
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        centered: true,
-        scrollable: true,
-        windowClass: 'modal-holder',
-        backdropClass: 'modal-backdrop',
-      }
-    );
+    const modalRef = this.modalService.open(PersonelUserFileUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
     modalRef.componentInstance.personelUserFileDTO = personelUserFileDTO;
   }
 
   openDetail(personelUserFileDTO: PersonelUserFileDTO) {
-    const modalRef = this.modalService.open(
-      PersonelUserCvEducationDetailComponent,
-      {
-        size: 'lg',
-        backdrop: 'static',
-        keyboard: false,
-        centered: true,
-        scrollable: true,
-        windowClass: 'modal-holder',
-        backdropClass: 'modal-backdrop',
-      }
-    );
+    const modalRef = this.modalService.open(PersonelUserFileDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
     modalRef.componentInstance.personelUserFileDTO = personelUserFileDTO;
   }
 

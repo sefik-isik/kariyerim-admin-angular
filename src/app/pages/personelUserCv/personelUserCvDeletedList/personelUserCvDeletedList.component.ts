@@ -103,7 +103,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  open(PersonelUserCvDTO: PersonelUserCvDTO) {
+  open(personelUserCvDTO: PersonelUserCvDTO) {
     const modalRef = this.modalService.open(PersonelUserCvUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -113,10 +113,10 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.PersonelUserCvDTO = PersonelUserCvDTO;
+    modalRef.componentInstance.personelUserCvDTO = personelUserCvDTO;
   }
 
-  openDetail(PersonelUserCvDTO: PersonelUserCvDTO) {
+  openDetail(personelUserCvDTO: PersonelUserCvDTO) {
     const modalRef = this.modalService.open(PersonelUserCvDetailComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -126,7 +126,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.PersonelUserCvDTO = PersonelUserCvDTO;
+    modalRef.componentInstance.personelUserCvDTO = personelUserCvDTO;
   }
 
   clearInput1() {
