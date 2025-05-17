@@ -1,0 +1,29 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ operationClaim.id }}</p>
+    <p class="card-text">
+      <b>operationClaimName: </b>{{ operationClaim.name }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ operationClaim.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ operationClaim.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ operationClaim.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

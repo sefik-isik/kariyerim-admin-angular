@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +13,37 @@ import { Router } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { LanguageLevel } from '../../../models/languageLevel';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-languageLevelUpdate',
   templateUrl: './languageLevelUpdate.component.html',
   styleUrls: ['./languageLevelUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageLevelUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() languageLevel: LanguageLevel;
   languageLevelId: number;
 
-  componentTitle = 'Language Level Update';
+  componentTitle = 'Language Level Update Form';
 
   constructor(
     private languageLevelService: LanguageLevelService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['languagelevelId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.languageLevel.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -68,6 +72,7 @@ export class LanguageLevelUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.languageLevelService.update(this.getLModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/languagelevels']);
         },

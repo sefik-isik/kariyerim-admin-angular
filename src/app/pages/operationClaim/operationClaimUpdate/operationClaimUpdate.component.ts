@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -12,32 +11,36 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/operationClaim';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-operationClaimUpdate',
   templateUrl: './operationClaimUpdate.component.html',
   styleUrls: ['./operationClaimUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class OperationClaimUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() operationClaim: OperationClaim;
   operationClaimId: number;
 
-  componentTitle = 'Operation Claim Update';
+  componentTitle = 'Operation Claim Update Form';
 
   constructor(
     private operationClaimService: OperationClaimService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getSectorById(params['operationclaimId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.operationClaim.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -46,7 +49,7 @@ export class OperationClaimUpdateComponent implements OnInit {
     });
   }
 
-  getSectorById(id: number) {
+  getById(id: number) {
     this.operationClaimService.getById(id).subscribe(
       (response) => {
         this.updateForm.patchValue({
@@ -62,6 +65,7 @@ export class OperationClaimUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.operationClaimService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/operationclaims']);
         },

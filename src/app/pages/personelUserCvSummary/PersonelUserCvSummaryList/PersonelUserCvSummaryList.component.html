@@ -1,7 +1,4 @@
-<div class="card">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
+<div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -29,27 +26,7 @@
         </span>
       </div>
     </div>
-    <div class="mt-3">
-      <button
-        [routerLink]="['personelusercvsummaryadd']"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        type="button"
-        class="btn btn-outline-success"
-      >
-        Add New Personel User Cv Summary <i class="bi bi-plus-circle"></i>
-      </button>
-      <button
-        routerLink="personelusercvsummarydeletedlist"
-        routerLinkActive="active"
-        ariaCurrentWhenActive="page"
-        type="button"
-        class="btn btn-outline-secondary"
-        style="margin-left: 10px"
-      >
-        Deleted PersonelUserCvSummaries <i class="bi bi-arrow-right"></i>
-      </button>
-    </div>
+
     <div class="mt-3 table-responsive-xxl">
       <table
         *ngIf="personelUserCvSummaryDTOs.length > 0"
@@ -64,6 +41,7 @@
             <th>cvSummaryDescription</th>
             <th>createdDate</th>
             <th>updatedDate</th>
+            <th></th>
             <th></th>
             <th>
               <i
@@ -104,11 +82,14 @@
             </td>
             <td>
               <i
-                [routerLink]="[
-                  'personelusercvsummaryupdate/' + personelUserCvSummaryDTO.id
-                ]"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
+                (click)="openDetail(personelUserCvSummaryDTO)"
+                class="bi bi-journal-text"
+                style="color: midnightblue"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="open(personelUserCvSummaryDTO)"
                 class="bi bi-pencil-square"
                 style="color: midnightblue"
               ></i>

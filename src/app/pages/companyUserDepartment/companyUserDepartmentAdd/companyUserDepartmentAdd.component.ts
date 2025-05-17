@@ -19,12 +19,13 @@ import { UserService } from '../../../services/user.service';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserDepartmentAdd',
   templateUrl: './companyUserDepartmentAdd.component.html',
   styleUrls: ['./companyUserDepartmentAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserDepartmentAddComponent implements OnInit {
   addForm: FormGroup;
@@ -43,7 +44,8 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     private adminService: AdminService,
     private caseService: CaseService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -63,6 +65,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel().companyUserId > 0) {
       this.companyUserDepartmentService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyuserdepartments']);
         },

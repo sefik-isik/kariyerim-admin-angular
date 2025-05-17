@@ -1,7 +1,6 @@
 import { TaxOfficeService } from './../../../services/taxOffice.service';
 import { City } from './../../../models/city';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -18,15 +17,17 @@ import { RegionService } from '../../../services/region.service';
 import { TaxOffice } from '../../../models/taxOffice';
 import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-taxOfficeUpdate',
   templateUrl: './taxOfficeUpdate.component.html',
   styleUrls: ['./taxOfficeUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class TaxOfficeUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() taxOfficeDTO: TaxOfficeDTO;
   taxOfficeDTOs: TaxOfficeDTO[];
   regions: Region[];
   cities: City[];
@@ -34,17 +35,18 @@ export class TaxOfficeUpdateComponent implements OnInit {
   regionId: number;
   taxOfficeId: number;
 
-  componentTitle = 'Tax Office Update';
+  componentTitle = 'Tax Office Update Form';
 
   constructor(
     private cityService: CityService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private regionService: RegionService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -53,10 +55,8 @@ export class TaxOfficeUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['taxofficeId']);
-      });
-    }, 500);
+      this.getById(this.taxOfficeDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -92,6 +92,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
     if (this.updateForm.valid && this.getModel().cityId > 0) {
       this.taxOfficeService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffices']);
         },

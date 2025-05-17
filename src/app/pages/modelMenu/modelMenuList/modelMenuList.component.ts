@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { ModelMenu } from '../../../models/modelMenu';
 import { ModelMenuService } from '../../../services/modelMenu.service';
 import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModelMenuUpdateComponent } from '../modelMenuUpdate/modelMenuUpdate.component';
+import { ModelMenuDetailComponent } from '../modelMenuDetail/modelMenuDetail.component';
 
 @Component({
   selector: 'app-modelMenuList',
   templateUrl: './modelMenuList.component.html',
   styleUrls: ['./modelMenuList.component.css'],
-  imports: [CommonModule, FormsModule, RouterLink, FilterModelMenuPipe],
+  imports: [CommonModule, FormsModule, FilterModelMenuPipe],
 })
 export class ModelMenuListComponent implements OnInit {
   modelMenus: ModelMenu[] = [];
@@ -23,11 +25,17 @@ export class ModelMenuListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private authService: AuthService,
-    private modelMenuService: ModelMenuService
+    private modelMenuService: ModelMenuService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getModelMenus();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getModelMenus();
+      }
+    });
   }
 
   getModelMenus() {
@@ -76,6 +84,32 @@ export class ModelMenuListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
+  }
+
+  open(modelMenu: ModelMenu) {
+    const modalRef = this.modalService.open(ModelMenuUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.modelMenu = modelMenu;
+  }
+
+  openDetail(modelMenu: ModelMenu) {
+    const modalRef = this.modalService.open(ModelMenuDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.modelMenu = modelMenu;
   }
 
   clearInput1() {

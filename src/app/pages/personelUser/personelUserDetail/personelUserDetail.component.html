@@ -1,0 +1,63 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ personelUserDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ personelUserDTO.email }}</p>
+    <p class="card-text">
+      <b>identityNumber: </b>{{ personelUserDTO.identityNumber }}
+    </p>
+    <p class="card-text">
+      <b>birthPlaceId: </b>{{ personelUserDTO.birthPlaceId }}
+    </p>
+    <p class="card-text">
+      <b>birthPlaceName: </b>{{ personelUserDTO.birthPlaceName }}
+    </p>
+    <p class="card-text">
+      <b>dateOfBirth: </b>{{ personelUserDTO.dateOfBirth }}
+    </p>
+    <p class="card-text">
+      <b>driverLicenceId: </b>{{ personelUserDTO.driverLicenceId }}
+    </p>
+    <p class="card-text">
+      <b>driverLicenceName: </b>{{ personelUserDTO.driverLicenceName }}
+    </p>
+    <p class="card-text">
+      <b>licenceDegreeId: </b>{{ personelUserDTO.licenceDegreeId }}
+    </p>
+    <p class="card-text">
+      <b>licenceDegreeName: </b>{{ personelUserDTO.licenceDegreeName }}
+    </p>
+    <p class="card-text"><b>gender: </b>{{ personelUserDTO.gender }}</p>
+    <p class="card-text">
+      <b>militaryStatus: </b>{{ personelUserDTO.militaryStatus }}
+    </p>
+    <p class="card-text">
+      <b>nationalStatus: </b>{{ personelUserDTO.nationalStatus }}
+    </p>
+    <p class="card-text">
+      <b>retirementStatus: </b>{{ personelUserDTO.retirementStatus }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ personelUserDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ personelUserDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ personelUserDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

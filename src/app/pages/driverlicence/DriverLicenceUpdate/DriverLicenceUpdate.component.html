@@ -9,7 +9,7 @@
           <div class="input-group mb-3">
             <span class="input-group-text">Driver Licence Name</span>
             <input
-              formControlName="licenceName"
+              formControlName="driverLicenceName"
               type="text"
               class="form-control"
               id="input1"
@@ -34,11 +34,10 @@
             </button>
             <button
               type="button"
-              class="btn btn-outline-secondary"
-              routerLink="/dashboard/driverlicences"
-              routerLinkActive="router-link-active"
+              class="btn btn-outline-dark"
+              (click)="activeModal.close('Close click')"
             >
-              Back
+              Close
             </button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { PersonelUserCvWorkExperienceDTO } from './../../../models/personelUserCvWorkExperienceDTO';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -33,15 +33,17 @@ import { RegionService } from '../../../services/region.service';
 import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
 import { SectorService } from '../../../services/sectorService';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceUpdate',
   templateUrl: './personelUserCvWorkExperienceUpdate.component.html',
   styleUrls: ['./personelUserCvWorkExperienceUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   companyUserDepartments: CompanyUserDepartment[] = [];
@@ -69,12 +71,13 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private sectorService: SectorService,
     private workingMethodService: WorkingMethodService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -87,10 +90,8 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     this.getWorkingMethods();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personelusercvworkexperienceId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserCvWorkExperienceDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -181,6 +182,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
         .update(this.getModel())
         .subscribe(
           (response) => {
+            this.activeModal.close();
             this.toastrService.success(response.message, 'Başarılı');
             this.router.navigate(['/dashboard/personelusercvworkexperiences']);
           },

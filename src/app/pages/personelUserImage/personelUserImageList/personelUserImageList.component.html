@@ -1,7 +1,4 @@
-<div class="card">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
+<div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -30,26 +27,6 @@
       </div>
 
       <div class="mt-3">
-        <button
-          [routerLink]="['personeluserimageadd']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-success"
-        >
-          Add New Personel User Image <i class="bi bi-plus-circle"></i>
-        </button>
-        <button
-          [routerLink]="['personeluserimagedeletedlist']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-secondary"
-          style="margin-left: 10px"
-        >
-          Deleted Personel User Images <i class="bi bi-arrow-right"></i>
-        </button>
-
         <i
           *ngIf="personelUserImagesLenght > 0"
           (click)="deleteAll()"
@@ -82,35 +59,42 @@
                 width: 100%;
                 text-align: center;
                 border: none;
-                cursor: pointer;
               "
               alt="{{ personelUserImageDTO.imageName }}"
-              [routerLink]="['personeluserimageslide']"
             />
             <div class="card-body">
               <h5 class="card-title">
                 {{ personelUserImageDTO.email }}
               </h5>
               <h6 class="card-title">
-                {{ personelUserImageDTO.email }}
+                {{ personelUserImageDTO.imageName }}
               </h6>
               <div class="mt-3">
                 <i
-                  class="bi bi-pencil-square btn btn-outline-primary"
-                  style="color: midnightblue"
-                  [routerLink]="[
-                    'personeluserimageupdate/' + personelUserImageDTO.id
-                  ]"
-                >
-                  Update
-                </i>
+                  (click)="openDetail(personelUserImageDTO)"
+                  class="bi bi-journal-text"
+                  style="color: midnightblue; cursor: pointer; font-size: large"
+                ></i>
                 <i
-                  class="bi bi-trash btn btn-outline-danger"
-                  style="color: red"
+                  (click)="open(personelUserImageDTO)"
+                  class="bi bi-pencil-square"
+                  style="
+                    color: midnightblue;
+                    cursor: pointer;
+                    margin-left: 4px;
+                    font-size: large;
+                  "
+                ></i>
+                <i
+                  style="
+                    color: red;
+                    cursor: pointer;
+                    margin-left: 4px;
+                    font-size: large;
+                  "
                   (click)="delete(personelUserImageDTO)"
-                  style="margin-left: 5px"
+                  class="bi bi-trash"
                 >
-                  Delete
                 </i>
               </div>
             </div>

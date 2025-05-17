@@ -5,7 +5,7 @@ import { LicenceDegree } from './../../../models/licenceDegree';
 import { LicenceDegreeService } from './../../../services/licenseDegree.service';
 import { PersonelUserService } from './../../../services/personelUser.service';
 import { UserDTO } from '../../../models/userDTO';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -14,22 +14,25 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserUpdate',
   templateUrl: './personelUserUpdate.component.html',
   styleUrls: ['./personelUserUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserUpdateComponent implements OnInit {
   componentTitle = 'Personel User Update Form';
+  @Input() personelUserDTO: PersonelUserDTO;
   userDTOs: UserDTO[] = [];
   cities: City[] = [];
   id: number;
@@ -55,8 +58,9 @@ export class PersonelUserUpdateComponent implements OnInit {
     private adminService: AdminService,
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService,
-    private activatedRoute: ActivatedRoute,
-    private localStorageService: LocalStorageService
+
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -67,10 +71,8 @@ export class PersonelUserUpdateComponent implements OnInit {
     this.getLDriverLicences();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personeluserId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserDTO.id);
+    }, 200);
   }
 
   createAddForm() {
@@ -134,6 +136,7 @@ export class PersonelUserUpdateComponent implements OnInit {
     ) {
       this.personelUserService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusers']);
         },

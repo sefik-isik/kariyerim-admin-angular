@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +13,37 @@ import { Router } from '@angular/router';
 import { SectorService } from '../../../services/sectorService';
 import { Sector } from '../../../models/sector';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-sectorUpdate',
   templateUrl: './sectorUpdate.component.html',
   styleUrls: ['./sectorUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class SectorUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() sector: Sector;
   sectorId: number;
 
-  componentTitle = 'Sector Update';
+  componentTitle = 'Sector Update Form';
 
   constructor(
     private sectorService: SectorService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['sectorId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.sector.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -64,6 +68,7 @@ export class SectorUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.sectorService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/sectors']);
         },

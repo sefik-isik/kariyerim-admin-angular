@@ -11,19 +11,20 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
 import { PersonelUserCoverLetter } from '../../../models/personelUserCoverLetter';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCoverLetterAdd',
   templateUrl: './personelUserCoverLetterAdd.component.html',
   styleUrls: ['./personelUserCoverLetterAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCoverLetterAddComponent implements OnInit {
   addForm: FormGroup;
@@ -42,7 +43,8 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private personelUserService: PersonelUserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -80,6 +82,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     ) {
       this.personelUserCoverLetterService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercoverletters']);
         },

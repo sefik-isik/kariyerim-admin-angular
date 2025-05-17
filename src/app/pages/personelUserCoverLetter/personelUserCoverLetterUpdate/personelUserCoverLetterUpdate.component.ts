@@ -1,6 +1,6 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -10,7 +10,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -20,15 +20,17 @@ import { LanguageLevel } from '../../../models/languageLevel';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
 import { PersonelUserCoverLetterDTO } from '../../../models/PersonelUserCoverLetterDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCoverLetterUpdate',
   templateUrl: './personelUserCoverLetterUpdate.component.html',
   styleUrls: ['./personelUserCoverLetterUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserCoverLetterDTO: PersonelUserCoverLetterDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
@@ -46,14 +48,15 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+
     private personelUserService: PersonelUserService,
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -61,10 +64,8 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     this.getAdminValues();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personelusercoverletterId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserCoverLetterDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -103,6 +104,7 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     if (this.updateForm.valid && this.getModel().id > 0) {
       this.personelUserCoverLetterService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercoverletters']);
         },

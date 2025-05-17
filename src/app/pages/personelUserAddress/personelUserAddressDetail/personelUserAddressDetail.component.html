@@ -1,0 +1,51 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserAddressDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ personelUserAddressDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ personelUserAddressDTO.email }}</p>
+    <p class="card-text">
+      <b>personelUserId: </b>{{ personelUserAddressDTO.personelUserId }}
+    </p>
+    <p class="card-text">
+      <b>countryId: </b>{{ personelUserAddressDTO.countryId }}
+    </p>
+    <p class="card-text">
+      <b>countryName: </b>{{ personelUserAddressDTO.countryName }}
+    </p>
+    <p class="card-text"><b>cityId: </b>{{ personelUserAddressDTO.cityId }}</p>
+    <p class="card-text">
+      <b>countryName: </b>{{ personelUserAddressDTO.countryName }}
+    </p>
+    <p class="card-text">
+      <b>regionId: </b>{{ personelUserAddressDTO.regionId }}
+    </p>
+    <p class="card-text">
+      <b>regionName: </b>{{ personelUserAddressDTO.regionName }}
+    </p>
+    <p class="card-text">
+      <b>addressDetail: </b>{{ personelUserAddressDTO.addressDetail }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ personelUserAddressDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ personelUserAddressDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ personelUserAddressDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

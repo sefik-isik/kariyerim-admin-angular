@@ -7,8 +7,6 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { LocalStorageService } from '../services/localStorage.service';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -17,8 +15,6 @@ import { ToastrService } from 'ngx-toastr';
 export class ExpirationGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private localStorageService: LocalStorageService,
-    private router: Router,
     private toastrService: ToastrService
   ) {}
 

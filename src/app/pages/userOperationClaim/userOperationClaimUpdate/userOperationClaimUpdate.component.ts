@@ -1,6 +1,6 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -10,7 +10,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserDTO } from '../../../models/userDTO';
 
@@ -19,15 +19,17 @@ import { UserService } from '../../../services/user.service';
 import { OperationClaim } from '../../../models/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-userOperationClaimUpdate',
   templateUrl: './userOperationClaimUpdate.component.html',
   styleUrls: ['./userOperationClaimUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UserOperationClaimUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() userOperationClaimDTO: OperationClaim;
   users: UserDTO[] = [];
   operationClaims: OperationClaim[];
   userId: number;
@@ -39,12 +41,13 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+
     private userOperationClaimService: UserOperationClaimService,
     private adminService: AdminService,
     private userService: UserService,
     private operationClaimService: OperationClaimService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -52,9 +55,9 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     this.getAdminValues();
     this.createUpdateForm();
 
-    this.activatedRoute.params.subscribe((params) => {
-      this.getUserValues(params['useroperationclaimId']);
-    });
+    setTimeout(() => {
+      this.getUserValues(this.userOperationClaimDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -98,6 +101,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     ) {
       this.userOperationClaimService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/useroperationclaims']);
         },

@@ -1,6 +1,6 @@
 import { City } from './../../../models/city';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -15,30 +15,33 @@ import { Router } from '@angular/router';
 import { Region } from '../../../models/region';
 import { RegionService } from '../../../services/region.service';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-regionUpdate',
   templateUrl: './regionUpdate.component.html',
   styleUrls: ['./regionUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class RegionUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() region: Region;
   regions: Region[];
   cities: City[];
   cityId: number;
   regionId: number;
 
-  componentTitle = 'Region Update';
+  componentTitle = 'Region Update Form';
 
   constructor(
     private cityService: CityService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private regionService: RegionService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -47,10 +50,8 @@ export class RegionUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['regionId']);
-      });
-    }, 500);
+      this.getById(this.region.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -79,6 +80,7 @@ export class RegionUpdateComponent implements OnInit {
     if (this.updateForm.valid && this.getModel().cityId > 0) {
       this.regionService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/regions']);
         },

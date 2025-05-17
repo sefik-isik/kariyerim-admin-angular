@@ -1,7 +1,4 @@
-<div class="card">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
+<div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -29,16 +26,7 @@
         </span>
       </div>
     </div>
-    <div class="d-grid gap-2">
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        routerLink="/dashboard/personelusercoverletters"
-        routerLinkActive="router-link-active"
-      >
-        Back
-      </button>
-    </div>
+
     <div class="mt-3 table-responsive-xxl">
       <table
         *ngIf="personelUserCoverLetterDTOs.length > 0"
@@ -52,6 +40,7 @@
             <th>description</th>
             <th>Created Date</th>
             <th>Updated Date</th>
+            <th></th>
             <th></th>
             <th>
               <i
@@ -89,12 +78,14 @@
             </td>
             <td>
               <i
-                [routerLink]="[
-                  'personelusercoverletterupdate/' +
-                    personelUserCoverLetterDTO.id
-                ]"
-                routerLinkActive="active"
-                ariaCurrentWhenActive="page"
+                (click)="openDetail(personelUserCoverLetterDTO)"
+                class="bi bi-journal-text"
+                style="color: midnightblue"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="open(personelUserCoverLetterDTO)"
                 class="bi bi-pencil-square"
                 style="color: midnightblue"
               ></i>

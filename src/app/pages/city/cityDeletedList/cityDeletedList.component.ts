@@ -85,7 +85,7 @@ export class CityDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  open(city: City) {
+  open(cityDTO: CityDTO) {
     const modalRef = this.modalService.open(CityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -95,7 +95,7 @@ export class CityDeletedListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.city = city;
+    modalRef.componentInstance.cityDTO = cityDTO;
   }
 
   openDetail(cityDTO: CityDTO) {

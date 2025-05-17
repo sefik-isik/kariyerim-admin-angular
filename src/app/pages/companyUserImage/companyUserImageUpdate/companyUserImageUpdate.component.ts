@@ -1,8 +1,7 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -20,16 +19,18 @@ import { HttpEventType } from '@angular/common/http';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserImageUpdate',
   templateUrl: './companyUserImageUpdate.component.html',
   styleUrls: ['./companyUserImageUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserImageUpdateComponent implements OnInit {
   updateForm: FormGroup;
-
+  @Input() companyUserImageDTO: CompanyUserImageDTO;
   componentTitle = 'Company User Image Update Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
@@ -46,24 +47,23 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private activatedRoute: ActivatedRoute,
+
     private companyUserImageService: CompanyUserImageService,
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
     this.createcUpdateForm();
 
-    this.activatedRoute.params.subscribe((params) => {
-      this.getUserValues(params['companyuserimageId']);
-    });
-
-    //setTimeout(() => {}, 500);
+    setTimeout(() => {
+      this.getUserValues(this.companyUserImageDTO.id);
+    }, 200);
   }
 
   checkImage(imageName: string) {
@@ -188,6 +188,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   update() {
     this.companyUserImageService.update(this.getModel()).subscribe(
       (response) => {
+        this.activeModal.close();
         this.router.navigate(['/dashboard/companyuserimages']);
       },
       (error) => {

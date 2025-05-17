@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +13,37 @@ import { Router } from '@angular/router';
 import { DriverLicence } from '../../../models/driverLicence';
 import { CaseService } from '../../../services/case.service';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-DriverLicenceUpdate',
-  templateUrl: './DriverLicenceUpdate.component.html',
-  styleUrls: ['./DriverLicenceUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  selector: 'app-driverLicenceUpdate',
+  templateUrl: './driverLicenceUpdate.component.html',
+  styleUrls: ['./driverLicenceUpdate.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DriverLicenceUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() driverLicence: DriverLicence;
   driverLicenceId: number;
 
-  componentTitle = 'Driver Licence Update';
+  componentTitle = 'Driver Licence Update Form';
 
   constructor(
     private driverLicenceService: DriverLicenceService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getSectorById(params['driverlicenceId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.driverLicence.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -48,7 +52,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     });
   }
 
-  getSectorById(id: number) {
+  getById(id: number) {
     this.driverLicenceService.getById(id).subscribe(
       (response) => {
         this.updateForm.patchValue({
@@ -64,6 +68,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.driverLicenceService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/driverlicences']);
         },

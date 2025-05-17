@@ -1,7 +1,4 @@
-<div class="card">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
+<div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -29,16 +26,6 @@
         </span>
       </div>
 
-      <div class="d-grid gap-2">
-        <button
-          type="button"
-          class="btn btn-outline-secondary"
-          routerLink="/dashboard/personeluserimages"
-          routerLinkActive="router-link-active"
-        >
-          Back
-        </button>
-      </div>
       <div class="d-grid gap-2 mt-1" *ngIf="personelUserImagesLenght > 0">
         <button
           type="button"
@@ -77,29 +64,37 @@
             />
             <div class="card-body">
               <h5 class="card-title">
-                {{ personelUserImageDTO.email }}
+                {{ personelUserImageDTO.imageName }}
               </h5>
               <h6 class="card-title">
                 {{ personelUserImageDTO.email }}
               </h6>
               <div class="mt-3">
                 <i
-                  class="bi bi-pencil-square btn btn-outline-primary"
-                  style="color: midnightblue"
-                  [routerLink]="[
-                    '/dashboard/personeluserimages/personeluserimageupdate/' +
-                      personelUserImageDTO.id
-                  ]"
-                >
-                  Update
-                </i>
+                  (click)="openDetail(personelUserImageDTO)"
+                  class="bi bi-journal-text"
+                  style="color: midnightblue; cursor: pointer; font-size: large"
+                ></i>
                 <i
-                  class="bi bi-arrow-up-right-square btn btn-outline-success"
-                  style="color: green"
+                  (click)="open(personelUserImageDTO)"
+                  class="bi bi-pencil-square"
+                  style="
+                    color: midnightblue;
+                    cursor: pointer;
+                    margin-left: 4px;
+                    font-size: large;
+                  "
+                ></i>
+                <i
+                  style="
+                    color: green;
+                    cursor: pointer;
+                    margin-left: 4px;
+                    font-size: large;
+                  "
                   (click)="unDelete(personelUserImageDTO)"
-                  style="margin-left: 5px"
+                  class="bi bi-arrow-up-right-square"
                 >
-                  Undelete
                 </i>
               </div>
             </div>

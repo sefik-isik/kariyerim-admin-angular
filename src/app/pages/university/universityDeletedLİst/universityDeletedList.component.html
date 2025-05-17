@@ -1,0 +1,86 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="datalist1"
+          id="input"
+          placeholder="Filter Universities..."
+        />
+        <datalist id="datalist1">
+          <option
+            *ngFor="let university of universities"
+            value="{{ university.universityName }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+      <div class="mt-3 table-responsive-xxl">
+        <table
+          *ngIf="universities.length > 0"
+          class="table table-striped table-hover table-sm"
+        >
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>University Name</th>
+              <th>DeletedDate Date</th>
+              <th></th>
+              <th>
+                <i
+                  (click)="unDeleteAll()"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let university of universities | filterUniversity : filter1
+              "
+            >
+              <td>{{ university.id }}</td>
+              <td>{{ university.universityName }}</td>
+              <td>
+                {{ university.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+              </td>
+              <td>
+                <i
+                  (click)="openDetail(university)"
+                  class="bi bi-journal-text"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="open(university)"
+                  class="bi bi-pencil-square"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="unDelete(university)"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

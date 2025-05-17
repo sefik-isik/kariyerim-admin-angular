@@ -1,6 +1,6 @@
 import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -17,42 +17,44 @@ import { UserDTO } from '../../../models/userDTO';
 import { CaseService } from '../../../services/case.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { AdminModel } from '../../../models/adminModel';
+import { CompanyUserDepartmentDTO } from '../../../models/companyUserDepartmentDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
   templateUrl: './companyUserDepartmentUpdate.component.html',
   styleUrls: ['./companyUserDepartmentUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserDepartmentUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() companyUserDepartmentDTO: CompanyUserDepartmentDTO;
   companyUsers: CompanyUserDTO[] = [];
   id: number;
   companyUserId: number;
   companyUserName: string;
 
-  componentTitle = 'Company User Department Update';
+  componentTitle = 'Company User Department Update Form';
   userEmail: string;
   users: UserDTO[] = [];
 
   constructor(
     private companyUserDepartmentService: CompanyUserDepartmentService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['companyuseraddressId']);
-      });
-    }, 500);
+      this.getUserValues(this.companyUserDepartmentDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -93,6 +95,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
       this.companyUserDepartmentService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
+          this.activeModal.close();
           this.router.navigate(['/dashboard/companyuserdepartments']);
         },
         (error) => {

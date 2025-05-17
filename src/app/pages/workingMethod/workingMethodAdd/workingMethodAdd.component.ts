@@ -9,15 +9,16 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { WorkingMethod } from '../../../models/workingMethod';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-workingMethodAdd',
   templateUrl: './workingMethodAdd.component.html',
   styleUrls: ['./workingMethodAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class WorkingMethodAddComponent implements OnInit {
   addForm: FormGroup;
@@ -29,7 +30,8 @@ export class WorkingMethodAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private workingMethodService: WorkingMethodService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class WorkingMethodAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.workingMethodService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/workingmethods']);
         },

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -12,32 +11,36 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ModelMenuService } from '../../../services/modelMenu.service';
 import { ModelMenu } from '../../../models/modelMenu';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modelMenuUpdate',
   templateUrl: './modelMenuUpdate.component.html',
   styleUrls: ['./modelMenuUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class ModelMenuUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() modelMenu: ModelMenu;
   modelMenuId: number;
 
-  componentTitle = 'Model Menu Update';
+  componentTitle = 'Model Menu Update Form';
 
   constructor(
     private modelMenuService: ModelMenuService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['modelmenuId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.modelMenu.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -62,6 +65,7 @@ export class ModelMenuUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.modelMenuService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/modelmenulists']);
         },

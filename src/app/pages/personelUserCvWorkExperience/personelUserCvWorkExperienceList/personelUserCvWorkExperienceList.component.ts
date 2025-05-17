@@ -3,7 +3,7 @@ import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
@@ -11,6 +11,9 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { PersonelUserCvWorkExperienceDTO } from '../../../models/personelUserCvWorkExperienceDTO';
 import { PersonelUserCvWorkExperienceService } from '../../../services/personelUserCvWorkExperience.service';
 import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/filterPersonelUserCvWorkExperienceByUser.pipe';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceList',
@@ -19,7 +22,7 @@ import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/fil
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
+
     FilterPersonelUserCvWorkExperienceByUserPipe,
   ],
 })
@@ -37,11 +40,17 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -108,6 +117,40 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
+  }
+
+  open(personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationUpdateComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCvWorkExperienceDTO =
+      personelUserCvWorkExperienceDTO;
+  }
+
+  openDetail(personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationDetailComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCvWorkExperienceDTO =
+      personelUserCvWorkExperienceDTO;
   }
 
   clearInput1() {

@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -33,12 +33,13 @@ import { RegionService } from '../../../services/region.service';
 import { Sector } from '../../../models/sector';
 import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
 import { WorkingMethod } from '../../../models/workingMethod';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceAdd',
   templateUrl: './personelUserCvWorkExperienceAdd.component.html',
   styleUrls: ['./personelUserCvWorkExperienceAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   addForm: FormGroup;
@@ -71,7 +72,8 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     private regionService: RegionService,
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private sectorService: SectorService,
-    private workingMethodService: WorkingMethodService
+    private workingMethodService: WorkingMethodService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -132,6 +134,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     ) {
       this.personelUserCvWorkExperienceService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercvworkexperiences']);
         },

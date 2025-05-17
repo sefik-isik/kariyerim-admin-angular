@@ -3,7 +3,7 @@ import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
@@ -12,17 +12,15 @@ import { PersonelUserCoverLetter } from '../../../models/personelUserCoverLetter
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
 import { FilterPersonelUserCoverLetterByUserPipe } from '../../../pipes/filterPersonelUserCoverLetterByUser.pipe';
 import { PersonelUserCoverLetterDTO } from '../../../models/PersonelUserCoverLetterDTO';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCoverLetterUpdateComponent } from '../personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
+import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLetterDetail/personelUserCoverLetterDetail.component';
 
 @Component({
   selector: 'app-personelUserCoverLetterList',
   templateUrl: './personelUserCoverLetterList.component.html',
   styleUrls: ['./personelUserCoverLetterList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    FilterPersonelUserCoverLetterByUserPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserCoverLetterByUserPipe],
 })
 export class PersonelUserCoverLetterListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
@@ -37,11 +35,17 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -106,6 +110,40 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
+  }
+
+  open(personelUserCoverLetter: PersonelUserCoverLetter) {
+    const modalRef = this.modalService.open(
+      PersonelUserCoverLetterUpdateComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCoverLetter =
+      personelUserCoverLetter;
+  }
+
+  openDetail(personelUserCoverLetter: PersonelUserCoverLetter) {
+    const modalRef = this.modalService.open(
+      PersonelUserCoverLetterDetailComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCoverLetter =
+      personelUserCoverLetter;
   }
 
   clearInput1() {

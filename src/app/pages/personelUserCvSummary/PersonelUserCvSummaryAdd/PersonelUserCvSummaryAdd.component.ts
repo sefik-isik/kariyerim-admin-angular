@@ -1,8 +1,8 @@
-import { PersonelUserCvSummaryService } from './../../../services/personelUserCvSummary.service';
-import { PersonelUserCvService } from './../../../services/personelUserCv.service';
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
+import { PersonelUserCvService } from '../../../services/personelUserCv.service';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminModel } from '../../../models/adminModel';
+import { AdminService } from '../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -14,19 +14,20 @@ import {
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCv } from '../../../models/personelUserCv';
 import { PersonelUserCvSummary } from '../../../models/personelUserCvSummary';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-PersonelUserCvSummaryAdd',
-  templateUrl: './PersonelUserCvSummaryAdd.component.html',
-  styleUrls: ['./PersonelUserCvSummaryAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  selector: 'app-personelUserCvSummaryAdd',
+  templateUrl: './personelUserCvSummaryAdd.component.html',
+  styleUrls: ['./personelUserCvSummaryAdd.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvSummaryAddComponent implements OnInit {
   addForm: FormGroup;
@@ -48,7 +49,8 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    private personelUserCvService: PersonelUserCvService
+    private personelUserCvService: PersonelUserCvService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -79,6 +81,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     if (this.getModel().userId > 0 && this.getModel().cvId > 0) {
       this.personelUserCvSummaryService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercvsummaryies']);
         },

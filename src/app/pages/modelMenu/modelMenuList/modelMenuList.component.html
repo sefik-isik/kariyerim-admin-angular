@@ -1,7 +1,4 @@
-<div class="card">
-  <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
-  </div>
+<div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -28,27 +25,7 @@
           ></i>
         </span>
       </div>
-      <div class="mt-3">
-        <button
-          [routerLink]="['modelmenuadd']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-success"
-        >
-          Add New Model Menu <i class="bi bi-plus-circle"></i>
-        </button>
-        <button
-          [routerLink]="['modelmenuofdeleted']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-secondary"
-          style="margin-left: 10px"
-        >
-          Deleted Model Menus <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
+
       <div class="mt-3 table-responsive-xxl">
         <table
           *ngIf="modelMenus.length > 0"
@@ -60,6 +37,7 @@
               <th>modelMenu Name</th>
               <th>Created Date</th>
               <th>Updated Date</th>
+              <th></th>
               <th></th>
               <th>
                 <i
@@ -84,9 +62,14 @@
               </td>
               <td>
                 <i
-                  [routerLink]="['modelmenuupdate/' + modelMenu.id]"
-                  routerLinkActive="active"
-                  ariaCurrentWhenActive="page"
+                  (click)="openDetail(modelMenu)"
+                  class="bi bi-journal-text"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="open(modelMenu)"
                   class="bi bi-pencil-square"
                   style="color: midnightblue"
                 ></i>

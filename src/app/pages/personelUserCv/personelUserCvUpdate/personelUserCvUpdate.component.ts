@@ -2,7 +2,7 @@ import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { LanguageLevelService } from './../../../services/languageLevel.service';
 import { LanguageService } from './../../../services/language.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -12,7 +12,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -22,15 +22,17 @@ import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
 import { Language } from '../../../models/language';
 import { LanguageLevel } from '../../../models/languageLevel';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCvUpdate',
   templateUrl: './personelUserCvUpdate.component.html',
   styleUrls: ['./personelUserCvUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserCvDTO: PersonelUserCvDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
@@ -48,7 +50,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+
     private personelUserService: PersonelUserService,
     private personelUserCvService: PersonelUserCvService,
     private languageService: LanguageService,
@@ -57,7 +59,8 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -67,10 +70,8 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     this.getLanguageLevels();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personelusercvId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserCvDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -121,6 +122,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     ) {
       this.personelUserCvService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercvs']);
         },

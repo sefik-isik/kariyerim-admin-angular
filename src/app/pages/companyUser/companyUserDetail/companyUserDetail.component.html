@@ -1,0 +1,48 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ companyUserDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ companyUserDTO.userId }}</p>
+    <p class="card-text">
+      <b>companyUserId: </b>{{ companyUserDTO.companyUserId }}
+    </p>
+    <p class="card-text">
+      <b>companyUserName: </b>{{ companyUserDTO.companyUserName }}
+    </p>
+    <p class="card-text"><b>email: </b>{{ companyUserDTO.email }}</p>
+    <p class="card-text"><b>sectorId: </b>{{ companyUserDTO.sectorId }}</p>
+    <p class="card-text"><b>sectorName: </b>{{ companyUserDTO.sectorName }}</p>
+    <p class="card-text"><b>taxCityId: </b>{{ companyUserDTO.taxCityId }}</p>
+    <p class="card-text">
+      <b>taxCityName: </b>{{ companyUserDTO.taxCityName }}
+    </p>
+    <p class="card-text">
+      <b>taxOfficeId: </b>{{ companyUserDTO.taxOfficeId }}
+    </p>
+    <p class="card-text">
+      <b>taxOfficeName: </b>{{ companyUserDTO.taxOfficeName }}
+    </p>
+    <p class="card-text"><b>taxNumber: </b>{{ companyUserDTO.taxNumber }}</p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ companyUserDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ companyUserDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ companyUserDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

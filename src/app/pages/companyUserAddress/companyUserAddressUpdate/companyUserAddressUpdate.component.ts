@@ -2,8 +2,8 @@ import { LocalStorageService } from './../../../services/localStorage.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { CountryService } from './../../../services/country.service';
 import { City } from './../../../models/city';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -22,15 +22,17 @@ import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { AdminModel } from '../../../models/adminModel';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
   templateUrl: './companyUserAddressUpdate.component.html',
   styleUrls: ['./companyUserAddressUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserAddressUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() companyUserAddressDTO: CompanyUserAddressDTO;
   companyUsers: CompanyUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
@@ -46,14 +48,14 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   addressDetail: string;
   addressDetailCount: number;
 
-  componentTitle = 'Company User Address Update';
+  componentTitle = 'Company User Address Update Form';
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
-    private activatedRoute: ActivatedRoute,
+    public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
@@ -65,10 +67,8 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     this.getCountries();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['companyuseraddressId']);
-      });
-    }, 500);
+      this.getUserValues(this.companyUserAddressDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -118,6 +118,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     ) {
       this.companyUserAddressService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyuseraddresses']);
         },

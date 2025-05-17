@@ -8,4 +8,4 @@ import { CityDeletedListComponent } from '../cityDeletedList/cityDeletedList.com
   </div> `,
   imports: [CityDeletedListComponent],
 })
-export class CityOfDeletedTab {}
+export class CityDeletedListTab {}

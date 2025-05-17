@@ -1,0 +1,76 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserCvEducationDTO.id }}</p>
+    <p class="card-text">
+      <b>userId: </b>{{ personelUserCvEducationDTO.userId }}
+    </p>
+    <p class="card-text">
+      <b>email: </b>{{ personelUserCvEducationDTO.email }}
+    </p>
+    <p class="card-text">
+      <b>personelUserId: </b>{{ personelUserCvEducationDTO.personelUserId }}
+    </p>
+    <p class="card-text"><b>cvId: </b>{{ personelUserCvEducationDTO.cvId }}</p>
+    <p class="card-text">
+      <b>cvName: </b>{{ personelUserCvEducationDTO.cvName }}
+    </p>
+    <p class="card-text">
+      <b>universityId: </b>{{ personelUserCvEducationDTO.universityId }}
+    </p>
+    <p class="card-text">
+      <b>universityName: </b>{{ personelUserCvEducationDTO.universityName }}
+    </p>
+    <p class="card-text">
+      <b>facultyId: </b>{{ personelUserCvEducationDTO.facultyId }}
+    </p>
+    <p class="card-text">
+      <b>facultyName: </b>{{ personelUserCvEducationDTO.facultyName }}
+    </p>
+    <p class="card-text">
+      <b>departmentId: </b>{{ personelUserCvEducationDTO.departmentId }}
+    </p>
+    <p class="card-text">
+      <b>departmentName: </b>{{ personelUserCvEducationDTO.departmentName }}
+    </p>
+    <p class="card-text">
+      <b>educationInfo: </b>{{ personelUserCvEducationDTO.educationInfo }}
+    </p>
+    <p class="card-text">
+      <b>startDate: </b>{{ personelUserCvEducationDTO.startDate }}
+    </p>
+    <p class="card-text">
+      <b>endDate: </b>{{ personelUserCvEducationDTO.endDate }}
+    </p>
+    <p class="card-text">
+      <b>detail: </b>{{ personelUserCvEducationDTO.detail }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{
+        personelUserCvEducationDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{
+        personelUserCvEducationDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{
+        personelUserCvEducationDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

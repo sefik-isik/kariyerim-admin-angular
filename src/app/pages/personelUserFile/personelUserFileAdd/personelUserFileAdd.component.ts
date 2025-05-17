@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AdminService } from '../../../services/admin.service';
@@ -19,12 +19,13 @@ import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserFile } from '../../../models/personelUserFile';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserFileAdd',
   templateUrl: './personelUserFileAdd.component.html',
   styleUrls: ['./personelUserFileAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserFileAddComponent implements OnInit {
   addForm: FormGroup;
@@ -46,7 +47,8 @@ export class PersonelUserFileAddComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
   ngOnInit() {
     this.createAddForm();

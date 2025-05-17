@@ -1,8 +1,7 @@
 import { AdminModel } from './../../../models/adminModel';
 import { Sector } from '../../../models/sector';
 import { City } from './../../../models/city';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -25,15 +24,17 @@ import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { CaseService } from '../../../services/case.service';
 import { AdminService } from '../../../services/admin.service';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserUpdate',
   templateUrl: './companyUserUpdate.component.html',
   styleUrls: ['./companyUserUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() companyUserDTO: CompanyUserDTO;
   companyUserDTOs: CompanyUserDTO[];
   sectors: Sector[];
   cities: City[];
@@ -55,7 +56,7 @@ export class CompanyUserUpdateComponent implements OnInit {
     private cityService: CityService,
     private taxOfficeService: TaxOfficeService,
     private userService: UserService,
-    private activatedRoute: ActivatedRoute,
+    public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
@@ -73,10 +74,8 @@ export class CompanyUserUpdateComponent implements OnInit {
     this.getTaxOffices();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['companyUserId']);
-      });
-    }, 500);
+      this.getUserValues(this.companyUserDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -134,6 +133,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       this.companyUserService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
+          this.activeModal.close();
           this.router.navigate(['/dashboard/companyusers']);
         },
         (error) => {

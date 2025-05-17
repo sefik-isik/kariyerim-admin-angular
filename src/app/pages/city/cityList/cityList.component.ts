@@ -21,12 +21,12 @@ import { CityDetailComponent } from '../cityDetail/cityDetail.component';
   imports: [CommonModule, FormsModule, FilterCityPipe, FilterCityByCountryPipe],
 })
 export class CityListComponent implements OnInit {
+  componentTitle = 'Cities';
   cityDTOs: CityDTO[] = [];
   countries: Country[] = [];
   filter1 = '';
   filter2 = '';
 
-  componentTitle = 'Cities';
   constructor(
     private cityService: CityService,
     private toastrService: ToastrService,
@@ -106,7 +106,7 @@ export class CityListComponent implements OnInit {
     }, 500);
   }
 
-  open(city: City) {
+  open(cityDTO: CityDTO) {
     const modalRef = this.modalService.open(CityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -116,7 +116,7 @@ export class CityListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.city = city;
+    modalRef.componentInstance.cityDTO = cityDTO;
   }
 
   openDetail(cityDTO: CityDTO) {

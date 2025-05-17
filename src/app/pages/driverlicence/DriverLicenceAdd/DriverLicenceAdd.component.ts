@@ -8,16 +8,17 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { DriverLicence } from '../../../models/driverLicence';
 import { CaseService } from '../../../services/case.service';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-DriverLicenceAdd',
-  templateUrl: './DriverLicenceAdd.component.html',
-  styleUrls: ['./DriverLicenceAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  selector: 'app-driverLicenceAdd',
+  templateUrl: './driverLicenceAdd.component.html',
+  styleUrls: ['./driverLicenceAdd.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DriverLicenceAddComponent implements OnInit {
   addForm: FormGroup;
@@ -29,7 +30,8 @@ export class DriverLicenceAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private driverLicenceService: DriverLicenceService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class DriverLicenceAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.driverLicenceService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/driverlicences']);
         },

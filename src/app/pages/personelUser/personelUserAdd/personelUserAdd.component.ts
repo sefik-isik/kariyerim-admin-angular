@@ -15,18 +15,19 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CityService } from '../../../services/city.service';
 import { City } from '../../../models/city';
 import { UserService } from '../../../services/user.service';
 import { PersonelUser } from '../../../models/personelUser';
 import { DriverLicence } from '../../../models/driverLicence';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserAdd',
   templateUrl: './personelUserAdd.component.html',
   styleUrls: ['./personelUserAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserAddComponent implements OnInit {
   componentTitle = 'Personel User Add Form';
@@ -48,7 +49,8 @@ export class PersonelUserAddComponent implements OnInit {
     private adminService: AdminService,
     private licenceDegreeService: LicenceDegreeService,
     private driverLicenceService: DriverLicenceService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -86,6 +88,7 @@ export class PersonelUserAddComponent implements OnInit {
     ) {
       this.personelUserService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusers']);
         },

@@ -12,19 +12,20 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { CompanyUserFile } from '../../../models/companyUserFile';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserFileAdd',
   templateUrl: './companyUserFileAdd.component.html',
   styleUrls: ['./companyUserFileAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserFileAddComponent {
   addForm: FormGroup;
@@ -46,7 +47,8 @@ export class CompanyUserFileAddComponent {
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
   ngOnInit() {
     this.createAddForm();

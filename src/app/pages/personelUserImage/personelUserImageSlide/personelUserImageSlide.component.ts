@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
+
 import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
@@ -20,7 +20,7 @@ import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonel
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
+
     FilterPersonelUserImageByUserPipe,
 
     CarouselModule,

@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CaseService } from '../../../services/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CityDTO } from '../../../models/cityDTO';
 
 @Component({
   selector: 'app-cityUpdate',
@@ -24,13 +25,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CityUpdateComponent implements OnInit {
   updateForm: FormGroup;
-  @Input() city: City;
+  @Input() cityDTO: CityDTO;
   countries: Country[];
   cities: City[];
   cityId: number;
   countryId: number;
-
-  componentTitle = 'City Update';
+  componentTitle = 'City Update Form';
 
   constructor(
     private cityService: CityService,
@@ -47,14 +47,8 @@ export class CityUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.getById(this.city.id);
+      this.getById(this.cityDTO.id);
     }, 200);
-
-    // setTimeout(() => {
-    //   this.activatedRoute.params.subscribe((params) => {
-    //     this.getById(params['cityId']);
-    //   });
-    // }, 500);
   }
 
   createUpdateForm() {

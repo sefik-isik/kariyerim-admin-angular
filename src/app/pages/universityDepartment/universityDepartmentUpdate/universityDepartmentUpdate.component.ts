@@ -1,8 +1,5 @@
-import { City } from './../../../models/city';
-import { Country } from './../../../models/country';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CityService } from '../../../services/city.service';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -11,7 +8,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CountryService } from '../../../services/country.service';
+
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CaseService } from '../../../services/case.service';
@@ -19,30 +16,33 @@ import { University } from '../../../models/university';
 import { UniversityDepartment } from '../../../models/universityDepartment';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityService } from '../../../services/university.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-universityDepartmentUpdate',
   templateUrl: './universityDepartmentUpdate.component.html',
   styleUrls: ['./universityDepartmentUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityDepartmentUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() universityDepartment: UniversityDepartment;
   universities: University[];
   universityDepartments: UniversityDepartment[];
   universityDepartmentId: number;
   universityId: number;
 
-  componentTitle = 'University Department Update';
+  componentTitle = 'University Department Update Form';
 
   constructor(
     private universityDepartmentService: UniversityDepartmentService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private universityService: UniversityService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -50,10 +50,8 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
     this.createUpdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getById(params['universitydepartmentId']);
-      });
-    }, 500);
+      this.getById(this.universityDepartment.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -81,6 +79,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
     if (this.updateForm.valid && this.getModel().universityId > 0) {
       this.universityDepartmentService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/universitydepartments']);
         },

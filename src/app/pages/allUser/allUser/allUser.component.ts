@@ -6,7 +6,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   selector: 'app-allUser',
   templateUrl: './allUser.component.html',
   styleUrls: ['./allUser.component.css'],
-
   imports: [RouterOutlet, RouterLink, CommonModule],
 })
 export class AllUserComponent {

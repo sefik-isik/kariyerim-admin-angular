@@ -1,27 +1,25 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
-import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminModel } from './../../../models/adminModel';
+import { AdminService } from './../../../services/admin.service';
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
-import { PersonelUserImageService } from '../../../services/personelUserImage.service';
+import { UserDTO } from '../../../models/userDTO';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
+import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserImageService } from '../../../services/personelUserImage.service';
+import { UserService } from '../../../services/user.service';
+import { PersonelUserImageDetailComponent } from '../personelUserImageDetail/personelUserImageDetail.component';
+import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/personelUserImageUpdate.component';
 
 @Component({
   selector: 'app-personelUserImageList',
   templateUrl: './personelUserImageList.component.html',
   styleUrls: ['./personelUserImageList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    FilterPersonelUserImageByUserPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserImageByUserPipe],
 })
 export class PersonelUserImageListComponent implements OnInit {
   personelUserImageDTOs: PersonelUserImageDTO[] = [];
@@ -39,11 +37,17 @@ export class PersonelUserImageListComponent implements OnInit {
     private personelUserImageService: PersonelUserImageService,
     private userService: UserService,
     private adminService: AdminService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -105,6 +109,32 @@ export class PersonelUserImageListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
+  }
+
+  open(personelUserImageDTO: PersonelUserImageDTO) {
+    const modalRef = this.modalService.open(PersonelUserImageUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.personelUserImageDTO = personelUserImageDTO;
+  }
+
+  openDetail(personelUserImageDTO: PersonelUserImageDTO) {
+    const modalRef = this.modalService.open(PersonelUserImageDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.personelUserImageDTO = personelUserImageDTO;
   }
 
   clearInput1() {

@@ -1,0 +1,111 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserCvWorkExperienceDTO.id }}</p>
+    <p class="card-text">
+      <b>userId: </b>{{ personelUserCvWorkExperienceDTO.userId }}
+    </p>
+    <p class="card-text">
+      <b>email: </b>{{ personelUserCvWorkExperienceDTO.email }}
+    </p>
+    <p class="card-text">
+      <b>cvId: </b>{{ personelUserCvWorkExperienceDTO.cvId }}
+    </p>
+    <p class="card-text">
+      <b>cvName: </b>{{ personelUserCvWorkExperienceDTO.cvName }}
+    </p>
+    <p class="card-text">
+      <b>countryId: </b>{{ personelUserCvWorkExperienceDTO.countryId }}
+    </p>
+    <p class="card-text">
+      <b>countryName: </b>{{ personelUserCvWorkExperienceDTO.countryName }}
+    </p>
+    <p class="card-text">
+      <b>cityId: </b>{{ personelUserCvWorkExperienceDTO.cityId }}
+    </p>
+    <p class="card-text">
+      <b>cityName: </b>{{ personelUserCvWorkExperienceDTO.cityName }}
+    </p>
+    <p class="card-text">
+      <b>regionId: </b>{{ personelUserCvWorkExperienceDTO.regionId }}
+    </p>
+    <p class="card-text">
+      <b>regionName: </b>{{ personelUserCvWorkExperienceDTO.regionName }}
+    </p>
+    <p class="card-text">
+      <b>companySectorId: </b
+      >{{ personelUserCvWorkExperienceDTO.companySectorId }}
+    </p>
+    <p class="card-text">
+      <b>companySectorName: </b
+      >{{ personelUserCvWorkExperienceDTO.companySectorName }}
+    </p>
+    <p class="card-text">
+      <b>companyName: </b>{{ personelUserCvWorkExperienceDTO.companyName }}
+    </p>
+    <p class="card-text">
+      <b>position: </b>{{ personelUserCvWorkExperienceDTO.position }}
+    </p>
+    <p class="card-text">
+      <b>startDate: </b>{{ personelUserCvWorkExperienceDTO.startDate }}
+    </p>
+    <p class="card-text">
+      <b>endDate: </b>{{ personelUserCvWorkExperienceDTO.endDate }}
+    </p>
+    <p class="card-text">
+      <b>foundJobInHere: </b
+      >{{ personelUserCvWorkExperienceDTO.foundJobInHere }}
+    </p>
+    <p class="card-text">
+      <b>departmentId: </b>{{ personelUserCvWorkExperienceDTO.departmentId }}
+    </p>
+    <p class="card-text">
+      <b>departmentName: </b
+      >{{ personelUserCvWorkExperienceDTO.departmentName }}
+    </p>
+    <p class="card-text">
+      <b>workingMethodId: </b
+      >{{ personelUserCvWorkExperienceDTO.workingMethodId }}
+    </p>
+    <p class="card-text">
+      <b>workingMethodName: </b
+      >{{ personelUserCvWorkExperienceDTO.workingMethodName }}
+    </p>
+    <p class="card-text">
+      <b>working: </b>{{ personelUserCvWorkExperienceDTO.working }}
+    </p>
+    <p class="card-text">
+      <b>detail: </b>{{ personelUserCvWorkExperienceDTO.detail }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{
+        personelUserCvWorkExperienceDTO.createdDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{
+        personelUserCvWorkExperienceDTO.updatedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{
+        personelUserCvWorkExperienceDTO.deletedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

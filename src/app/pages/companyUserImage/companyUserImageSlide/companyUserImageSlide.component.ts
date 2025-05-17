@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
 import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
@@ -20,7 +19,6 @@ import { LocalStorageService } from '../../../services/localStorage.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     FilterCompanyUserImageByUserPipe,
 
     CarouselModule,

@@ -1,0 +1,34 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserFileDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ personelUserFileDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ personelUserFileDTO.email }}</p>
+    <p class="card-text">
+      <b>personelUserId: </b>{{ personelUserFileDTO.personelUserId }}
+    </p>
+    <p class="card-text"><b>filePath: </b>{{ personelUserFileDTO.filePath }}</p>
+    <p class="card-text"><b>fileName: </b>{{ personelUserFileDTO.fileName }}</p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ personelUserFileDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ personelUserFileDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ personelUserFileDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

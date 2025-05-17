@@ -54,6 +54,7 @@ export class CityAddComponent implements OnInit {
     if (this.addForm1.valid && this.getModel().countryId > 0) {
       this.cityService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/cities']);
         },

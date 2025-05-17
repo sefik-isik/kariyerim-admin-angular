@@ -8,15 +8,16 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/operationClaim';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-operationClaimAdd',
   templateUrl: './operationClaimAdd.component.html',
   styleUrls: ['./operationClaimAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class OperationClaimAddComponent implements OnInit {
   addForm: FormGroup;
@@ -26,7 +27,8 @@ export class OperationClaimAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private operationClaimService: OperationClaimService
+    private operationClaimService: OperationClaimService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class OperationClaimAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.operationClaimService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/operationclaims']);
         },

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +12,37 @@ import { Router } from '@angular/router';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-countryUpdate',
   templateUrl: './countryUpdate.component.html',
   styleUrls: ['./countryUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CountryUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() country: Country;
   countryId: number;
 
-  componentTitle = 'Country Update';
+  componentTitle = 'Country Update Form';
 
   constructor(
     private countryService: CountryService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['countryId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.country.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -66,6 +69,7 @@ export class CountryUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.countryService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/countries']);
         },

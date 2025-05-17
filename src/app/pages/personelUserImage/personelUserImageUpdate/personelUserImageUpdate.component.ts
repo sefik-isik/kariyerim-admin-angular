@@ -1,8 +1,8 @@
 import { AdminModel } from './../../../models/adminModel';
 import { AdminService } from './../../../services/admin.service';
 import { PersonelUserService } from './../../../services/personelUser.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -20,16 +20,18 @@ import { HttpEventType } from '@angular/common/http';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { PersonelUserImage } from '../../../models/personelUserImage';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserImageUpdate',
   templateUrl: './personelUserImageUpdate.component.html',
   styleUrls: ['./personelUserImageUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserImageUpdateComponent implements OnInit {
   updateForm: FormGroup;
-
+  @Input() personelUserImageDTO: PersonelUserImageDTO;
   componentTitle = 'Personel User Image Update Form';
   selectedImage: File | null = null;
   imagePath: string | null = null;
@@ -46,24 +48,23 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private activatedRoute: ActivatedRoute,
+
     private personelUserImageService: PersonelUserImageService,
     private router: Router,
     private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
     this.createcUpdateForm();
 
-    this.activatedRoute.params.subscribe((params) => {
-      this.getUserValues(params['personeluserimageId']);
-    });
-
-    //setTimeout(() => {}, 500);
+    setTimeout(() => {
+      this.getUserValues(this.personelUserImageDTO.id);
+    }, 200);
   }
 
   checkImage(imageName: string) {
@@ -188,6 +189,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   update() {
     this.personelUserImageService.update(this.getModel()).subscribe(
       (response) => {
+        this.activeModal.close();
         this.router.navigate(['/dashboard/personeluserimages']);
       },
       (error) => {

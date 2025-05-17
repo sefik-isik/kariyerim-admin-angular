@@ -1,0 +1,54 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ companyUserAddressDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ companyUserAddressDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ companyUserAddressDTO.email }}</p>
+    <p class="card-text">
+      <b>companyUserId: </b>{{ companyUserAddressDTO.companyUserId }}
+    </p>
+    <p class="card-text">
+      <b>companyUserName: </b>{{ companyUserAddressDTO.companyUserName }}
+    </p>
+    <p class="card-text">
+      <b>countryId: </b>{{ companyUserAddressDTO.countryId }}
+    </p>
+    <p class="card-text">
+      <b>countryName: </b>{{ companyUserAddressDTO.countryName }}
+    </p>
+    <p class="card-text"><b>cityId: </b>{{ companyUserAddressDTO.cityId }}</p>
+    <p class="card-text">
+      <b>cityName: </b>{{ companyUserAddressDTO.cityName }}
+    </p>
+    <p class="card-text">
+      <b>regionId: </b>{{ companyUserAddressDTO.regionId }}
+    </p>
+    <p class="card-text">
+      <b>regionName: </b>{{ companyUserAddressDTO.regionName }}
+    </p>
+    <p class="card-text">
+      <b>addressDetail: </b>{{ companyUserAddressDTO.addressDetail }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ companyUserAddressDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ companyUserAddressDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ companyUserAddressDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

@@ -14,7 +14,7 @@ import {
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { City } from '../../../models/city';
 import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
 import { CompanyUserAddress } from '../../../models/companyUserAddress';
@@ -24,12 +24,13 @@ import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserAddressAdd',
   templateUrl: './companyUserAddressAdd.component.html',
   styleUrls: ['./companyUserAddressAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserAddressAddComponent implements OnInit {
   addForm: FormGroup;
@@ -55,7 +56,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     private router: Router,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-
+    public activeModal: NgbActiveModal,
     private companyUserService: CompanyUserService
   ) {}
 
@@ -94,6 +95,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     ) {
       this.companyUserAddressService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyuseraddresses']);
         },

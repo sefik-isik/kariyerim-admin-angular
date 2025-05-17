@@ -1,6 +1,6 @@
 import { CaseService } from './../../../services/case.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +13,37 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { WorkingMethod } from '../../../models/workingMethod';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-workingMethodUpdate',
   templateUrl: './workingMethodUpdate.component.html',
   styleUrls: ['./workingMethodUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class WorkingMethodUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() workingMethod: WorkingMethod;
   workingMethodId: number;
 
-  componentTitle = ' Working Method Update';
+  componentTitle = 'Working Method Update Form';
 
   constructor(
     private workingMethodService: WorkingMethodService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['workingmethodId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.workingMethod.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -64,6 +68,7 @@ export class WorkingMethodUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.workingMethodService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/workingmethods']);
         },

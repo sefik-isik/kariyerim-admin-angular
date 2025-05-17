@@ -5,12 +5,12 @@
   <div class="card-body">
     <form [formGroup]="updateForm" class="form">
       <div class="form-group">
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 justify-content-md-center">
           <div class="card" *ngIf="result == true">
             <img
               src="{{ imagePath + 'thumbs/' + imageName }}"
               class="img-fluid img-thumbnail"
-              style="height: 250px; width: 100%; border: none"
+              style="border: none"
               alt="{{ imageName }}"
             />
             <i
@@ -64,11 +64,10 @@
 
       <button
         type="button"
-        class="btn btn-outline-secondary"
-        routerLink="/dashboard/personeluserimages"
-        routerLinkActive="router-link-active"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
       >
-        Back
+        Close
       </button>
     </div>
   </div>

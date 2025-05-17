@@ -1,0 +1,31 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ languageLevel.id }}</p>
+    <p class="card-text"><b>level: </b>{{ languageLevel.level }}</p>
+    <p class="card-text"><b>levelTitle: </b>{{ languageLevel.levelTitle }}</p>
+    <p class="card-text">
+      <b>levelDescription: </b>{{ languageLevel.levelDescription }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ languageLevel.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ languageLevel.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ languageLevel.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

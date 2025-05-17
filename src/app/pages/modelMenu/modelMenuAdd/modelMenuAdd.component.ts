@@ -8,15 +8,16 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ModelMenuService } from '../../../services/modelMenu.service';
 import { ModelMenu } from '../../../models/modelMenu';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modelMenuAdd',
   templateUrl: './modelMenuAdd.component.html',
   styleUrls: ['./modelMenuAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class ModelMenuAddComponent implements OnInit {
   addForm: FormGroup;
@@ -27,7 +28,8 @@ export class ModelMenuAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private modelMenuService: ModelMenuService
+    private modelMenuService: ModelMenuService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,7 @@ export class ModelMenuAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.modelMenuService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/modelmenulists']);
         },

@@ -1,3 +1,4 @@
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDTO } from '../../../models/userDTO';
 import { TaxOffice } from './../../../models/taxOffice';
 import { CompanyUserService } from './../../../services/companyUser.service';
@@ -11,7 +12,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SectorService } from '../../../services/sectorService';
 import { CompanyUser } from '../../../models/companyUser';
 import { Sector } from '../../../models/sector';
@@ -28,7 +29,7 @@ import { LocalStorageService } from '../../../services/localStorage.service';
   selector: 'app-companyUserAdd',
   templateUrl: './companyUserAdd.component.html',
   styleUrls: ['./companyUserAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserAddComponent implements OnInit {
   componentTitle = 'Company User Add Form';
@@ -51,7 +52,8 @@ export class CompanyUserAddComponent implements OnInit {
     private userService: UserService,
     private adminService: AdminService,
     private caseService: CaseService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -92,6 +94,7 @@ export class CompanyUserAddComponent implements OnInit {
     ) {
       this.companyUserService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyusers']);
         },

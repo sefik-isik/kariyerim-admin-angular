@@ -8,16 +8,17 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { LanguageLevel } from '../../../models/languageLevel';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-languageLevelAdd',
   templateUrl: './languageLevelAdd.component.html',
   styleUrls: ['./languageLevelAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageLevelAddComponent implements OnInit {
   addForm: FormGroup;
@@ -29,7 +30,8 @@ export class LanguageLevelAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private languageLevelService: LanguageLevelService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class LanguageLevelAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.languageLevelService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/languagelevels']);
         },

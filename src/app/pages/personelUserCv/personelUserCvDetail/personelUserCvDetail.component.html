@@ -1,0 +1,50 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserCvDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ personelUserCvDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ personelUserCvDTO.email }}</p>
+    <p class="card-text"><b>cvId: </b>{{ personelUserCvDTO.cvId }}</p>
+    <p class="card-text"><b>cvName: </b>{{ personelUserCvDTO.cvName }}</p>
+    <p class="card-text">
+      <b>birthPlaceId: </b>{{ personelUserCvDTO.birthPlaceId }}
+    </p>
+    <p class="card-text">
+      <b>birthPlaceName: </b>{{ personelUserCvDTO.birthPlaceName }}
+    </p>
+    <p class="card-text">
+      <b>languageId: </b>{{ personelUserCvDTO.languageId }}
+    </p>
+    <p class="card-text">
+      <b>languageName: </b>{{ personelUserCvDTO.languageName }}
+    </p>
+    <p class="card-text"><b>level: </b>{{ personelUserCvDTO.level }}</p>
+    <p class="card-text">
+      <b>levelTitle: </b>{{ personelUserCvDTO.levelTitle }}
+    </p>
+    <p class="card-text">
+      <b>levelDescription: </b>{{ personelUserCvDTO.levelDescription }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ personelUserCvDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ personelUserCvDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ personelUserCvDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

@@ -4,24 +4,22 @@ import { AdminService } from './../../../services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { FilterPersonelUserCvEducationByUserPipe } from '../../../pipes/filterPersonelUserCvEducationByUser.pipe';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 
 @Component({
   selector: 'app-personelUserCvEducationList',
   templateUrl: './personelUserCvEducationList.component.html',
   styleUrls: ['./personelUserCvEducationList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    FilterPersonelUserCvEducationByUserPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserCvEducationByUserPipe],
 })
 export class PersonelUserCvEducationListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
@@ -37,11 +35,17 @@ export class PersonelUserCvEducationListComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -106,6 +110,40 @@ export class PersonelUserCvEducationListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
     }, 500);
+  }
+
+  open(personelUserCvEducationDTO: PersonelUserCvEducationDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationUpdateComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCvEducationDTO =
+      personelUserCvEducationDTO;
+  }
+
+  openDetail(personelUserCvEducationDTO: PersonelUserCvEducationDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationDetailComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserCvEducationDTO =
+      personelUserCvEducationDTO;
   }
 
   clearInput1() {

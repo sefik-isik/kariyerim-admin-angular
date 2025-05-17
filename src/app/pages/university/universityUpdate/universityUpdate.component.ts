@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +13,37 @@ import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
 import { University } from '../../../models/university';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-universityUpdate',
   templateUrl: './universityUpdate.component.html',
   styleUrls: ['./universityUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() university: University;
   universityId: number;
 
-  componentTitle = 'University Update';
+  componentTitle = 'University Update Form';
 
   constructor(
     private universityService: UniversityService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['universityId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.university.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -64,6 +68,7 @@ export class UniversityUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.universityService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/universities']);
         },

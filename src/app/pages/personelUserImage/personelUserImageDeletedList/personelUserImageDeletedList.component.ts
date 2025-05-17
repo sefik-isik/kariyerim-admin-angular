@@ -5,23 +5,21 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { RouterLink } from '@angular/router';
+
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
 import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/personelUserImageUpdate.component';
+import { PersonelUserImageDetailComponent } from '../personelUserImageDetail/personelUserImageDetail.component';
 
 @Component({
   selector: 'app-personelUserImageDeletedList',
   templateUrl: './personelUserImageDeletedList.component.html',
   styleUrls: ['./personelUserImageDeletedList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    FilterPersonelUserImageByUserPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserImageByUserPipe],
 })
 export class PersonelUserImageDeletedListComponent implements OnInit {
   personelUserImageDTOs: PersonelUserImageDTO[] = [];
@@ -38,11 +36,17 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
     private personelUserImageService: PersonelUserImageService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -96,6 +100,32 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
     }, 500);
+  }
+
+  open(personelUserImageDTO: PersonelUserImageDTO) {
+    const modalRef = this.modalService.open(PersonelUserImageUpdateComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.personelUserImageDTO = personelUserImageDTO;
+  }
+
+  openDetail(personelUserImageDTO: PersonelUserImageDTO) {
+    const modalRef = this.modalService.open(PersonelUserImageDetailComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      scrollable: true,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.personelUserImageDTO = personelUserImageDTO;
   }
 
   clear1Input1() {

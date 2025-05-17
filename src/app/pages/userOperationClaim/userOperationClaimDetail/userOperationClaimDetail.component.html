@@ -1,0 +1,43 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ userOperationClaimDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ userOperationClaimDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ userOperationClaimDTO.email }}</p>
+    <p class="card-text">
+      <b>firstName: </b>{{ userOperationClaimDTO.firstName }}
+    </p>
+    <p class="card-text">
+      <b>lastName: </b>{{ userOperationClaimDTO.lastName }}
+    </p>
+    <p class="card-text">
+      <b>phoneNumber: </b>{{ userOperationClaimDTO.phoneNumber }}
+    </p>
+    <p class="card-text">
+      <b>operationClaimId: </b>{{ userOperationClaimDTO.operationClaimId }}
+    </p>
+    <p class="card-text">
+      <b>operationClaimName: </b>{{ userOperationClaimDTO.operationClaimName }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ userOperationClaimDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ userOperationClaimDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ userOperationClaimDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

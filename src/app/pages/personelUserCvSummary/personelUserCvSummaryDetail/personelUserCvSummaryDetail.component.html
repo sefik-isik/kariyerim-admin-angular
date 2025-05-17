@@ -1,0 +1,45 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ personelUserCvSummaryDTO.id }}</p>
+    <p class="card-text">
+      <b>userId: </b>{{ personelUserCvSummaryDTO.userId }}
+    </p>
+    <p class="card-text"><b>email: </b>{{ personelUserCvSummaryDTO.email }}</p>
+    <p class="card-text">
+      <b>personelUserId: </b>{{ personelUserCvSummaryDTO.personelUserId }}
+    </p>
+    <p class="card-text"><b>cvId: </b>{{ personelUserCvSummaryDTO.cvId }}</p>
+    <p class="card-text">
+      <b>cvName: </b>{{ personelUserCvSummaryDTO.cvName }}
+    </p>
+    <p class="card-text">
+      <b>cvSummaryTitle: </b>{{ personelUserCvSummaryDTO.cvSummaryTitle }}
+    </p>
+    <p class="card-text">
+      <b>cvSummaryDescription: </b
+      >{{ personelUserCvSummaryDTO.cvSummaryDescription }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ personelUserCvSummaryDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ personelUserCvSummaryDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ personelUserCvSummaryDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

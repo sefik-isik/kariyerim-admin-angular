@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -27,15 +26,17 @@ import { PersonelUserCvEducationDTO } from '../../../models/personelUserCvEducat
 import { UserService } from '../../../services/user.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { AdminService } from '../../../services/admin.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCvEducationUpdate',
   templateUrl: './personelUserCvEducationUpdate.component.html',
   styleUrls: ['./personelUserCvEducationUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvEducationUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserCvEducationDTO: PersonelUserCvEducationDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   users: UserDTO[] = [];
   universities: University[] = [];
@@ -49,7 +50,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   detailText: string;
   detailCount: number;
   userDTOs: UserDTO[] = [];
-  componentTitle = 'Personel User Cv Education Update';
+  componentTitle = 'Personel User Cv Education Update Form';
 
   constructor(
     private personelUserCvEducationService: PersonelUserCvEducationService,
@@ -59,12 +60,13 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private personelUserCvService: PersonelUserCvService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -75,10 +77,8 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
     this.getFaculties();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personelusercveducationId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserCvEducationDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -150,6 +150,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
     ) {
       this.personelUserCvEducationService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercveducations']);
         },

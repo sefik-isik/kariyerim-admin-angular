@@ -11,17 +11,18 @@ import {
 } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
 import { TaxOffice } from '../../../models/taxOffice';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-taxOfficeAdd',
   templateUrl: './taxOfficeAdd.component.html',
   styleUrls: ['./taxOfficeAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class TaxOfficeAddComponent implements OnInit {
   addForm1: FormGroup;
@@ -37,7 +38,8 @@ export class TaxOfficeAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -61,6 +63,7 @@ export class TaxOfficeAddComponent implements OnInit {
     if (this.addForm1.valid && this.getModel().cityId > 0) {
       this.taxOfficeService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffices']);
         },

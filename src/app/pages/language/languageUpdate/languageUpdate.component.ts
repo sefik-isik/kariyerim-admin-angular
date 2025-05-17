@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +12,37 @@ import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/language.service';
 import { Language } from '../../../models/language';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-languageUpdate',
   templateUrl: './languageUpdate.component.html',
   styleUrls: ['./languageUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() language: Language;
   languageId: number;
 
-  componentTitle = 'Language Update';
+  componentTitle = 'Language Update Form';
 
   constructor(
     private languageService: LanguageService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['languageId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.language.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -64,6 +67,7 @@ export class LanguageUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.languageService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/languages']);
         },

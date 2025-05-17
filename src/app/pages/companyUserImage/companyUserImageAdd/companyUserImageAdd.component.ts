@@ -11,7 +11,7 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
 import { CompanyUserDTO } from '../../../models/companyUserDTO';
 import { UserDTO } from '../../../models/userDTO';
@@ -19,12 +19,13 @@ import { UserService } from '../../../services/user.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
 import { CompanyUserImage } from '../../../models/companyUserImage';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserImageAdd',
   templateUrl: './companyUserImageAdd.component.html',
   styleUrls: ['./companyUserImageAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserImageAddComponent implements OnInit {
   addForm: FormGroup;
@@ -46,7 +47,8 @@ export class CompanyUserImageAddComponent implements OnInit {
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
   ngOnInit() {
     this.createAddForm();
@@ -132,6 +134,7 @@ export class CompanyUserImageAddComponent implements OnInit {
       .add(this.getModel(this.imagePath, this.imageName))
       .subscribe(
         (response) => {
+          this.activeModal.close();
           this.router.navigate(['/dashboard/companyuserimages']);
         },
         (error) => {

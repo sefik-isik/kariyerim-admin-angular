@@ -8,16 +8,17 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/language.service';
 import { Language } from '../../../models/language';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-languageAdd',
   templateUrl: './languageAdd.component.html',
   styleUrls: ['./languageAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageAddComponent implements OnInit {
   addForm: FormGroup;
@@ -29,7 +30,8 @@ export class LanguageAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private languageService: LanguageService,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class LanguageAddComponent implements OnInit {
     if (this.addForm.valid && this.getModel()) {
       this.languageService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/languages']);
         },

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -21,15 +21,17 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { AdminService } from '../../../services/admin.service';
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
 import { PersonelUserCvSummaryDTO } from '../../../models/personelUserCvSummaryDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-PersonelUserCvSummaryUpdate',
-  templateUrl: './PersonelUserCvSummaryUpdate.component.html',
-  styleUrls: ['./PersonelUserCvSummaryUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  selector: 'app-personelUserCvSummaryUpdate',
+  templateUrl: './personelUserCvSummaryUpdate.component.html',
+  styleUrls: ['./personelUserCvSummaryUpdate.component.css'],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvSummaryUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserCvSummaryDTO: PersonelUserCvSummaryDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   users: UserDTO[] = [];
   personelUserCvs: PersonelUserCv[] = [];
@@ -40,19 +42,20 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
   detailText: string;
   detailCount: number;
   userDTOs: UserDTO[] = [];
-  componentTitle = 'Personel User Cv Summary Update';
+  componentTitle = 'Personel User Cv Summary Update Form';
 
   constructor(
     private personelUserCvSummaryService: PersonelUserCvSummaryService,
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private personelUserCvService: PersonelUserCvService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -60,10 +63,8 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
     this.getAdminValues();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personelusercvsummaryId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserCvSummaryDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -111,6 +112,7 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
     ) {
       this.personelUserCvSummaryService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercvsummaries']);
         },

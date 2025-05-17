@@ -9,17 +9,18 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityDepartment } from '../../../models/universityDepartment';
 import { University } from '../../../models/university';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-universityDepartmentAdd',
   templateUrl: './universityDepartmentAdd.component.html',
   styleUrls: ['./universityDepartmentAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityDepartmentAddComponent implements OnInit {
   addForm1: FormGroup;
@@ -33,7 +34,8 @@ export class UniversityDepartmentAddComponent implements OnInit {
     private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private caseService: CaseService,
-    private router: Router
+    private router: Router,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -52,6 +54,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
     if (this.addForm1.valid && this.getModel().universityId > 0) {
       this.universityDepartmentService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/universitydepartments']);
         },

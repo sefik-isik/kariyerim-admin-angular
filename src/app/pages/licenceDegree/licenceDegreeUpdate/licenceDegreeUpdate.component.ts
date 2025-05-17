@@ -1,6 +1,5 @@
 import { CaseService } from './../../../services/case.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -14,33 +13,37 @@ import { Router } from '@angular/router';
 
 import { LicenceDegree } from '../../../models/licenceDegree';
 import { LicenceDegreeService } from '../../../services/licenseDegree.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-licenceDegreeUpdate',
   templateUrl: './licenceDegreeUpdate.component.html',
   styleUrls: ['./licenceDegreeUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LicenceDegreeUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() licenceDegree: LicenceDegree;
   licenceDegreeId: number;
 
-  componentTitle = 'Licence Degree Update';
+  componentTitle = 'Licence Degree Update Form';
 
   constructor(
     private licenceDegreeService: LicenceDegreeService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['licencedegreeId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.licenceDegree.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -65,6 +68,7 @@ export class LicenceDegreeUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.licenceDegreeService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/licencedegrees']);
         },

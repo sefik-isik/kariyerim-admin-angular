@@ -2,7 +2,7 @@ import { LocalStorageService } from './../../../services/localStorage.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/userDTO';
@@ -11,17 +11,15 @@ import { AdminModel } from '../../../models/adminModel';
 import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelUserFileByUser.pipe';
 import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCvEducationUpdateComponent } from '../../personelUserCvEducation/personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { PersonelUserCvEducationDetailComponent } from '../../personelUserCvEducation/personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 
 @Component({
   selector: 'app-personelUserFileDeletedList',
   templateUrl: './personelUserFileDeletedList.component.html',
   styleUrls: ['./personelUserFileDeletedList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    FilterPersonelUserFileByUserPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserFileByUserPipe],
 })
 export class PersonelUserFileDeletedListComponent implements OnInit {
   personelUserFileDTOs: PersonelUserFileDTO[] = [];
@@ -37,11 +35,17 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getAdminValues();
+    this.modalService.activeInstances.subscribe((x) => {
+      if (x.length == 0) {
+        this.getAdminValues();
+      }
+    });
   }
 
   getAdminValues() {
@@ -95,6 +99,38 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
     }, 500);
+  }
+
+  open(personelUserFileDTO: PersonelUserFileDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationUpdateComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserFileDTO = personelUserFileDTO;
+  }
+
+  openDetail(personelUserFileDTO: PersonelUserFileDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserCvEducationDetailComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        centered: true,
+        scrollable: true,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserFileDTO = personelUserFileDTO;
   }
 
   clearInput1() {

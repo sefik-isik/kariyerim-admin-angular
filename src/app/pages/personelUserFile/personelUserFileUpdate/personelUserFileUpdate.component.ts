@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -19,15 +19,18 @@ import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserFile } from '../../../models/personelUserFile';
+import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserFileUpdate',
   templateUrl: './personelUserFileUpdate.component.html',
   styleUrls: ['./personelUserFileUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserFileUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserFileDTO: PersonelUserFileDTO;
   componentTitle = 'Personel User File Update Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
@@ -44,22 +47,21 @@ export class PersonelUserFileUpdateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private activatedRoute: ActivatedRoute,
+
     private personelUserFileService: PersonelUserFileService,
     private router: Router,
     private personelUserService: PersonelUserService,
     private adminService: AdminService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
   ngOnInit() {
     this.getAdminValues();
     this.createupdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personeluserfileId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserFileDTO.id);
+    }, 200);
   }
 
   checkFile(fileName: string) {
@@ -188,6 +190,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
   update() {
     this.personelUserFileService.update(this.getModel()).subscribe(
       (response) => {
+        this.activeModal.close();
         this.router.navigate(['/dashboard/personeluserfiles']);
       },
       (error) => {

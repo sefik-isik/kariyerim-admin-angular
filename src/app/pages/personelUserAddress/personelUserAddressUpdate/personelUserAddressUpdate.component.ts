@@ -1,7 +1,7 @@
 import { CountryService } from './../../../services/country.service';
 import { City } from './../../../models/city';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+
 import { CityService } from '../../../services/city.service';
 import {
   FormsModule,
@@ -22,15 +22,17 @@ import { PersonelUserAddressService } from '../../../services/personelUserAddres
 import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
 import { LocalStorageService } from '../../../services/localStorage.service';
 import { AdminModel } from '../../../models/adminModel';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserAddressUpdate',
   templateUrl: './personelUserAddressUpdate.component.html',
   styleUrls: ['./personelUserAddressUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserAddressUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() personelUserAddressDTO: PersonelUserAddressDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
@@ -46,18 +48,19 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
   addressDetail: string;
   addressDetailCount: number;
 
-  componentTitle = 'Personel User Address Update';
+  componentTitle = 'Personel User Address Update Form';
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -65,10 +68,8 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
     this.getCountries();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['personeluseraddressId']);
-      });
-    }, 500);
+      this.getUserValues(this.personelUserAddressDTO.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -118,6 +119,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
     ) {
       this.personelUserAddressService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personeluseraddresses']);
         },

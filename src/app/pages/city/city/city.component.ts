@@ -12,7 +12,6 @@ import { CityAddComponent } from '../cityAdd/cityAdd.component';
 })
 export class CityComponent {
   componentTitle = 'Cities';
-
   constructor(private modalService: NgbModal) {}
 
   open() {

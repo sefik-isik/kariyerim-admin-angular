@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Router,
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { LocalStorageService } from '../services/localStorage.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -17,8 +15,6 @@ import { ToastrService } from 'ngx-toastr';
 export class StatusGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private localStorageService: LocalStorageService,
-    private router: Router,
     private toastrService: ToastrService
   ) {}
 
@@ -29,8 +25,6 @@ export class StatusGuard implements CanActivate {
     if (this.authService.isAdmin('status')) {
       return true;
     } else {
-      //this.localStorageService.clearLocalStorage();
-      //this.authService.logout();
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return false;
     }

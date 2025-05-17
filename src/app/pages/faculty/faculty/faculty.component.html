@@ -1,101 +1,32 @@
-<div class="card">
+<div class="container">
   <div class="alert alert-dark" role="alert">
-    {{ componentTitle }}
+    <i
+      (click)="open()"
+      class="bi bi-plus-circle"
+      style="color: black; font-size: 16px; cursor: pointer"
+    >
+      {{ componentTitle }}</i
+    >
   </div>
-  <div class="card-body">
-    <div class="form-group">
-      <div class="input-group mb-3">
-        <span class="input-group-text"><i class="bi bi-filter"></i></span>
-        <input
-          type="text"
-          [(ngModel)]="filter1"
-          class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Faculties..."
-        />
-        <datalist id="datalist1">
-          <option
-            *ngFor="let faculty of faculties"
-            value="{{ faculty.facultyName }}"
-          ></option>
-        </datalist>
-        <span class="input-group-text">
-          <i
-            (click)="clearInput1()"
-            class="bi bi-x-circle"
-            style="cursor: pointer"
-          ></i>
-        </span>
-      </div>
-      <div class="mt-3">
-        <button
-          [routerLink]="['facultyadd']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-success"
-        >
-          Add New Faculty <i class="bi bi-plus-circle"></i>
-        </button>
-        <button
-          [routerLink]="['facultyofdeleted']"
-          routerLinkActive="active"
-          ariaCurrentWhenActive="page"
-          type="button"
-          class="btn btn-outline-secondary"
-          style="margin-left: 10px"
-        >
-          Deleted Faculty <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-      <div class="mt-3 table-responsive-xxl">
-        <table
-          *ngIf="faculties.length > 0"
-          class="table table-striped table-hover table-sm"
-        >
-          <thead>
-            <tr>
-              <th>faculty Id</th>
-              <th>faculty Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
-              <th></th>
-              <th>
-                <i
-                  (click)="deleteAll()"
-                  class="bi bi-trash"
-                  style="color: red"
-                ></i>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let faculty of faculties | filterFaculty : filter1">
-              <td>{{ faculty.id }}</td>
-              <td>{{ faculty.facultyName }}</td>
-              <td>{{ faculty.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
-              <td>{{ faculty.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}</td>
-              <td>
-                <i
-                  [routerLink]="['facultyupdate/' + faculty.id]"
-                  routerLinkActive="active"
-                  ariaCurrentWhenActive="page"
-                  class="bi bi-pencil-square"
-                  style="color: midnightblue"
-                ></i>
-              </td>
-              <td>
-                <i
-                  (click)="delete(faculty)"
-                  class="bi bi-trash"
-                  style="color: red"
-                ></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+
+  <div class="nav nav-tabs d-flex mt-3" id="nav-tab" role="tablist">
+    <a
+      class="w-100 nav-item nav-link"
+      routerLink="facultylisttab"
+      routerLinkActive="active"
+      style="flex: 1"
+    >
+      {{ componentTitle }} List
+    </a>
+
+    <a
+      class="w-100 nav-item nav-link"
+      routerLink="facultydeletedlisttab"
+      routerLinkActive="active"
+      style="flex: 1"
+    >
+      {{ componentTitle }} Deleted List
+    </a>
   </div>
 </div>
+<router-outlet></router-outlet>

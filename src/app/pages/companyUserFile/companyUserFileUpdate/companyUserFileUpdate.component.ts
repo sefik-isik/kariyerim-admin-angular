@@ -1,6 +1,5 @@
 import { CompanyUserService } from './../../../services/companyUser.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -20,15 +19,18 @@ import { HttpEventType } from '@angular/common/http';
 import { AdminService } from '../../../services/admin.service';
 import { AdminModel } from '../../../models/adminModel';
 import { LocalStorageService } from '../../../services/localStorage.service';
+import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-companyUserFileUpdate',
   templateUrl: './companyUserFileUpdate.component.html',
   styleUrls: ['./companyUserFileUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserFileUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() companyUserFileDTO: CompanyUserFileDTO;
   componentTitle = 'Company User File Update Form';
   selectedFile: File | null = null;
   filePath: string | null = null;
@@ -45,22 +47,21 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private activatedRoute: ActivatedRoute,
+
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
   ngOnInit() {
     this.getAdminValues();
     this.createupdateForm();
 
     setTimeout(() => {
-      this.activatedRoute.params.subscribe((params) => {
-        this.getUserValues(params['companyuserfileId']);
-      });
-    }, 500);
+      this.getUserValues(this.companyUserFileDTO.id);
+    }, 200);
   }
 
   checkFile(fileName: string) {
@@ -189,6 +190,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   update() {
     this.companyUserFileService.update(this.getModel()).subscribe(
       (response) => {
+        this.activeModal.close();
         this.router.navigate(['/dashboard/companyuserfiles']);
       },
       (error) => {

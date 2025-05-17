@@ -1,0 +1,40 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ companyUserImageDTO.id }}</p>
+    <p class="card-text"><b>userId: </b>{{ companyUserImageDTO.userId }}</p>
+    <p class="card-text"><b>email: </b>{{ companyUserImageDTO.email }}</p>
+    <p class="card-text">
+      <b>companyUserId: </b>{{ companyUserImageDTO.companyUserId }}
+    </p>
+    <p class="card-text">
+      <b>companyUserName: </b>{{ companyUserImageDTO.companyUserName }}
+    </p>
+    <p class="card-text">
+      <b>imagePath: </b>{{ companyUserImageDTO.imagePath }}
+    </p>
+    <p class="card-text">
+      <b>imageName: </b>{{ companyUserImageDTO.imageName }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ companyUserImageDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ companyUserImageDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ companyUserImageDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

@@ -15,7 +15,7 @@ import {
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/country';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { City } from '../../../models/city';
 import { Region } from '../../../models/region';
 import { UserDTO } from '../../../models/userDTO';
@@ -24,12 +24,13 @@ import { PersonelUserDTO } from '../../../models/personelUserDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { PersonelUserAddress } from '../../../models/personelUserAddress';
 import { PersonelUserService } from '../../../services/personelUser.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
   templateUrl: './personelUserAddressAdd.component.html',
   styleUrls: ['./personelUserAddressAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserAddressAddComponent implements OnInit {
   addForm: FormGroup;
@@ -55,7 +56,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private personelUserService: PersonelUserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -99,6 +101,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
     ) {
       this.personelUserAddressService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personeluseraddresses']);
         },

@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserDTO } from '../../../models/personelUserDTO';
@@ -27,12 +27,13 @@ import { University } from '../../../models/university';
 import { Faculty } from '../../../models/faculty';
 import { UniversityDepartment } from '../../../models/universityDepartment';
 import { PersonelUserCv } from '../../../models/personelUserCv';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
   templateUrl: './personelUserCvEducationAdd.component.html',
   styleUrls: ['./personelUserCvEducationAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvEducationAddComponent implements OnInit {
   addForm: FormGroup;
@@ -59,7 +60,8 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    private personelUserCvService: PersonelUserCvService
+    private personelUserCvService: PersonelUserCvService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
@@ -111,6 +113,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     ) {
       this.personelUserCvEducationService.add(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personelusercveducations']);
         },

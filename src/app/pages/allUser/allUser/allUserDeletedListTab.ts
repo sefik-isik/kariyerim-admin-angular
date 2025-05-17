@@ -1,4 +1,5 @@
-import { AllUserDeletedListComponent } from '../allUserDeletedLİst/allUserDeletedList.component';
+import { AllUserDeletedListComponent } from './../allUserDeletedLİst/allUserDeletedList.component';
+
 import { Component } from '@angular/core';
 
 @Component({

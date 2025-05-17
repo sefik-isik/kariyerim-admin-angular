@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -13,33 +12,37 @@ import { Router } from '@angular/router';
 import { FacultyService } from '../../../services/faculty.service';
 import { Faculty } from '../../../models/faculty';
 import { CaseService } from '../../../services/case.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-facultyUpdate',
   templateUrl: './facultyUpdate.component.html',
   styleUrls: ['./facultyUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class FacultyUpdateComponent implements OnInit {
   updateForm: FormGroup;
+  @Input() faculty: Faculty;
   facultyId: number;
 
-  componentTitle = 'Faculty Update';
+  componentTitle = 'Faculty Update Form';
 
   constructor(
     private facultyService: FacultyService,
-    private activatedRoute: ActivatedRoute,
+
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public activeModal: NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.createUpdateForm();
-    this.activatedRoute.params.subscribe((params) => {
-      this.getById(params['facultyId']);
-    });
+
+    setTimeout(() => {
+      this.getById(this.faculty.id);
+    }, 200);
   }
 
   createUpdateForm() {
@@ -64,6 +67,7 @@ export class FacultyUpdateComponent implements OnInit {
     if (this.updateForm.valid) {
       this.facultyService.update(this.getModel()).subscribe(
         (response) => {
+          this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/faculties']);
         },
