@@ -144,7 +144,7 @@ export const routes: Routes = [
         canActivate: [LoginGuard, ExpirationGuard],
       },
       {
-        path: 'allusers',
+        path: 'alluser',
         component: AllUserComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -161,7 +161,7 @@ export const routes: Routes = [
         ],
       },
       {
-        path: 'cities',
+        path: 'city',
         component: CityComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -179,7 +179,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'companyusers',
+        path: 'companyuser',
         component: CompanyUserComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -197,7 +197,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'companyuseraddresses',
+        path: 'companyuseraddress',
         component: CompanyUserAddressComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -215,7 +215,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'companyuserdepartments',
+        path: 'companyuserdepartment',
         component: CompanyUserDepartmentComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -233,7 +233,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'companyuserfiles',
+        path: 'companyuserfile',
         component: CompanyUserFileComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -251,7 +251,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'companyuserimages',
+        path: 'companyuserimage',
         component: CompanyUserImageComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -279,7 +279,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'sectors',
+        path: 'sector',
         component: SectorComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -297,7 +297,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'countries',
+        path: 'country',
         component: CountryComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -315,7 +315,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusercvs',
+        path: 'personelusercv',
         component: PersonelUserCvComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -333,7 +333,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'driverlicences',
+        path: 'driverlicence',
         component: DriverLicenceComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -351,7 +351,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'faculties',
+        path: 'faculty',
         component: FacultyComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -369,7 +369,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'languagelevels',
+        path: 'languagelevel',
         component: LanguageLevelComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -387,7 +387,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'languages',
+        path: 'language',
         component: LanguageComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -405,7 +405,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'licencedegrees',
+        path: 'licencedegree',
         component: LicenceDegreeComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -428,12 +428,12 @@ export const routes: Routes = [
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'modelmenulisttab',
+            path: 'modelmenumainlisttab',
             component: ModelMenuListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'modelmenudeletedlisttab',
+            path: 'modelmenumaindeletedlisttab',
             component: ModelMenuDeletedListComponent,
             canActivate: [LoginGuard, ExpirationGuard],
           },
@@ -441,7 +441,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'operationclaims',
+        path: 'operationclaim',
         component: OperationClaimComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -459,7 +459,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'regions',
+        path: 'region',
         component: RegionComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -477,7 +477,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'taxoffices',
+        path: 'taxoffice',
         component: TaxOfficeComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -495,7 +495,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'universities',
+        path: 'university',
         component: UniversityComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -513,7 +513,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'universitydepartments',
+        path: 'universitydepartment',
         component: UniversityDepartmentComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -531,7 +531,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'useroperationclaims',
+        path: 'useroperationclaim',
         component: UserOperationClaimComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -549,7 +549,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'workingmethods',
+        path: 'workingmethod',
         component: WorkingMethodComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -567,7 +567,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusers',
+        path: 'personeluser',
         component: PersonelUserComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -585,7 +585,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personeluseraddresses',
+        path: 'personeluseraddress',
         component: PersonelUserAddressComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -603,7 +603,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusercoverletters',
+        path: 'personelusercoverletter',
         component: PersonelUserCoverLetterComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -621,7 +621,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusercveducations',
+        path: 'personelusercveducation',
         component: PersonelUserCvEducationComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -639,7 +639,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusercvsummaries',
+        path: 'personelusercvsummary',
         component: PersonelUserCvSummaryComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -657,7 +657,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personeluserfiles',
+        path: 'personeluserfile',
         component: PersonelUserFileComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -675,7 +675,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personeluserimages',
+        path: 'personeluserimage',
         component: PersonelUserImageComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
@@ -703,7 +703,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'personelusercvworkexperiences',
+        path: 'personelusercvworkexperience',
         component: PersonelUserCvWorkExperienceComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [

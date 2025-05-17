@@ -21,7 +21,14 @@
     *ngFor="let modelMenu of modelMenus"
     (click)="setModelMenu(modelMenu)"
     [class]="getModelMenuClass(modelMenu)"
-    [routerLink]="[modelMenu.modelName.toLocaleLowerCase()]"
+    [routerLink]="[
+      (
+        modelMenu.modelName +
+        '/' +
+        modelMenu.modelName +
+        'listtab'
+      ).toLowerCase()
+    ]"
   >
     {{ modelMenu.modelName }}
   </li>
