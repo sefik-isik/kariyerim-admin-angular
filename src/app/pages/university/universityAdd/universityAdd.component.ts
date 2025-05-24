@@ -58,7 +58,7 @@ export class UniversityAddComponent implements OnInit {
       instagramAddress: ['', [Validators.required, Validators.minLength(3)]],
       xAddress: ['', [Validators.required, Validators.minLength(3)]],
       youTubeAddress: ['', [Validators.required, Validators.minLength(3)]],
-      address: ['', [Validators.required, Validators.minLength(50)]],
+      address: ['', [Validators.required, Validators.minLength(20)]],
       description: ['', [Validators.required, Validators.minLength(100)]],
       subDescription: ['', [Validators.required, Validators.minLength(100)]],
     });
