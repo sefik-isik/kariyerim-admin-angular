@@ -9,7 +9,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UniversityDepartment } from '../../../models/universityDepartment';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Department } from '../../../models/department';
 import { DepartmentService } from '../../../services/department.service';

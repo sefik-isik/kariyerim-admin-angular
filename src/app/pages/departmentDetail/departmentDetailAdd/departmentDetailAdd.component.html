@@ -1,0 +1,88 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="addForm">
+      <div class="form-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text">Department Name</span>
+          <input
+            formControlName="departmentName"
+            type="text"
+            class="form-control"
+            list="departmentdatalist"
+            id="department"
+            placeholder="Select Department..."
+          />
+          <datalist id="departmentdatalist">
+            <option
+              *ngFor="let department of departments"
+              value="{{ department.departmentName }}"
+            ></option>
+          </datalist>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Title</span>
+          <input
+            formControlName="title"
+            type="text"
+            class="form-control"
+            id="title"
+            placeholder="title"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            >Description <br />{{ descriptionDetail }} \ 50</span
+          >
+
+          <textarea
+            formControlName="description"
+            class="form-control"
+            id="description"
+            style="height: 120px"
+            minlength="50"
+            maxlength="2000"
+            (input)="countDescription()"
+          ></textarea>
+          <span class="input-group-text">
+            <i
+              (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button (click)="add()" type="button" class="btn btn-outline-primary">
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

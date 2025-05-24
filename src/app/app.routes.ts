@@ -107,6 +107,11 @@ import { ModelMenuComponent } from './pages/modelMenu/modelMenu/modelMenu.compon
 import { DepartmentComponent } from './pages/department/department/department.component';
 import { DepartmentListTab } from './pages/department/department/departmentListTab';
 import { DepartmentDeletedListComponent } from './pages/department/departmentDeletedList/departmentDeletedList.component';
+import { DepartmentDetailComponent } from './pages/department/departmentDetail/departmentDetail.component';
+import { DepartmentDetailMainListTab } from './pages/departmentDetail/departmentDetailMain/departmentDetailMainListTab';
+import { DepartmentDetailDeletedListComponent } from './pages/departmentDetail/departmentDetailDeletedList/departmentDetailDeletedList.component';
+import { DepartmentDetailMainComponent } from './pages/departmentDetail/departmentDetailMain/departmentDetailMain.component';
+import { DepartmentDetailMainDeletedListTab } from './pages/departmentDetail/departmentDetailMain/departmentDetailMainDeletedListTab';
 //-----------------
 
 export const routes: Routes = [
@@ -330,6 +335,24 @@ export const routes: Routes = [
           {
             path: 'departmentdeletedlisttab',
             component: DepartmentDeletedListComponent,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'departmentdetail',
+        component: DepartmentDetailMainComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'departmentdetaillisttab',
+            component: DepartmentDetailMainListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'departmentdetaildeletedlisttab',
+            component: DepartmentDetailMainDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
