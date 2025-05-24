@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { University } from '../../../models/university';
 import { UniversityService } from '../../../services/university.service';
 import { FilterUniversityPipe } from '../../../pipes/filterUniversity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
+import { UniversityDTO } from '../../../models/universityDTO';
 
 @Component({
   selector: 'app-universityList',
@@ -18,8 +18,7 @@ import { UniversityDetailComponent } from '../universityDetail/universityDetail.
   imports: [CommonModule, FormsModule, FilterUniversityPipe],
 })
 export class UniversityListComponent implements OnInit {
-  universities: University[] = [];
-
+  universityDTOs: UniversityDTO[] = [];
   componentTitle = 'Universities';
   filter1: string;
 
@@ -40,15 +39,15 @@ export class UniversityListComponent implements OnInit {
   }
 
   getUniversities() {
-    this.universityService.getAll().subscribe(
+    this.universityService.getAllDTO().subscribe(
       (response) => {
-        this.universities = response.data;
+        this.universityDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  delete(university: University) {
+  delete(universityDTO: UniversityDTO) {
     if (!this.authService.isAdmin('status')) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
@@ -57,7 +56,7 @@ export class UniversityListComponent implements OnInit {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
     }
-    this.universityService.delete(university).subscribe(
+    this.universityService.delete(universityDTO).subscribe(
       (response) => {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
@@ -75,8 +74,8 @@ export class UniversityListComponent implements OnInit {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
     }
-    this.universities.forEach((university) => {
-      this.universityService.delete(university).subscribe(
+    this.universityDTOs.forEach((universityDTO) => {
+      this.universityService.delete(universityDTO).subscribe(
         (response) => {},
         (error) => console.error
       );
@@ -87,7 +86,7 @@ export class UniversityListComponent implements OnInit {
     }, 500);
   }
 
-  open(university: University) {
+  open(universityDTO: UniversityDTO) {
     const modalRef = this.modalService.open(UniversityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -97,10 +96,10 @@ export class UniversityListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.university = university;
+    modalRef.componentInstance.universityDTO = universityDTO;
   }
 
-  openDetail(university: University) {
+  openDetail(universityDTO: UniversityDTO) {
     const modalRef = this.modalService.open(UniversityDetailComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -110,7 +109,7 @@ export class UniversityListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.university = university;
+    modalRef.componentInstance.universityDTO = universityDTO;
   }
 
   clearInput1() {

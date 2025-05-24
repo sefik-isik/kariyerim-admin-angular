@@ -191,7 +191,9 @@ export class PersonelUserFileUpdateComponent implements OnInit {
     this.personelUserFileService.update(this.getModel()).subscribe(
       (response) => {
         this.activeModal.close();
-        this.router.navigate(['/dashboard/personeluserfiles']);
+        this.router.navigate([
+          '/dashboard/personeluserfile/personeluserfilelisttab',
+        ]);
       },
       (error) => {
         this.toastrService.error(error.error.message);

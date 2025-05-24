@@ -50,7 +50,7 @@ export class SectorAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/sectors']);
+          this.router.navigate(['/dashboard/sector/sectorlisttab']);
         },
         (error) => {
           this.toastrService.error(error.error.message);

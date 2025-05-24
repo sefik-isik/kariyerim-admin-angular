@@ -71,7 +71,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
   }
 
   getPersonelUserCvSummaries(adminModel: AdminModel) {
-    this.personelUserCvSummaryService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserCvSummaryService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserCvSummaryDTOs = response.data;
       },

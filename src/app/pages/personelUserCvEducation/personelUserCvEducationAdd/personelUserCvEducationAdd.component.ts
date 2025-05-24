@@ -21,13 +21,13 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDTO } from '../../../models/personelUserCvEducationDTO';
 import { UniversityService } from '../../../services/university.service';
-import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { FacultyService } from '../../../services/faculty.service';
 import { University } from '../../../models/university';
 import { Faculty } from '../../../models/faculty';
-import { UniversityDepartment } from '../../../models/universityDepartment';
 import { PersonelUserCv } from '../../../models/personelUserCv';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DepartmentService } from '../../../services/department.service';
+import { Department } from '../../../models/department';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -40,7 +40,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   universities: University[] = [];
   faculties: Faculty[] = [];
-  universityDepartments: UniversityDepartment[] = [];
+  departments: Department[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   detailText: string;
   componentTitle = 'Personel User Cv Education Add Form';
@@ -51,7 +51,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private universityService: UniversityService,
-    private universityDepartmentService: UniversityDepartmentService,
+    private departmentService: DepartmentService,
     private facultyService: FacultyService,
     private personelUserCvEducationService: PersonelUserCvEducationService,
     private toastrService: ToastrService,
@@ -115,7 +115,9 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personelusercveducations']);
+          this.router.navigate([
+            '/dashboard/personelusercveducation/personelusercveducationlisttab',
+          ]);
         },
         (error) => {
           console.error;
@@ -206,9 +208,9 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   }
 
   getUniversityDepartments() {
-    this.universityDepartmentService.getAll().subscribe(
+    this.departmentService.getAll().subscribe(
       (response) => {
-        this.universityDepartments = response.data;
+        this.departments = response.data;
       },
       (error) => console.error
     );
@@ -246,7 +248,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   }
 
   getepartmentId(departmentName: string): number {
-    const departmentId = this.universityDepartments.filter(
+    const departmentId = this.departments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;
 

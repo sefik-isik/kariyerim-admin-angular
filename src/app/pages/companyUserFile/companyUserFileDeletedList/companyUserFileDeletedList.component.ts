@@ -69,7 +69,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
   }
 
   getCompanyUserFiles(adminModel: AdminModel) {
-    this.companyUserFileService.getAllDeletedDTO(adminModel).subscribe(
+    this.companyUserFileService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserFileDTOs = response.data;
       },

@@ -48,7 +48,9 @@ export class ModelMenuAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/modelmenulists']);
+          this.router.navigate([
+            '/dashboard/modelmenulist/modelmenulistlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

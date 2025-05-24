@@ -69,7 +69,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   }
 
   getPersonelUserFiles(adminModel: AdminModel) {
-    this.personelUserFileService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserFileService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserFileDTOs = response.data;
       },

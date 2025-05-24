@@ -134,7 +134,7 @@ export class CompanyUserUpdateComponent implements OnInit {
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
           this.activeModal.close();
-          this.router.navigate(['/dashboard/companyusers']);
+          this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
         },
         (error) => {
           this.toastrService.error(error.error.message);

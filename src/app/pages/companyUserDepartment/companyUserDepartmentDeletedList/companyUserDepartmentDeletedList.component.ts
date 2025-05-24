@@ -70,7 +70,7 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
   }
 
   getCompanyUserDepartments(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getAllDeletedDTO(adminModel).subscribe(
+    this.companyUserDepartmentService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserDepartmentDTOs = response.data;
       },

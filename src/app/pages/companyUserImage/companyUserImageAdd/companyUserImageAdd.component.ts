@@ -135,7 +135,9 @@ export class CompanyUserImageAddComponent implements OnInit {
       .subscribe(
         (response) => {
           this.activeModal.close();
-          this.router.navigate(['/dashboard/companyuserimages']);
+          this.router.navigate([
+            '/dashboard/companyuserimage/companyuserimagelisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

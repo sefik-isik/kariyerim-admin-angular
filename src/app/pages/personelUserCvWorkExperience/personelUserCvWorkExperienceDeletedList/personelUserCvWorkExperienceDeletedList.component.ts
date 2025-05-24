@@ -78,7 +78,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
 
   getPersonelUserCvWorkExperiences(adminModel: AdminModel) {
     this.personelUserCvWorkExperienceService
-      .getAllDeletedDTO(adminModel)
+      .getDeletedAllDTO(adminModel)
       .subscribe(
         (response) => {
           this.personelUserCvWorkExperienceDTOs = response.data;

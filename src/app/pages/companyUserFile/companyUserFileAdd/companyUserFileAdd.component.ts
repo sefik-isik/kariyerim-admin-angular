@@ -148,7 +148,9 @@ export class CompanyUserFileAddComponent {
       .add(this.getModel(this.filePath, this.fileName))
       .subscribe(
         (response) => {
-          this.router.navigate(['/dashboard/companyuserfiles']);
+          this.router.navigate([
+            '/dashboard/companyuserfile/companyuserfilelisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

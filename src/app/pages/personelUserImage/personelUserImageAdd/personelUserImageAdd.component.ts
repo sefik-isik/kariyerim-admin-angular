@@ -135,7 +135,9 @@ export class PersonelUserImageAddComponent implements OnInit {
       .subscribe(
         (response) => {
           this.activeModal.close();
-          this.router.navigate(['/dashboard/personeluserimages']);
+          this.router.navigate([
+            '/dashboard/personeluserimage/personeluserimagelisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

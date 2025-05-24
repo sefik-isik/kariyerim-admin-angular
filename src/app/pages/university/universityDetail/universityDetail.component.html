@@ -1,20 +1,48 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <p class="card-text"><b>Id: </b>{{ university.id }}</p>
+    <p class="card-text"><b>Id: </b>{{ universityDTO.id }}</p>
     <p class="card-text">
-      <b>universityName: </b>{{ university.universityName }}
+      <b>universityName: </b>{{ universityDTO.universityName }}
+    </p>
+    <p class="card-text"><b>sectorId: </b>{{ universityDTO.sectorId }}</p>
+    <p class="card-text"><b>sectorName: </b>{{ universityDTO.sectorName }}</p>
+    <p class="card-text"><b>address: </b>{{ universityDTO.address }}</p>
+    <p class="card-text"><b>workerCount: </b>{{ universityDTO.workerCount }}</p>
+    <p class="card-text">
+      <b>yearOfEstablishment: </b
+      >{{ universityDTO.yearOfEstablishment | date : "dd/MM/yyyy" }}
+    </p>
+    <p class="card-text"><b>description: </b>{{ universityDTO.description }}</p>
+    <p class="card-text">
+      <b>subDescription: </b>{{ universityDTO.subDescription }}
+    </p>
+    <p class="card-text"><b>webAddress: </b>{{ universityDTO.webAddress }}</p>
+    <p class="card-text">
+      <b>webNewsAddress: </b>{{ universityDTO.webNewsAddress }}
+    </p>
+    <p class="card-text">
+      <b>facebookAddress: </b>{{ universityDTO.facebookAddress }}
+    </p>
+    <p class="card-text">
+      <b>instagramAddress: </b>{{ universityDTO.instagramAddress }}
+    </p>
+    <p class="card-text">
+      <b>youTubeAddress: </b>{{ universityDTO.youTubeAddress }}
+    </p>
+    <p class="card-text">
+      <b>youTubeEmbedAddress: </b>{{ universityDTO.youTubeEmbedAddress }}
     </p>
     <p class="card-text">
       <b>createdDate: </b
-      >{{ university.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ universityDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>updatedDate: </b
-      >{{ university.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ universityDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>deletedDate: </b
-      >{{ university.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ universityDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
   </div>
 </div>

@@ -92,11 +92,11 @@ export class PersonelUserFileService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserFileDTO>> {
     return this.httpClient.post<ListResponseModel<PersonelUserFileDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

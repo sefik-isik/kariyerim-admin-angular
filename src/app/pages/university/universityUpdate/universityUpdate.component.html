@@ -24,6 +24,263 @@
             </span>
           </div>
 
+          <div class="input-group mb-3">
+            <span class="input-group-text">yearOfEstablishment</span>
+            <input
+              formControlName="yearOfEstablishment"
+              type="date"
+              class="form-control"
+              id="yearOfEstablishment"
+              placeholder="yearOfEstablishment"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">workerCount</span>
+            <input
+              formControlName="workerCount"
+              type="text"
+              class="form-control"
+              id="workerCount"
+              placeholder="workerCount"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput3()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Sectors</span>
+            <input
+              formControlName="sectorName"
+              type="text"
+              class="form-control"
+              list="sectorDatalist"
+              id="input1"
+              placeholder="Select Sector..."
+              minlength="3"
+            />
+            <datalist id="sectorDatalist">
+              <option
+                *ngFor="let sector of sectors"
+                value="{{ sector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput4()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">webAddress</span>
+            <input
+              formControlName="webAddress"
+              type="text"
+              class="form-control"
+              id="webAddress"
+              placeholder="webAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput5()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">webNewsAddress</span>
+            <input
+              formControlName="webNewsAddress"
+              type="text"
+              class="form-control"
+              id="webNewsAddress"
+              placeholder="webNewsAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput6()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">youTubeEmbedAddress</span>
+            <input
+              formControlName="youTubeEmbedAddress"
+              type="text"
+              class="form-control"
+              id="youTubeEmbedAddress"
+              placeholder="youTubeEmbedAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput7()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">facebookAddress</span>
+            <input
+              formControlName="facebookAddress"
+              type="text"
+              class="form-control"
+              id="facebookAddress"
+              placeholder="facebookAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput8()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">instagramAddress</span>
+            <input
+              formControlName="instagramAddress"
+              type="text"
+              class="form-control"
+              id="instagramAddress"
+              placeholder="instagramAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput9()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">xAddress</span>
+            <input
+              formControlName="xAddress"
+              type="text"
+              class="form-control"
+              id="xAddress"
+              placeholder="xAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput10()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">youTubeAddress</span>
+            <input
+              formControlName="youTubeAddress"
+              type="text"
+              class="form-control"
+              id="youTubeAddress"
+              placeholder="youTubeAddress"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clearInput11()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"
+              >Address <br />{{ addressDetail }} \ 500</span
+            >
+
+            <textarea
+              formControlName="address"
+              class="form-control"
+              id="address"
+              style="height: 120px"
+              minlength="50"
+              maxlength="500"
+              (input)="countAddress()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput12()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"
+              >description <br />{{ descriptionDetail }} \ 3000</span
+            >
+
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="description"
+              style="height: 120px"
+              minlength="100"
+              maxlength="3000"
+              (input)="countDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput13()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text"
+              >subDescription <br />{{ subDescriptionDetail }} \ 3000</span
+            >
+
+            <textarea
+              formControlName="subDescription"
+              class="form-control"
+              id="subDescriptionDetail"
+              style="height: 120px"
+              minlength="100"
+              maxlength="3000"
+              (input)="countSubDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput14()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
           <div class="d-grid gap-2">
             <button
               (click)="update()"

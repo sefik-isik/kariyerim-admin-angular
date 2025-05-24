@@ -71,7 +71,7 @@ export class CountryUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/countries']);
+          this.router.navigate(['/dashboard/country/countrylisttab']);
         },
         (error) => {
           this.toastrService.error(error.error.message);

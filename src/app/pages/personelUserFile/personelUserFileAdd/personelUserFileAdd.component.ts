@@ -147,7 +147,9 @@ export class PersonelUserFileAddComponent implements OnInit {
       .add(this.getModel(this.filePath, this.fileName))
       .subscribe(
         (response) => {
-          this.router.navigate(['/dashboard/personeluserfiles']);
+          this.router.navigate([
+            '/dashboard/personeluserfile/personeluserfilelisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

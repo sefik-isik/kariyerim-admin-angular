@@ -12,11 +12,11 @@
               formControlName="universityName"
               type="text"
               class="form-control"
-              list="datalist1"
-              id="input1"
+              list="universitydatalist"
+              id="university"
               placeholder="Select University..."
             />
-            <datalist id="datalist1">
+            <datalist id="universitydatalist">
               <option
                 *ngFor="let university of universities"
                 value="{{ university.universityName }}"
@@ -30,18 +30,51 @@
               ></i>
             </span>
           </div>
+
           <div class="input-group mb-3">
-            <span class="input-group-text">University Department Name</span>
+            <span class="input-group-text">Faculty Name</span>
+            <input
+              formControlName="facultyName"
+              type="text"
+              class="form-control"
+              list="facultydatalist"
+              id="faculty"
+              placeholder="Select University..."
+            />
+            <datalist id="facultydatalist">
+              <option
+                *ngFor="let university of universities"
+                value="{{ university.universityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="clearInput2()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Department Name</span>
             <input
               formControlName="departmentName"
               type="text"
               class="form-control"
-              id="input2"
-              placeholder="Department Name"
+              list="departmentdatalist"
+              id="department"
+              placeholder="Select Department..."
             />
+            <datalist id="departmentdatalist">
+              <option
+                *ngFor="let department of departments"
+                value="{{ department.departmentName }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="clearInput3()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>

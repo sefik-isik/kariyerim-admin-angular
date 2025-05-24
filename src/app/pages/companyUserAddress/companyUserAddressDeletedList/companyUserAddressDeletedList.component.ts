@@ -69,7 +69,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
   }
 
   getCompanyUserAddresses(adminModel: AdminModel) {
-    this.companyUserAddressService.getAllDeletedDTO(adminModel).subscribe(
+    this.companyUserAddressService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserAddressDTOs = response.data;
       },

@@ -121,7 +121,9 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personeluseraddresses']);
+          this.router.navigate([
+            '/dashboard/personeluseraddress/personeluseraddresslisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

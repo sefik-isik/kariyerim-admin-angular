@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
-import { University } from '../../../models/university';
 import { UniversityService } from '../../../services/university.service';
 import { FilterUniversityPipe } from '../../../pipes/filterUniversity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
+import { UniversityDTO } from '../../../models/universityDTO';
 
 @Component({
   selector: 'app-universityDeletedList',
@@ -17,8 +16,7 @@ import { UniversityDetailComponent } from '../universityDetail/universityDetail.
   imports: [CommonModule, FormsModule, FilterUniversityPipe],
 })
 export class UniversityDeletedListComponent implements OnInit {
-  universities: University[] = [];
-
+  universityDTOs: UniversityDTO[] = [];
   componentTitle = 'University Deleted List';
   filter1: string;
 
@@ -38,16 +36,16 @@ export class UniversityDeletedListComponent implements OnInit {
   }
 
   getUniversities() {
-    this.universityService.getDeletedAll().subscribe(
+    this.universityService.getDeletedAllDTO().subscribe(
       (response) => {
-        this.universities = response.data;
+        this.universityDTOs = response.data;
       },
       (error) => console.error
     );
   }
 
-  unDelete(university: University) {
-    this.universityService.update(university).subscribe(
+  unDelete(universityDTOs: UniversityDTO) {
+    this.universityService.update(universityDTOs).subscribe(
       (response) => {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
@@ -57,8 +55,8 @@ export class UniversityDeletedListComponent implements OnInit {
   }
 
   unDeleteAll() {
-    this.universities.forEach((university) => {
-      this.universityService.update(university).subscribe(
+    this.universityDTOs.forEach((universityDTO) => {
+      this.universityService.update(universityDTO).subscribe(
         (response) => {},
         (error) => console.error
       );
@@ -69,7 +67,7 @@ export class UniversityDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  open(university: University) {
+  open(universityDTO: UniversityDTO) {
     const modalRef = this.modalService.open(UniversityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -79,10 +77,10 @@ export class UniversityDeletedListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.university = university;
+    modalRef.componentInstance.universityDTO = universityDTO;
   }
 
-  openDetail(university: University) {
+  openDetail(universityDTO: UniversityDTO) {
     const modalRef = this.modalService.open(UniversityDetailComponent, {
       size: 'lg',
       backdrop: 'static',
@@ -92,7 +90,7 @@ export class UniversityDeletedListComponent implements OnInit {
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
-    modalRef.componentInstance.university = university;
+    modalRef.componentInstance.universityDTO = universityDTO;
   }
 
   clearInput1() {

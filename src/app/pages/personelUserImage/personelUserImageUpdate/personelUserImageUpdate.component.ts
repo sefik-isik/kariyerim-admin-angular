@@ -190,7 +190,9 @@ export class PersonelUserImageUpdateComponent implements OnInit {
     this.personelUserImageService.update(this.getModel()).subscribe(
       (response) => {
         this.activeModal.close();
-        this.router.navigate(['/dashboard/personeluserimages']);
+        this.router.navigate([
+          '/dashboard/personeluserimage/personeluserimagelisttab',
+        ]);
       },
       (error) => {
         this.toastrService.error(error.error.message);

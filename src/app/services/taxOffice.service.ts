@@ -57,8 +57,8 @@ export class TaxOfficeService {
     return this.httpClient.get<ListResponseModel<TaxOfficeDTO>>(path);
   }
 
-  getAllDeletedDTO(): Observable<ListResponseModel<TaxOfficeDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto';
+  getDeletedAllDTO(): Observable<ListResponseModel<TaxOfficeDTO>> {
+    let path = this.newUrlPath + 'getdeletedalldto';
     return this.httpClient.get<ListResponseModel<TaxOfficeDTO>>(path);
   }
 }

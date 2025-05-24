@@ -70,7 +70,9 @@ export class LicenceDegreeUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/licencedegrees']);
+          this.router.navigate([
+            '/dashboard/licencedegree/licencedegreelisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

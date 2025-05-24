@@ -80,11 +80,11 @@ export class PersonelUserCoverLetterService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserCoverLetterDTO>> {
     return this.httpClient.post<ListResponseModel<PersonelUserCoverLetterDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

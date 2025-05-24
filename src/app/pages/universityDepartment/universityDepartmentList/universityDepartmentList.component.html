@@ -9,8 +9,7 @@
           class="form-control"
           list="datalist1"
           id="input1"
-          placeholder="Filter Cities By University..."
-          (change)="getUniversityDepartments()"
+          placeholder="Filter By University..."
         />
         <datalist id="datalist1">
           <option
@@ -35,17 +34,42 @@
           class="form-control"
           list="datalist2"
           id="input2"
-          placeholder="Filter By University Department ..."
+          placeholder="Filter By Faculty ..."
         />
         <datalist id="datalist2">
           <option
-            *ngFor="let universityDepartmentDTO of universityDepartmentDTOs"
-            value="{{ universityDepartmentDTO.departmentName }}"
+            *ngFor="let faculty of faculties"
+            value="{{ faculty.facultyName }}"
           ></option>
         </datalist>
         <span class="input-group-text">
           <i
             (click)="clearInput2()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter3"
+          class="form-control"
+          list="datalist3"
+          id="input2"
+          placeholder="Filter By Department ..."
+        />
+        <datalist id="datalist3">
+          <option
+            *ngFor="let department of departments"
+            value="{{ department.departmentName }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput3()"
             class="bi bi-x-circle"
             style="cursor: pointer"
           ></i>
@@ -60,6 +84,8 @@
           <thead>
             <tr>
               <th>Id</th>
+              <th>University Name</th>
+              <th>Faculty Name</th>
               <th>Department Name</th>
 
               <th></th>
@@ -78,10 +104,13 @@
               *ngFor="
                 let universityDepartmentDTO of universityDepartmentDTOs
                   | filterUniversityDepartmentsByUniversity : filter1
-                  | filterUniversityDepartment : filter2
+                  | filterUniversityFaculty : filter2
+                  | filterUniversityDepartment : filter3
               "
             >
               <td>{{ universityDepartmentDTO.id }}</td>
+              <td>{{ universityDepartmentDTO.universityName }}</td>
+              <td>{{ universityDepartmentDTO.facultyName }}</td>
               <td>{{ universityDepartmentDTO.departmentName }}</td>
 
               <td>

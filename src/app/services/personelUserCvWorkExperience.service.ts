@@ -76,11 +76,11 @@ export class PersonelUserCvWorkExperienceService {
     >(this.newUrlPath + 'getalldto', adminModel);
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserCvWorkExperienceDTO>> {
     return this.httpClient.post<
       ListResponseModel<PersonelUserCvWorkExperienceDTO>
-    >(this.newUrlPath + 'getalldeleteddto', adminModel);
+    >(this.newUrlPath + 'getdeletedalldto', adminModel);
   }
 }

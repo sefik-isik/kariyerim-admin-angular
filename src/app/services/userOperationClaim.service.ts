@@ -67,11 +67,11 @@ export class UserOperationClaimService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<UserOperationClaimDTO>> {
     return this.httpClient.post<ListResponseModel<UserOperationClaimDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

@@ -74,7 +74,9 @@ export class LanguageLevelUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/languagelevels']);
+          this.router.navigate([
+            '/dashboard/languagelevel/languagelevellisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

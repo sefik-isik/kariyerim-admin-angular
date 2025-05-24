@@ -124,7 +124,9 @@ export class PersonelUserCvUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personelusercvs']);
+          this.router.navigate([
+            '/dashboard/personelusercv/personelusercvlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

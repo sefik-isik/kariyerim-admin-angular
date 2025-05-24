@@ -53,8 +53,8 @@ export class RegionService {
     return this.httpClient.get<ListResponseModel<RegionDTO>>(path);
   }
 
-  getAllDeletedDTO(): Observable<ListResponseModel<RegionDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto';
+  getDeletedAllDTO(): Observable<ListResponseModel<RegionDTO>> {
+    let path = this.newUrlPath + 'getdeletedalldto';
     return this.httpClient.get<ListResponseModel<RegionDTO>>(path);
   }
 }

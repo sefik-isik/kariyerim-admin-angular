@@ -191,7 +191,9 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     this.companyUserFileService.update(this.getModel()).subscribe(
       (response) => {
         this.activeModal.close();
-        this.router.navigate(['/dashboard/companyuserfiles']);
+        this.router.navigate([
+          '/dashboard/companyuserfile/companyuserfilelisttab',
+        ]);
       },
       (error) => {
         this.toastrService.error(error.error.message);

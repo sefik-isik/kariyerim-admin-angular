@@ -54,7 +54,7 @@ export class CityDeletedListComponent implements OnInit {
   }
 
   getCities() {
-    this.cityService.getAllDeletedDTO().subscribe(
+    this.cityService.getDeletedAllDTO().subscribe(
       (response) => {
         this.cityDTOs = response.data;
       },

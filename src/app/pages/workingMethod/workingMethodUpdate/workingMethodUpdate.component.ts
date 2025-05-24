@@ -70,7 +70,9 @@ export class WorkingMethodUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/workingmethods']);
+          this.router.navigate([
+            '/dashboard/workingmethod/workingmethodlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

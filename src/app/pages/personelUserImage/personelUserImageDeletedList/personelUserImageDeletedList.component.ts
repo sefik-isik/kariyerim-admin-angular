@@ -70,7 +70,7 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
   }
 
   getPersonelUserImages(adminModel: AdminModel) {
-    this.personelUserImageService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserImageService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserImageDTOs = response.data;
         this.personelUserImagesLenght = this.personelUserImageDTOs.length;

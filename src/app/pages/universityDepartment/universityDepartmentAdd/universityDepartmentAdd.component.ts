@@ -1,4 +1,4 @@
-import { CaseService } from './../../../services/case.service';
+import { DepartmentService } from './../../../services/department.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -15,6 +15,9 @@ import { UniversityDepartmentService } from '../../../services/universityDepartm
 import { UniversityDepartment } from '../../../models/universityDepartment';
 import { University } from '../../../models/university';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Department } from '../../../models/department';
+import { Faculty } from '../../../models/faculty';
+import { FacultyService } from '../../../services/faculty.service';
 
 @Component({
   selector: 'app-universityDepartmentAdd',
@@ -23,17 +26,19 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityDepartmentAddComponent implements OnInit {
-  addForm1: FormGroup;
+  addForm: FormGroup;
   universities: University[];
-
+  faculties: Faculty[];
+  departments: Department[];
   componentTitle = 'University Department Add Form';
 
   constructor(
     private formBuilder: FormBuilder,
     private universityService: UniversityService,
+    private facultyService: FacultyService,
+    private departmentService: DepartmentService,
     private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
-    private caseService: CaseService,
     private router: Router,
     public activeModal: NgbActiveModal
   ) {}
@@ -41,22 +46,32 @@ export class UniversityDepartmentAddComponent implements OnInit {
   ngOnInit() {
     this.createAddForm();
     this.getUniversities();
+    this.getFaculties();
+    this.getDepartments();
   }
 
   createAddForm() {
-    this.addForm1 = this.formBuilder.group({
+    this.addForm = this.formBuilder.group({
       universityName: ['', [Validators.required, Validators.minLength(3)]],
+      facultyName: ['', [Validators.required, Validators.minLength(3)]],
       departmentName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
   add() {
-    if (this.addForm1.valid && this.getModel().universityId > 0) {
+    if (
+      this.addForm.valid &&
+      this.getModel().universityId > 0 &&
+      this.getModel().facultyId > 0 &&
+      this.getModel().departmentId > 0
+    ) {
       this.universityDepartmentService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/universitydepartments']);
+          this.router.navigate([
+            '/dashboard/universitydepartment/universitydepartmentlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);
@@ -69,10 +84,9 @@ export class UniversityDepartmentAddComponent implements OnInit {
 
   getModel(): UniversityDepartment {
     return Object.assign({
-      departmentName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.departmentName
-      ),
-      universityId: this.getUniversityId(this.addForm1.value.universityName),
+      universityId: this.getUniversityId(this.addForm.value.universityName),
+      facultyId: this.getFacultytId(this.addForm.value.facultyName),
+      departmentId: this.getDepartmentId(this.addForm.value.departmentName),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -86,6 +100,24 @@ export class UniversityDepartmentAddComponent implements OnInit {
     );
   }
 
+  getFaculties() {
+    this.facultyService.getAll().subscribe(
+      (response) => {
+        this.faculties = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getDepartments() {
+    this.departmentService.getAll().subscribe(
+      (response) => {
+        this.departments = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
   getUniversityId(universityName: string): number {
     const universityId = this.universities.filter(
       (c) => c.universityName === universityName
@@ -94,14 +126,30 @@ export class UniversityDepartmentAddComponent implements OnInit {
     return universityId;
   }
 
+  getFacultytId(facultyName: string): number {
+    const facultytId = this.faculties.filter(
+      (c) => c.facultyName === facultyName
+    )[0]?.id;
+
+    return facultytId;
+  }
+
+  getDepartmentId(departmentName: string): number {
+    const departmentId = this.departments.filter(
+      (c) => c.departmentName === departmentName
+    )[0]?.id;
+
+    return departmentId;
+  }
+
   clearInput1() {
-    let value = this.addForm1.get('universityName');
+    let value = this.addForm.get('universityName');
     value.reset();
     this.getUniversities();
   }
 
   clearInput2() {
-    let value = this.addForm1.get('departmentName');
+    let value = this.addForm.get('departmentName');
     value.reset();
   }
 }

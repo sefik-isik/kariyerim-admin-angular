@@ -80,11 +80,11 @@ export class PersonelUserCvEducationService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserCvEducationDTO>> {
     return this.httpClient.post<ListResponseModel<PersonelUserCvEducationDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

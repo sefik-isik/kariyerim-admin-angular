@@ -96,7 +96,7 @@ export class CompanyUserAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/companyusers']);
+          this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
         },
         (error) => {
           this.toastrService.error(error.error.message);

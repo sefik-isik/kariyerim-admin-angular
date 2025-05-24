@@ -63,7 +63,7 @@ export class AllUserDeletedListComponent implements OnInit {
   }
 
   getUsers(adminModel: AdminModel) {
-    this.userService.getAllDeletedDTO(adminModel).subscribe(
+    this.userService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
       },

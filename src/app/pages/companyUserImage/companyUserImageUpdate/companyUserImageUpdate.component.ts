@@ -190,7 +190,9 @@ export class CompanyUserImageUpdateComponent implements OnInit {
     this.companyUserImageService.update(this.getModel()).subscribe(
       (response) => {
         this.activeModal.close();
-        this.router.navigate(['/dashboard/companyuserimages']);
+        this.router.navigate([
+          '/dashboard/companyuserimage/companyuserimagelisttab',
+        ]);
       },
       (error) => {
         this.toastrService.error(error.error.message);

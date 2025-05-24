@@ -86,7 +86,9 @@ export class PersonelUserCvAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personelusercvs']);
+          this.router.navigate([
+            '/dashboard/personelusercv/personelusercvlisttab',
+          ]);
         },
         (error) => console.error
       );

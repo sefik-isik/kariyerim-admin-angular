@@ -65,7 +65,7 @@ export class TaxOfficeAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/taxoffices']);
+          this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
         (error) => console.error
       );

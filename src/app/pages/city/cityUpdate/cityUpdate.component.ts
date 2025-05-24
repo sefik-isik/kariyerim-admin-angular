@@ -78,7 +78,7 @@ export class CityUpdateComponent implements OnInit {
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
 
-          this.router.navigate(['dashboard/cities/citylisttab']);
+          this.router.navigate(['dashboard/city/citylisttab']);
           this.activeModal.close();
         },
         (error) => {

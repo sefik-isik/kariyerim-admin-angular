@@ -64,7 +64,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAllDeletedDTO(adminModel).subscribe(
+    this.companyUserService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserDTOs = response.data;
       },

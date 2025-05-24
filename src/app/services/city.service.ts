@@ -54,8 +54,8 @@ export class CityService {
     return this.httpClient.get<ListResponseModel<CityDTO>>(path);
   }
 
-  getAllDeletedDTO(): Observable<ListResponseModel<CityDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto';
+  getDeletedAllDTO(): Observable<ListResponseModel<CityDTO>> {
+    let path = this.newUrlPath + 'getdeletedalldto';
     return this.httpClient.get<ListResponseModel<CityDTO>>(path);
   }
 }

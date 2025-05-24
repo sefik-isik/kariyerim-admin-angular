@@ -60,7 +60,7 @@ export class RegionDeletedListComponent implements OnInit {
   }
 
   getRegions() {
-    this.regionService.getAllDeletedDTO().subscribe(
+    this.regionService.getDeletedAllDTO().subscribe(
       (response) => {
         this.regionDTOs = response.data;
       },

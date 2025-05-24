@@ -106,7 +106,7 @@ export class AllUserUpdateComponent implements OnInit {
       this.authService.updateUser(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/allusers/alluserlisttab']);
+          this.router.navigate(['/dashboard/alluser/alluserlisttab']);
           this.activeModal.close();
         },
         (error) => console.error

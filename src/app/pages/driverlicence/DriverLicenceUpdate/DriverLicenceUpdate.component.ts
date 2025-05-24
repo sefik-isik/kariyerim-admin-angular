@@ -70,7 +70,9 @@ export class DriverLicenceUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/driverlicences']);
+          this.router.navigate([
+            '/dashboard/driverlicence/driverlicencelisttab',
+          ]);
         },
         (error) => {
           console.error;

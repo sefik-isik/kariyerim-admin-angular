@@ -92,11 +92,11 @@ export class CompanyUserImageService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<CompanyUserImageDTO>> {
     return this.httpClient.post<ListResponseModel<CompanyUserImageDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

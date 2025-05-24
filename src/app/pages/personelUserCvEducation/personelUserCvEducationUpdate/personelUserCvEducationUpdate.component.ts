@@ -15,18 +15,18 @@ import { LocalStorageService } from '../../../services/localStorage.service';
 import { AdminModel } from '../../../models/adminModel';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { UniversityService } from '../../../services/university.service';
-import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { FacultyService } from '../../../services/faculty.service';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 import { University } from '../../../models/university';
 import { Faculty } from '../../../models/faculty';
 import { PersonelUserCv } from '../../../models/personelUserCv';
-import { UniversityDepartment } from '../../../models/universityDepartment';
 import { PersonelUserCvEducationDTO } from '../../../models/personelUserCvEducationDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { AdminService } from '../../../services/admin.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DepartmentService } from '../../../services/department.service';
+import { Department } from '../../../models/department';
 
 @Component({
   selector: 'app-personelUserCvEducationUpdate',
@@ -42,7 +42,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   universities: University[] = [];
   faculties: Faculty[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  universityDepartments: UniversityDepartment[] = [];
+  departments: Department[] = [];
   id: number;
   personelUserId: number;
   personelUserName: string;
@@ -55,12 +55,11 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   constructor(
     private personelUserCvEducationService: PersonelUserCvEducationService,
     private universityService: UniversityService,
-    private universityDepartmentService: UniversityDepartmentService,
+    private departmentService: DepartmentService,
     private facultyService: FacultyService,
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private personelUserCvService: PersonelUserCvService,
-
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
@@ -152,7 +151,9 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personelusercveducations']);
+          this.router.navigate([
+            '/dashboard/personelusercveducation/personelusercveducationlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);
@@ -253,9 +254,9 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   }
 
   getUniversityDepartments() {
-    this.universityDepartmentService.getAll().subscribe(
+    this.departmentService.getAll().subscribe(
       (response) => {
-        this.universityDepartments = response.data;
+        this.departments = response.data;
       },
       (error) => console.error
     );
@@ -290,7 +291,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   }
 
   getDepartmentNameById(departmentId: number) {
-    const departmentName = this.universityDepartments.filter(
+    const departmentName = this.departments.filter(
       (c) => c.id === departmentId
     )[0]?.departmentName;
 
@@ -314,7 +315,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   }
 
   getepartmentId(departmentName: string): number {
-    const departmentId = this.universityDepartments.filter(
+    const departmentId = this.departments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;
 

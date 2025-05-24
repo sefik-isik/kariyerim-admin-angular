@@ -70,7 +70,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   }
 
   getCompanyUserImages(adminModel: AdminModel) {
-    this.companyUserImageService.getAllDeletedDTO(adminModel).subscribe(
+    this.companyUserImageService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserImageDTOs = response.data;
         this.companyUserImagesLenght = this.companyUserImageDTOs.length;

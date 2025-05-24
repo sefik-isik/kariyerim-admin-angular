@@ -104,6 +104,9 @@ import { WorkingMethodListTab } from './pages/workingMethod/workingMethod/workin
 import { WorkingMethodDeletedListComponent } from './pages/workingMethod/workingMethodDeletedLİst/workingMethodDeletedList.component';
 import { ModelMenuListComponent } from './pages/modelMenu/modelMenuList/modelMenuList.component';
 import { ModelMenuComponent } from './pages/modelMenu/modelMenu/modelMenu.component';
+import { DepartmentComponent } from './pages/department/department/department.component';
+import { DepartmentListTab } from './pages/department/department/departmentListTab';
+import { DepartmentDeletedListComponent } from './pages/department/departmentDeletedList/departmentDeletedList.component';
 //-----------------
 
 export const routes: Routes = [
@@ -309,6 +312,24 @@ export const routes: Routes = [
           {
             path: 'countrydeletedlisttab',
             component: CountryDeletedListComponent,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'department',
+        component: DepartmentComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'departmentlisttab',
+            component: DepartmentListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'departmentdeletedlisttab',
+            component: DepartmentDeletedListComponent,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],

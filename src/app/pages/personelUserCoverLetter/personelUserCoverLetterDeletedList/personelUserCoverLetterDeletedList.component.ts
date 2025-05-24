@@ -69,7 +69,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
   }
 
   getPersonelUserCoverLetter(adminModel: AdminModel) {
-    this.personelUserCoverLetterService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserCoverLetterService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserCoverLetterDTOs = response.data;
       },

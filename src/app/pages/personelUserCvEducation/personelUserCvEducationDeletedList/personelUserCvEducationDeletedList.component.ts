@@ -69,7 +69,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   }
 
   getPersonelUserCvEducations(adminModel: AdminModel) {
-    this.personelUserCvEducationService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserCvEducationService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserCvEducationDTOs = response.data;
       },

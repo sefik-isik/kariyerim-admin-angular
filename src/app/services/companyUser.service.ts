@@ -72,11 +72,11 @@ export class CompanyUserService {
     );
   }
 
-  getAllDeletedDTO(
+  getDeletedAllDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<CompanyUserDTO>> {
     return this.httpClient.post<ListResponseModel<CompanyUserDTO>>(
-      this.newUrlPath + 'getalldeleteddto',
+      this.newUrlPath + 'getdeletedalldto',
       adminModel
     );
   }

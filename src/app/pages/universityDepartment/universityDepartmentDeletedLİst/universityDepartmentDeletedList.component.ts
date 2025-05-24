@@ -1,3 +1,4 @@
+import { DepartmentService } from './../../../services/department.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,10 @@ import { FilterUniversityDepartmentsByUniversityPipe } from '../../../pipes/filt
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityDepartmentUpdateComponent } from '../universityDepartmentUpdate/universityDepartmentUpdate.component';
 import { UniversityDepartmentDetailComponent } from '../universityDepartmentDetail/universityDepartmentDetail.component';
+import { Department } from '../../../models/department';
+import { FacultyService } from '../../../services/faculty.service';
+import { Faculty } from '../../../models/faculty';
+import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFaculty.pipe';
 
 @Component({
   selector: 'app-universityDepartmentDeletedList',
@@ -20,27 +25,35 @@ import { UniversityDepartmentDetailComponent } from '../universityDepartmentDeta
   imports: [
     CommonModule,
     FormsModule,
-
     FilterUniversityDepartmentPipe,
+    FilterUniversityFacultyPipe,
     FilterUniversityDepartmentsByUniversityPipe,
   ],
 })
 export class UniversityDepartmentDeletedListComponent implements OnInit {
   universityDepartmentDTOs: UniversityDepartmentDTO[] = [];
   universities: University[];
+  faculties: Faculty[] = [];
+  departments: Department[];
   dataLoaded = false;
   filter1 = '';
   filter2 = '';
+  filter3 = '';
   componentTitle = 'Deleted University Departments';
+
   constructor(
     private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private universityService: UniversityService,
+    private facultyService: FacultyService,
+    private departmentService: DepartmentService,
     private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getUniversities();
+    this.getFaculties();
+    this.getDepartments();
     this.getUniversityDepartments();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -58,8 +71,26 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
     );
   }
 
+  getFaculties() {
+    this.facultyService.getAll().subscribe(
+      (response) => {
+        this.faculties = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getDepartments() {
+    this.departmentService.getAll().subscribe(
+      (response) => {
+        this.departments = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
   getUniversityDepartments() {
-    this.universityDepartmentService.getAllDeletedDTO().subscribe(
+    this.universityDepartmentService.getDeletedAllDTO().subscribe(
       (response) => {
         this.universityDepartmentDTOs = response.data;
       },
@@ -131,6 +162,11 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
 
   clearInput2() {
     this.filter2 = null;
-    this.getUniversityDepartments();
+    this.getFaculties();
+  }
+
+  clearInput3() {
+    this.filter3 = null;
+    this.getDepartments();
   }
 }

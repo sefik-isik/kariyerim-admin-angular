@@ -106,7 +106,9 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/personelusercoverletters']);
+          this.router.navigate([
+            '/dashboard/personelusercoverletter/personelusercoverletterlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

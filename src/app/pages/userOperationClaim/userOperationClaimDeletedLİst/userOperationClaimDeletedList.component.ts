@@ -81,7 +81,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   }
 
   getUserOperationClaims(adminModel: AdminModel) {
-    this.userOperationClaimService.getAllDeletedDTO(adminModel).subscribe(
+    this.userOperationClaimService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },

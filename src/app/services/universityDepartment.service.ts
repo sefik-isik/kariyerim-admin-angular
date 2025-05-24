@@ -59,8 +59,8 @@ export class UniversityDepartmentService {
     );
   }
 
-  getAllDeletedDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
-    let path = this.newUrlPath + 'getalldeleteddto';
+  getDeletedAllDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
+    let path = this.newUrlPath + 'getdeletedalldto';
     return this.httpClient.get<ListResponseModel<UniversityDepartmentDTO>>(
       path
     );

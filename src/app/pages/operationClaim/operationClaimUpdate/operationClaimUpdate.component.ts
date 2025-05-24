@@ -67,7 +67,9 @@ export class OperationClaimUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/operationclaims']);
+          this.router.navigate([
+            '/dashboard/operationclaim/operationclaimlisttab',
+          ]);
         },
         (error) => {
           console.error;

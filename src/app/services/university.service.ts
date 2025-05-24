@@ -6,6 +6,7 @@ import { ResponseModel } from '../models/responseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { University } from '../models/university';
+import { UniversityDTO } from '../models/universityDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +50,15 @@ export class UniversityService {
   getById(id: number): Observable<SingleResponseModel<University>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<University>>(path);
+  }
+
+  getAllDTO(): Observable<ListResponseModel<UniversityDTO>> {
+    let path = this.newUrlPath + 'getalldto';
+    return this.httpClient.get<ListResponseModel<UniversityDTO>>(path);
+  }
+
+  getDeletedAllDTO(): Observable<ListResponseModel<UniversityDTO>> {
+    let path = this.newUrlPath + 'getdeletedalldto';
+    return this.httpClient.get<ListResponseModel<UniversityDTO>>(path);
   }
 }

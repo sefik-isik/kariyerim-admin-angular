@@ -50,7 +50,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   }
 
   getCities() {
-    this.cityService.getAllDeletedDTO().subscribe(
+    this.cityService.getDeletedAllDTO().subscribe(
       (response) => {
         this.cities = response.data;
       },
@@ -59,7 +59,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   }
 
   getTaxOffices() {
-    this.taxOfficeService.getAllDeletedDTO().subscribe(
+    this.taxOfficeService.getDeletedAllDTO().subscribe(
       (response) => {
         this.taxOfficeDTOs = response.data;
       },

@@ -1,3 +1,5 @@
+import { FacultyService } from './../../../services/faculty.service';
+import { DepartmentService } from './../../../services/department.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +15,9 @@ import { FilterUniversityDepartmentPipe } from '../../../pipes/filterUniversityD
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityDepartmentUpdateComponent } from '../universityDepartmentUpdate/universityDepartmentUpdate.component';
 import { UniversityDepartmentDetailComponent } from '../universityDepartmentDetail/universityDepartmentDetail.component';
+import { Department } from '../../../models/department';
+import { Faculty } from '../../../models/faculty';
+import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFaculty.pipe';
 
 @Component({
   selector: 'app-universityDepartmentList',
@@ -22,27 +27,36 @@ import { UniversityDepartmentDetailComponent } from '../universityDepartmentDeta
     CommonModule,
     FormsModule,
     FilterUniversityDepartmentPipe,
+    FilterUniversityFacultyPipe,
     FilterUniversityDepartmentsByUniversityPipe,
   ],
 })
 export class UniversityDepartmentListComponent implements OnInit {
   universityDepartmentDTOs: UniversityDepartmentDTO[] = [];
   universities: University[] = [];
+  faculties: Faculty[] = [];
+  departments: Department[];
   filter1 = '';
   filter2 = '';
+  filter3 = '';
 
   componentTitle = 'University Departments';
   constructor(
     private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private universityService: UniversityService,
+    private facultyService: FacultyService,
+    private departmentService: DepartmentService,
     private authService: AuthService,
     private modalService: NgbModal
   ) {}
 
   ngOnInit() {
     this.getUniversities();
+    this.getFaculties();
+    this.getDepartments();
     this.getUniversityDepartments();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getUniversityDepartments();
@@ -54,6 +68,24 @@ export class UniversityDepartmentListComponent implements OnInit {
     this.universityService.getAll().subscribe(
       (response) => {
         this.universities = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getFaculties() {
+    this.facultyService.getAll().subscribe(
+      (response) => {
+        this.faculties = response.data;
+      },
+      (error) => console.error
+    );
+  }
+
+  getDepartments() {
+    this.departmentService.getAll().subscribe(
+      (response) => {
+        this.departments = response.data;
       },
       (error) => console.error
     );
@@ -109,11 +141,6 @@ export class UniversityDepartmentListComponent implements OnInit {
     }, 500);
   }
 
-  getUniversityId(universityName: string): number {
-    return this.universities.find((f) => f.universityName == universityName)
-      ?.id;
-  }
-
   open(universityDepartmentDTO: UniversityDepartmentDTO) {
     const modalRef = this.modalService.open(
       UniversityDepartmentUpdateComponent,
@@ -155,6 +182,11 @@ export class UniversityDepartmentListComponent implements OnInit {
 
   clearInput2() {
     this.filter2 = null;
-    this.getUniversityDepartments();
+    this.getFaculties();
+  }
+
+  clearInput3() {
+    this.filter3 = null;
+    this.getDepartments();
   }
 }

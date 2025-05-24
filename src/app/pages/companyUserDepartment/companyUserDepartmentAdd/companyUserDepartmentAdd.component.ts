@@ -67,7 +67,9 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/companyuserdepartments']);
+          this.router.navigate([
+            '/dashboard/companyuserdepartment/companyuserdepartmentlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

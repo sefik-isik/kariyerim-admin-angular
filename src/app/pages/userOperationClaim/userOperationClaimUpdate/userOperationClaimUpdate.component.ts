@@ -103,7 +103,9 @@ export class UserOperationClaimUpdateComponent implements OnInit {
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate(['/dashboard/useroperationclaims']);
+          this.router.navigate([
+            '/dashboard/useroperationclaim/useroperationclaimlisttab',
+          ]);
         },
         (error) => {
           this.toastrService.error(error.error.message);

@@ -79,7 +79,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
   }
 
   getPersonelUsers(adminModel: AdminModel) {
-    this.personelUserService.getAllDeletedDTO(adminModel).subscribe(
+    this.personelUserService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserDTOs = response.data;
       },
