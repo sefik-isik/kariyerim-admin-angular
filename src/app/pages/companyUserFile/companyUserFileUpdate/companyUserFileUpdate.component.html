@@ -13,7 +13,7 @@
 
         <div class="input-group mb-3" *ngIf="result == true">
           <span class="input-group-text"
-            >File Name : {{ fileName }}
+            >File Own Name : {{ fileName }}
             <span style="margin-left: 10px">
               <i
                 type="button"
@@ -34,6 +34,24 @@
             placeholder="Upload File"
             (change)="onFileSelected($event)"
             aria-label="Upload File"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3" *ngIf="result == false">
+          <span class="input-group-text">File Name</span>
+          <input
+            formControlName="fileOwnName"
+            type="text"
+            class="form-control"
+            id="File"
+            placeholder="File Name"
+            value="{{ fileOwnName }}"
           />
           <span class="input-group-text">
             <i

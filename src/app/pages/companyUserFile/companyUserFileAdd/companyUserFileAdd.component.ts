@@ -32,6 +32,7 @@ export class CompanyUserFileAddComponent {
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
+  fileOwnName: string | null = null;
   companyUserDTOs: CompanyUserDTO[] = [];
   companyUserId: number;
   userId: number;
@@ -60,6 +61,7 @@ export class CompanyUserFileAddComponent {
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
       file: ['', [Validators.required, Validators.minLength(3)]],
+      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -100,69 +102,75 @@ export class CompanyUserFileAddComponent {
   }
 
   onUpload() {
-    if (this.selectedFile) {
-      this.companyUserId = this.getCompanyUserId(
-        this.addForm.value.companyUserName
-      );
-
-      const formData = new FormData();
-      formData.append('file', this.selectedFile, this.selectedFile.name);
-      formData.append('companyUserId', this.companyUserId.toString());
-
-      this.companyUserFileService
-        .uploadFile(formData, this.companyUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`File is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.fileName = event.body.name;
-              this.filePath = event.body.type;
-
-              this.add(this.filePath, this.fileName);
-
-              this.toastrService.success(
-                'Company User File Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-            this.toastrService.error('Error uploading file', error);
-          }
-        );
-    } else {
+    if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
         'No file selected'
       );
+      return;
     }
-  }
 
-  add(filePath: string | null, fileName: string | null) {
+    if (!this.addForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
+    this.companyUserId = this.getCompanyUserId(
+      this.addForm.value.companyUserName
+    );
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('companyUserId', this.companyUserId.toString());
+
     this.companyUserFileService
-      .add(this.getModel(this.filePath, this.fileName))
+      .uploadFile(formData, this.companyUserId)
       .subscribe(
-        (response) => {
-          this.router.navigate([
-            '/dashboard/companyuserfile/companyuserfilelisttab',
-          ]);
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`File is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.fileName = event.body.name;
+            this.filePath = event.body.type;
+
+            this.add();
+
+            this.toastrService.success(
+              'Company User File Added Successfully',
+              'Success'
+            );
+          }
         },
         (error) => {
-          this.toastrService.error(error.error.message);
+          console.error;
+          this.toastrService.error('Error uploading file', error);
         }
       );
   }
 
-  getModel(filePath: string | null, fileName: string | null): CompanyUserFile {
+  add() {
+    this.companyUserFileService.add(this.getModel()).subscribe(
+      (response) => {
+        this.activeModal.close();
+        this.toastrService.success(response.message, 'Başarılı');
+        this.router.navigate([
+          '/dashboard/companyuserfile/companyuserfilelisttab',
+        ]);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getModel(): CompanyUserFile {
     return Object.assign({
       companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
-      filePath: filePath,
-      fileName: fileName,
+      filePath: this.filePath,
+      fileName: this.fileName,
+      fileOwnName: this.addForm.value.fileOwnName,
+
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -223,8 +231,12 @@ export class CompanyUserFileAddComponent {
     value.reset();
     this.getAdminValues();
   }
-
   clearInput3() {
+    let value = this.addForm.get('fileOwnName');
+    value.reset();
+  }
+
+  clearInput4() {
     let value = this.addForm.get('file');
     value.reset();
   }

@@ -32,6 +32,7 @@ export class PersonelUserFileAddComponent implements OnInit {
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
+  fileOwnName: string | null = null;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserId: number;
   userId: number;
@@ -59,6 +60,7 @@ export class PersonelUserFileAddComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
       file: ['', [Validators.required, Validators.minLength(3)]],
+      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -99,69 +101,70 @@ export class PersonelUserFileAddComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.selectedFile) {
-      this.personelUserId = this.getPersonelUserId(
-        this.addForm.value.userEmail
-      );
-
-      const formData = new FormData();
-      formData.append('file', this.selectedFile, this.selectedFile.name);
-      formData.append('personelUserId', this.personelUserId.toString());
-
-      this.personelUserFileService
-        .uploadFile(formData, this.personelUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`File is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.fileName = event.body.name;
-              this.filePath = event.body.type;
-
-              this.add(this.filePath, this.fileName);
-
-              this.toastrService.success(
-                'Personel User File Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-            this.toastrService.error('Error uploading file', error);
-          }
-        );
-    } else {
+    if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
         'No file selected'
       );
+      return;
     }
-  }
+    if (!this.addForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+    this.personelUserId = this.getPersonelUserId(this.addForm.value.userEmail);
 
-  add(filePath: string | null, fileName: string | null) {
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('personelUserId', this.personelUserId.toString());
+
     this.personelUserFileService
-      .add(this.getModel(this.filePath, this.fileName))
+      .uploadFile(formData, this.personelUserId)
       .subscribe(
-        (response) => {
-          this.router.navigate([
-            '/dashboard/personeluserfile/personeluserfilelisttab',
-          ]);
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`File is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.fileName = event.body.name;
+            this.filePath = event.body.type;
+
+            this.add();
+
+            this.toastrService.success(
+              'Personel User File Added Successfully',
+              'Success'
+            );
+          }
         },
         (error) => {
-          this.toastrService.error(error.error.message);
+          console.error;
+          this.toastrService.error('Error uploading file', error);
         }
       );
   }
 
-  getModel(filePath: string | null, fileName: string | null): PersonelUserFile {
+  add() {
+    this.personelUserFileService.add(this.getModel()).subscribe(
+      (response) => {
+        this.activeModal.close();
+        this.toastrService.success(response.message, 'Başarılı');
+        this.router.navigate([
+          '/dashboard/personeluserfile/personeluserfilelisttab',
+        ]);
+      },
+      (error) => {
+        this.toastrService.error(error.error.message);
+      }
+    );
+  }
+
+  getModel(): PersonelUserFile {
     return Object.assign({
       personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
-      filePath: filePath,
-      fileName: fileName,
+      filePath: this.filePath,
+      fileName: this.fileName,
+      fileOwnName: this.addForm.value.fileOwnName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -226,6 +229,11 @@ export class PersonelUserFileAddComponent implements OnInit {
   }
 
   clearInput3() {
+    let value = this.addForm.get('fileOwnName');
+    value.reset();
+  }
+
+  clearInput4() {
     let value = this.addForm.get('file');
     value.reset();
   }

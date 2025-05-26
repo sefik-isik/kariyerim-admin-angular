@@ -33,6 +33,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
+  imageOwnName: string | null = null;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserId: number;
   userId: number;
@@ -59,7 +60,7 @@ export class PersonelUserImageAddComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
       image: ['', [Validators.required, Validators.minLength(3)]],
-      personelUserName: ['', [Validators.required, Validators.minLength(3)]],
+      imageOwnName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -90,71 +91,70 @@ export class PersonelUserImageAddComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.selectedImage && this.addForm.valid) {
-      this.personelUserId = this.getPersonelUserId(
-        this.addForm.value.personelUserName
+    if (!this.selectedImage) {
+      this.toastrService.error(
+        'Please select a image to upload',
+        'No image selected'
       );
-
-      const formData = new FormData();
-      formData.append('image', this.selectedImage, this.selectedImage.name);
-      formData.append('personelUserId', this.personelUserId.toString());
-
-      this.personelUserImageService
-        .uploadImage(formData, this.personelUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`Image is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.imageName = event.body.name;
-              this.imagePath = event.body.type;
-
-              this.add(this.imagePath, this.imageName);
-
-              this.toastrService.success(
-                'Personel User Image Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-          }
-        );
-    } else {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
     }
-  }
 
-  add(imagePath: string | null, imageName: string | null) {
+    if (!this.addForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
+    this.personelUserId = this.getPersonelUserId(this.addForm.value.userEmail);
+
+    const formData = new FormData();
+    formData.append('image', this.selectedImage, this.selectedImage.name);
+    formData.append('personelUserId', this.personelUserId.toString());
+
     this.personelUserImageService
-      .add(this.getModel(this.imagePath, this.imageName))
+      .uploadImage(formData, this.personelUserId)
       .subscribe(
-        (response) => {
-          this.activeModal.close();
-          this.router.navigate([
-            '/dashboard/personeluserimage/personeluserimagelisttab',
-          ]);
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`Image is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.imageName = event.body.name;
+            this.imagePath = event.body.type;
+
+            this.add();
+
+            this.toastrService.success(
+              'Personel User Image Added Successfully',
+              'Success'
+            );
+          }
         },
         (error) => {
-          this.toastrService.error(error.error.message);
+          console.error;
         }
       );
   }
 
-  getModel(
-    imagePath: string | null,
-    imageName: string | null
-  ): PersonelUserImage {
+  add() {
+    this.personelUserImageService.add(this.getModel()).subscribe(
+      (response) => {
+        this.activeModal.close();
+        this.router.navigate([
+          '/dashboard/personeluserimage/personeluserimagelisttab',
+        ]);
+      },
+      (error) => {
+        this.toastrService.error(error.error.message);
+      }
+    );
+  }
+
+  getModel(): PersonelUserImage {
     return Object.assign({
-      personelUserId: this.getPersonelUserId(
-        this.addForm.value.personelUserName
-      ),
-      imagePath: imagePath,
-      imageName: imageName,
+      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
+      imagePath: this.imagePath,
+      imageName: this.imageName,
+      imageOwnName: this.addForm.value.imageOwnName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -197,11 +197,12 @@ export class PersonelUserImageAddComponent implements OnInit {
     return userId;
   }
 
-  getPersonelUserId(email: string): number {
-    const personelId = this.personelUserDTOs.filter((c) => c.email === email)[0]
-      ?.id;
+  getPersonelUserId(userEmail: string): number {
+    const personelUserId = this.personelUserDTOs.filter(
+      (c) => c.email === userEmail
+    )[0]?.id;
 
-    return personelId;
+    return personelUserId;
   }
 
   clearInput1() {
@@ -218,6 +219,11 @@ export class PersonelUserImageAddComponent implements OnInit {
 
   clearInput3() {
     let value = this.addForm.get('image');
+    value.reset();
+  }
+
+  clearInput4() {
+    let value = this.addForm.get('imageOwnName');
     value.reset();
   }
 }

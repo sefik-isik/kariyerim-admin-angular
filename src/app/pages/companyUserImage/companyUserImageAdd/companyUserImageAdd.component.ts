@@ -33,6 +33,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
+  imageOwnName: string | null = null;
   companyUserDTOs: CompanyUserDTO[] = [];
   companyUserId: number;
   userId: number;
@@ -59,6 +60,7 @@ export class CompanyUserImageAddComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       userEmail: ['', [Validators.required, Validators.minLength(3)]],
       image: ['', [Validators.required, Validators.minLength(3)]],
+      imageOwnName: ['', [Validators.required, Validators.minLength(3)]],
       companyUserName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
@@ -90,69 +92,72 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.selectedImage && this.addForm.valid) {
-      this.companyUserId = this.getCompanyUserId(
-        this.addForm.value.companyUserName
+    if (!this.selectedImage) {
+      this.toastrService.error(
+        'Please select a image to upload',
+        'No image selected'
       );
-
-      const formData = new FormData();
-      formData.append('image', this.selectedImage, this.selectedImage.name);
-      formData.append('companyUserId', this.companyUserId.toString());
-
-      this.companyUserImageService
-        .uploadImage(formData, this.companyUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`Image is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.imageName = event.body.name;
-              this.imagePath = event.body.type;
-
-              this.add(this.imagePath, this.imageName);
-
-              this.toastrService.success(
-                'Company User Image Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-          }
-        );
-    } else {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
     }
-  }
 
-  add(imagePath: string | null, imageName: string | null) {
+    if (!this.addForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
+    this.companyUserId = this.getCompanyUserId(
+      this.addForm.value.companyUserName
+    );
+
+    const formData = new FormData();
+    formData.append('image', this.selectedImage, this.selectedImage.name);
+    formData.append('companyUserId', this.companyUserId.toString());
+
     this.companyUserImageService
-      .add(this.getModel(this.imagePath, this.imageName))
+      .uploadImage(formData, this.companyUserId)
       .subscribe(
-        (response) => {
-          this.activeModal.close();
-          this.router.navigate([
-            '/dashboard/companyuserimage/companyuserimagelisttab',
-          ]);
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`Image is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.imageName = event.body.name;
+            this.imagePath = event.body.type;
+
+            this.add();
+
+            this.toastrService.success(
+              'Company User Image Added Successfully',
+              'Success'
+            );
+          }
         },
         (error) => {
-          this.toastrService.error(error.error.message);
+          console.error;
         }
       );
   }
 
-  getModel(
-    imagePath: string | null,
-    imageName: string | null
-  ): CompanyUserImage {
+  add() {
+    this.companyUserImageService.add(this.getModel()).subscribe(
+      (response) => {
+        this.activeModal.close();
+        this.router.navigate([
+          '/dashboard/companyuserimage/companyuserimagelisttab',
+        ]);
+      },
+      (error) => {
+        this.toastrService.error(error.error.message);
+      }
+    );
+  }
+
+  getModel(): CompanyUserImage {
     return Object.assign({
       companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
-      imagePath: imagePath,
-      imageName: imageName,
+      imagePath: this.imagePath,
+      imageName: this.imageName,
+      imageOwnName: this.addForm.value.imageOwnName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -214,6 +219,11 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   clearInput3() {
+    let value = this.addForm.get('imageOwnName');
+    value.reset();
+  }
+
+  clearInput4() {
     let value = this.addForm.get('image');
     value.reset();
   }

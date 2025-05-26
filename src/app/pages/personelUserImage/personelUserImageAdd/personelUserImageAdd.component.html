@@ -31,30 +31,6 @@
             ></i>
           </span>
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Personel Name</span>
-          <input
-            formControlName="personelUserName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input2"
-            placeholder="Select Personel..."
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let personelUserDTO of personelUserDTOs"
-              value="{{ personelUserDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
 
         <div class="input-group mb-3">
           <input
@@ -69,6 +45,24 @@
           <span class="input-group-text">
             <i
               (click)="clearInput3()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">Image Name</span>
+          <input
+            formControlName="imageOwnName"
+            type="text"
+            class="form-control"
+            id="imageOwnName"
+            placeholder="Image Name"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput4()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>

@@ -68,6 +68,24 @@
           />
           <span class="input-group-text">
             <i
+              (click)="clearInput4()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">File Name</span>
+          <input
+            formControlName="fileOwnName"
+            type="text"
+            class="form-control"
+            id="fileOwnName"
+            placeholder="File Name"
+          />
+          <span class="input-group-text">
+            <i
               (click)="clearInput3()"
               class="bi bi-x-circle"
               style="cursor: pointer"

@@ -35,6 +35,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
+  fileOwnName: string | null = null;
   users: UserDTO[] = [];
   companyUsers: CompanyUserDTO[] = [];
   companyUserId: number;
@@ -75,6 +76,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   createupdateForm() {
     this.updateForm = this.formBuilder.group({
       file: ['', [Validators.required, Validators.minLength(3)]],
+      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -97,6 +99,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
         this.companyUserName = this.getCompanyUserById(this.companyUserId);
         this.filePath = response.data.filePath;
         this.fileName = response.data.fileName;
+        this.fileOwnName = response.data.fileOwnName;
         this.checkFile(this.fileName);
       },
       (error) => console.error
@@ -148,49 +151,52 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile, this.selectedFile.name);
-      formData.append('companyUserId', this.companyUserId.toString());
-
-      this.companyUserFileService
-        .uploadFile(formData, this.companyUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`File is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.fileName = event.body.name;
-              this.filePath = event.body.type;
-
-              this.update();
-
-              this.toastrService.success(
-                'Company User File Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-            this.toastrService.error('Error uploading file', error);
-          }
-        );
-    } else {
+    if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
         'No file selected'
       );
+      return;
     }
+    if (!this.updateForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('companyUserId', this.companyUserId.toString());
+
+    this.companyUserFileService
+      .uploadFile(formData, this.companyUserId)
+      .subscribe(
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`File is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.fileName = event.body.name;
+            this.filePath = event.body.type;
+
+            this.update();
+
+            this.toastrService.success(
+              'Company User File Added Successfully',
+              'Success'
+            );
+          }
+        },
+        (error) => {
+          console.error;
+          this.toastrService.error('Error uploading file', error);
+        }
+      );
   }
 
   update() {
     this.companyUserFileService.update(this.getModel()).subscribe(
       (response) => {
         this.activeModal.close();
+        this.toastrService.success(response.message, 'Başarılı');
         this.router.navigate([
           '/dashboard/companyuserfile/companyuserfilelisttab',
         ]);
@@ -207,6 +213,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       companyUserId: this.companyUserId,
       filePath: this.filePath,
       fileName: this.fileName,
+      fileOwnName: this.updateForm.value.fileOwnName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -237,6 +244,11 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   }
 
   clearInput1() {
+    let value = this.updateForm.get('fileOwnName');
+    value.reset();
+  }
+
+  clearInput2() {
     let value = this.updateForm.get('file');
     value.reset();
   }

@@ -36,6 +36,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
+  imageOwnName: string | null = null;
   users: UserDTO[] = [];
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserId: number;
@@ -78,6 +79,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   createcUpdateForm() {
     this.updateForm = this.formBuilder.group({
       image: ['', [Validators.required, Validators.minLength(3)]],
+      imageOwnName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
@@ -147,43 +149,46 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   }
 
   onUpload() {
-    if (this.selectedImage) {
-      const formData = new FormData();
-      formData.append('image', this.selectedImage, this.selectedImage.name);
-      formData.append('personelUserId', this.personelUserId.toString());
-
-      this.personelUserImageService
-        .uploadImage(formData, this.personelUserId)
-        .subscribe(
-          (event) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              const percentDone = Math.round(
-                event.loaded / (event.total * 100)
-              );
-              console.log(`File is ${percentDone}% uploaded.`);
-            } else if (event.type === HttpEventType.Response) {
-              this.imageName = event.body.name;
-              this.imagePath = event.body.type;
-
-              this.update();
-
-              this.toastrService.success(
-                'Personel User Image Added Successfully',
-                'Success'
-              );
-            }
-          },
-          (error) => {
-            console.error;
-            this.toastrService.error('Error uploading image', error);
-          }
-        );
-    } else {
+    if (!this.selectedImage) {
       this.toastrService.error(
         'Please select a image to upload',
         'No image selected'
       );
+      return;
     }
+
+    if (!this.updateForm.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('image', this.selectedImage, this.selectedImage.name);
+    formData.append('personelUserId', this.personelUserId.toString());
+
+    this.personelUserImageService
+      .uploadImage(formData, this.personelUserId)
+      .subscribe(
+        (event) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const percentDone = Math.round(event.loaded / (event.total * 100));
+            console.log(`File is ${percentDone}% uploaded.`);
+          } else if (event.type === HttpEventType.Response) {
+            this.imageName = event.body.name;
+            this.imagePath = event.body.type;
+
+            this.update();
+
+            this.toastrService.success(
+              'Personel User Image Added Successfully',
+              'Success'
+            );
+          }
+        },
+        (error) => {
+          console.error;
+          this.toastrService.error('Error uploading image', error);
+        }
+      );
   }
 
   update() {
@@ -206,6 +211,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
       personelUserId: this.personelUserId,
       imagePath: this.imagePath,
       imageName: this.imageName,
+      imageOwnName: this.updateForm.value.imageOwnName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -256,6 +262,11 @@ export class PersonelUserImageUpdateComponent implements OnInit {
 
   clearInput1() {
     let value = this.updateForm.get('image');
+    value.reset();
+  }
+
+  clearInput2() {
+    let value = this.updateForm.get('imageOwnName');
     value.reset();
   }
 }

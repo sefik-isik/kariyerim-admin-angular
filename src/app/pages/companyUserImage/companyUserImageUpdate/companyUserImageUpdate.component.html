@@ -8,10 +8,11 @@
         <div class="input-group mb-3 justify-content-md-center">
           <div class="card" *ngIf="result == true">
             <img
+              *ngIf="imagePath"
               src="{{ imagePath + 'thumbs/' + imageName }}"
               class="img-fluid img-thumbnail"
               style="border: none"
-              alt="{{ imageName }}"
+              alt="{{ imageOwnName }}"
             />
             <i
               type="button"
@@ -36,6 +37,23 @@
           <span class="input-group-text" *ngIf="result == false">
             <i
               (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div class="input-group mb-3" *ngIf="result == false">
+          <span class="input-group-text">Image Name</span>
+          <input
+            formControlName="imageOwnName"
+            type="text"
+            class="form-control"
+            id="imageOwnName"
+            placeholder="Image Name"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>

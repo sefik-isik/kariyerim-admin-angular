@@ -23,6 +23,7 @@
             </span>
           </span>
         </div>
+
         <div class="input-group mb-3" *ngIf="result == false">
           <input
             formControlName="file"
@@ -36,6 +37,25 @@
           <span class="input-group-text">
             <i
               (click)="clearInput1()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+
+        <div class="input-group mb-3" *ngIf="result == false">
+          <span class="input-group-text">File Name</span>
+          <input
+            formControlName="fileOwnName"
+            type="text"
+            class="form-control"
+            id="File"
+            placeholder="File Name"
+            value="{{ fileOwnName }}"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="clearInput2()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>
