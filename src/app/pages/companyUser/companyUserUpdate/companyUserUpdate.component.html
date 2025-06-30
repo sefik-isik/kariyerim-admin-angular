@@ -3,74 +3,119 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email : {{ userEmail }}</span>
-        </div>
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
-            <span class="input-group-text">Company Name</span>
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
             <input
-              formControlName="companyUserName"
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserDTO.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserDTO.companyUserName"
               type="text"
               class="form-control"
-              list="datalist1"
-              id="input1"
-              placeholder="Select Company..."
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company User Name"
             />
-            <datalist id="datalist1">
-              <option
-                *ngFor="let companyUserDTO of companyUserDTOs"
-                value="{{ companyUserDTO.companyUserName }}"
-              ></option>
-            </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="companyUserNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-          <div class="input-group mb-3">
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Sector Name</span>
             <input
-              formControlName="sectorName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserDTO.sectorName"
               type="text"
               class="form-control"
-              list="datalist2"
-              id="input2"
-              placeholder="Select Company Sector..."
-              (change)="getSectors()"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNameDataList"
             />
-            <datalist id="datalist2">
+            <datalist id="sectorNameDataList">
               <option
-                *ngFor="let sector of sectors"
-                value="{{ sector.sectorName }}"
+                *ngFor="let companyUserSector of sectors"
+                value="{{ companyUserSector.sectorName }}"
               ></option>
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="sectorNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Tax City Name</span>
             <input
-              formControlName="cityName"
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDTO.taxCityName"
               type="text"
               class="form-control"
-              list="datalist3"
-              id="input3"
-              placeholder="Select Tax City..."
-              (change)="getTaxOffices()"
+              name="taxCityName"
+              #taxCityName="ngModel"
+              placeholder="Tax City Name"
+              (blur)="getTaxOffices(companyUserDTO.taxCityName)"
+              list="taxCityNameDataList"
             />
-            <datalist id="datalist3">
+            <datalist id="taxCityNameDataList">
               <option
                 *ngFor="let city of cities"
                 value="{{ city.cityName }}"
@@ -78,25 +123,41 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput3()"
+                (click)="taxCityNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!taxCityName.valid && taxCityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxCityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Tax Office Name</span>
             <input
-              formControlName="taxOfficeName"
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDTO.taxOfficeName"
               type="text"
               class="form-control"
-              list="datalist4"
-              id="input4"
-              placeholder="Select Tax Office..."
-              (input)="getTaxOffices()"
+              name="taxOfficeName"
+              #taxOfficeName="ngModel"
+              placeholder="Tax Office Name"
+              list="taxOfficeNameDataList"
             />
-            <datalist id="datalist4">
+            <datalist id="taxOfficeNameDataList">
               <option
                 *ngFor="let taxOffice of taxOffices"
                 value="{{ taxOffice.taxOfficeName }}"
@@ -104,51 +165,256 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput4()"
+                (click)="taxOfficeNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!taxOfficeName.valid && taxOfficeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxOfficeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Tax Number</span>
             <input
-              formControlName="taxNumber"
-              type="text"
-              class="form-control"
-              id="input5"
-              placeholder="Tax Number"
+              required
               minlength="10"
               maxlength="10"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="companyUserDTO.taxNumber"
+              type="text"
+              class="form-control"
+              name="taxNumber"
+              #taxNumber="ngModel"
+              placeholder="Tax Number"
             />
             <span class="input-group-text">
               <i
-                (click)="clearInput5()"
+                (click)="taxNumberClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!taxNumber.valid && taxNumber.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxNumber)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Worker Count</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDTO.workerCount"
+              type="text"
+              class="form-control"
+              name="workerCount"
+              #workerCount="ngModel"
+              placeholder="Worker Count"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="workerCountClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workerCount.valid && workerCount.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workerCount)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Web Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDTO.webAddress"
+              type="text"
+              class="form-control"
+              name="webAddress"
+              #webAddress="ngModel"
+              placeholder="Web Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="webAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!webAddress.valid && webAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(webAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Year of Establishment</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="companyUserDTO.yearOfEstablishment"
+              type="date"
+              class="form-control"
+              name="yearOfEstablishment"
+              #yearOfEstablishment="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="yearOfEstablishmentClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="!yearOfEstablishment.valid && yearOfEstablishment.touched"
+          >
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(yearOfEstablishment)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Clarification</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDTO.clarification"
+              type="text"
+              class="form-control"
+              name="clarification"
+              #clarification="ngModel"
+              placeholder="Clarification"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clarificationClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!clarification.valid && clarification.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(clarification)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >About <br />{{ aboutDetail }} \ 250</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="1000"
+              pattern=""
+              class="form-control"
+              name="about"
+              #about="ngModel"
+              style="height: 100px"
+              [(ngModel)]="companyUserDTO.about"
+              (input)="count()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="aboutClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!about.valid && about.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(about)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

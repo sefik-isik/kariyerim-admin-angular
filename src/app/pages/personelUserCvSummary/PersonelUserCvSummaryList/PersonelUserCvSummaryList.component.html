@@ -55,10 +55,11 @@
           <tr
             *ngFor="
               let personelUserCvSummaryDTO of personelUserCvSummaryDTOs
-                | filterPersonelUserCvSummaryByUser : filter1
+                | filterPersonelUserCvSummaryByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserCvSummaryDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserCvSummaryDTO.email }}</td>
             <td>{{ personelUserCvSummaryDTO.cvName }}</td>
             <td>{{ personelUserCvSummaryDTO.cvSummaryTitle }}</td>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 import { CountryService } from '../../../services/country.service';
 import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -43,7 +43,7 @@ export class CountryListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class CountryListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class CountryListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.delete(country).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -1,13 +1,13 @@
-import { AdminModel } from './../models/adminModel';
+import { AdminModel } from '../models/auth/adminModel';
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { ResponseModel } from '../models/responseModel';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { UserOperationClaim } from '../models/userOperationClaim';
-import { UserOperationClaimDTO } from '../models/userOperationClaimDTO';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { UserOperationClaim } from '../models/component/userOperationClaim';
+import { UserOperationClaimDTO } from '../models/dto/userOperationClaimDTO';
 
 @Injectable({
   providedIn: 'root',

@@ -6,12 +6,14 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ModelMenuService } from '../../../services/modelMenu.service';
-import { ModelMenu } from '../../../models/modelMenu';
+import { ModelMenu } from '../../../models/component/modelMenu';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-modelMenuAdd',
@@ -20,8 +22,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class ModelMenuAddComponent implements OnInit {
-  addForm: FormGroup;
-
+  modelMenuModel: ModelMenu = {} as ModelMenu;
   componentTitle = 'Add Model Menu Form';
 
   constructor(
@@ -29,31 +30,26 @@ export class ModelMenuAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private modelMenuService: ModelMenuService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      modelName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.modelMenuService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate([
-            '/dashboard/modelmenulist/modelmenulistlisttab',
-          ]);
+          this.router.navigate(['/dashboard/modelmenu/modelmenulisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -63,14 +59,13 @@ export class ModelMenuAddComponent implements OnInit {
 
   getModel(): ModelMenu {
     return Object.assign({
-      modelName: this.addForm.value.modelName,
-
+      id: '',
+      modelName: this.modelMenuModel.modelName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('modelName');
-    value.reset();
+  modelNameClear() {
+    this.modelMenuModel.modelName = '';
   }
 }

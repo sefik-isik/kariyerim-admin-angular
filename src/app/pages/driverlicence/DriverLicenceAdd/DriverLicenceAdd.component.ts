@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { DriverLicence } from '../../../models/driverLicence';
-import { CaseService } from '../../../services/case.service';
+import { DriverLicence } from '../../../models/component/driverLicence';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-driverLicenceAdd',
@@ -21,31 +16,26 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DriverLicenceAddComponent implements OnInit {
-  addForm: FormGroup;
-
-  componentTitle = 'Add Driver Licence Form';
+  driverLicence: DriverLicence = {} as DriverLicence;
+  componentTitle = 'Driver Licence Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private driverLicenceService: DriverLicenceService,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      driverLicenceName: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.driverLicenceService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -54,7 +44,7 @@ export class DriverLicenceAddComponent implements OnInit {
             '/dashboard/driverlicence/driverlicencelisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -65,15 +55,15 @@ export class DriverLicenceAddComponent implements OnInit {
 
   getModel(): DriverLicence {
     return Object.assign({
+      id: '',
       driverLicenceName: this.caseService.capitalizeToUpper(
-        this.addForm.value.driverLicenceName
+        this.driverLicence.driverLicenceName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('driverLicenceName');
-    value.reset();
+  driverLicenceNameClear() {
+    this.driverLicence.driverLicenceName = '';
   }
 }

@@ -34,18 +34,8 @@
             <tr>
               <th>Id</th>
               <th>University Name</th>
-              <th>sectorName</th>
-              <th>workerCount</th>
-              <th>address</th>
+
               <th>webAddress</th>
-              <th>webNewsAddress</th>
-              <th>yearOfEstablishment</th>
-              <th>description</th>
-              <th>subDescription</th>
-              <th>youTubeEmbedAddress</th>
-              <th>youTubeAddress</th>
-              <th>facebookAddress</th>
-              <th>instagramAddress</th>
               <th></th>
               <th></th>
               <th>
@@ -55,32 +45,27 @@
                   style="color: green"
                 ></i>
               </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr
               *ngFor="
-                let universityDTO of universityDTOs | filterUniversity : filter1
+                let universityDTO of universityDTOs
+                  | filterUniversity : filter1;
+                index as i
               "
             >
-              <td>{{ universityDTO.id }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ universityDTO.universityName }}</td>
-              <td>{{ universityDTO.sectorName }}</td>
-              <td>{{ universityDTO.workerCount }}</td>
-              <td>{{ universityDTO.address.substring(0, 20) }}...</td>
-              <td>{{ universityDTO.webAddress.substring(0, 20) }}...</td>
-              <td>{{ universityDTO.webNewsAddress.substring(0, 20) }}...</td>
-              <td>
-                {{ universityDTO.yearOfEstablishment | date : "dd/MM/yyyy" }}
-              </td>
-              <td>{{ universityDTO.description.substring(0, 20) }}...</td>
-              <td>{{ universityDTO.subDescription.substring(0, 20) }}...</td>
-              <td>
-                {{ universityDTO.youTubeEmbedAddress.substring(0, 20) }}...
-              </td>
-              <td>{{ universityDTO.youTubeAddress.substring(0, 20) }}...</td>
-              <td>{{ universityDTO.facebookAddress.substring(0, 20) }}...</td>
-              <td>{{ universityDTO.instagramAddress.substring(0, 20) }}...</td>
+
+              <td>{{ universityDTO.webAddress }}</td>
               <td>
                 <i
                   (click)="openDetail(universityDTO)"
@@ -100,6 +85,13 @@
                   (click)="unDelete(universityDTO)"
                   class="bi bi-arrow-up-right-square"
                   style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(universityDTO)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

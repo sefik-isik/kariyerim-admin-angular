@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { ResponseModel } from '../models/responseModel';
+import { ResponseModel } from '../models/response/responseModel';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { OperationClaim } from '../models/operationClaim';
-import { AdminModel } from '../models/adminModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { OperationClaim } from '../models/component/operationClaim';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +36,13 @@ export class OperationClaimService {
     );
   }
 
+  terminate(operationClaim: OperationClaim): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      operationClaim
+    );
+  }
+
   getAll(): Observable<ListResponseModel<OperationClaim>> {
     return this.httpClient.get<ListResponseModel<OperationClaim>>(
       this.newUrlPath + 'getall'
@@ -49,7 +55,7 @@ export class OperationClaimService {
     );
   }
 
-  getById(id: number): Observable<SingleResponseModel<OperationClaim>> {
+  getById(id: string): Observable<SingleResponseModel<OperationClaim>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<OperationClaim>>(path);
   }

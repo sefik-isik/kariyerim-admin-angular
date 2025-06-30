@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { LanguageService } from '../../../services/language.service';
-import { Language } from '../../../models/language';
+import { Language } from '../../../models/component/language';
 import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageUpdateComponent } from '../languageUpdate/languageUpdate.component';
@@ -43,7 +43,7 @@ export class LanguageListComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class LanguageListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class LanguageListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.delete(language).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

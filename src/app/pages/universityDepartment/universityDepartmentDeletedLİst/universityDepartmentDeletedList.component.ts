@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { UniversityDepartmentDTO } from '../../../models/universityDepartmentDTO';
-import { University } from '../../../models/university';
+import { UniversityDepartmentDTO } from '../../../models/dto/universityDepartmentDTO';
+import { University } from '../../../models/component/university';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityService } from '../../../services/university.service';
 import { FilterUniversityDepartmentPipe } from '../../../pipes/filterUniversityDepartment.pipe';
@@ -13,9 +13,9 @@ import { FilterUniversityDepartmentsByUniversityPipe } from '../../../pipes/filt
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityDepartmentUpdateComponent } from '../universityDepartmentUpdate/universityDepartmentUpdate.component';
 import { UniversityDepartmentDetailComponent } from '../universityDepartmentDetail/universityDepartmentDetail.component';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
 import { FacultyService } from '../../../services/faculty.service';
-import { Faculty } from '../../../models/faculty';
+import { Faculty } from '../../../models/component/faculty';
 import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFaculty.pipe';
 
 @Component({
@@ -67,7 +67,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,7 +76,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -85,7 +85,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -94,7 +94,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.universityDepartmentDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -104,7 +104,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -112,12 +112,49 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
     this.universityDepartmentDTOs.forEach((universityDepartment) => {
       this.universityDepartmentService.update(universityDepartment).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(universityDepartmentDTO: UniversityDepartmentDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.universityDepartmentService
+      .terminate(universityDepartmentDTO)
+      .subscribe(
+        (response) => {
+          this.toastrService.success('Başarı ile kalıcı olarak silindi');
+          this.ngOnInit();
+        },
+        (responseError) => console.log(responseError)
+      );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.universityDepartmentDTOs.forEach((universityDepartmentDTO) => {
+      this.universityDepartmentService
+        .terminate(universityDepartmentDTO)
+        .subscribe(
+          (response) => {},
+          (responseError) => console.error
+        );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

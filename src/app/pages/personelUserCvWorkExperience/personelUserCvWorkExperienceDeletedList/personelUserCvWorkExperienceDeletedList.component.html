@@ -58,16 +58,24 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
               let personelUserCvWorkExperienceDTO of personelUserCvWorkExperienceDTOs
-                | filterPersonelUserCvWorkExperienceByUser : filter1
+                | filterPersonelUserCvWorkExperienceByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserCvWorkExperienceDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserCvWorkExperienceDTO.email }}</td>
             <td>{{ personelUserCvWorkExperienceDTO.cvName }}</td>
             <td>{{ personelUserCvWorkExperienceDTO.companyName }}</td>
@@ -109,6 +117,13 @@
                 (click)="unDelete(personelUserCvWorkExperienceDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(personelUserCvWorkExperienceDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

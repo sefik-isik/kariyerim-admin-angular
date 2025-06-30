@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { DriverLicence } from '../models/driverLicence';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { DriverLicence } from '../models/component/driverLicence';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +36,13 @@ export class DriverLicenceService {
     );
   }
 
+  terminate(driverLicence: DriverLicence): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      driverLicence
+    );
+  }
+
   getAll(): Observable<ListResponseModel<DriverLicence>> {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<DriverLicence>>(path);
@@ -46,7 +53,7 @@ export class DriverLicenceService {
     return this.httpClient.get<ListResponseModel<DriverLicence>>(path);
   }
 
-  getById(id: number): Observable<SingleResponseModel<DriverLicence>> {
+  getById(id: string): Observable<SingleResponseModel<DriverLicence>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<DriverLicence>>(path);
   }

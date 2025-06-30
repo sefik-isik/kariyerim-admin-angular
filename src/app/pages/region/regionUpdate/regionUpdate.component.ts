@@ -1,22 +1,19 @@
-import { City } from './../../../models/city';
+import { City } from '../../../models/component/city';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { CityService } from '../../../services/city.service';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { Region } from '../../../models/region';
+import { Region } from '../../../models/component/region';
 import { RegionService } from '../../../services/region.service';
-import { CaseService } from '../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { RegionDTO } from '../../../models/regionDTO';
+import { RegionDTO } from '../../../models/dto/regionDTO';
+import { ValidationService } from '../../../services/validation.service';
+import { CountryService } from '../../../services/country.service';
+import { Country } from '../../../models/component/country';
 
 @Component({
   selector: 'app-regionUpdate',
@@ -25,67 +22,55 @@ import { RegionDTO } from '../../../models/regionDTO';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class RegionUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() regionDTO: RegionDTO;
   regions: Region[];
   cities: City[];
-  cityId: number;
-  regionId: number;
-
+  countries: Country[];
   componentTitle = 'Region Update Form';
 
   constructor(
+    private countryService: CountryService,
     private cityService: CityService,
-
-    private formBuilder: FormBuilder,
     private regionService: RegionService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
+    this.getCountries();
     this.getCities();
-
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.regionDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.regionService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          regionName: response.data.regionName,
-          cityName: this.getCityById(response.data.cityId),
-        });
-        this.regionId = response.data.id;
-        this.cityId = response.data.cityId;
+        this.regionDTO.id = response.data.id;
+        this.regionDTO.cityId = response.data.cityId;
         this.getRegions();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid && this.getModel().cityId > 0) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.regionService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/region/regionlisttab']);
         },
-        (error) => console.error
+        (responseError) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -94,10 +79,11 @@ export class RegionUpdateComponent implements OnInit {
 
   getModel(): Region {
     return Object.assign({
-      id: this.regionId,
-      cityId: this.getCityId(this.updateForm.value.cityName),
+      id: this.regionDTO.id,
+      countryId: this.getCountryId(this.regionDTO.countryName),
+      cityId: this.getCityId(this.regionDTO.cityName),
       regionName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.regionName
+        this.regionDTO.regionName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -105,42 +91,62 @@ export class RegionUpdateComponent implements OnInit {
     });
   }
 
+  getCountries() {
+    this.countryService.getAll().subscribe(
+      (response) => {
+        this.countries = response.data;
+      },
+      (responseError) => console.error
+    );
+  }
+
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   getRegions() {
     this.regionService.getAll().subscribe(
       (response) => {
-        if (this.cityId) {
-          this.regions = response.data.filter((f) => f.cityId == this.cityId);
+        if (this.regionDTO.cityId) {
+          this.regions = response.data.filter(
+            (f) => f.cityId == this.regionDTO.cityId
+          );
         }
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCityById(cityId: number): string {
+  getCountryId(countryName: string): string {
+    const countryId = this.countries.filter(
+      (c) => c.countryName === countryName
+    )[0]?.id;
+
+    return countryId;
+  }
+
+  getCityById(cityId: string): string {
     return this.cities.find((c) => c.id == cityId)?.cityName;
   }
 
-  getCityId(cityName: string): number {
+  getCityId(cityName: string): string {
     return this.cities.find((c) => c.cityName == cityName)?.id;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('cityName');
-    value.reset();
-    this.getCities();
+  countryNameClear() {
+    this.regionDTO.countryName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('regionName');
-    value.reset();
+  cityNameClear() {
+    this.regionDTO.cityName = '';
+  }
+
+  regionNameClear() {
+    this.regionDTO.regionName = '';
   }
 }

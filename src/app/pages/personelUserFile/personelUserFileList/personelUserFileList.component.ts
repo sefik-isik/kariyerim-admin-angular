@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserFileDTO } from '../../../models/dto/personelUserFileDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
-import { PersonelUserFile } from '../../../models/personelUserFile';
+import { PersonelUserFile } from '../../../models/component/personelUserFile';
 import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelUserFileByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
@@ -29,7 +29,7 @@ export class PersonelUserFileListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Files';
-  userId: number;
+  userId: string;
 
   constructor(
     private toastrService: ToastrService,
@@ -50,13 +50,13 @@ export class PersonelUserFileListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserFiles(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -65,7 +65,7 @@ export class PersonelUserFileListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -74,7 +74,7 @@ export class PersonelUserFileListComponent implements OnInit {
       (response) => {
         this.personelUserFileDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -88,7 +88,7 @@ export class PersonelUserFileListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -100,7 +100,7 @@ export class PersonelUserFileListComponent implements OnInit {
     this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
       this.personelUserFileService.delete(personelUserFileDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

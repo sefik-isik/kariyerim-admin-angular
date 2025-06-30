@@ -45,11 +45,23 @@
                   style="color: green"
                 ></i>
               </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let language of languages | filterLanguage : filter1">
-              <td>{{ language.id }}</td>
+            <tr
+              *ngFor="
+                let language of languages | filterLanguage : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ language.languageName }}</td>
               <td>
                 <i
@@ -70,6 +82,13 @@
                   (click)="unDelete(language)"
                   class="bi bi-arrow-up-right-square"
                   style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(language)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

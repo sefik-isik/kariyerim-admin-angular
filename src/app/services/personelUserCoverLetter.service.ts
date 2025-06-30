@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { PersonelUserCoverLetter } from '../models/personelUserCoverLetter';
-import { AdminModel } from '../models/adminModel';
-import { PersonelUserCoverLetterDTO } from '../models/PersonelUserCoverLetterDTO';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PersonelUserCoverLetter } from '../models/component/personelUserCoverLetter';
+import { AdminModel } from '../models/auth/adminModel';
+import { PersonelUserCoverLetterDTO } from '../models/dto/personelUserCoverLetterDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +40,15 @@ export class PersonelUserCoverLetterService {
   ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      personelUserCoverLetter
+    );
+  }
+
+  terminate(
+    personelUserCoverLetter: PersonelUserCoverLetter
+  ): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       personelUserCoverLetter
     );
   }

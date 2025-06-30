@@ -1,17 +1,17 @@
 import { PrivatePipe } from '../../../pipes/private.pipe';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 import { FilterPersonelUserCvByUserPipe } from '../../../pipes/filterPersonelUserCvByUser.pipe';
-import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvUpdateComponent } from '../personelUserCvUpdate/personelUserCvUpdate.component';
 import { PersonelUserCvDetailComponent } from '../personelUserCvDetail/personelUserCvDetail.component';
@@ -34,7 +34,7 @@ export class PersonelUserCvListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-  userId: number;
+  userId: string;
 
   componentTitle = 'Personel User Cvs';
 
@@ -57,13 +57,13 @@ export class PersonelUserCvListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCvs(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -72,7 +72,7 @@ export class PersonelUserCvListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -81,7 +81,7 @@ export class PersonelUserCvListComponent implements OnInit {
       (response) => {
         this.personelUserCvDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -95,7 +95,7 @@ export class PersonelUserCvListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -107,7 +107,7 @@ export class PersonelUserCvListComponent implements OnInit {
     this.personelUserCvDTOs.forEach((personelUserCvDTO) => {
       this.personelUserCvService.delete(personelUserCvDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

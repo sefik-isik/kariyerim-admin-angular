@@ -1,19 +1,13 @@
-import { SectorService } from './../../../services/sectorService';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FacultyService } from '../../../services/faculty.service';
-import { Faculty } from '../../../models/faculty';
-import { CaseService } from '../../../services/case.service';
+import { Faculty } from '../../../models/component/faculty';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-facultyAdd',
@@ -22,39 +16,34 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class FacultyAddComponent implements OnInit {
-  addForm: FormGroup;
-
-  componentTitle = 'Add Faculty Form';
+  facultModel: Faculty = {} as Faculty;
+  componentTitle = 'Faculty Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private facultyService: FacultyService,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      facultyName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.facultyService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/faculty/facultylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -64,15 +53,15 @@ export class FacultyAddComponent implements OnInit {
 
   getModel(): Faculty {
     return Object.assign({
+      id: '',
       facultyName: this.caseService.capitalizeFirstLetter(
-        this.addForm.value.facultyName
+        this.facultModel.facultyName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('facultyName');
-    value.reset();
+  facultyNameClear() {
+    this.facultModel.facultyName = '';
   }
 }

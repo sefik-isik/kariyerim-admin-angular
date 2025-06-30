@@ -4,7 +4,7 @@ import { CompanyUserListComponent } from '../companyUserList/companyUserList.com
 @Component({
   selector: 'app-companyUser-list-tab',
   template: `
-    <div class="card-body"><app-companyUserList></app-companyUserList>></div>
+    <div class="card-body"><app-companyUserList></app-companyUserList></div>
   `,
   imports: [CompanyUserListComponent],
 })

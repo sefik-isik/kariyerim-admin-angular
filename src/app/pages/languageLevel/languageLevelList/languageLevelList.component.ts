@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
-import { LanguageLevel } from '../../../models/languageLevel';
+import { LanguageLevel } from '../../../models/component/languageLevel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageLevelUpdateComponent } from '../languageLevelUpdate/languageLevelUpdate.component';
 import { LanguageLevelDetailComponent } from '../languageLevelDetail/languageLevelDetail.component';
@@ -43,7 +43,7 @@ export class LanguageLevelListComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class LanguageLevelListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class LanguageLevelListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.delete(languageLevel).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

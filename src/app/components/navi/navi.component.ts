@@ -1,7 +1,7 @@
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LocalStorageService } from '../../services/localStorage.service';
+import { LocalStorageService } from '../../services/helperServices/localStorage.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

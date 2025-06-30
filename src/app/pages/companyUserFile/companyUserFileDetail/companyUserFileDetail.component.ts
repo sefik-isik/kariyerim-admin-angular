@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
+import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
 
 @Component({
   selector: 'app-companyUserFileDetail',

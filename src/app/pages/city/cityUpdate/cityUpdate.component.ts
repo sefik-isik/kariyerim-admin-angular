@@ -1,5 +1,5 @@
-import { City } from '../../../models/city';
-import { Country } from '../../../models/country';
+import { City } from '../../../models/component/city';
+import { Country } from '../../../models/component/country';
 import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
 import {
@@ -8,14 +8,16 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CountryService } from '../../../services/country.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { CaseService } from '../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CityDTO } from '../../../models/cityDTO';
+import { CityDTO } from '../../../models/dto/cityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-cityUpdate',
@@ -24,12 +26,11 @@ import { CityDTO } from '../../../models/cityDTO';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CityUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() cityDTO: CityDTO;
   countries: Country[];
   cities: City[];
-  cityId: number;
-  countryId: number;
+  cityId: string;
+  countryId: string;
   componentTitle = 'City Update Form';
 
   constructor(
@@ -39,41 +40,35 @@ export class CityUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
     this.getCountries();
-    this.createUpdateForm();
 
     setTimeout(() => {
       this.getById(this.cityDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  getById(id: number) {
+  getById(id: string) {
     this.cityService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          cityName: response.data.cityName,
-          countryName: this.getCountryById(response.data.countryId),
-        });
-        this.cityId = response.data.id;
-        this.countryId = response.data.countryId;
+        this.cityDTO.cityName = response.data.cityName;
+        this.cityDTO.cityCode = response.data.cityCode;
+        this.cityDTO.countryName = this.getCountryById(response.data.countryId);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid && this.getModel().countryId > 0) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.cityService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -81,8 +76,8 @@ export class CityUpdateComponent implements OnInit {
           this.router.navigate(['dashboard/city/citylisttab']);
           this.activeModal.close();
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.log(responseError);
         }
       );
     } else {
@@ -92,11 +87,10 @@ export class CityUpdateComponent implements OnInit {
 
   getModel(): City {
     return Object.assign({
-      id: this.cityId,
-      countryId: this.getCountryId(this.updateForm.value.countryName),
-      cityName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.cityName
-      ),
+      id: this.cityDTO.id,
+      countryId: this.getCountryId(this.cityDTO.countryName),
+      cityName: this.caseService.capitalizeFirstLetter(this.cityDTO.cityName),
+      cityCode: this.cityDTO.cityCode,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -108,26 +102,27 @@ export class CityUpdateComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCountryById(countryId: number): string {
+  getCountryById(countryId: string): string {
     return this.countries.find((c) => c.id == countryId)?.countryName;
   }
 
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     return this.countries.find((c) => c.countryName == countryName)?.id;
   }
 
-  clearInput1() {
-    let countryName = this.updateForm.get('countryName');
-    countryName.reset();
-    this.getCountries();
+  countryNameClear() {
+    this.cityDTO.countryName = '';
   }
 
-  clearInput2() {
-    let cityName = this.updateForm.get('cityName');
-    cityName.reset();
+  cityNameClear() {
+    this.cityDTO.cityName = '';
+  }
+
+  cityCodeClear() {
+    this.cityDTO.cityCode = '';
   }
 }

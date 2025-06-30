@@ -1,12 +1,12 @@
-import { ApiUrl } from './../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { City } from '../models/city';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { CityDTO } from '../models/cityDTO';
-import { ResponseModel } from '../models/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { City } from '../models/component/city';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { CityDTO } from '../models/dto/cityDTO';
+import { ResponseModel } from '../models/response/responseModel';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class CityService {
     );
   }
 
+  terminate(city: City): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      city
+    );
+  }
+
   getAll(): Observable<ListResponseModel<City>> {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<City>>(path);
@@ -44,7 +51,7 @@ export class CityService {
     return this.httpClient.get<ListResponseModel<City>>(path);
   }
 
-  getById(id: number): Observable<SingleResponseModel<City>> {
+  getById(id: string): Observable<SingleResponseModel<City>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<City>>(path);
   }

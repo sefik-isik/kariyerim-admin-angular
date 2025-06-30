@@ -1,14 +1,4 @@
-import { CodeService } from '../../../services/code.service';
 import { Component, OnInit } from '@angular/core';
-import { PersonelUserCode } from '../../../models/userCodes';
-import { CompanyUserCode } from '../../../models/userCodes';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { UserCodeModel } from '../../../models/userCodeModel';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
-import { ToastrService } from 'ngx-toastr';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
 
 @Component({
   selector: 'app-main',
@@ -17,69 +7,7 @@ import { AdminModel } from '../../../models/adminModel';
   imports: [],
 })
 export class MainComponent implements OnInit {
-  constructor(
-    private localStorageService: LocalStorageService,
-    private router: Router,
-    private authService: AuthService,
-    private toastrService: ToastrService,
-    private codeService: CodeService,
-    private adminService: AdminService
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.getAdminValues();
-  }
-
-  getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
-    this.adminService.getAdminValues(id).subscribe(
-      (response) => {
-        this.getCode(response);
-      },
-      (error) => console.error
-    );
-  }
-
-  getCode(adminModel: AdminModel) {
-    if (this.localStorageService.getFromLocalStorage('id') == null) {
-      this.router.navigate(['login']);
-    } else {
-      this.codeService.getCode(adminModel);
-    }
-  }
-
-  updatePersonelUserCode() {
-    if (!confirm('Personel Userı seçmek istediğinize emin misiniz?')) {
-      this.toastrService.info('Seçim İşlemi İptal Edildi');
-      return;
-    }
-    this.updateUserCode(PersonelUserCode);
-  }
-
-  updateCompanyUserCode() {
-    if (!confirm('Company Userı seçmek istediğinize emin misiniz?')) {
-      this.toastrService.info('Seçim İşlemi İptal Edildi');
-      return;
-    }
-    this.updateUserCode(CompanyUserCode);
-  }
-
-  updateUserCode(code: string) {
-    this.authService.updateCode(this.getModel(code)).subscribe(
-      (response) => {
-        this.codeService.getAdminValues();
-        this.toastrService.success('Seçiminizi başarıyla yaptınız', 'Başarılı');
-      },
-      (error) => console.error
-    );
-  }
-
-  getModel(code: string): UserCodeModel {
-    let updateUserCodeModel: UserCodeModel = Object.assign({
-      id: this.localStorageService.getFromLocalStorage('id'),
-      code: code,
-      email: this.localStorageService.getFromLocalStorage('email'),
-    });
-    return updateUserCodeModel;
-  }
+  ngOnInit() {}
 }

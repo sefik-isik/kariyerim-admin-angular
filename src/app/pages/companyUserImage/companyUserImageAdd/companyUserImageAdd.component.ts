@@ -1,25 +1,21 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  Validators,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
-import { CompanyUserImage } from '../../../models/companyUserImage';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { CompanyUserImage } from '../../../models/component/companyUserImage';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyUserImageDTO } from '../../../models/dto/companyUserImageDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserImageAdd',
@@ -28,20 +24,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserImageAddComponent implements OnInit {
-  addForm: FormGroup;
-  componentTitle = 'Company User Image Add Form';
+  companyUserImageModel: CompanyUserImageDTO = {} as CompanyUserImageDTO;
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
   imageOwnName: string | null = null;
-  companyUserDTOs: CompanyUserDTO[] = [];
-  companyUserId: number;
-  userId: number;
+  companyUsers: CompanyUserDTO[] = [];
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean;
+  componentTitle = 'Company User Image Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private router: Router,
@@ -49,20 +41,11 @@ export class CompanyUserImageAddComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
-  }
-
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      image: ['', [Validators.required, Validators.minLength(3)]],
-      imageOwnName: ['', [Validators.required, Validators.minLength(3)]],
-      companyUserName: ['', [Validators.required, Validators.minLength(3)]],
-    });
   }
 
   onImageSelected(event: any) {
@@ -91,7 +74,11 @@ export class CompanyUserImageAddComponent implements OnInit {
     }
   }
 
-  onUpload() {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
     if (!this.selectedImage) {
       this.toastrService.error(
         'Please select a image to upload',
@@ -100,21 +87,19 @@ export class CompanyUserImageAddComponent implements OnInit {
       return;
     }
 
-    if (!this.addForm.valid) {
+    if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
     }
 
-    this.companyUserId = this.getCompanyUserId(
-      this.addForm.value.companyUserName
-    );
-
     const formData = new FormData();
     formData.append('image', this.selectedImage, this.selectedImage.name);
-    formData.append('companyUserId', this.companyUserId.toString());
 
     this.companyUserImageService
-      .uploadImage(formData, this.companyUserId)
+      .uploadImage(
+        formData,
+        this.getCompanyUserId(this.companyUserImageModel.companyUserName)
+      )
       .subscribe(
         (event) => {
           if (event.type === HttpEventType.UploadProgress) {
@@ -132,7 +117,7 @@ export class CompanyUserImageAddComponent implements OnInit {
             );
           }
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -146,30 +131,34 @@ export class CompanyUserImageAddComponent implements OnInit {
           '/dashboard/companyuserimage/companyuserimagelisttab',
         ]);
       },
-      (error) => {
-        this.toastrService.error(error.error.message);
+      (responseError) => {
+        console.log(responseError);
       }
     );
   }
 
   getModel(): CompanyUserImage {
     return Object.assign({
-      companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
+      id: '',
+      userId: this.getUserId(this.companyUserImageModel.email),
+      companyUserId: this.getCompanyUserId(
+        this.companyUserImageModel.companyUserName
+      ),
       imagePath: this.imagePath,
       imageName: this.imageName,
-      imageOwnName: this.addForm.value.imageOwnName,
+      imageOwnName: this.companyUserImageModel.imageOwnName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -178,53 +167,47 @@ export class CompanyUserImageAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.addForm.value.userEmail);
+    const userId = this.getUserId(this.companyUserImageModel.email);
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
+        this.companyUsers = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getCompanyUserId(companyUserName: string): number {
-    const companyId = this.companyUserDTOs.filter(
+  getCompanyUserId(companyUserName: string): string {
+    const companyId = this.companyUsers.filter(
       (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
     return companyId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.companyUserImageModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('companyUserName');
-    value.reset();
-    this.getAdminValues();
+  companyUserNameClear() {
+    this.companyUserImageModel.companyUserName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('imageOwnName');
-    value.reset();
+  imageOwnNameClear() {
+    this.companyUserImageModel.imageOwnName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('image');
-    value.reset();
+  imageNameClear() {
+    this.companyUserImageModel.imageName = '';
   }
 }

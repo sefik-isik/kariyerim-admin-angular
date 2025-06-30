@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { UserOperationClaimDTO } from '../models/userOperationClaimDTO';
+import { UserOperationClaimDTO } from '../models/dto/userOperationClaimDTO';
 
 @Pipe({
   name: 'filterUserOperationClaimByUser',

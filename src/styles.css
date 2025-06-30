@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+.form-control.ng-touched.ng-invalid {
+  border-bottom: 3px solid rgba(185, 50, 50, 0.781);
+}
+
+.form-control.ng-dirty.ng-valid {
+  border-bottom: 3px solid rgb(52, 156, 92);
+}
+
+.error-message {
+  padding: 1px;
+  margin-top: 1px;
+  height: 20px;
+  color: rgba(185, 50, 50, 0.781);
+  font-size: 11px;
+  text-align: left;
+}

@@ -1,19 +1,18 @@
-import { AdminService } from './../../../services/admin.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { AllUserDetailComponent } from './../allUserDetail/allUserDetail.component';
-import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterAllUserPipe } from '../../../pipes/filterAllUser.pipe';
 import { CodePipe } from '../../../pipes/code.pipe';
 import { StatusPipe } from '../../../pipes/status.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-allUserList',
@@ -27,16 +26,15 @@ export class AllUserListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'All Users';
-  userId: number;
+  userId: string;
   status: string;
 
   constructor(
     private userService: UserService,
-    private toastrService: ToastrService,
-    private authService: AuthService,
     private modalService: NgbModal,
     private adminService: AdminService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit() {
@@ -49,12 +47,12 @@ export class AllUserListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -63,7 +61,7 @@ export class AllUserListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.log(responseError)
     );
   }
 
@@ -73,15 +71,15 @@ export class AllUserListComponent implements OnInit {
       return;
     }
 
-    userDTO.passwordHash = 'passwordHash';
-    userDTO.passwordSalt = 'passwordSalt';
+    userDTO.passwordHash = '';
+    userDTO.passwordSalt = '';
 
-    this.authService.deleteUser(userDTO).subscribe(
+    this.userService.delete(userDTO).subscribe(
       (response) => {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.log(responseError)
     );
   }
 
@@ -92,11 +90,11 @@ export class AllUserListComponent implements OnInit {
     }
 
     this.userDTOs.forEach((userDTO) => {
-      userDTO.passwordHash = 'passwordHash';
-      userDTO.passwordSalt = 'passwordSalt';
-      this.authService.deleteUser(userDTO).subscribe(
+      userDTO.passwordHash = '';
+      userDTO.passwordSalt = '';
+      this.userService.delete(userDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

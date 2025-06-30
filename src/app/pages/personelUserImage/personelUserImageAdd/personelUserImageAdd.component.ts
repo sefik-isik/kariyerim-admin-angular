@@ -1,5 +1,5 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -8,18 +8,21 @@ import {
   FormGroup,
   Validators,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
-import { PersonelUserImage } from '../../../models/personelUserImage';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserImage } from '../../../models/component/personelUserImage';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserImageAdd',
@@ -28,20 +31,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserImageAddComponent implements OnInit {
-  addForm: FormGroup;
-  componentTitle = 'Personel User Image Add Form';
+  personelUserImageModel: PersonelUserImageDTO = {} as PersonelUserImageDTO;
   selectedImage: File | null = null;
   imagePath: string | null = null;
   imageName: string | null = null;
   imageOwnName: string | null = null;
   personelUserDTOs: PersonelUserDTO[] = [];
-  personelUserId: number;
-  userId: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean;
+  componentTitle = 'Personel User Image Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private personelUserImageService: PersonelUserImageService,
     private router: Router,
@@ -49,19 +48,12 @@ export class PersonelUserImageAddComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
-  ngOnInit() {
-    this.createAddForm();
-    this.getAdminValues();
-  }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      image: ['', [Validators.required, Validators.minLength(3)]],
-      imageOwnName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  ngOnInit() {
+    this.getAdminValues();
   }
 
   onImageSelected(event: any) {
@@ -90,7 +82,16 @@ export class PersonelUserImageAddComponent implements OnInit {
     }
   }
 
-  onUpload() {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!form.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
     if (!this.selectedImage) {
       this.toastrService.error(
         'Please select a image to upload',
@@ -99,19 +100,14 @@ export class PersonelUserImageAddComponent implements OnInit {
       return;
     }
 
-    if (!this.addForm.valid) {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
-      return;
-    }
-
-    this.personelUserId = this.getPersonelUserId(this.addForm.value.userEmail);
-
     const formData = new FormData();
     formData.append('image', this.selectedImage, this.selectedImage.name);
-    formData.append('personelUserId', this.personelUserId.toString());
 
     this.personelUserImageService
-      .uploadImage(formData, this.personelUserId)
+      .uploadImage(
+        formData,
+        this.getPersonelUserId(this.personelUserImageModel.email)
+      )
       .subscribe(
         (event) => {
           if (event.type === HttpEventType.UploadProgress) {
@@ -129,8 +125,9 @@ export class PersonelUserImageAddComponent implements OnInit {
             );
           }
         },
-        (error) => {
-          console.error;
+        (responseError) => {
+          console.log(responseError);
+          this.toastrService.error('Error uploading file', responseError);
         }
       );
   }
@@ -143,30 +140,32 @@ export class PersonelUserImageAddComponent implements OnInit {
           '/dashboard/personeluserimage/personeluserimagelisttab',
         ]);
       },
-      (error) => {
-        this.toastrService.error(error.error.message);
+      (responseError) => {
+        this.toastrService.error(responseError.error.message);
       }
     );
   }
 
   getModel(): PersonelUserImage {
     return Object.assign({
-      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
+      id: '',
+      userId: this.getUserId(this.personelUserImageModel.email),
+      personelUserId: this.getPersonelUserId(this.personelUserImageModel.email),
       imagePath: this.imagePath,
       imageName: this.imageName,
-      imageOwnName: this.addForm.value.imageOwnName,
+      imageOwnName: this.personelUserImageModel.imageOwnName,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -175,29 +174,27 @@ export class PersonelUserImageAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   getPersonelUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.addForm.value.userEmail);
+    const userId = this.getUserId(this.personelUserImageModel.email);
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserDTOs = response.data.filter(
-          (f) => f.userId === userId
-        );
+        this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getPersonelUserId(userEmail: string): number {
+  getPersonelUserId(userEmail: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.email === userEmail
     )[0]?.id;
@@ -205,25 +202,19 @@ export class PersonelUserImageAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserImageModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('personelUserName');
-    value.reset();
-    this.getAdminValues();
+  firstNameClear() {
+    this.personelUserImageModel.firstName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('image');
-    value.reset();
+  imageOwnNameClear() {
+    this.personelUserImageModel.imageOwnName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('imageOwnName');
-    value.reset();
+  imageNameClear() {
+    this.personelUserImageModel.imageName = '';
   }
 }

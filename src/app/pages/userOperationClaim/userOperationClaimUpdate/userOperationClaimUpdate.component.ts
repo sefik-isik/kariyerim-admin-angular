@@ -1,25 +1,21 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 
-import { UserOperationClaim } from '../../../models/userOperationClaim';
+import { UserOperationClaim } from '../../../models/component/userOperationClaim';
 import { UserService } from '../../../services/user.service';
-import { OperationClaim } from '../../../models/operationClaim';
+import { OperationClaim } from '../../../models/component/operationClaim';
 import { OperationClaimService } from '../../../services/operationClaim.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
+import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
 
 @Component({
   selector: 'app-userOperationClaimUpdate',
@@ -28,49 +24,37 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UserOperationClaimUpdateComponent implements OnInit {
-  updateForm: FormGroup;
-  @Input() userOperationClaimDTO: OperationClaim;
+  @Input() userOperationClaimDTO: UserOperationClaimDTO;
   users: UserDTO[] = [];
   operationClaims: OperationClaim[];
-  userId: number;
-  userEmail: string;
-  id: number;
   componentTitle = 'Update User Operation Claim Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-
     private userOperationClaimService: UserOperationClaimService,
     private adminService: AdminService,
     private userService: UserService,
     private operationClaimService: OperationClaimService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
     this.getOperaionClaims();
     this.getAdminValues();
-    this.createUpdateForm();
 
     setTimeout(() => {
       this.getUserValues(this.userOperationClaimDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      claimName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
@@ -79,26 +63,18 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.userOperationClaimService.getById(adminModel).subscribe(
       (response) => {
-        this.id = response.data.id;
-        this.userId = response.data.userId;
-        this.userEmail = this.getEmailByUserId(this.userId);
-
-        this.updateForm.patchValue({
-          claimName: this.getOperationClaimByClaimId(
-            response.data.operationClaimId
-          ),
-        });
+        this.userOperationClaimDTO.id = response.data.id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (
-      this.updateForm.valid &&
-      this.getModel().id > 0 &&
-      this.getModel().operationClaimId > 0
-    ) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.userOperationClaimService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -107,8 +83,8 @@ export class UserOperationClaimUpdateComponent implements OnInit {
             '/dashboard/useroperationclaim/useroperationclaimlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -118,11 +94,12 @@ export class UserOperationClaimUpdateComponent implements OnInit {
 
   getModel(): UserOperationClaim {
     return Object.assign({
-      id: this.id,
+      id: this.userOperationClaimDTO.id,
+      userId: this.userOperationClaimDTO.userId,
       operationClaimId: this.getOperaionClaimId(
-        this.updateForm.value.claimName
+        this.userOperationClaimDTO.operationClaimName
       ),
-      userId: this.userId,
+
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -130,12 +107,12 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues(this.id).subscribe(
+    this.adminService.getAdminValues(this.userOperationClaimDTO.id).subscribe(
       (response) => {
         this.getUsers(response);
         this.getOperaionClaims();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -144,15 +121,15 @@ export class UserOperationClaimUpdateComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getEmailByUserId(userId: number): string {
+  getEmailByUserId(userId: string): string {
     return this.users.find((u) => u.id == userId)?.email;
   }
 
-  getOperationClaimByClaimId(userOperationClaimId: number): string {
+  getOperationClaimByClaimId(userOperationClaimId: string): string {
     return this.operationClaims.find((u) => u.id == userOperationClaimId)?.name;
   }
 
@@ -161,17 +138,17 @@ export class UserOperationClaimUpdateComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getOperaionClaimId(claimName: string): number {
+  getOperaionClaimId(claimName: string): string {
     const operaionClaimId = this.operationClaims.filter(
       (c) => c.name === claimName
     )[0]?.id;
@@ -179,9 +156,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     return operaionClaimId;
   }
 
-  clearInput1() {
-    let cityName = this.updateForm.get('claimName');
-    cityName.reset();
-    this.getAdminValues();
+  operationClaimNameClear() {
+    this.userOperationClaimDTO.operationClaimName = '';
   }
 }

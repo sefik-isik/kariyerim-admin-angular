@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { CompanyUser } from '../models/companyUser';
-import { ResponseModel } from '../models/responseModel';
+import { CompanyUser } from '../models/component/companyUser';
+import { ResponseModel } from '../models/response/responseModel';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { CompanyUserDTO } from '../models/companyUserDTO';
-import { AdminModel } from '../models/adminModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { CompanyUserDTO } from '../models/dto/companyUserDTO';
+import { AdminModel } from '../models/auth/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class CompanyUserService {
   delete(companyUser: CompanyUser): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      companyUser
+    );
+  }
+
+  terminate(companyUser: CompanyUser): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       companyUser
     );
   }

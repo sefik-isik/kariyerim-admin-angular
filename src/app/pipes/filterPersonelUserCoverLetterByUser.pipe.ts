@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { PersonelUserCoverLetter } from '../models/personelUserCoverLetter';
+import { PersonelUserCoverLetter } from '../models/component/personelUserCoverLetter';
 
 @Pipe({
   name: 'filterPersonelUserCoverLetterByUser',

@@ -1,4 +1,7 @@
-<div class="card tab-page" style="border: none">
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
   <div class="card-body">
     <p class="card-text"><b>Id: </b>{{ companyUserFileDTO.id }}</p>
     <p class="card-text"><b>userId: </b>{{ companyUserFileDTO.userId }}</p>
@@ -17,11 +20,11 @@
       <b>companyUserName: </b>{{ companyUserFileDTO.companyUserName }}
     </p>
 
+    <p class="card-text"><b>filePath: </b>{{ companyUserFileDTO.filePath }}</p>
+    <p class="card-text"><b>fileName: </b>{{ companyUserFileDTO.fileName }}</p>
     <p class="card-text">
       <b>fileOwnName: </b>{{ companyUserFileDTO.fileOwnName }}
     </p>
-    <p class="card-text"><b>filePath: </b>{{ companyUserFileDTO.filePath }}</p>
-    <p class="card-text"><b>filePath: </b>{{ companyUserFileDTO.filePath }}</p>
     <p class="card-text">
       <b>createdDate: </b
       >{{ companyUserFileDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}

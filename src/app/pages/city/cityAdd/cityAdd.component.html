@@ -1,61 +1,138 @@
-<div class="card tab-page" style="border: none">
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
   <div class="card-body">
-    <form [formGroup]="addForm1">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">Country Name</span>
-          <input
-            formControlName="countryName"
-            type="text"
-            class="form-control"
-            list="CountryData"
-            id="Country"
-            placeholder="Select Country..."
-          />
-          <datalist id="CountryData">
-            <option
-              *ngFor="let country of countries"
-              value="{{ country.countryName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="cityModel.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="countryName"
+              list="countryNameDataList"
+            />
+            <datalist id="countryNameDataList">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="countryNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">City Name</span>
-          <input
-            formControlName="cityName"
-            type="text"
-            class="form-control"
-            id="City"
-            placeholder="City Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
+      </div>
 
-        <div class="d-grid gap-2">
-          <button (click)="add()" type="button" class="btn btn-outline-primary">
-            Update
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-dark"
-            (click)="activeModal.close('Close click')"
-          >
-            Close
-          </button>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="cityModel.cityName"
+              type="text"
+              class="form-control"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="cityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Code</span>
+            <input
+              required
+              minlength="1"
+              maxlength="2"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="cityModel.cityCode"
+              type="text"
+              class="form-control"
+              name="cityCode"
+              #cityCode="ngModel"
+              placeholder="City Code"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="cityCodeClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityCode.valid && cityCode.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityCode)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid gap-2">
+        <button
+          [disabled]="!form.valid"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="onSubmit(form)"
+        >
+          Add
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          (click)="activeModal.close('Close click')"
+        >
+          Close
+        </button>
       </div>
     </form>
   </div>

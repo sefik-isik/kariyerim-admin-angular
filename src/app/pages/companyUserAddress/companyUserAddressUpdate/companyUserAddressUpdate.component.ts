@@ -1,28 +1,24 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
 import { CountryService } from './../../../services/country.service';
-import { City } from './../../../models/city';
+import { City } from '../../../models/component/city';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { CityService } from '../../../services/city.service';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { Country } from '../../../models/country';
-import { Region } from '../../../models/region';
+import { Country } from '../../../models/component/country';
+import { Region } from '../../../models/component/region';
 import { RegionService } from '../../../services/region.service';
-import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { UserDTO } from '../../../models/userDTO';
-import { AdminModel } from '../../../models/adminModel';
+import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
+import { CompanyUserAddress } from '../../../models/component/companyUserAddress';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
@@ -31,23 +27,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserAddressUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() companyUserAddressDTO: CompanyUserAddressDTO;
   companyUsers: CompanyUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
   regions: Region[] = [];
-  users: UserDTO[] = [];
-  id: number;
-  companyUserId: number;
-  companyUserName: string;
-  userEmail: string;
-  countrId: number;
-  cityId: number;
-  regionId: number;
-  addressDetail: string;
   addressDetailCount: number;
-
   componentTitle = 'Company User Address Update Form';
 
   constructor(
@@ -56,14 +41,13 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     private cityService: CityService,
     private regionService: RegionService,
     public activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
     this.getCountries();
 
     setTimeout(() => {
@@ -71,20 +55,11 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      addressDetail: ['', [Validators.required, Validators.minLength(50)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
@@ -93,29 +68,21 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserAddressService.getById(adminModel).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          countryName: this.getCountryNameById(response.data.countryId),
-          cityName: this.getCityNameById(response.data.cityId),
-          regionName: this.getRegionNameById(response.data.regionId),
-          addressDetail: response.data.addressDetail,
-        });
-        this.id = response.data.id;
-        this.companyUserId = response.data.companyUserId;
+        this.companyUserAddressDTO.id = response.data.id;
+        this.companyUserAddressDTO.cityId = response.data.cityId;
+        this.companyUserAddressDTO.regionId = response.data.regionId;
         this.addressDetailCount = this.count(response.data.addressDetail);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (
-      this.updateForm.valid &&
-      this.getModel().id > 0 &&
-      this.getModel().companyUserId > 0 &&
-      this.getModel().countryId > 0 &&
-      this.getModel().cityId > 0 &&
-      this.getModel().regionId > 0
-    ) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.companyUserAddressService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -124,8 +91,8 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
             '/dashboard/companyuseraddress/companyuseraddresslisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.error;
         }
       );
     } else {
@@ -133,14 +100,15 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     }
   }
 
-  getModel(): CompanyUserAddressDTO {
+  getModel(): CompanyUserAddress {
     return Object.assign({
-      id: this.id,
-      companyUserId: this.companyUserId,
-      countryId: this.getCountryId(this.updateForm.value.countryName),
-      cityId: this.getCityId(this.updateForm.value.cityName),
-      regionId: this.getRegionId(this.updateForm.value.regionName),
-      addressDetail: this.updateForm.value.addressDetail,
+      id: this.companyUserAddressDTO.id,
+      userId: this.companyUserAddressDTO.userId,
+      companyUserId: this.companyUserAddressDTO.companyUserId,
+      countryId: this.getCountryId(this.companyUserAddressDTO.countryName),
+      cityId: this.getCityId(this.companyUserAddressDTO.cityName),
+      regionId: this.getRegionId(this.companyUserAddressDTO.regionName),
+      addressDetail: this.companyUserAddressDTO.addressDetail,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -155,89 +123,76 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     this.countryService.getAll().subscribe(
       (response) => {
         this.countries = response.data;
-        this.getCities();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCities() {
+  getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
-        if (this.updateForm.value.countryName) {
-          this.cities = response.data.filter(
-            (f) =>
-              f.countryId ===
-              this.getCountryId(this.updateForm.value.countryName)
-          );
-        } else {
-          this.cities = response.data;
-        }
-        this.getRegions();
+        this.cities = response.data.filter(
+          (c) => c.countryId === this.getCountryId(countryName)
+        );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getRegions() {
+  getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
-        if (this.updateForm.value.cityName) {
-          this.regions = response.data.filter(
-            (f) => f.cityId === this.getCityId(this.updateForm.value.cityName)
-          );
-        } else {
-          this.regions = response.data;
-        }
+        this.regions = response.data.filter(
+          (r) => r.cityId === this.getCityId(cityName)
+        );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCountryNameById(countryId: number): string {
-    return this.countries.filter((c) => c.id == countryId)[0]?.countryName;
-  }
-
-  getCityNameById(cityId: number): string {
-    return this.cities.filter((c) => c.id == cityId)[0]?.cityName;
-  }
-
-  getRegionNameById(regionId: number): string {
-    return this.regions.filter((r) => r.id == regionId)[0]?.regionName;
-  }
-
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     return this.countries.filter((c) => c.countryName == countryName)[0]?.id;
   }
 
-  getCityId(cityName: string): number {
-    return this.cities.filter((c) => c.cityName == cityName)[0]?.id;
+  getCityId(cityName: string): string {
+    let cityId = this.cities.filter((c) => c.cityName == cityName)[0]?.id;
+
+    if (cityId == undefined) {
+      cityId = this.companyUserAddressDTO.cityId;
+    }
+    return cityId;
   }
 
-  getRegionId(regionName: string): number {
-    return this.regions.filter((c) => c.regionName == regionName)[0]?.id;
+  getRegionId(regionName: string): string {
+    let regionId = this.regions.filter((c) => c.regionName == regionName)[0]
+      ?.id;
+    if (regionId == undefined) {
+      regionId = this.companyUserAddressDTO.regionId;
+    }
+    return regionId;
   }
 
-  clearInput1() {
-    let countryName = this.updateForm.get('countryName');
-    countryName.reset();
-    this.getCountries();
+  emailClear() {
+    this.companyUserAddressDTO.email = '';
   }
 
-  clearInput2() {
-    let cityName = this.updateForm.get('cityName');
-    cityName.reset();
-    this.getCities();
+  companyUserNameClear() {
+    this.companyUserAddressDTO.companyUserName = '';
   }
 
-  clearInput3() {
-    let cityName = this.updateForm.get('regionName');
-    cityName.reset();
-    this.getRegions();
+  countryNameClear() {
+    this.companyUserAddressDTO.countryName = '';
   }
 
-  clearInput4() {
-    let cityName = this.updateForm.get('addressDetail');
-    cityName.reset();
+  cityNameClear() {
+    this.companyUserAddressDTO.cityName = '';
+  }
+
+  regionNameClear() {
+    this.companyUserAddressDTO.regionName = '';
+  }
+
+  addressClear() {
+    this.companyUserAddressDTO.addressDetail = '';
   }
 }

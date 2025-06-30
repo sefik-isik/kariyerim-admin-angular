@@ -3,81 +3,134 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm" class="form">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-            (change)="getAdminValues()"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="companyUserDepartmentModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Company Name</span>
-          <input
-            formControlName="companyUserName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input2"
-            placeholder="Select Company..."
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let companyUserDTO of companyUserDTOs"
-              value="{{ companyUserDTO.companyUserName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserDepartmentModel.companyUserName"
+              type="text"
+              class="form-control"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company User Name"
+              list="companyUserNameDataList"
+            />
+            <datalist id="companyUserNameDataList">
+              <option
+                *ngFor="let companyUser of companyUsers"
+                value="{{ companyUser.companyUserName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="companyUserNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Department Name</span>
-          <input
-            formControlName="departmentName"
-            type="text"
-            class="form-control"
-            id="input3"
-            placeholder="Type Department Name..."
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Department Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserDepartmentModel.departmentName"
+              type="text"
+              class="form-control"
+              name="departmentName"
+              #departmentName="ngModel"
+              placeholder="Department Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="departmentNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!departmentName.valid && departmentName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(departmentName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

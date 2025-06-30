@@ -1,22 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
-import { University } from '../../../models/university';
-import { CaseService } from '../../../services/case.service';
+import { University } from '../../../models/component/university';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Sector } from '../../../models/sector';
+import { Sector } from '../../../models/component/sector';
 import { SectorService } from '../../../services/sectorService';
-import { UniversityDTO } from '../../../models/universityDTO';
+import { UniversityDTO } from '../../../models/dto/universityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityUpdate',
@@ -25,91 +19,56 @@ import { UniversityDTO } from '../../../models/universityDTO';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() universityDTO: UniversityDTO;
-  universityId: number;
   sectors: Sector[];
-  addressDetail: string;
-  descriptionDetail: string;
-  subDescriptionDetail: string;
+  addressDetail: number;
+  descriptionDetail: number;
+  subDescriptionDetail: number;
   componentTitle = 'University Update Form';
 
   constructor(
     private universityService: UniversityService,
-
-    private formBuilder: FormBuilder,
     private sectorService: SectorService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
     this.getSectors();
-
     setTimeout(() => {
       this.getById(this.universityDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      universityName: ['', [Validators.required, Validators.minLength(3)]],
-      sectorName: ['', [Validators.required, Validators.minLength(3)]],
-      yearOfEstablishment: ['', [Validators.required, Validators.minLength(3)]],
-      workerCount: ['', [Validators.required, Validators.minLength(3)]],
-      webAddress: ['', [Validators.required, Validators.minLength(3)]],
-      webNewsAddress: ['', [Validators.required, Validators.minLength(3)]],
-      youTubeEmbedAddress: ['', [Validators.required, Validators.minLength(3)]],
-      facebookAddress: ['', [Validators.required, Validators.minLength(3)]],
-      instagramAddress: ['', [Validators.required, Validators.minLength(3)]],
-      xAddress: ['', [Validators.required, Validators.minLength(3)]],
-      youTubeAddress: ['', [Validators.required, Validators.minLength(3)]],
-      address: ['', [Validators.required, Validators.minLength(20)]],
-      description: ['', [Validators.required, Validators.minLength(100)]],
-      subDescription: ['', [Validators.required, Validators.minLength(100)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  getById(id: number) {
+  getById(id: string) {
     this.universityService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          universityName: response.data.universityName,
-          sectorName: this.getSectorNameById(response.data.sectorId),
-          yearOfEstablishment: this.formatDate(
-            response.data.yearOfEstablishment
-          ),
-          workerCount: response.data.workerCount,
-          webAddress: response.data.webAddress,
-          webNewsAddress: response.data.webNewsAddress,
-          youTubeEmbedAddress: response.data.youTubeEmbedAddress,
-          facebookAddress: response.data.facebookAddress,
-          instagramAddress: response.data.instagramAddress,
-          xAddress: response.data.xAddress,
-          youTubeAddress: response.data.youTubeAddress,
-          address: response.data.address,
-          description: response.data.description,
-          subDescription: response.data.subDescription,
-        });
-        this.universityId = id;
+        this.universityDTO.id = id;
+        this.universityDTO.yearOfEstablishment = this.formatDate(
+          this.universityDTO.yearOfEstablishment
+        );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.universityService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -119,25 +78,25 @@ export class UniversityUpdateComponent implements OnInit {
 
   getModel(): University {
     return Object.assign({
-      id: this.universityId,
+      id: this.universityDTO.id,
       universityName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.universityName
+        this.universityDTO.universityName
       ),
-      sectorId: this.getSectorId(this.updateForm.value.sectorName),
+      sectorId: this.getSectorId(this.universityDTO.sectorName),
       yearOfEstablishment: new Date(
-        this.updateForm.value.yearOfEstablishment
+        this.universityDTO.yearOfEstablishment
       ).toJSON(),
-      webAddress: this.updateForm.value.webAddress,
-      workerCount: this.updateForm.value.workerCount,
-      webNewsAddress: this.updateForm.value.webNewsAddress,
-      youTubeEmbedAddress: this.updateForm.value.youTubeEmbedAddress,
-      address: this.updateForm.value.address,
-      facebookAddress: this.updateForm.value.facebookAddress,
-      instagramAddress: this.updateForm.value.instagramAddress,
-      xAddress: this.updateForm.value.xAddress,
-      youTubeAddress: this.updateForm.value.youTubeAddress,
-      description: this.updateForm.value.description,
-      subDescription: this.updateForm.value.subDescription,
+      webAddress: this.universityDTO.webAddress,
+      workerCount: this.universityDTO.workerCount,
+      webNewsAddress: this.universityDTO.webNewsAddress,
+      youTubeEmbedAddress: this.universityDTO.youTubeEmbedAddress,
+      address: this.universityDTO.address,
+      facebookAddress: this.universityDTO.facebookAddress,
+      instagramAddress: this.universityDTO.instagramAddress,
+      xAddress: this.universityDTO.xAddress,
+      youTubeAddress: this.universityDTO.youTubeAddress,
+      description: this.universityDTO.description,
+      subDescription: this.universityDTO.subDescription,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -157,15 +116,15 @@ export class UniversityUpdateComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getSectorNameById(sectorId: number): string {
+  getSectorNameById(sectorId: string): string {
     return this.sectors.find((c) => c.id == sectorId)?.sectorName;
   }
 
-  getSectorId(sectorName: string): number {
+  getSectorId(sectorName: string): string {
     const companyUserSectorId = this.sectors.filter(
       (c) => c.sectorName === sectorName
     )[0]?.id;
@@ -174,87 +133,70 @@ export class UniversityUpdateComponent implements OnInit {
   }
 
   countAddress() {
-    this.addressDetail = this.updateForm.value.address.length;
+    this.addressDetail = this.universityDTO.address.length;
   }
 
   countDescription() {
-    this.descriptionDetail = this.updateForm.value.description.length;
+    this.descriptionDetail = this.universityDTO.description.length;
   }
 
   countSubDescription() {
-    this.subDescriptionDetail = this.updateForm.value.subDescription.length;
+    this.subDescriptionDetail = this.universityDTO.subDescription.length;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('universityName');
-    value.reset();
+  universityNameClear() {
+    this.universityDTO.universityName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('yearOfEstablishment');
-    value.reset();
+  yearOfEstablishmentClear() {
+    this.universityDTO.yearOfEstablishment = '';
   }
 
-  clearInput3() {
-    let value = this.updateForm.get('workerCount');
-    value.reset();
+  workerCountClear() {
+    this.universityDTO.workerCount = '';
   }
 
-  clearInput4() {
-    let value = this.updateForm.get('sectorName');
-    value.reset();
+  sectorNameClear() {
+    this.universityDTO.sectorName = '';
   }
 
-  clearInput5() {
-    let value = this.updateForm.get('webAddress');
-    value.reset();
+  webAddressClear() {
+    this.universityDTO.webAddress = '';
   }
 
-  clearInput6() {
-    let value = this.updateForm.get('webNewsAddress');
-    value.reset();
+  webNewsAddressClear() {
+    this.universityDTO.webNewsAddress = '';
   }
 
-  clearInput7() {
-    let value = this.updateForm.get('youTubeEmbedAddress');
-    value.reset();
+  youTubeEmbedAddressClear() {
+    this.universityDTO.youTubeEmbedAddress = '';
   }
 
-  clearInput8() {
-    let value = this.updateForm.get('facebookAddress');
-    value.reset();
+  facebookAddressClear() {
+    this.universityDTO.facebookAddress = '';
   }
 
-  clearInput9() {
-    let value = this.updateForm.get('instagramAddress');
-    value.reset();
+  instagramAddressClear() {
+    this.universityDTO.instagramAddress = '';
   }
 
-  clearInput10() {
-    let value = this.updateForm.get('xAddress');
-    value.reset();
+  xAddressClear() {
+    this.universityDTO.xAddress = '';
   }
 
-  clearInput11() {
-    let value = this.updateForm.get('youTubeAddress');
-    value.reset();
+  youTubeAddressClear() {
+    this.universityDTO.youTubeAddress = '';
   }
 
-  clearInput12() {
-    let value = this.updateForm.get('address');
-    this.addressDetail = '';
-    value.reset();
+  addressClear() {
+    this.universityDTO.address = '';
   }
 
-  clearInput13() {
-    let value = this.updateForm.get('description');
-    this.descriptionDetail = '';
-    value.reset();
+  descriptionClear() {
+    this.universityDTO.description = '';
   }
 
-  clearInput14() {
-    let value = this.updateForm.get('subDescription');
-    this.subDescriptionDetail = '';
-    value.reset();
+  subDescriptionClear() {
+    this.universityDTO.subDescription = '';
   }
 }

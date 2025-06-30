@@ -3,154 +3,436 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="companyUserModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Company User Name</span>
-          <input
-            formControlName="companyUserName"
-            type="text"
-            class="form-control"
-            id="input2"
-            placeholder="Type Company User Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserModel.companyUserName"
+              type="text"
+              class="form-control"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company User Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="companyUserNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Sector Name</span>
-          <input
-            formControlName="sectorName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input3"
-            placeholder="Select Sector..."
-            minlength="3"
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let companyUserSector of companyUserSectors"
-              value="{{ companyUserSector.sectorName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserModel.sectorName"
+              type="text"
+              class="form-control"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNameDataList"
+            />
+            <datalist id="sectorNameDataList">
+              <option
+                *ngFor="let companyUserSector of sectors"
+                value="{{ companyUserSector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="sectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Tax City Name</span>
-          <input
-            formControlName="cityName"
-            type="text"
-            class="form-control"
-            list="datalist3"
-            id="input4"
-            placeholder="Select Tax City..."
-            minlength="3"
-            (input)="getTaxOffices()"
-          />
-          <datalist id="datalist3">
-            <option
-              *ngFor="let city of cities"
-              value="{{ city.cityName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserModel.taxCityName"
+              type="text"
+              class="form-control"
+              name="taxCityName"
+              #taxCityName="ngModel"
+              placeholder="Tax City Name"
+              (change)="getTaxOffices(companyUserModel.taxCityName)"
+              list="taxCityNameDataList"
+            />
+            <datalist id="taxCityNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="taxCityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxCityName.valid && taxCityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxCityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Tax Office Name</span>
-          <input
-            formControlName="taxOfficeName"
-            type="text"
-            class="form-control"
-            list="datalist4"
-            id="input5"
-            placeholder="Select Tax Office..."
-            minlength="3"
-          />
-          <datalist id="datalist4">
-            <option
-              *ngFor="let taxOffice of taxOffices"
-              value="{{ taxOffice.taxOfficeName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax Office Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserModel.taxOfficeName"
+              type="text"
+              class="form-control"
+              name="taxOfficeName"
+              #taxOfficeName="ngModel"
+              placeholder="Tax Office Name"
+              list="taxOfficeNameDataList"
+            />
+            <datalist id="taxOfficeNameDataList">
+              <option
+                *ngFor="let taxOffice of taxOffices"
+                value="{{ taxOffice.taxOfficeName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="taxOfficeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxOfficeName.valid && taxOfficeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxOfficeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Tax Number</span>
-          <input
-            formControlName="taxNumber"
-            type="text"
-            class="form-control"
-            id="input6"
-            placeholder="Tax Number"
-            minlength="10"
-            maxlength="10"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput6()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax Number</span>
+            <input
+              required
+              minlength="10"
+              maxlength="10"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="companyUserModel.taxNumber"
+              type="text"
+              class="form-control"
+              name="taxNumber"
+              #taxNumber="ngModel"
+              placeholder="Tax Number"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="taxNumberClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxNumber.valid && taxNumber.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxNumber)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Worker Count</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserModel.workerCount"
+              type="text"
+              class="form-control"
+              name="workerCount"
+              #workerCount="ngModel"
+              placeholder="Worker Count"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="workerCountClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workerCount.valid && workerCount.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workerCount)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Web Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserModel.webAddress"
+              type="text"
+              class="form-control"
+              name="webAddress"
+              #webAddress="ngModel"
+              placeholder="Web Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="webAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!webAddress.valid && webAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(webAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Year of Establishment</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="companyUserModel.yearOfEstablishment"
+              type="date"
+              class="form-control"
+              name="yearOfEstablishment"
+              #yearOfEstablishment="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="yearOfEstablishmentClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="!yearOfEstablishment.valid && yearOfEstablishment.touched"
+          >
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(yearOfEstablishment)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Clarification</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserModel.clarification"
+              type="text"
+              class="form-control"
+              name="clarification"
+              #clarification="ngModel"
+              placeholder="Clarification"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="clarificationClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!clarification.valid && clarification.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(clarification)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >About <br />{{ aboutDetail }} \ 250</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="1000"
+              pattern=""
+              class="form-control"
+              name="about"
+              #about="ngModel"
+              style="height: 100px"
+              [(ngModel)]="companyUserModel.about"
+              (input)="count()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="aboutClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!about.valid && about.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(about)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

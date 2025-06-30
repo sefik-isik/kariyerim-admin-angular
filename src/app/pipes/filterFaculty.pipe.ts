@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Faculty } from '../models/faculty';
+import { Faculty } from '../models/component/faculty';
 
 @Pipe({
   name: 'filterFaculty',

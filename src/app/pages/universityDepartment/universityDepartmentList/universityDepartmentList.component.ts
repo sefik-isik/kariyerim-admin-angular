@@ -6,8 +6,8 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { UniversityDepartmentDTO } from '../../../models/universityDepartmentDTO';
-import { University } from '../../../models/university';
+import { UniversityDepartmentDTO } from '../../../models/dto/universityDepartmentDTO';
+import { University } from '../../../models/component/university';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityService } from '../../../services/university.service';
 import { FilterUniversityDepartmentsByUniversityPipe } from '../../../pipes/filterUniversityDepartmentsByUniversity.pipe';
@@ -15,8 +15,8 @@ import { FilterUniversityDepartmentPipe } from '../../../pipes/filterUniversityD
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityDepartmentUpdateComponent } from '../universityDepartmentUpdate/universityDepartmentUpdate.component';
 import { UniversityDepartmentDetailComponent } from '../universityDepartmentDetail/universityDepartmentDetail.component';
-import { Department } from '../../../models/department';
-import { Faculty } from '../../../models/faculty';
+import { Department } from '../../../models/component/department';
+import { Faculty } from '../../../models/component/faculty';
 import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFaculty.pipe';
 
 @Component({
@@ -69,7 +69,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -78,7 +78,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -87,7 +87,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -96,7 +96,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.universityDepartmentDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -114,7 +114,7 @@ export class UniversityDepartmentListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -132,7 +132,7 @@ export class UniversityDepartmentListComponent implements OnInit {
         .delete(universityDepartmentDTO)
         .subscribe(
           (response) => {},
-          (error) => console.error
+          (responseError) => console.error
         );
     });
     setTimeout(() => {

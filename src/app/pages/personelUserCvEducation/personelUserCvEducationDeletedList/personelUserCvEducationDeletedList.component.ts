@@ -1,14 +1,14 @@
-import { PersonelUserCvEducationDTO } from './../../../models/personelUserCvEducationDTO';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { FilterPersonelUserCvEducationByUserPipe } from '../../../pipes/filterPersonelUserCvEducationByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +28,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Cv Educations';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserCvEducationService: PersonelUserCvEducationService,
@@ -49,13 +49,13 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCvEducations(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCvEducationDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -85,7 +85,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
-        (error) => console.error
+        (responseError) => console.error
       );
   }
 
@@ -95,12 +95,49 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
         .update(personelUserCvEducationDTO)
         .subscribe(
           (response) => {},
-          (error) => console.error
+          (responseError) => console.error
         );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(personelUserCvEducationDTO: PersonelUserCvEducationDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserCvEducationService
+      .terminate(personelUserCvEducationDTO)
+      .subscribe(
+        (response) => {
+          this.toastrService.success('Başarı ile kalıcı olarak silindi');
+          this.ngOnInit();
+        },
+        (responseError) => console.log(responseError)
+      );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserCvEducationDTOs.forEach((personelUserCvEducationDTO) => {
+      this.personelUserCvEducationService
+        .terminate(personelUserCvEducationDTO)
+        .subscribe(
+          (response) => {},
+          (responseError) => console.error
+        );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

@@ -48,8 +48,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let language of languages | filterLanguage : filter1">
-              <td>{{ language.id }}</td>
+            <tr
+              *ngFor="
+                let language of languages | filterLanguage : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ language.languageName }}</td>
 
               <td>

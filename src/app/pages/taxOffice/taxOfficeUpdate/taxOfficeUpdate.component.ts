@@ -1,23 +1,18 @@
 import { TaxOfficeService } from './../../../services/taxOffice.service';
-import { City } from './../../../models/city';
+import { City } from '../../../models/component/city';
 import { Component, Input, OnInit } from '@angular/core';
 import { CityService } from '../../../services/city.service';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { Region } from '../../../models/region';
+import { Region } from '../../../models/component/region';
 import { RegionService } from '../../../services/region.service';
-import { TaxOffice } from '../../../models/taxOffice';
-import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
-import { CaseService } from '../../../services/case.service';
+import { TaxOffice } from '../../../models/component/taxOffice';
+import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-taxOfficeUpdate',
@@ -26,77 +21,54 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class TaxOfficeUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() taxOfficeDTO: TaxOfficeDTO;
   taxOfficeDTOs: TaxOfficeDTO[];
   regions: Region[];
   cities: City[];
-  cityId: number;
-  regionId: number;
-  taxOfficeId: number;
-
   componentTitle = 'Tax Office Update Form';
 
   constructor(
     private cityService: CityService,
-
-    private formBuilder: FormBuilder,
     private regionService: RegionService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
     this.getCities();
-
-    this.createUpdateForm();
 
     setTimeout(() => {
       this.getById(this.taxOfficeDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      taxOfficeCode: [
-        '',
-        [Validators.required, Validators.minLength(4), Validators.minLength(5)],
-      ],
-      taxOfficeName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.taxOfficeService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          regionName: response.data.regionName,
-          cityName: this.getCityById(response.data.cityId),
-          taxOfficeCode: response.data.taxOfficeCode,
-          taxOfficeName: response.data.taxOfficeName,
-        });
-        this.taxOfficeId = response.data.id;
-        this.cityId = response.data.cityId;
-        this.getRegions();
+        this.taxOfficeDTO.id = response.data.id;
+        this.taxOfficeDTO.cityId = response.data.cityId;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid && this.getModel().cityId > 0) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.taxOfficeService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
-        (error) => console.error
+        (responseError) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -105,14 +77,14 @@ export class TaxOfficeUpdateComponent implements OnInit {
 
   getModel(): TaxOffice {
     return Object.assign({
-      id: this.taxOfficeId,
-      cityId: this.getCityId(this.updateForm.value.cityName),
+      id: this.taxOfficeDTO.id,
+      cityId: this.getCityId(this.taxOfficeDTO.cityName),
       regionName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.regionName
+        this.taxOfficeDTO.regionName
       ),
-      taxOfficeCode: this.updateForm.value.taxOfficeCode,
+      taxOfficeCode: this.taxOfficeDTO.taxOfficeCode,
       taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.taxOfficeName
+        this.taxOfficeDTO.taxOfficeName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -125,47 +97,43 @@ export class TaxOfficeUpdateComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getRegions() {
+  getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
-        if (this.cityId) {
-          this.regions = response.data.filter((f) => f.cityId == this.cityId);
+        if (this.taxOfficeDTO.cityName) {
+          const cityId = this.getCityId(cityName);
+          this.regions = response.data.filter((f) => f.cityId == cityId);
         }
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCityById(cityId: number): string {
+  getCityById(cityId: string): string {
     return this.cities.find((c) => c.id == cityId)?.cityName;
   }
 
-  getCityId(cityName: string): number {
+  getCityId(cityName: string): string {
     return this.cities.find((c) => c.cityName == cityName)?.id;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('cityName');
-    value.reset();
-    this.getCities();
+  cityNameClear() {
+    this.taxOfficeDTO.cityName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('regionName');
-    value.reset();
+  regionNameClear() {
+    this.taxOfficeDTO.regionName = '';
   }
 
-  clearInput3() {
-    let value = this.updateForm.get('taxOfficeCode');
-    value.reset();
+  taxOfficeCodeClear() {
+    this.taxOfficeDTO.taxOfficeCode = '';
   }
 
-  clearInput4() {
-    let value = this.updateForm.get('taxOfficeName');
-    value.reset();
+  taxOfficeNameClear() {
+    this.taxOfficeDTO.taxOfficeName = '';
   }
 }

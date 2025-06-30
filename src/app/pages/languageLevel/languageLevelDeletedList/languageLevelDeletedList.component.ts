@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { LanguageLevel } from '../../../models/languageLevel';
+import { LanguageLevel } from '../../../models/component/languageLevel';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageLevelUpdateComponent } from '../languageLevelUpdate/languageLevelUpdate.component';
@@ -40,7 +40,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -50,7 +50,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -58,12 +58,45 @@ export class LanguageLevelDeletedListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.update(languageLevel).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(languageLevel: LanguageLevel) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.languageLevelService.terminate(languageLevel).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.languageLevels.forEach((languageLevel) => {
+      this.languageLevelService.terminate(languageLevel).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

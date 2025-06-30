@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { OperationClaimService } from '../../../services/operationClaim.service';
-import { OperationClaim } from '../../../models/operationClaim';
+import { OperationClaim } from '../../../models/component/operationClaim';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-operationClaimAdd',
@@ -20,29 +15,25 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class OperationClaimAddComponent implements OnInit {
-  addForm: FormGroup;
-  componentTitle = 'Add Operation Claim Form';
+  operationClaimModel: OperationClaim = {} as OperationClaim;
+  componentTitle = 'Operation Claim Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private operationClaimService: OperationClaimService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.operationClaimService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -51,7 +42,7 @@ export class OperationClaimAddComponent implements OnInit {
             '/dashboard/operationclaim/operationclaimlisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -62,13 +53,13 @@ export class OperationClaimAddComponent implements OnInit {
 
   getModel(): OperationClaim {
     return Object.assign({
-      name: this.addForm.value.name,
+      id: '',
+      name: this.operationClaimModel.name,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('name');
-    value.reset();
+  nameClear() {
+    this.operationClaimModel.name = '';
   }
 }

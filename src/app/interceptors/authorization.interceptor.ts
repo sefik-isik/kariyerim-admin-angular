@@ -1,4 +1,4 @@
-import { LocalStorageService } from './../services/localStorage.service';
+import { LocalStorageService } from '../services/helperServices/localStorage.service';
 import { Injectable } from '@angular/core';
 import {
   HttpEvent,

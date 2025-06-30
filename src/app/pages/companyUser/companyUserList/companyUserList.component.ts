@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { CompanyUser } from '../../../models/companyUser';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { CompanyUser } from '../../../models/component/companyUser';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserUpdateComponent } from '../companyUserUpdate/companyUserUpdate.component';
 import { CompanyUserDetailComponent } from '../companyUserDetail/companyUserDetail.component';
@@ -26,9 +26,8 @@ export class CompanyUserListComponent implements OnInit {
   companyUserDTOs: CompanyUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
-
+  userId: string;
   componentTitle = 'Company Users';
-  userId: number;
 
   constructor(
     private userService: UserService,
@@ -50,13 +49,13 @@ export class CompanyUserListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -65,7 +64,7 @@ export class CompanyUserListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -74,11 +73,11 @@ export class CompanyUserListComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.log(responseError)
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
@@ -95,7 +94,7 @@ export class CompanyUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -108,7 +107,7 @@ export class CompanyUserListComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.delete(companyUser).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { CompanyUserDepartment } from '../models/companyUserDepartment';
-import { ResponseModel } from '../models/responseModel';
+import { CompanyUserDepartment } from '../models/component/companyUserDepartment';
+import { ResponseModel } from '../models/response/responseModel';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { CompanyUserDepartmentDTO } from '../models/companyUserDepartmentDTO';
-import { AdminModel } from '../models/adminModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { CompanyUserDepartmentDTO } from '../models/dto/companyUserDepartmentDTO';
+import { AdminModel } from '../models/auth/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +38,15 @@ export class CompanyUserDepartmentService {
   ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      companyUserDepartment
+    );
+  }
+
+  terminate(
+    companyUserDepartment: CompanyUserDepartment
+  ): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       companyUserDepartment
     );
   }

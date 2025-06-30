@@ -1,18 +1,17 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterUserPipe } from '../../../pipes/filterUser.pipe';
 import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserUpdateComponent } from '../companyUserUpdate/companyUserUpdate.component';
-import { CompanyUser } from '../../../models/companyUser';
 import { CompanyUserDetailComponent } from '../companyUserDetail/companyUserDetail.component';
 
 @Component({
@@ -28,7 +27,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
   filter1 = '';
 
   componentTitle = 'Deleted Company Users';
-  userId: number;
+  userId: string;
 
   constructor(
     private userService: UserService,
@@ -44,13 +43,13 @@ export class CompanyUserDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -59,7 +58,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -68,11 +67,11 @@ export class CompanyUserDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.find((c) => c.email === userEmail)?.id;
 
     return userId;
@@ -84,7 +83,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -92,12 +91,45 @@ export class CompanyUserDeletedListComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.update(companyUser).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(companyUser: CompanyUserDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.companyUserService.terminate(companyUser).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.companyUserDTOs.forEach((companyUser) => {
+      this.companyUserService.terminate(companyUser).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

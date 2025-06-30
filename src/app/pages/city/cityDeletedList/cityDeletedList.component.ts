@@ -6,9 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
 import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/country';
-import { CityDTO } from '../../../models/cityDTO';
-import { City } from '../../../models/city';
+import { Country } from '../../../models/component/country';
+import { CityDTO } from '../../../models/dto/cityDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
 import { CityDetailComponent } from '../cityDetail/cityDetail.component';
@@ -49,7 +48,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -58,7 +57,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -68,7 +67,7 @@ export class CityDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,12 +75,45 @@ export class CityDeletedListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.update(city).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(city: CityDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.cityService.terminate(city).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.cityDTOs.forEach((city) => {
+      this.cityService.terminate(city).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

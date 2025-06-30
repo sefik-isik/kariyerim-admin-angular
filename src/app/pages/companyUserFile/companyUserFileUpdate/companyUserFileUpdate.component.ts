@@ -1,26 +1,16 @@
-import { CompanyUserService } from './../../../services/companyUser.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { CompanyUserFileService } from './../../../services/companyUserFile.service';
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { CompanyUserFileService } from '../../../services/companyUserFile.service';
-import { CompanyUserFile } from '../../../models/companyUserFile';
-import { UserDTO } from '../../../models/userDTO';
 import { HttpEventType } from '@angular/common/http';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
+import { CompanyUserFile } from '../../../models/component/companyUserFile';
+import { Router } from '@angular/router';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserFileUpdate',
@@ -29,80 +19,56 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserFileUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() companyUserFileDTO: CompanyUserFileDTO;
-  componentTitle = 'Company User File Update Form';
   selectedFile: File | null = null;
-  filePath: string | null = null;
-  fileName: string | null = null;
-  fileOwnName: string | null = null;
-  users: UserDTO[] = [];
-  companyUsers: CompanyUserDTO[] = [];
-  companyUserId: number;
-  companyUserName: string;
-  userEmail: string;
-  userId: number;
-  id: number;
-  result: boolean = true;
+  result: boolean;
+  componentTitle = 'Company User File Update Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
-    private companyUserService: CompanyUserService,
-    private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
-  ngOnInit() {
-    this.getAdminValues();
-    this.createupdateForm();
 
+  ngOnInit() {
     setTimeout(() => {
       this.getUserValues(this.companyUserFileDTO.id);
     }, 200);
   }
 
-  checkFile(fileName: string) {
-    if (this.fileName == 'noFile') {
+  checkFile() {
+    if (this.companyUserFileDTO.fileName == 'noFile') {
       this.result = false;
     } else {
       this.result = true;
     }
   }
 
-  createupdateForm() {
-    this.updateForm = this.formBuilder.group({
-      file: ['', [Validators.required, Validators.minLength(3)]],
-      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
   }
 
   getById(adminModel: AdminModel) {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
     this.companyUserFileService.getById(adminModel).subscribe(
       (response) => {
-        this.id = response.data.id;
-        this.companyUserId = response.data.companyUserId;
-        this.companyUserName = this.getCompanyUserById(this.companyUserId);
-        this.filePath = response.data.filePath;
-        this.fileName = response.data.fileName;
-        this.fileOwnName = response.data.fileOwnName;
-        this.checkFile(this.fileName);
+        this.companyUserFileDTO.id = response.data.id;
+        this.companyUserFileDTO.userId = response.data.userId;
+        this.companyUserFileDTO.companyUserId = response.data.companyUserId;
+        this.companyUserFileDTO.filePath = response.data.filePath;
+        this.companyUserFileDTO.fileName = response.data.fileName;
+        this.companyUserFileDTO.fileOwnName = response.data.fileOwnName;
+        this.checkFile();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -137,7 +103,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       );
     } else {
       this.toastrService.success('File selected successfully', 'Success');
-      this.fileName = this.selectedFile.name;
+      this.companyUserFileDTO.fileName = this.selectedFile.name;
     }
   }
 
@@ -146,11 +112,20 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  onUpload() {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!form.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
     if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
@@ -158,24 +133,20 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       );
       return;
     }
-    if (!this.updateForm.valid) {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
-      return;
-    }
+
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
-    formData.append('companyUserId', this.companyUserId.toString());
 
     this.companyUserFileService
-      .uploadFile(formData, this.companyUserId)
+      .uploadFile(formData, this.companyUserFileDTO.companyUserId)
       .subscribe(
         (event) => {
           if (event.type === HttpEventType.UploadProgress) {
             const percentDone = Math.round(event.loaded / (event.total * 100));
             console.log(`File is ${percentDone}% uploaded.`);
           } else if (event.type === HttpEventType.Response) {
-            this.fileName = event.body.name;
-            this.filePath = event.body.type;
+            this.companyUserFileDTO.fileName = event.body.name;
+            this.companyUserFileDTO.filePath = event.body.type;
 
             this.update();
 
@@ -185,9 +156,9 @@ export class CompanyUserFileUpdateComponent implements OnInit {
             );
           }
         },
-        (error) => {
+        (responseError) => {
           console.error;
-          this.toastrService.error('Error uploading file', error);
+          this.toastrService.error('Error uploading file', responseError);
         }
       );
   }
@@ -201,55 +172,31 @@ export class CompanyUserFileUpdateComponent implements OnInit {
           '/dashboard/companyuserfile/companyuserfilelisttab',
         ]);
       },
-      (error) => {
-        this.toastrService.error(error.error.message);
+      (responseError) => {
+        this.toastrService.error(responseError.error.message);
       }
     );
   }
 
   getModel(): CompanyUserFile {
     return Object.assign({
-      id: this.id,
-      companyUserId: this.companyUserId,
-      filePath: this.filePath,
-      fileName: this.fileName,
-      fileOwnName: this.updateForm.value.fileOwnName,
+      id: this.companyUserFileDTO.id,
+      userId: this.companyUserFileDTO.userId,
+      companyUserId: this.companyUserFileDTO.companyUserId,
+      filePath: this.companyUserFileDTO.filePath,
+      fileName: this.companyUserFileDTO.fileName,
+      fileOwnName: this.companyUserFileDTO.fileOwnName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  getAdminValues() {
-    this.adminService.getAdminValues(this.id).subscribe(
-      (response) => {
-        this.getCompanyUsers(response);
-      },
-      (error) => console.error
-    );
+  fileNameClear() {
+    this.companyUserFileDTO.fileName = '';
   }
 
-  getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.companyUsers = response.data;
-      },
-      (error) => console.error
-    );
-  }
-
-  getCompanyUserById(companyUserId: number): string {
-    return this.companyUsers.find((c) => c.id == companyUserId)
-      ?.companyUserName;
-  }
-
-  clearInput1() {
-    let value = this.updateForm.get('fileOwnName');
-    value.reset();
-  }
-
-  clearInput2() {
-    let value = this.updateForm.get('file');
-    value.reset();
+  fileOwnNameClear() {
+    this.companyUserFileDTO.fileOwnName = '';
   }
 }

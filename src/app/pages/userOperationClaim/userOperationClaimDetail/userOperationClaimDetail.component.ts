@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
+import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
 
 @Component({
   selector: 'app-userOperationClaimDetail',

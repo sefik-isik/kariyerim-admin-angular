@@ -3,7 +3,7 @@ import { CodePipe } from './../../../pipes/code.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 
 @Component({
   selector: 'app-allUserDetail',

@@ -5,9 +5,9 @@ import { CityService } from '../../../services/city.service';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { City } from '../../../models/city';
+import { City } from '../../../models/component/city';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
-import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
+import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
 import { FilterTaxOfficePipe } from '../../../pipes/filterTaxOffice.pipe';
 import { FilterTaxOfficeByCityPipe } from '../../../pipes/filterTaxOfficeByCity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -55,7 +55,7 @@ export class TaxOfficeListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,15 +64,15 @@ export class TaxOfficeListComponent implements OnInit {
       (response) => {
         this.taxOfficeDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   delete(taxOfficeDTO: TaxOfficeDTO) {
-    if (!this.authService.isAdmin('status')) {
-      this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
-      return;
-    }
+    // if (!this.authService.isAdmin('status')) {
+    //   this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
+    //   return;
+    // }
     if (!confirm('Silmek istediğinize emin misiniz?')) {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
@@ -82,15 +82,15 @@ export class TaxOfficeListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
-      this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
-      return;
-    }
+    // if (!this.authService.isAdmin('status')) {
+    //   this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
+    //   return;
+    // }
     if (!confirm('Tümünü Silmek istediğinize emin misiniz?')) {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
@@ -98,7 +98,7 @@ export class TaxOfficeListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.delete(taxOfficeDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -2,38 +2,33 @@ import { WorkingMethodService } from './../../../services/workingMethod.service'
 import { SectorService } from './../../../services/sectorService';
 import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 import { PersonelUserCvService } from './../../../services/personelUserCv.service';
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserCv } from '../../../models/personelUserCv';
+import { PersonelUserCv } from '../../../models/component/personelUserCv';
 import { PersonelUserCvWorkExperienceService } from '../../../services/personelUserCvWorkExperience.service';
-import { PersonelUserCvWorkExperienceDTO } from '../../../models/personelUserCvWorkExperienceDTO';
-import { Country } from '../../../models/country';
-import { City } from '../../../models/city';
-import { Region } from '../../../models/region';
+import { PersonelUserCvWorkExperienceDTO } from '../../../models/dto/personelUserCvWorkExperienceDTO';
+import { Country } from '../../../models/component/country';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
 import { CountryService } from '../../../services/country.service';
 import { CityService } from '../../../services/city.service';
 import { RegionService } from '../../../services/region.service';
-import { Sector } from '../../../models/sector';
-import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { Sector } from '../../../models/component/sector';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceAdd',
@@ -42,23 +37,22 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
-  addForm: FormGroup;
+  personelUserCvWorkExperienceModel: PersonelUserCvWorkExperienceDTO =
+    {} as PersonelUserCvWorkExperienceDTO;
+  userDTOs: UserDTO[] = [];
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   companyUserDepartments: CompanyUserDepartment[] = [];
   companySectors: Sector[] = [];
   workingMethods: WorkingMethod[] = [];
-  detailText: string;
+  detailCount: number;
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
+  today: number = Date.now();
   componentTitle = 'Personel User Cv Work Experience Add Form';
-  userId: number;
-  userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
     private personelUserCvWorkExperienceService: PersonelUserCvWorkExperienceService,
     private toastrService: ToastrService,
     private router: Router,
@@ -73,65 +67,23 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private sectorService: SectorService,
     private workingMethodService: WorkingMethodService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
     this.getSectors();
     this.getCountries();
-    this.getCities();
     this.getWorkingMethods();
-    this.getRegions();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      cvName: ['', [Validators.required, Validators.minLength(3)]],
-      companyName: ['', [Validators.required, Validators.minLength(3)]],
-      companySectorName: ['', [Validators.required, Validators.minLength(3)]],
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-      position: ['', [Validators.required, Validators.minLength(3)]],
-      workingMethodName: ['', [Validators.required, Validators.minLength(3)]],
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]],
-      foundJobInHere: [false],
-      working: [false],
-      detail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(50),
-          Validators.maxLength(250),
-        ],
-      ],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.getModel().userId > 0 &&
-      this.getModel().cvId > 0 &&
-      this.getModel().companySectorId > 0 &&
-      this.getModel().departmentId > 0 &&
-      this.getModel().workingMethodId > 0 &&
-      this.getModel().countryId > 0 &&
-      this.getModel().cityId > 0 &&
-      this.getModel().regionId > 0 &&
-      this.getModel().detail.length >= 50
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCvWorkExperienceService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -140,7 +92,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
             '/dashboard/personelusercvworkexperience/personelusercvworkexperiencelisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -151,39 +103,54 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
 
   getModel(): PersonelUserCvWorkExperienceDTO {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
-      cvId: this.getPersonelUserCvId(this.addForm.value.cvName),
+      id: '',
+      userId: this.getUserId(this.personelUserCvWorkExperienceModel.email),
+      personelUserId: this.getPersonelUserId(
+        this.personelUserCvWorkExperienceModel.email
+      ),
+      cvId: this.getPersonelUserCvId(
+        this.personelUserCvWorkExperienceModel.cvName
+      ),
       companySectorId: this.CompanySectorId(
-        this.addForm.value.companySectorName
+        this.personelUserCvWorkExperienceModel.companySectorName
       ),
-      departmentId: this.getDepartmentId(this.addForm.value.departmentName),
-      foundJobInHere: this.addForm.value.foundJobInHere,
-      working: this.addForm.value.working,
-      position: this.addForm.value.position,
-      companyName: this.addForm.value.companyName,
+      departmentId: this.getDepartmentId(
+        this.personelUserCvWorkExperienceModel.departmentName
+      ),
+      foundJobInHere: this.personelUserCvWorkExperienceModel.foundJobInHere,
+      working: this.personelUserCvWorkExperienceModel.working,
+      position: this.personelUserCvWorkExperienceModel.position,
+      companyName: this.personelUserCvWorkExperienceModel.companyName,
       workingMethodId: this.getWorkingMethodId(
-        this.addForm.value.workingMethodName
+        this.personelUserCvWorkExperienceModel.workingMethodName
       ),
-      countryId: this.getCountryId(this.addForm.value.countryName),
-      cityId: this.getCityId(this.addForm.value.cityName),
-      regionId: this.getRegionId(this.addForm.value.regionName),
-      startDate: new Date(this.addForm.value.startDate).toJSON(),
-      endDate: new Date(this.addForm.value.endDate).toJSON(),
-      detail: this.addForm.value.detail,
+      countryId: this.getCountryId(
+        this.personelUserCvWorkExperienceModel.countryName
+      ),
+      cityId: this.getCityId(this.personelUserCvWorkExperienceModel.cityName),
+      regionId: this.getRegionId(
+        this.personelUserCvWorkExperienceModel.regionName
+      ),
+      startDate: new Date(
+        this.personelUserCvWorkExperienceModel.startDate
+      ).toJSON(),
+      endDate: new Date(
+        this.personelUserCvWorkExperienceModel.endDate
+      ).toJSON(),
+      detail: this.personelUserCvWorkExperienceModel.detail,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
         this.getCompanyUserDepartments(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -192,7 +159,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -202,18 +169,16 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserCvs = response.data.filter(
-          (f) => f.userId == this.getUserId(this.addForm.value.userEmail)
-        );
+        this.personelUserCvs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -222,7 +187,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.companySectors = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -231,7 +196,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -240,7 +205,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.companyUserDepartments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -248,36 +213,34 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     this.countryService.getAll().subscribe(
       (response) => {
         this.countries = response.data;
-        this.getCities();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCities() {
+  getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
         this.cities = response.data.filter(
-          (c) =>
-            c.countryId === this.getCountryId(this.addForm.value.countryName)
+          (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getRegions() {
+  getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
         this.regions = response.data.filter(
-          (r) => r.cityId === this.getCityId(this.addForm.value.cityName)
+          (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getPersonelUserId(email: string): number {
+  getPersonelUserId(email: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.email === email
     )[0]?.id;
@@ -293,7 +256,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     return companySectorId;
   }
 
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     const countryId = this.countries.filter(
       (c) => c.countryName === countryName
     )[0]?.id;
@@ -301,13 +264,13 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     return countryId;
   }
 
-  getCityId(cityName: string): number {
+  getCityId(cityName: string): string {
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
 
     return cityId;
   }
 
-  getRegionId(regionName: string): number {
+  getRegionId(regionName: string): string {
     const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
       ?.id;
 
@@ -315,16 +278,16 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   }
 
   count() {
-    this.detailText = this.addForm.value.detail.length;
+    this.detailCount = this.personelUserCvWorkExperienceModel.detail.length;
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getDepartmentId(departmentName: string): number {
+  getDepartmentId(departmentName: string): string {
     const departmentId = this.companyUserDepartments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;
@@ -332,7 +295,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     return departmentId;
   }
 
-  getWorkingMethodId(workingMethodName: string): number {
+  getWorkingMethodId(workingMethodName: string): string {
     const departmentId = this.workingMethods.filter(
       (c) => c.methodName === workingMethodName
     )[0]?.id;
@@ -340,7 +303,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     return departmentId;
   }
 
-  getPersonelUserCvId(cvName: string): number {
+  getPersonelUserCvId(cvName: string): string {
     const personelUserId = this.personelUserCvs.filter(
       (c) => c.cvName === cvName
     )[0]?.id;
@@ -348,73 +311,55 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserCvWorkExperienceModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('cvName');
-    value.reset();
-    this.getAdminValues();
+  cvNameClear() {
+    this.personelUserCvWorkExperienceModel.cvName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('companyName');
-    value.reset();
-    this.getAdminValues();
+  companyNameClear() {
+    this.personelUserCvWorkExperienceModel.companyName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('companySectorName');
-    value.reset();
-    this.getSectors();
+  companySectorNameClear() {
+    this.personelUserCvWorkExperienceModel.companySectorName = '';
   }
 
-  clearInput5() {
-    let value = this.addForm.get('departmentName');
-    value.reset();
-    this.getAdminValues();
+  departmentNameClear() {
+    this.personelUserCvWorkExperienceModel.departmentName = '';
   }
 
-  clearInput6() {
-    let value = this.addForm.get('workingMethodName');
-    value.reset();
+  workingMethodNameClear() {
+    this.personelUserCvWorkExperienceModel.workingMethodName = '';
   }
 
-  clearInput7() {
-    let value = this.addForm.get('countryName');
-    value.reset();
+  countryNameClear() {
+    this.personelUserCvWorkExperienceModel.countryName = '';
   }
 
-  clearInput8() {
-    let value = this.addForm.get('cityName');
-    value.reset();
+  cityNameClear() {
+    this.personelUserCvWorkExperienceModel.cityName = '';
   }
 
-  clearInput9() {
-    let value = this.addForm.get('regionName');
-    value.reset();
+  regionNameClear() {
+    this.personelUserCvWorkExperienceModel.regionName = '';
   }
 
-  clearInput10() {
-    let value = this.addForm.get('startDate');
-    value.reset();
+  startDateClear() {
+    this.personelUserCvWorkExperienceModel.startDate = '';
   }
 
-  clearInput11() {
-    let value = this.addForm.get('endDate');
-    value.reset();
-  }
-  clearInput12() {
-    let value = this.addForm.get('position');
-    value.reset();
+  endDateClear() {
+    this.personelUserCvWorkExperienceModel.endDate = '';
   }
 
-  clearInput13() {
-    let value = this.addForm.get('detail');
-    value.reset();
-    this.detailText = '';
+  positionClear() {
+    this.personelUserCvWorkExperienceModel.position = '';
+  }
+
+  detailClear() {
+    this.personelUserCvWorkExperienceModel.detail = '';
   }
 }

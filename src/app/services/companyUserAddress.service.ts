@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { CompanyUserAddress } from '../models/companyUserAddress';
+import { CompanyUserAddress } from '../models/component/companyUserAddress';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { CompanyUserAddressDTO } from '../models/CompanyUserAddressDTO';
-import { ResponseModel } from '../models/responseModel';
-import { AdminModel } from '../models/adminModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { ResponseModel } from '../models/response/responseModel';
+import { AdminModel } from '../models/auth/adminModel';
+import { CompanyUserAddressDTO } from '../models/dto/companyUserAddressDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +27,13 @@ export class CompanyUserAddressService {
   update(companyUserAddress: CompanyUserAddress): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'update',
+      companyUserAddress
+    );
+  }
+
+  terminate(companyUserAddress: CompanyUserAddress): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       companyUserAddress
     );
   }

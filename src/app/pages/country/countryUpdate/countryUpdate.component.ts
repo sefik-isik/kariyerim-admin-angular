@@ -1,18 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/country';
-import { CaseService } from '../../../services/case.service';
+import { Country } from '../../../models/component/country';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countryUpdate',
@@ -21,60 +16,47 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CountryUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() country: Country;
-  countryId: number;
-
   componentTitle = 'Country Update Form';
 
   constructor(
     private countryService: CountryService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.country.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-      countryIso: ['', [Validators.required, Validators.minLength(2)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  getById(countryId: number) {
+  getById(countryId: string) {
     this.countryService.getById(countryId).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          countryName: response.data.countryName,
-          countryIso: response.data.countryIso,
-        });
-        this.countryId = countryId;
+        this.country.id = countryId;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.countryService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/country/countrylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -84,24 +66,22 @@ export class CountryUpdateComponent implements OnInit {
 
   getModel(): Country {
     return Object.assign({
-      id: this.countryId,
+      id: this.country.id,
       countryName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.countryName
+        this.country.countryName
       ),
-      countryIso: this.updateForm.value.countryIso,
+      countryIso: this.caseService.capitalizeToUpper(this.country.countryIso),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('countryName');
-    value.reset();
+  countryNameClear() {
+    this.country.countryName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('countryIso');
-    value.reset();
+  countryIsoClear() {
+    this.country.countryIso = '';
   }
 }

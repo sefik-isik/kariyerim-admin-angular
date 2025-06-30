@@ -3,70 +3,111 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="updateForm" class="form">
-      <div class="form-group">
-        <div class="input-group mb-3 justify-content-md-center">
-          <div class="card" *ngIf="result == true">
-            <img
-              *ngIf="imagePath"
-              src="{{ imagePath + 'thumbs/' + imageName }}"
-              class="img-fluid img-thumbnail"
-              style="border: none"
-              alt="{{ imageOwnName }}"
-            />
-            <i
-              type="button"
-              (click)="deleteImage()"
-              class="bi bi-x-circle-fill btn btn-outline-danger"
-            >
-              Delete Image
-            </i>
-          </div>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="input-group">
+          <span class="input-group-text"
+            >Email : {{ personelUserImageDTO.email }}</span
+          >
         </div>
-        <div class="input-group mb-3">
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <span class="input-group-text"
+            >Personel Name : {{ personelUserImageDTO.firstName }}
+            {{ personelUserImageDTO.lastName }}</span
+          >
+        </div>
+      </div>
+
+      <div class="input-group mb-3 justify-content-md-center">
+        <div class="card" *ngIf="result == true">
+          <img
+            *ngIf="personelUserImageDTO.imageName"
+            src="{{
+              personelUserImageDTO.imagePath +
+                'thumbs/' +
+                personelUserImageDTO.imageName
+            }}"
+            class="img-fluid img-thumbnail"
+            style="border: none"
+            alt="{{ personelUserImageDTO.imageOwnName }}"
+          />
+          <i
+            type="button"
+            (click)="deleteImage()"
+            class="bi bi-x-circle-fill btn btn-outline-danger"
+          >
+            Delete Image
+          </i>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="input-group">
           <input
-            *ngIf="result == false"
-            formControlName="image"
             type="file"
+            required
+            pattern=""
             class="form-control"
-            id="imageName"
-            placeholder="Upload Image"
+            name="imageName"
+            placeholder="Upload File"
             (change)="onImageSelected($event)"
             aria-label="Upload Image"
           />
           <span class="input-group-text" *ngIf="result == false">
             <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-        <div class="input-group mb-3" *ngIf="result == false">
-          <span class="input-group-text">Image Name</span>
-          <input
-            formControlName="imageOwnName"
-            type="text"
-            class="form-control"
-            id="imageOwnName"
-            placeholder="Image Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
+              (click)="imageNameClear()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>
           </span>
         </div>
       </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Image Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserImageDTO.imageOwnName"
+              type="text"
+              class="form-control"
+              name="imageOwnName"
+              #imageOwnName="ngModel"
+              placeholder="Image Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="imageOwnNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!imageOwnName.valid && imageOwnName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(imageOwnName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
     <div class="d-grid gap-2">
       <button
         *ngIf="result == false"
+        [disabled]="!form.valid"
         type="button"
         class="btn btn-outline-primary"
-        (click)="onUpload()"
+        (click)="onSubmit(form)"
       >
         Upload
       </button>

@@ -1,4 +1,4 @@
-import { CaseService } from './../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 import {
@@ -7,13 +7,15 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workingMethodUpdate',
@@ -22,50 +24,39 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class WorkingMethodUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() workingMethod: WorkingMethod;
-  workingMethodId: number;
-
   componentTitle = 'Working Method Update Form';
 
   constructor(
     private workingMethodService: WorkingMethodService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.workingMethod.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      methodName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.workingMethodService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          methodName: response.data.methodName,
-        });
-        this.workingMethodId = id;
+        this.workingMethod.id = id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.workingMethodService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -74,8 +65,8 @@ export class WorkingMethodUpdateComponent implements OnInit {
             '/dashboard/workingmethod/workingmethodlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -85,9 +76,9 @@ export class WorkingMethodUpdateComponent implements OnInit {
 
   getModel(): WorkingMethod {
     return Object.assign({
-      id: this.workingMethodId,
+      id: this.workingMethod.id,
       methodName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.methodName
+        this.workingMethod.methodName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -95,8 +86,7 @@ export class WorkingMethodUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('methodName');
-    value.reset();
+  methodNameClear() {
+    this.workingMethod.methodName = '';
   }
 }

@@ -1,25 +1,20 @@
 import { FacultyService } from './../../../services/faculty.service';
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { University } from '../../../models/university';
-import { UniversityDepartment } from '../../../models/universityDepartment';
+import { University } from '../../../models/component/university';
+import { UniversityDepartment } from '../../../models/component/universityDepartment';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityService } from '../../../services/university.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
-import { UniversityDepartmentDTO } from '../../../models/universityDepartmentDTO';
-import { Faculty } from '../../../models/faculty';
+import { UniversityDepartmentDTO } from '../../../models/dto/universityDepartmentDTO';
+import { Faculty } from '../../../models/component/faculty';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityDepartmentUpdate',
@@ -28,65 +23,49 @@ import { Faculty } from '../../../models/faculty';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityDepartmentUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() universityDepartmentDTO: UniversityDepartmentDTO;
   universities: University[];
   faculties: Faculty[];
   departments: Department[];
   universityDepartmentDTOs: UniversityDepartmentDTO[];
-  universityDepartmentId: number;
-  universityId: number;
-
   componentTitle = 'University Department Update Form';
 
   constructor(
     private universityDepartmentService: UniversityDepartmentService,
-
-    private formBuilder: FormBuilder,
     private universityService: UniversityService,
     private toastrService: ToastrService,
     private router: Router,
     public activeModal: NgbActiveModal,
     private departmentService: DepartmentService,
-    private facultyService: FacultyService
+    private facultyService: FacultyService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
     this.getUniversities();
     this.getFaculties();
     this.getDepartments();
-    this.createUpdateForm();
 
     setTimeout(() => {
       this.getById(this.universityDepartmentDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-      facultyName: ['', [Validators.required, Validators.minLength(3)]],
-      universityName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.universityDepartmentService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          departmentName: this.getDepartmentById(response.data.departmentId),
-          facultyName: this.getFacultyById(response.data.facultyId),
-          universityName: this.getUniversityById(response.data.universityId),
-        });
-        this.universityDepartmentId = response.data.id;
-        this.universityId = response.data.universityId;
+        this.universityDepartmentDTO.id = response.data.id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid && this.getModel().universityId > 0) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.universityDepartmentService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -95,8 +74,8 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
             '/dashboard/universitydepartment/universitydepartmentlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -106,10 +85,14 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
 
   getModel(): UniversityDepartment {
     return Object.assign({
-      id: this.universityDepartmentId,
-      universityId: this.getUniversityId(this.updateForm.value.universityName),
-      facultyId: this.getFacultyId(this.updateForm.value.facultyName),
-      departmentId: this.getDepartmentId(this.updateForm.value.departmentName),
+      id: this.universityDepartmentDTO.id,
+      universityId: this.getUniversityId(
+        this.universityDepartmentDTO.universityName
+      ),
+      facultyId: this.getFacultyId(this.universityDepartmentDTO.facultyName),
+      departmentId: this.getDepartmentId(
+        this.universityDepartmentDTO.departmentName
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -121,7 +104,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -130,7 +113,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -139,46 +122,42 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUniversityById(universityId: number): string {
+  getUniversityById(universityId: string): string {
     return this.universities.find((c) => c.id == universityId)?.universityName;
   }
 
-  getDepartmentById(departmentId: number): string {
+  getDepartmentById(departmentId: string): string {
     return this.departments.find((c) => c.id == departmentId)?.departmentName;
   }
 
-  getFacultyById(facultyId: number): string {
+  getFacultyById(facultyId: string): string {
     return this.faculties.find((c) => c.id == facultyId)?.facultyName;
   }
 
-  getUniversityId(universityName: string): number {
+  getUniversityId(universityName: string): string {
     return this.universities.find((c) => c.universityName == universityName)
       ?.id;
   }
-  getFacultyId(facultyName: string): number {
+  getFacultyId(facultyName: string): string {
     return this.faculties.find((c) => c.facultyName == facultyName)?.id;
   }
-  getDepartmentId(departmentName: string): number {
+  getDepartmentId(departmentName: string): string {
     return this.departments.find((c) => c.departmentName == departmentName)?.id;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('universityName');
-    value.reset();
-    this.getUniversities();
+  universityNameClear() {
+    this.universityDepartmentDTO.universityName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('facultyName');
-    value.reset();
+  facultyNameClear() {
+    this.universityDepartmentDTO.facultyName = '';
   }
 
-  clearInput3() {
-    let value = this.updateForm.get('departmentName');
-    value.reset();
+  departmentNameClear() {
+    this.universityDepartmentDTO.departmentName = '';
   }
 }

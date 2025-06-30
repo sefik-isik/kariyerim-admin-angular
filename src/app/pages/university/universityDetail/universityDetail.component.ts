@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UniversityDTO } from '../../../models/universityDTO';
+import { UniversityDTO } from '../../../models/dto/universityDTO';
 
 @Component({
   selector: 'app-universityDetail',

@@ -1,20 +1,18 @@
 import { RegionService } from './../../../services/region.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { City } from '../../../models/city';
-import { Region } from '../../../models/region';
-import { CaseService } from '../../../services/case.service';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
+import { RegionDTO } from '../../../models/dto/regionDTO';
+import { CountryService } from '../../../services/country.service';
+import { Country } from '../../../models/component/country';
 
 @Component({
   selector: 'app-regionAdd',
@@ -23,42 +21,40 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class RegionAddComponent implements OnInit {
-  addForm1: FormGroup;
+  regionModel: RegionDTO = {} as RegionDTO;
+  countries: Country[];
   cities: City[];
-
   componentTitle = 'Region Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private regionService: RegionService,
+    private countryService: CountryService,
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
+    this.getCountries();
     this.getCities();
   }
 
-  createAddForm() {
-    this.addForm1 = this.formBuilder.group({
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (this.addForm1.valid && this.getModel().cityId > 0) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.regionService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/region/regionlisttab']);
         },
-        (error) => console.error
+        (responseError) => console.error(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -67,12 +63,23 @@ export class RegionAddComponent implements OnInit {
 
   getModel(): Region {
     return Object.assign({
+      id: '',
       regionName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.regionName
+        this.regionModel.regionName
       ),
-      cityId: this.getCityId(this.addForm1.value.cityName),
+      countryId: this.getCountryId(this.regionModel.countryName),
+      cityId: this.getCityId(this.regionModel.cityName),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  getCountries() {
+    this.countryService.getAll().subscribe(
+      (response) => {
+        this.countries = response.data;
+      },
+      (responseError) => console.error
+    );
   }
 
   getCities() {
@@ -80,24 +87,33 @@ export class RegionAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCityId(cityName: string): number {
+  getCountryId(countryName: string): string {
+    const countryId = this.countries.filter(
+      (c) => c.countryName === countryName
+    )[0]?.id;
+
+    return countryId;
+  }
+
+  getCityId(cityName: string): string {
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
 
     return cityId;
   }
 
-  clearInput1() {
-    let value = this.addForm1.get('cityName');
-    value.reset();
-    this.getCities();
+  countryNameClear() {
+    this.regionModel.countryName = '';
   }
 
-  clearInput2() {
-    let value = this.addForm1.get('regionName');
-    value.reset();
+  cityNameClear() {
+    this.regionModel.cityName = '';
+  }
+
+  regionNameClear() {
+    this.regionModel.regionName = '';
   }
 }

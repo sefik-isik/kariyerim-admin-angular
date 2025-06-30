@@ -1,16 +1,16 @@
-import { LocalStorageService } from './localStorage.service';
+import { LocalStorageService } from './helperServices/localStorage.service';
 import { Injectable, OnInit } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
-import { Status } from '../models/status';
+import { ApiUrl } from '../models/concrete/apiUrl';
+
 import { HttpClient } from '@angular/common/http';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { LoginModel } from '../models/loginModel';
-import { TokenModel } from '../models/tokenModel';
-import { RegisterModel } from '../models/registerModel';
-import { PasswordModel } from '../models/passwordModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { LoginModel } from '../models/auth/loginModel';
+import { TokenModel } from '../models/auth/tokenModel';
+import { RegisterModel } from '../models/auth/registerModel';
+import { PasswordModel } from '../models/auth/passwordModel';
 import { Router } from '@angular/router';
-import { UserCodeModel } from '../models/userCodeModel';
-import { UserDTO } from '../models/userDTO';
+import { UserDTO } from '../models/dto/userDTO';
+import { AdminStatus } from '../models/concrete/status';
 
 @Injectable({
   providedIn: 'root',
@@ -26,13 +26,6 @@ export class AuthService implements OnInit {
 
   ngOnInit() {}
 
-  login(loginModel: LoginModel) {
-    return this.HttpClient.post<SingleResponseModel<TokenModel>>(
-      this.newUrlPath + 'login',
-      loginModel
-    );
-  }
-
   register(registerModel: RegisterModel) {
     return this.HttpClient.post<SingleResponseModel<TokenModel>>(
       this.newUrlPath + 'register',
@@ -40,38 +33,17 @@ export class AuthService implements OnInit {
     );
   }
 
+  login(loginModel: LoginModel) {
+    return this.HttpClient.post<SingleResponseModel<TokenModel>>(
+      this.newUrlPath + 'login',
+      loginModel
+    );
+  }
+
   updatePassword(passwordModel: PasswordModel) {
     return this.HttpClient.post<SingleResponseModel<PasswordModel>>(
       this.newUrlPath + 'updatepassword',
       passwordModel
-    );
-  }
-
-  updateCode(userCodeModel: UserCodeModel) {
-    return this.HttpClient.post<SingleResponseModel<UserCodeModel>>(
-      this.newUrlPath + 'updatecode',
-      userCodeModel
-    );
-  }
-
-  updateUser(user: UserDTO) {
-    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
-      this.newUrlPath + 'updateuser',
-      user
-    );
-  }
-
-  deleteUser(user: UserDTO) {
-    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
-      this.newUrlPath + 'deleteuser',
-      user
-    );
-  }
-
-  unDeleteUser(user: UserDTO) {
-    return this.HttpClient.post<SingleResponseModel<UserDTO>>(
-      this.newUrlPath + 'undeleteuser',
-      user
     );
   }
 
@@ -100,7 +72,7 @@ export class AuthService implements OnInit {
   }
 
   isAdmin(key: string) {
-    if (this.localStorageService.getFromLocalStorage(key) == Status) {
+    if (this.localStorageService.getFromLocalStorage(key) == AdminStatus) {
       return true;
     }
     return false;

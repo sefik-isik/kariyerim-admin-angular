@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient, HttpEvent } from '@angular/common/http';
-import { ResponseModel } from '../models/responseModel';
-import { PersonelUserFile } from '../models/personelUserFile';
+import { PersonelUserFile } from '../models/component/personelUserFile';
 import { Observable } from 'rxjs';
-import { AdminModel } from '../models/adminModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { PersonelUserFileDTO } from '../models/personelUserFileDTO';
+import { AdminModel } from '../models/auth/adminModel';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PersonelUserFileDTO } from '../models/dto/personelUserFileDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class PersonelUserFileService {
   delete(personelUserFile: PersonelUserFile): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      personelUserFile
+    );
+  }
+
+  terminate(personelUserFile: PersonelUserFile): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       personelUserFile
     );
   }
@@ -65,7 +72,7 @@ export class PersonelUserFileService {
     );
   }
 
-  uploadFile(formData: FormData, id: number): Observable<HttpEvent<File>> {
+  uploadFile(formData: FormData, id: string): Observable<HttpEvent<File>> {
     return this.httpClient.post<File>(
       this.newUrlPath + 'uploadfile?id=' + id,
       formData,

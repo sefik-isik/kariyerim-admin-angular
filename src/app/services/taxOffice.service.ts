@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { TaxOffice } from '../models/taxOffice';
-import { TaxOfficeDTO } from '../models/taxOfficeDTO';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { TaxOffice } from '../models/component/taxOffice';
+import { TaxOfficeDTO } from '../models/dto/taxOfficeDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +37,13 @@ export class TaxOfficeService {
     );
   }
 
+  terminate(taxOffice: TaxOffice): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      taxOffice
+    );
+  }
+
   getAll(): Observable<ListResponseModel<TaxOffice>> {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<TaxOffice>>(path);
@@ -47,7 +54,7 @@ export class TaxOfficeService {
     return this.httpClient.get<ListResponseModel<TaxOffice>>(path);
   }
 
-  getById(id: number): Observable<SingleResponseModel<TaxOffice>> {
+  getById(id: string): Observable<SingleResponseModel<TaxOffice>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<TaxOffice>>(path);
   }

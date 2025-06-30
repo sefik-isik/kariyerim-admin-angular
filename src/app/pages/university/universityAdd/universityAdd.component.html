@@ -3,286 +3,521 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">University Name</span>
-          <input
-            formControlName="universityName"
-            type="text"
-            class="form-control"
-            id="input1"
-            placeholder="University Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">University Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.universityName"
+              type="text"
+              class="form-control"
+              name="universityName"
+              #universityName="ngModel"
+              placeholder="University Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="universityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!universityName.valid && universityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(universityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">yearOfEstablishment</span>
-          <input
-            formControlName="yearOfEstablishment"
-            type="date"
-            class="form-control"
-            id="yearOfEstablishment"
-            placeholder="yearOfEstablishment"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">workerCount</span>
-          <input
-            formControlName="workerCount"
-            type="text"
-            class="form-control"
-            id="workerCount"
-            placeholder="workerCount"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Sectors</span>
-          <input
-            formControlName="sectorName"
-            type="text"
-            class="form-control"
-            list="sectorDatalist"
-            id="input1"
-            placeholder="Select Sector..."
-            minlength="3"
-          />
-          <datalist id="sectorDatalist">
-            <option
-              *ngFor="let sector of sectors"
-              value="{{ sector.sectorName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">webAddress</span>
-          <input
-            formControlName="webAddress"
-            type="text"
-            class="form-control"
-            id="webAddress"
-            placeholder="webAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">webNewsAddress</span>
-          <input
-            formControlName="webNewsAddress"
-            type="text"
-            class="form-control"
-            id="webNewsAddress"
-            placeholder="webNewsAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput6()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">youTubeEmbedAddress</span>
-          <input
-            formControlName="youTubeEmbedAddress"
-            type="text"
-            class="form-control"
-            id="youTubeEmbedAddress"
-            placeholder="youTubeEmbedAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput7()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">facebookAddress</span>
-          <input
-            formControlName="facebookAddress"
-            type="text"
-            class="form-control"
-            id="facebookAddress"
-            placeholder="facebookAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput8()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">instagramAddress</span>
-          <input
-            formControlName="instagramAddress"
-            type="text"
-            class="form-control"
-            id="instagramAddress"
-            placeholder="instagramAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput9()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">xAddress</span>
-          <input
-            formControlName="xAddress"
-            type="text"
-            class="form-control"
-            id="xAddress"
-            placeholder="xAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput10()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">youTubeAddress</span>
-          <input
-            formControlName="youTubeAddress"
-            type="text"
-            class="form-control"
-            id="youTubeAddress"
-            placeholder="youTubeAddress"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput11()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >Address <br />{{ addressDetail }} \ 500</span
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Year Of Establishment</span>
+            <input
+              required
+              minlength="3"
+              maxlength="10"
+              pattern=""
+              [(ngModel)]="universityModel.yearOfEstablishment"
+              type="date"
+              class="form-control"
+              name="yearOfEstablishment"
+              #yearOfEstablishment="ngModel"
+              placeholder="yearOfEstablishment"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="yearOfEstablishmentClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="!yearOfEstablishment.valid && yearOfEstablishment.touched"
           >
-
-          <textarea
-            formControlName="address"
-            class="form-control"
-            id="address"
-            style="height: 120px"
-            minlength="20"
-            maxlength="500"
-            (input)="countAddress()"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput12()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(yearOfEstablishment)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >description <br />{{ descriptionDetail }} \ 3000</span
-          >
-
-          <textarea
-            formControlName="description"
-            class="form-control"
-            id="description"
-            style="height: 120px"
-            minlength="100"
-            maxlength="3000"
-            (input)="countDescription()"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput13()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Worker Count</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.workerCount"
+              type="text"
+              class="form-control"
+              name="workerCount"
+              #workerCount="ngModel"
+              placeholder="Worker Count"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="workerCountClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workerCount.valid && workerCount.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workerCount)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >subDescription <br />{{ subDescriptionDetail }} \ 3000</span
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.sectorName"
+              type="text"
+              class="form-control"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNameDataList"
+            />
+            <datalist id="sectorNameDataList">
+              <option
+                *ngFor="let sector of sectors"
+                value="{{ sector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="sectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Web Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.webAddress"
+              type="text"
+              class="form-control"
+              name="webAddress"
+              #webAddress="ngModel"
+              placeholder="Web Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="webAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!webAddress.valid && webAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(webAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Web News Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.webNewsAddress"
+              type="text"
+              class="form-control"
+              name="webNewsAddress"
+              #webNewsAddress="ngModel"
+              placeholder="Web News Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="webNewsAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!webNewsAddress.valid && webNewsAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(webNewsAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">YouTube Embed Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.youTubeEmbedAddress"
+              type="text"
+              class="form-control"
+              name="youTubeEmbedAddress"
+              #youTubeEmbedAddress="ngModel"
+              placeholder="YouTube Embed Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="youTubeEmbedAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="!youTubeEmbedAddress.valid && youTubeEmbedAddress.touched"
           >
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(youTubeEmbedAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <textarea
-            formControlName="subDescription"
-            class="form-control"
-            id="subDescriptionDetail"
-            style="height: 120px"
-            minlength="100"
-            maxlength="3000"
-            (input)="countSubDescription()"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput14()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Facebook Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.facebookAddress"
+              type="text"
+              class="form-control"
+              name="facebookAddress"
+              #facebookAddress="ngModel"
+              placeholder="Facebook Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="facebookAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!facebookAddress.valid && facebookAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(facebookAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Instagram Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.instagramAddress"
+              type="text"
+              class="form-control"
+              name="instagramAddress"
+              #instagramAddress="ngModel"
+              placeholder="Instagram Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="instagramAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!instagramAddress.valid && instagramAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(instagramAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">X Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.xAddress"
+              type="text"
+              class="form-control"
+              name="xAddress"
+              #xAddress="ngModel"
+              placeholder="X Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="xAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!xAddress.valid && xAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(xAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">YouTube Address</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityModel.youTubeAddress"
+              type="text"
+              class="form-control"
+              name="youTubeAddress"
+              #youTubeAddress="ngModel"
+              placeholder="YouTube Address"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="youTubeAddressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!youTubeAddress.valid && youTubeAddress.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(youTubeAddress)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ addressDetail }} \ 50</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="500"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.address"
+              name="address"
+              #address="ngModel"
+              style="height: 80px"
+              (input)="countAddress()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="addressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!address.valid && address.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(address)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Description <br />{{ descriptionDetail }} \ 100</span
+            >
+            <textarea
+              required
+              minlength="100"
+              maxlength="3000"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.description"
+              name="description"
+              #description="ngModel"
+              style="height: 100px"
+              (input)="countDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Sub Description <br />{{ subDescriptionDetail }} \ 100</span
+            >
+            <textarea
+              required
+              minlength="100"
+              maxlength="3000"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.subDescription"
+              name="subDescription"
+              #subDescription="ngModel"
+              style="height: 100px"
+              (input)="countSubDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="subDescriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!subDescription.valid && subDescription.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(subDescription)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

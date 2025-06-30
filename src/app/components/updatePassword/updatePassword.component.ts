@@ -1,17 +1,13 @@
-import { LocalStorageService } from '../../services/localStorage.service';
+import { LocalStorageService } from '../../services/helperServices/localStorage.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { PasswordModel } from '../../models/passwordModel';
+import { PasswordModel } from '../../models/auth/passwordModel';
 import { Router } from '@angular/router';
+import { ValidationService } from '../../services/validation.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-updatePassword',
@@ -19,35 +15,37 @@ import { Router } from '@angular/router';
   styleUrls: ['./updatePassword.component.css'],
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
-export class UpdatePasswordComponent implements OnInit {
-  updatePasswordForm: FormGroup;
-
-  componentTitle = 'Change Password';
-  passwordModel: PasswordModel;
+export class UpdatePasswordComponent {
+  title = 'Change Password';
+  passwordModel: PasswordModel = {} as PasswordModel;
 
   constructor(
-    private formBuilder: FormBuilder,
     private autService: AuthService,
     private toastrService: ToastrService,
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit(): void {
-    this.createupdatePasswordForm();
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createupdatePasswordForm() {
-    this.updatePasswordForm = this.formBuilder.group({
-      oldPassword: ['', [Validators.required, Validators.minLength(6)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      const passwordModel: PasswordModel = Object.assign(
+        {
+          id: this.localStorageService.getFromLocalStorage('id'),
+          firstName: this.localStorageService.getFromLocalStorage('firstName'),
+          lastName: this.localStorageService.getFromLocalStorage('lastName'),
+          email: this.localStorageService.getFromLocalStorage('email'),
+          phoneNumber:
+            this.localStorageService.getFromLocalStorage('phoneNumber'),
+        },
+        form.value
+      );
 
-  updatePassword() {
-    if (this.updatePasswordForm.valid) {
-      this.autService.updatePassword(this.getModel()).subscribe(
+      this.autService.updatePassword(passwordModel).subscribe(
         (response) => {
           this.localStorageService.clearLocalStorage();
 
@@ -57,20 +55,11 @@ export class UpdatePasswordComponent implements OnInit {
           );
           this.router.navigate(['login']);
         },
-        (error) => console.error
+        (responseError) =>
+          this.toastrService.error(responseError.error, 'Bir Hata Oluştu!') // Error handling
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
     }
-  }
-
-  getModel() {
-    let updatePasswordModel: PasswordModel = Object.assign(
-      {
-        id: this.localStorageService.getFromLocalStorage('id'),
-      },
-      this.updatePasswordForm.value
-    );
-    return updatePasswordModel;
   }
 }

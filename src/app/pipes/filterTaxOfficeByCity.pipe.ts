@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TaxOfficeDTO } from '../models/taxOfficeDTO';
+import { TaxOfficeDTO } from '../models/dto/taxOfficeDTO';
 
 @Pipe({
   name: 'filterTaxOfficeByCity',

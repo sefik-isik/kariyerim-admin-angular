@@ -1,16 +1,16 @@
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { CompanyUserAddressDTO } from '../../../models/CompanyUserAddressDTO';
+import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserAddressUpdateComponent } from '../companyUserAddressUpdate/companyUserAddressUpdate.component';
 import { CompanyUserAddressDetailComponent } from '../companyUserAddressDetail/companyUserAddressDetail.component';
@@ -27,7 +27,7 @@ export class CompanyUserAddressListComponent implements OnInit {
   dataLoaded: boolean = false;
   filter1: string = '';
   componentTitle = 'Company User Addresses';
-  userId: number;
+  userId: string;
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
@@ -48,13 +48,13 @@ export class CompanyUserAddressListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -63,7 +63,7 @@ export class CompanyUserAddressListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -71,9 +71,8 @@ export class CompanyUserAddressListComponent implements OnInit {
     this.companyUserAddressService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserAddressDTOs = response.data;
-        this.dataLoaded = true;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -87,7 +86,7 @@ export class CompanyUserAddressListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -99,7 +98,7 @@ export class CompanyUserAddressListComponent implements OnInit {
     this.companyUserAddressDTOs.forEach((companyUserAddressDTO) => {
       this.companyUserAddressService.delete(companyUserAddressDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Faculty } from '../../../models/faculty';
+import { Faculty } from '../../../models/component/faculty';
 
 @Component({
   selector: 'app-facultyDetail',

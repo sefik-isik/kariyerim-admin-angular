@@ -2,35 +2,8 @@
   class="navbar bg-dark navbar-expand-lg bg-body-tertiary"
   data-bs-theme="dark"
 >
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-    </div>
+  <div class="container-fluid mt-5">
+    <div class="collapse navbar-collapse" id="navbarNav"></div>
   </div>
 </nav>
 <div class="container-sm">
@@ -39,51 +12,97 @@
       <div class="card">
         <div class="card-body">
           <div class="alert alert-success" role="alert">
-            {{ componentTitle }}
+            {{ title }}
           </div>
-          <form [formGroup]="loginFom">
+
+          <form #form="ngForm">
             <div class="mb-3">
               <div class="form-group">
-                <label for="eMail" class="form-label">Email Address</label>
-                <input
-                  formControlName="email"
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  placeholder="Email Address"
-                />
+                <div class="input-group">
+                  <span class="input-group-text">Email</span>
+                  <input
+                    required
+                    minlength="3"
+                    maxlength="30"
+                    pattern=""
+                    email="true"
+                    [(ngModel)]="loginModel.email"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    #email="ngModel"
+                    placeholder="email"
+                  /><span class="input-group-text">
+                    <i
+                      (click)="emailClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+                <div *ngIf="!email.valid && email.touched">
+                  <div
+                    class="error-message"
+                    *ngFor="let error of getValidationErrors(email)"
+                  >
+                    {{ error }}
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="mb-3">
               <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input
-                  formControlName="password"
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Password"
-                />
+                <div class="input-group">
+                  <span class="input-group-text">Password</span>
+                  <input
+                    required
+                    minlength="6"
+                    maxlength="20"
+                    [(ngModel)]="loginModel.password"
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    #password="ngModel"
+                    placeholder="Password"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="passwordClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="error-message"
+                  *ngIf="!password.valid && password.touched"
+                >
+                  <p *ngFor="let error of getValidationErrors(password)">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
+              <div class="d-grid gap-2 mt-3">
+                <button
+                  type="button"
+                  (click)="onSubmit(form)"
+                  [disabled]="!form.valid"
+                  class="btn btn-outline-success"
+                >
+                  Sign in
+                </button>
+
+                <div style="text-align: center; margin: 0px">or</div>
               </div>
             </div>
-            <div class="d-grid gap-2">
-              <button
-                (click)="login()"
-                type="button"
-                class="btn btn-outline-success"
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                (click)="register()"
-              >
-                Register
-              </button>
-            </div>
           </form>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" (click)="register()">
+              Register
+            </button>
+          </div>
         </div>
       </div>
     </div>

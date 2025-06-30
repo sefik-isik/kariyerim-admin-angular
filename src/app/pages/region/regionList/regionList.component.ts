@@ -5,8 +5,8 @@ import { CityService } from '../../../services/city.service';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { RegionDTO } from '../../../models/regionDTO';
-import { City } from '../../../models/city';
+import { RegionDTO } from '../../../models/dto/regionDTO';
+import { City } from '../../../models/component/city';
 import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
@@ -55,7 +55,7 @@ export class RegionListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,34 +64,9 @@ export class RegionListComponent implements OnInit {
       (response) => {
         this.regionDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
-
-  // updateAll() {
-  //   this.regionDTOs.forEach((regionDTO) => {
-  //     this.regionService
-  //       .update(
-  //         this.getModel(regionDTO.id, regionDTO.cityId, regionDTO.regionName)
-  //       )
-  //       .subscribe(
-  //         (response) => {},
-  //         (error) => console.error
-  //       );
-  //   });
-  // }
-
-  // getModel(id: number, cityId: number, regionName: string): Region {
-  //   console;
-  //   return Object.assign({
-  //     id: id,
-  //     cityId: cityId,
-  //     regionName: this.caseService.capitalizeFirstLetter(regionName),
-  //     createdDate: new Date(Date.now()).toJSON(),
-  //     updatedDate: new Date(Date.now()).toJSON(),
-  //     deletedDate: new Date(Date.now()).toJSON(),
-  //   });
-  // }
 
   delete(regionDTO: RegionDTO) {
     if (!this.authService.isAdmin('status')) {
@@ -107,7 +82,7 @@ export class RegionListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -123,7 +98,7 @@ export class RegionListComponent implements OnInit {
     this.regionDTOs.forEach((regionDTO) => {
       this.regionService.delete(regionDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

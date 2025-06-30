@@ -5,13 +5,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { CompanyUserFile } from '../../../models/companyUserFile';
-import { CompanyUserFileDTO } from '../../../models/companyUserFileDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { CompanyUserFile } from '../../../models/component/companyUserFile';
+import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserFileUpdateComponent } from '../companyUserFileUpdate/companyUserFileUpdate.component';
 import { CompanyUserFileDetailComponent } from '../companyUserFileDetail/companyUserFileDetail.component';
@@ -29,7 +29,7 @@ export class CompanyUserFileComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Company User Files';
-  userId: number;
+  userId: string;
 
   constructor(
     private toastrService: ToastrService,
@@ -50,13 +50,13 @@ export class CompanyUserFileComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserFiles(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -65,7 +65,7 @@ export class CompanyUserFileComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -74,7 +74,7 @@ export class CompanyUserFileComponent implements OnInit {
       (response) => {
         this.companyUserFileDTOS = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -88,7 +88,7 @@ export class CompanyUserFileComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -100,7 +100,7 @@ export class CompanyUserFileComponent implements OnInit {
     this.companyUserFileDTOS.forEach((companyUserFile) => {
       this.companyUserFileService.delete(companyUserFile).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

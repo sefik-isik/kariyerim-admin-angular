@@ -1,20 +1,20 @@
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { UserDTO } from '../../../models/userDTO';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUser } from '../../../models/personelUser';
+import { PersonelUser } from '../../../models/component/personelUser';
 import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
 import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
 import { GenderPipe } from '../../../pipes/gender.pipe';
 import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserUpdateComponent } from '../personelUserUpdate/personelUserUpdate.component';
 import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserDetail.component';
@@ -38,7 +38,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel Users';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserService: PersonelUserService,
@@ -59,13 +59,13 @@ export class PersonelUserDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -74,7 +74,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -83,7 +83,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -93,7 +93,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -101,12 +101,45 @@ export class PersonelUserDeletedListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.update(personelUserDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile silindi');
+    }, 500);
+  }
+
+  terminate(personelUserDTO: PersonelUserDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserService.terminate(personelUserDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserDTOs.forEach((personelUserDTO) => {
+      this.personelUserService.terminate(personelUserDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

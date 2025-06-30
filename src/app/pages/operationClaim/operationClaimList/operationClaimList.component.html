@@ -23,8 +23,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let operationClaim of operationClaims">
-              <td>{{ operationClaim.id }}</td>
+            <tr *ngFor="let operationClaim of operationClaims; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ operationClaim.name }}</td>
 
               <td>

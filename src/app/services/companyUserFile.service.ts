@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient, HttpEvent } from '@angular/common/http';
-import { CompanyUserFile } from '../models/companyUserFile';
-import { ResponseModel } from '../models/responseModel';
+import { CompanyUserFile } from '../models/component/companyUserFile';
+import { ResponseModel } from '../models/response/responseModel';
 import { Observable } from 'rxjs';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { CompanyUserFileDTO } from '../models/companyUserFileDTO';
-import { AdminModel } from '../models/adminModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { CompanyUserFileDTO } from '../models/dto/companyUserFileDTO';
+import { AdminModel } from '../models/auth/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class CompanyUserFileService {
   delete(companyUserFile: CompanyUserFile): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      companyUserFile
+    );
+  }
+
+  terminate(companyUserFile: CompanyUserFile): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       companyUserFile
     );
   }
@@ -65,7 +72,7 @@ export class CompanyUserFileService {
     );
   }
 
-  uploadFile(formData: FormData, id: number): Observable<HttpEvent<File>> {
+  uploadFile(formData: FormData, id: string): Observable<HttpEvent<File>> {
     return this.httpClient.post<File>(
       this.newUrlPath + 'uploadfile?id=' + id,
       formData,

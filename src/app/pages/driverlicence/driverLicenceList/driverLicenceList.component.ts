@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 
-import { DriverLicence } from '../../../models/driverLicence';
+import { DriverLicence } from '../../../models/component/driverLicence';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DriverLicenceUpdateComponent } from '../driverLicenceUpdate/driverLicenceUpdate.component';
@@ -42,7 +42,7 @@ export class DriverLicenceListComponent implements OnInit {
       (response) => {
         this.driverLicences = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -60,7 +60,7 @@ export class DriverLicenceListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,7 +76,7 @@ export class DriverLicenceListComponent implements OnInit {
     this.driverLicences.forEach((driverLicences) => {
       this.driverLicenceService.delete(driverLicences).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

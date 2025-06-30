@@ -59,9 +59,8 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>countryId</th>
             <th>countryName</th>
-            <th>City Id</th>
+            <th>City Code</th>
             <th>City Name</th>
             <th>Region Name</th>
 
@@ -74,6 +73,13 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -81,13 +87,13 @@
             *ngFor="
               let regionDTO of regionDTOs
                 | filterRegion : filter2
-                | filterRegionByCity : filter1
+                | filterRegionByCity : filter1;
+              index as i
             "
           >
-            <td>{{ regionDTO.id }}</td>
-            <td>{{ regionDTO.countryId }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ regionDTO.countryName }}</td>
-            <td>{{ regionDTO.cityId }}</td>
+            <td>{{ regionDTO.cityCode }}</td>
             <td>{{ regionDTO.cityName }}</td>
             <td>{{ regionDTO.regionName }}</td>
 
@@ -110,6 +116,13 @@
                 (click)="unDelete(regionDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(regionDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

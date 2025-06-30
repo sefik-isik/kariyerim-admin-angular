@@ -1,6 +1,6 @@
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { UserService } from '../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,9 +8,9 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
-import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
-import { UserDTO } from '../../../models/userDTO';
-import { OperationClaim } from '../../../models/operationClaim';
+import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { OperationClaim } from '../../../models/component/operationClaim';
 import { FilterUserOperationClaimByUserPipe } from '../../../pipes/filterUserOperationClaimByUser.pipe';
 import { FilterUserOperationClaimPipe } from '../../../pipes/filterUserOperationClaim.pipe';
 import { OperationClaimService } from '../../../services/operationClaim.service';
@@ -36,7 +36,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   filter2 = '';
   users: UserDTO[];
   operationClaims: OperationClaim[];
-  userId: number;
+  userId: string;
 
   componentTitle = 'Deleted User Operation Claims';
 
@@ -60,14 +60,14 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getUsers(response);
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,7 +76,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -85,7 +85,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -94,7 +94,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -104,7 +104,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -112,7 +112,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaimDTO) => {
       this.userOperationClaimService.update(userOperationClaimDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

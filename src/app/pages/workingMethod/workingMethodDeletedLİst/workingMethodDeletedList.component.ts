@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkingMethodUpdateComponent } from '../workingMethodUpdate/workingMethodUpdate.component';
@@ -40,7 +40,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -50,7 +50,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -58,12 +58,45 @@ export class WorkingMethodDeletedListComponent implements OnInit {
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.update(workingMethod).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(workingMethod: WorkingMethod) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.workingMethodService.terminate(workingMethod).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.workingMethods.forEach((workingMethod) => {
+      this.workingMethodService.terminate(workingMethod).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

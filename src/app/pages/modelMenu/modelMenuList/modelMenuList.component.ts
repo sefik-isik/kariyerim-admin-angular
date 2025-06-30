@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { ModelMenu } from '../../../models/modelMenu';
+import { ModelMenu } from '../../../models/component/modelMenu';
 import { ModelMenuService } from '../../../services/modelMenu.service';
 import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -43,7 +43,7 @@ export class ModelMenuListComponent implements OnInit {
       (response) => {
         this.modelMenus = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class ModelMenuListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class ModelMenuListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.delete(modelMenu).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
 
 @Component({
@@ -33,7 +33,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Images Slide';
-  userId: number;
+  userId: string;
 
   constructor(
     private toastrService: ToastrService,
@@ -48,13 +48,13 @@ export class PersonelUserImageSlideComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -63,7 +63,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -72,7 +72,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
       (response) => {
         this.personelUserImageDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -86,10 +86,10 @@ export class PersonelUserImageSlideComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.getAdminValues();
       },
-      (error) => {
-        console.error(error);
-        if (error.error) {
-          this.toastrService.error(error.error.message);
+      (responseError) => {
+        console.error(responseError);
+        if (responseError.error) {
+          this.toastrService.error(responseError.error.message);
         } else {
           this.toastrService.error('Silme işlemi başarısız oldu');
         }

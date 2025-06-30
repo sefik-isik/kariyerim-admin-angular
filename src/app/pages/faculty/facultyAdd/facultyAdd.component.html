@@ -3,29 +3,49 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">Faculty Name</span>
-          <input
-            formControlName="facultyName"
-            type="text"
-            class="form-control"
-            id="input1"
-            placeholder="Faculty Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Faculty Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="facultModel.facultyName"
+              type="text"
+              class="form-control"
+              name="facultyName"
+              #facultyName="ngModel"
+              placeholder="Faculty Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="facultyNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!facultyName.valid && facultyName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(facultyName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

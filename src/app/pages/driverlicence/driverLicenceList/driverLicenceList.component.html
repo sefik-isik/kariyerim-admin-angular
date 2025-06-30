@@ -23,8 +23,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let driverLicence of driverLicences">
-              <td>{{ driverLicence.id }}</td>
+            <tr *ngFor="let driverLicence of driverLicences; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ driverLicence.driverLicenceName }}</td>
 
               <td>

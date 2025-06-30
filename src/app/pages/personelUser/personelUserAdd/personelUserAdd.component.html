@@ -3,220 +3,310 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">identity Number</span>
-          <input
-            formControlName="identityNumber"
-            type="text"
-            class="form-control"
-            id="input2"
-            placeholder="Type identity Number"
-            minlength="11"
-            maxlength="11"
-            pattern="[0-9]*"
-            inputmode="numeric"
-            (keypress)="onlyNumberKey($event)"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">licence Degree Name</span>
-          <input
-            formControlName="licenceDegreeName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input3"
-            placeholder="Select licence Degree..."
-            minlength="3"
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let licenceDegree of licenceDegrees"
-              value="{{ licenceDegree.licenceDegreeName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">driver Licence Name</span>
-          <input
-            formControlName="driverLicenceName"
-            type="text"
-            class="form-control"
-            list="datalist3"
-            id="input4"
-            placeholder="Select driver Licence..."
-            minlength="3"
-          />
-          <datalist id="datalist3">
-            <option
-              *ngFor="let driverLicence of driverLicences"
-              value="{{ driverLicence.driverLicenceName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">birth Place Name</span>
-          <input
-            formControlName="birthPlaceName"
-            type="text"
-            class="form-control"
-            list="datalist4"
-            id="input5"
-            placeholder="Select birth Place..."
-            minlength="3"
-          />
-          <datalist id="datalist4">
-            <option
-              *ngFor="let city of cities"
-              value="{{ city.cityName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">date Of Birth</span>
-          <input
-            formControlName="dateOfBirth"
-            type="date"
-            class="form-control"
-            id="input6"
-            placeholder="Date Of Birth"
-            min="1950-01-01"
-            max="2010-12-31"
-            minlength="10"
-            maxlength="10"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput6()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-        <div class="input-group mb-3">
-          <div class="form-check">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
             <input
-              formControlName="militaryStatus"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="input7"
-              checked
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="personelUserModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
             />
-            <label class="form-check-label" for="checkChecked">
-              militaryStatus
-            </label>
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <div class="form-check">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">identity Number</span>
             <input
-              formControlName="nationalStatus"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="input8"
+              required
+              minlength="11"
+              maxlength="11"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="personelUserModel.identityNumber"
+              type="text"
+              class="form-control"
+              name="identityNumber"
+              #identityNumber="ngModel"
+              placeholder="identity Number"
             />
-            <label class="form-check-label" for="checkChecked">
-              nationalStatus
-            </label>
+            <span class="input-group-text">
+              <i
+                (click)="identityNumberClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!identityNumber.valid && identityNumber.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(identityNumber)"
+            >
+              {{ error }}
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <div class="form-check">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Licence Degree Name</span>
             <input
-              formControlName="retirementStatus"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="input9"
-              checked
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserModel.licenseDegreeName"
+              type="text"
+              class="form-control"
+              name="licenseDegreeName"
+              #licenseDegreeName="ngModel"
+              placeholder="Licence Degree Name"
+              list="licenseDegreeNameDataList"
             />
-            <label class="form-check-label" for="checkChecked">
-              retirementStatus
-            </label>
+            <datalist id="licenseDegreeNameDataList">
+              <option
+                *ngFor="let licenseDegree of licenseDegrees"
+                value="{{ licenseDegree.licenseDegreeName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="licenseDegreeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!licenseDegreeName.valid && licenseDegreeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(licenseDegreeName)"
+            >
+              {{ error }}
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <div class="form-check">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Driver Licence Name</span>
             <input
-              formControlName="gender"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="input10"
-              checked
+              required
+              minlength="1"
+              maxlength="3"
+              pattern=""
+              [(ngModel)]="personelUserModel.driverLicenceName"
+              type="text"
+              class="form-control"
+              name="driverLicenceName"
+              #driverLicenceName="ngModel"
+              placeholder="Driver Licence Name"
+              list="driverLicenceNameDataList"
             />
-            <label class="form-check-label" for="checkChecked"> gender </label>
+            <datalist id="driverLicenceNameDataList">
+              <option
+                *ngFor="let driverLicence of driverLicences"
+                value="{{ driverLicence.driverLicenceName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="driverLicenceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
           </div>
+          <div *ngIf="!driverLicenceName.valid && driverLicenceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(driverLicenceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Birth Place Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserModel.birthPlaceName"
+              type="text"
+              class="form-control"
+              name="birthPlaceName"
+              #birthPlaceName="ngModel"
+              placeholder="Birth Place Name"
+              list="birthPlaceNameDataList"
+            />
+            <datalist id="birthPlaceNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="birthPlaceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!birthPlaceName.valid && birthPlaceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(birthPlaceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Date Of Birth</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserModel.dateOfBirth"
+              type="date"
+              class="form-control"
+              name="dateOfBirth"
+              #dateOfBirth="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="dateOfBirthClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!dateOfBirth.valid && dateOfBirth.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(dateOfBirth)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserModel.militaryStatus"
+            name="militaryStatus"
+          />
+          <label class="form-check-label" for="checkChecked">
+            Military Status
+          </label>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserModel.nationalStatus"
+            name="nationalStatus"
+          />
+          <label class="form-check-label" for="checkChecked">
+            National Status
+          </label>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserModel.retirementStatus"
+            name="retirementStatus"
+          />
+          <label class="form-check-label" for="checkChecked">
+            Retirement Status
+          </label>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserModel.gender"
+            name="gender"
+          />
+          <label class="form-check-label" for="checkChecked"> Gender </label>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

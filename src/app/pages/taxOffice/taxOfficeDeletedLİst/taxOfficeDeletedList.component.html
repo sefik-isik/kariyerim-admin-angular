@@ -60,7 +60,6 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>City Id</th>
               <th>City Name</th>
               <th>Region Name</th>
               <th>Tax Office Code</th>
@@ -71,8 +70,15 @@
               <th>
                 <i
                   (click)="unDeleteAll()"
-                  class="bi bi-trash"
-                  style="color: red"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </th>
             </tr>
@@ -82,11 +88,12 @@
               *ngFor="
                 let taxOfficeDTO of taxOfficeDTOs
                   | filterTaxOfficeByCity : filter1
-                  | filterTaxOffice : filter2
+                  | filterTaxOffice : filter2;
+                index as i
               "
             >
-              <td>{{ taxOfficeDTO.id }}</td>
-              <td>{{ taxOfficeDTO.cityId }}</td>
+              <td>{{ i + 1 }}</td>
+
               <td>{{ taxOfficeDTO.cityName }}</td>
               <td>{{ taxOfficeDTO.regionName }}</td>
               <td>{{ taxOfficeDTO.taxOfficeCode }}</td>
@@ -109,8 +116,15 @@
               <td>
                 <i
                   (click)="unDelete(taxOfficeDTO)"
-                  class="bi bi-trash"
-                  style="color: red"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(taxOfficeDTO)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

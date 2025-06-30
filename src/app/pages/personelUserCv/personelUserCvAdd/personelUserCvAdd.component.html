@@ -3,123 +3,189 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Cv Name</span>
-          <input
-            formControlName="cvName"
-            type="text"
-            class="form-control"
-            id="input3"
-            placeholder="Type Cv Name..."
-            minlength="3"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Language Name</span>
-          <input
-            formControlName="languageName"
-            type="text"
-            class="form-control"
-            list="datalist3"
-            id="input4"
-            placeholder="Select Language..."
-            minlength="3"
-            (change)="getLanguages()"
-          />
-          <datalist id="datalist3">
-            <option
-              *ngFor="let language of languages"
-              value="{{ language.languageName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Language Level</span>
-          <input
-            formControlName="languageLevel"
-            type="text"
-            class="form-control"
-            list="datalist4"
-            id="input4"
-            placeholder="Select Language Level..."
-          />
-          <datalist id="datalist4">
-            <option
-              *ngFor="let languageLevel of languageLevels"
-              value="{{ languageLevel.levelTitle }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-        <div class="input-group mb-3">
-          <div class="form-check">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
             <input
-              formControlName="isPrivate"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="input5"
-              checked
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="personelUserCvModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
             />
-            <label class="form-check-label" for="checkChecked">
-              isPrivate
-            </label>
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
           </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Cv Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvModel.cvName"
+              type="text"
+              class="form-control"
+              name="cvName"
+              #cvName="ngModel"
+              placeholder="Cv Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="cvNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cvName.valid && cvName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cvName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Language Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvModel.languageName"
+              type="text"
+              class="form-control"
+              name="languageName"
+              #languageName="ngModel"
+              placeholder="Language Name"
+              list="languageNameDataList"
+            />
+            <datalist id="languageNameDataList">
+              <option
+                *ngFor="let language of languages"
+                value="{{ language.languageName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="languageNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!languageName.valid && languageName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(languageName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Language Level</span>
+            <input
+              required
+              minlength="1"
+              maxlength="1"
+              pattern="[1-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="personelUserCvModel.level"
+              type="number"
+              class="form-control"
+              name="level"
+              #level="ngModel"
+              placeholder="Language Level"
+              list="levelDataList"
+            />
+            <datalist id="levelDataList">
+              <option
+                *ngFor="let languageLevel of languageLevels"
+                value="{{ languageLevel.level }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="levelClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!level.valid && level.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(level)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserCvModel.isPrivate"
+            name="isPrivate"
+          />
+          <label class="form-check-label" for="checkChecked"> isPrivate </label>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

@@ -1,26 +1,21 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { Language } from '../../../models/language';
-import { LanguageLevel } from '../../../models/languageLevel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { Language } from '../../../models/component/language';
+import { LanguageLevel } from '../../../models/component/languageLevel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
-import { PersonelUserCoverLetterDTO } from '../../../models/PersonelUserCoverLetterDTO';
+import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterUpdate',
@@ -29,26 +24,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCoverLetterUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() personelUserCoverLetterDTO: PersonelUserCoverLetterDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
-  descriptionText: string;
-
-  componentTitle = 'Personel User Cover Letter Update Form';
-  id: number;
-  userEmail: string;
-  personelUserName: string;
-  personelUserId: number;
-  cvName: string;
-  userId: number;
+  descriptionCount: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
+  componentTitle = 'Personel User Cover Letter Update Form';
 
   constructor(
-    private formBuilder: FormBuilder,
-
     private personelUserService: PersonelUserService,
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
     private toastrService: ToastrService,
@@ -56,11 +40,11 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
     this.getAdminValues();
 
     setTimeout(() => {
@@ -68,18 +52,11 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
@@ -88,20 +65,20 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.personelUserCoverLetterService.getById(adminModel).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          title: response.data.title,
-          description: response.data.description,
-        });
-        this.id = response.data.id;
-        this.personelUserId = response.data.personelUserId;
-        this.userEmail = this.getEmailByUserId(this.personelUserId);
+        this.personelUserCoverLetterDTO.id = response.data.id;
+        this.personelUserCoverLetterDTO.personelUserId =
+          response.data.personelUserId;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid && this.getModel().id > 0) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCoverLetterService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -110,8 +87,8 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
             '/dashboard/personelusercoverletter/personelusercoverletterlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.log(responseError);
         }
       );
     } else {
@@ -121,10 +98,11 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
 
   getModel(): PersonelUserCoverLetterDTO {
     return Object.assign({
-      id: this.id,
-      personelUserId: this.personelUserId,
-      title: this.updateForm.value.title,
-      description: this.updateForm.value.description,
+      id: this.personelUserCoverLetterDTO.id,
+      userId: this.personelUserCoverLetterDTO.userId,
+      personelUserId: this.personelUserCoverLetterDTO.personelUserId,
+      title: this.personelUserCoverLetterDTO.title,
+      description: this.personelUserCoverLetterDTO.description,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -136,13 +114,15 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues(this.id).subscribe(
-      (response) => {
-        this.getAllPersonelUsers(response);
-        this.getPersonelUsers(response);
-      },
-      (error) => console.error
-    );
+    this.adminService
+      .getAdminValues(this.personelUserCoverLetterDTO.id)
+      .subscribe(
+        (response) => {
+          this.getAllPersonelUsers(response);
+          this.getPersonelUsers(response);
+        },
+        (responseError) => console.error
+      );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
@@ -150,7 +130,7 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -159,29 +139,25 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getEmailByUserId(personelUserId: number): string {
+  getEmailByUserId(personelUserId: string): string {
     return this.personelUserDTOs.find((u) => u.id == personelUserId)?.email;
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('title');
-    value.reset();
-    this.getAdminValues();
+  titleClear() {
+    this.personelUserCoverLetterDTO.title = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('description');
-    value.reset();
-    this.getAdminValues();
+  descriptionClear() {
+    this.personelUserCoverLetterDTO.description = '';
   }
 }

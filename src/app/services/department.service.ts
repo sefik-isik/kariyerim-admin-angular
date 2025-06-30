@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { Department } from '../models/department';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { Department } from '../models/component/department';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +36,13 @@ export class DepartmentService {
     );
   }
 
+  terminate(department: Department): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      department
+    );
+  }
+
   getAll(): Observable<ListResponseModel<Department>> {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<Department>>(path);
@@ -46,7 +53,7 @@ export class DepartmentService {
     return this.httpClient.get<ListResponseModel<Department>>(path);
   }
 
-  getById(id: number): Observable<SingleResponseModel<Department>> {
+  getById(id: string): Observable<SingleResponseModel<Department>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<Department>>(path);
   }

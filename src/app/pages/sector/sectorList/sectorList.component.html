@@ -48,8 +48,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let sector of sectors | filterSector : filter1">
-              <td>{{ sector.id }}</td>
+            <tr
+              *ngFor="
+                let sector of sectors | filterSector : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ sector.sectorName }}</td>
 
               <td>

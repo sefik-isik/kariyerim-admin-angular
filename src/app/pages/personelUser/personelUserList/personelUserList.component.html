@@ -38,7 +38,7 @@
             <th>Id</th>
             <th>email</th>
             <th>gender</th>
-            <th>licenceDegreeName</th>
+            <th>licenseDegreeName</th>
             <th>driverLicenceName</th>
             <th>militaryStatus</th>
             <th>nationalStatus</th>
@@ -61,13 +61,14 @@
           <tr
             *ngFor="
               let personelUserDTO of personelUserDTOs
-                | filterPersonelUser : filter1
+                | filterPersonelUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserDTO.email }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
-            <td>{{ personelUserDTO.licenceDegreeName }}</td>
+            <td>{{ personelUserDTO.licenseDegreeName }}</td>
             <td>{{ personelUserDTO.driverLicenceName }}</td>
             <td>{{ personelUserDTO.militaryStatus | boolenText }}</td>
             <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>

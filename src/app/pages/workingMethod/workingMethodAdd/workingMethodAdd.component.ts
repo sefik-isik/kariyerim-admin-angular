@@ -1,4 +1,4 @@
-import { CaseService } from './../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -7,12 +7,14 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workingMethodAdd',
@@ -21,31 +23,26 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class WorkingMethodAddComponent implements OnInit {
-  addForm: FormGroup;
-
-  componentTitle = 'Add Working Method Form';
+  workingMethodModel: WorkingMethod = {} as WorkingMethod;
+  componentTitle = 'Working Method Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private workingMethodService: WorkingMethodService,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      methodName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.workingMethodService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -54,8 +51,8 @@ export class WorkingMethodAddComponent implements OnInit {
             '/dashboard/workingmethod/workingmethodlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -65,15 +62,15 @@ export class WorkingMethodAddComponent implements OnInit {
 
   getModel(): WorkingMethod {
     return Object.assign({
+      id: '',
       methodName: this.caseService.capitalizeFirstLetter(
-        this.addForm.value.methodName
+        this.workingMethodModel.methodName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('methodName');
-    value.reset();
+  methodNameClear() {
+    this.workingMethodModel.methodName = '';
   }
 }

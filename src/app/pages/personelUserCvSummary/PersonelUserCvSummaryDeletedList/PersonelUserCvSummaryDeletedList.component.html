@@ -49,16 +49,24 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
               let personelUserCvSummaryDTO of personelUserCvSummaryDTOs
-                | filterPersonelUserCvSummaryByUser : filter1
+                | filterPersonelUserCvSummaryByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserCvSummaryDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserCvSummaryDTO.email }}</td>
             <td>{{ personelUserCvSummaryDTO.cvName }}</td>
             <td>{{ personelUserCvSummaryDTO.cvSummaryTitle }}</td>
@@ -87,6 +95,13 @@
                 (click)="unDelete(personelUserCvSummaryDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(personelUserCvSummaryDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

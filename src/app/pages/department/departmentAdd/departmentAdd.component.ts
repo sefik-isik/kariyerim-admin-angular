@@ -1,4 +1,4 @@
-import { CaseService } from './../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -7,12 +7,14 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DepartmentService } from '../../../services/department.service';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-departmentAdd',
@@ -21,7 +23,7 @@ import { Department } from '../../../models/department';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DepartmentAddComponent implements OnInit {
-  addForm1: FormGroup;
+  departmentModel: Department = {} as Department;
   componentTitle = 'Department Add Form';
 
   constructor(
@@ -30,29 +32,26 @@ export class DepartmentAddComponent implements OnInit {
     private toastrService: ToastrService,
     private caseService: CaseService,
     private router: Router,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm1 = this.formBuilder.group({
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  add() {
-    if (this.addForm1.valid) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.departmentService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/department/departmentlisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -62,15 +61,15 @@ export class DepartmentAddComponent implements OnInit {
 
   getModel(): Department {
     return Object.assign({
+      id: '',
       departmentName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.departmentName
+        this.departmentModel.departmentName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm1.get('departmentName');
-    value.reset();
+  departmentNameClear() {
+    this.departmentModel.departmentName = '';
   }
 }

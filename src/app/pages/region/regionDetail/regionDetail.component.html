@@ -1,8 +1,14 @@
-<div class="card tab-page" style="border: none">
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
   <div class="card-body">
     <p class="card-text"><b>Id: </b>{{ regionDTO.id }}</p>
+    <p class="card-text"><b>countryId: </b>{{ regionDTO.countryId }}</p>
+    <p class="card-text"><b>countryName: </b>{{ regionDTO.countryName }}</p>
     <p class="card-text"><b>cityId: </b>{{ regionDTO.cityId }}</p>
-    <p class="card-text"><b>cityId: </b>{{ regionDTO.cityName }}</p>
+    <p class="card-text"><b>cityCode: </b>{{ regionDTO.cityCode }}</p>
+    <p class="card-text"><b>cityName: </b>{{ regionDTO.cityName }}</p>
     <p class="card-text"><b>regionName: </b>{{ regionDTO.regionName }}</p>
     <p class="card-text">
       <b>createdDate: </b

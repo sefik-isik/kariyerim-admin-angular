@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { UserService } from '../../../services/user.service';
 import { PersonelUserImageDetailComponent } from '../personelUserImageDetail/personelUserImageDetail.component';
@@ -28,7 +28,7 @@ export class PersonelUserImageListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Images';
-  userId: number;
+  userId: string;
 
   personelUserImagesLenght: number = 0;
 
@@ -51,13 +51,13 @@ export class PersonelUserImageListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -66,7 +66,7 @@ export class PersonelUserImageListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,7 +76,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.personelUserImageDTOs = response.data;
         this.personelUserImagesLenght = this.personelUserImageDTOs.length;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -90,7 +90,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -102,7 +102,7 @@ export class PersonelUserImageListComponent implements OnInit {
     this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
       this.personelUserImageService.delete(personelUserImageDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

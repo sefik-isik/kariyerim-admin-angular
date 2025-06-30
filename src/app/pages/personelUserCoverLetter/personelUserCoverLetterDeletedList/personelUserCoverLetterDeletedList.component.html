@@ -48,16 +48,24 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
               let personelUserCoverLetterDTO of personelUserCoverLetterDTOs
-                | filterPersonelUserCoverLetterByUser : filter1
+                | filterPersonelUserCoverLetterByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserCoverLetterDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserCoverLetterDTO.email }}</td>
             <td>{{ personelUserCoverLetterDTO.title }}</td>
             <td>
@@ -83,6 +91,13 @@
                 (click)="unDelete(personelUserCoverLetterDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(personelUserCoverLetterDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

@@ -1,15 +1,15 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { FilterPersonelUserFileByUserPipe } from '../../../pipes/filterPersonelUserFileByUser.pipe';
-import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
+import { PersonelUserFileDTO } from '../../../models/dto/personelUserFileDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
@@ -28,7 +28,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Files Deleted List';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserFileService: PersonelUserFileService,
@@ -49,13 +49,13 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserFiles(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserFileDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -83,7 +83,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -91,12 +91,45 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
     this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
       this.personelUserFileService.update(personelUserFileDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(personelUserFileDTO: PersonelUserFileDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserFileService.terminate(personelUserFileDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
+      this.personelUserFileService.terminate(personelUserFileDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

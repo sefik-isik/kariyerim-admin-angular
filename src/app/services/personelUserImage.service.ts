@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { PersonelUserImage } from '../models/personelUserImage';
-import { AdminModel } from '../models/adminModel';
-
-import { PersonelUserImageDTO } from '../models/personelUserImageDTO';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PersonelUserImage } from '../models/component/personelUserImage';
+import { AdminModel } from '../models/auth/adminModel';
+import { PersonelUserImageDTO } from '../models/dto/personelUserImageDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +38,14 @@ export class PersonelUserImageService {
     );
   }
 
-  uploadImage(formData: FormData, id: number): Observable<HttpEvent<File>> {
+  terminate(personelUserImage: PersonelUserImage): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      personelUserImage
+    );
+  }
+
+  uploadImage(formData: FormData, id: string): Observable<HttpEvent<File>> {
     return this.httpClient.post<File>(
       this.newUrlPath + 'uploadimage?id=' + id,
       formData,

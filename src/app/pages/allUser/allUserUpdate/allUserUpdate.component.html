@@ -4,96 +4,162 @@
   </div>
   <div class="card-body">
     <div>
-      <form [formGroup]="updateForm">
-        <div class="form-group">
-          <div class="input-group mb-3">
-            <span class="input-group-text">First Name</span>
-            <input
-              formControlName="firstName"
-              type="text"
-              class="form-control"
-              id="input1"
-              placeholder="First Name"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput1()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">Last Name</span>
-            <input
-              formControlName="lastName"
-              type="text"
-              class="form-control"
-              id="input2"
-              placeholder="Last Name"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput2()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">Email</span>
-            <input
-              formControlName="email"
-              type="text"
-              class="form-control"
-              id="input3"
-              placeholder="Email"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput3()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">Phone Number</span>
-            <input
-              formControlName="phoneNumber"
-              type="text"
-              class="form-control"
-              id="input4"
-              placeholder="Phone Number"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput4()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <div class="mb-3">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-text">First Name</span>
+              <input
+                required
+                minlength="3"
+                maxlength="20"
+                [(ngModel)]="userDTO.firstName"
+                type="text"
+                class="form-control"
+                name="firstName"
+                #firstName="ngModel"
+                placeholder="First Name"
+              />
+              <span class="input-group-text">
+                <i
+                  (click)="firstNameClear()"
+                  class="bi bi-x-circle"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <div
+              class="error-message"
+              *ngIf="!firstName.valid && firstName.touched"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              <div *ngFor="let error of getValidationErrors(firstName)">
+                {{ error }}
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-text">Last Name</span>
+              <input
+                required
+                minlength="3"
+                maxlength="20"
+                [(ngModel)]="userDTO.lastName"
+                type="text"
+                class="form-control"
+                name="lastName"
+                #lastName="ngModel"
+                placeholder="Last Name"
+              />
+              <span class="input-group-text">
+                <i
+                  (click)="lastNameClear()"
+                  class="bi bi-x-circle"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <div
+              class="error-message"
+              *ngIf="!lastName.valid && lastName.touched"
+            >
+              <div *ngFor="let error of getValidationErrors(lastName)">
+                {{ error }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-text">Email</span>
+              <input
+                required
+                minlength="3"
+                maxlength="30"
+                pattern=""
+                email="true"
+                [(ngModel)]="userDTO.email"
+                type="email"
+                class="form-control"
+                name="email"
+                #email="ngModel"
+                placeholder="email"
+              />
+              <span class="input-group-text">
+                <i
+                  (click)="emailClear()"
+                  class="bi bi-x-circle"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <div *ngIf="!email.valid && email.touched">
+              <div
+                class="error-message"
+                *ngFor="let error of getValidationErrors(email)"
+              >
+                {{ error }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-text">Phone Number</span>
+              <input
+                required
+                minlength="10"
+                maxlength="10"
+                pattern="[0-9\/]*"
+                inputmode="numeric"
+                [(ngModel)]="userDTO.phoneNumber"
+                type="text"
+                class="form-control"
+                name="phoneNumber"
+                #phoneNumber="ngModel"
+                placeholder="5055619000"
+              />
+              <span class="input-group-text">
+                <i
+                  (click)="phoneNumberClear()"
+                  class="bi bi-x-circle"
+                  style="cursor: pointer"
+                ></i>
+              </span>
+            </div>
+            <div
+              class="error-message"
+              *ngIf="!phoneNumber.valid && phoneNumber.touched"
+            >
+              <p *ngFor="let error of getValidationErrors(phoneNumber)">
+                {{ error }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button
+            [disabled]="!form.valid"
+            type="submit"
+            class="btn btn-outline-primary"
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="activeModal.close('Close click')"
+          >
+            Close
+          </button>
         </div>
       </form>
     </div>

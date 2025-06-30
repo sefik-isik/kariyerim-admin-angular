@@ -36,6 +36,15 @@
           Undelete All
           <i class="bi bi-arrow-up-right-square" style="color: white"></i>
         </button>
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          (click)="terminateAll()"
+          routerLinkActive="router-link-active"
+        >
+          Terminate All
+          <i class="bi bi-x-octagon" style="color: white"></i>
+        </button>
       </div>
 
       <div class="row mt-3">
@@ -96,6 +105,16 @@
                   class="bi bi-arrow-up-right-square"
                 >
                 </i>
+                <i
+                  (click)="terminate(companyUserImageDTO)"
+                  class="bi bi-x-octagon"
+                  style="
+                    cursor: pointer;
+                    margin-left: 4px;
+                    font-size: large;
+                    color: rgb(255, 0, 0);
+                  "
+                ></i>
               </div>
             </div>
           </div>

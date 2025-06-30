@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Sector } from '../../../models/sector';
+import { Sector } from '../../../models/component/sector';
 
 @Component({
   selector: 'app-sectorDetail',

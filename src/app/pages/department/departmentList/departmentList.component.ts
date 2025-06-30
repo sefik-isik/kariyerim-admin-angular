@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DepartmentUpdateComponent } from '../departmentUpdate/departmentUpdate.component';
 import { DepartmentDetailComponent } from '../departmentDetail/departmentDetail.component';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDepartmentPipe } from '../../../pipes/filterDepartment.pipe';
 import { AuthService } from '../../../services/auth.service';
@@ -42,7 +42,7 @@ export class DepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -60,7 +60,7 @@ export class DepartmentListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -76,7 +76,7 @@ export class DepartmentListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.delete(department).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

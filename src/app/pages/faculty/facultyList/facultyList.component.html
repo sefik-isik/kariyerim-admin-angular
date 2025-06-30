@@ -48,8 +48,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let faculty of faculties | filterFaculty : filter1">
-              <td>{{ faculty.id }}</td>
+            <tr
+              *ngFor="
+                let faculty of faculties | filterFaculty : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ faculty.facultyName }}</td>
 
               <td>

@@ -1,27 +1,24 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { DriverLicenceService } from './../../../services/driverLicense.service';
-import { LicenceDegree } from './../../../models/licenceDegree';
-import { LicenceDegreeService } from './../../../services/licenseDegree.service';
+import { LicenseDegree } from '../../../models/component/licenseDegree';
+import { LicenseDegreeService } from './../../../services/licenseDegree.service';
 import { PersonelUserService } from './../../../services/personelUser.service';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CityService } from '../../../services/city.service';
-import { City } from '../../../models/city';
+import { City } from '../../../models/component/city';
 import { UserService } from '../../../services/user.service';
-import { PersonelUser } from '../../../models/personelUser';
-import { DriverLicence } from '../../../models/driverLicence';
+import { PersonelUser } from '../../../models/component/personelUser';
+import { DriverLicence } from '../../../models/component/driverLicence';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserAdd',
@@ -30,70 +27,49 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserAddComponent implements OnInit {
-  componentTitle = 'Personel User Add Form';
+  personelUserModel: PersonelUserDTO = {} as PersonelUserDTO;
   userDTOs: UserDTO[] = [];
   cities: City[] = [];
-  licenceDegrees: LicenceDegree[] = [];
+  licenseDegrees: LicenseDegree[] = [];
   driverLicences: DriverLicence[] = [];
-  addForm: FormGroup;
-  userId: number;
-  isAdmin: boolean = false;
+  today: number = Date.now();
+  componentTitle = 'Personel User Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
     private router: Router,
     private cityService: CityService,
     private userService: UserService,
     private adminService: AdminService,
-    private licenceDegreeService: LicenceDegreeService,
+    private licenseDegreeService: LicenseDegreeService,
     private driverLicenceService: DriverLicenceService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
     this.getCities();
-    this.getLicenceDegrees();
+    this.getLicenseDegrees();
     this.getLDriverLicences();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [''],
-      identityNumber: [''],
-      licenceDegreeName: [''],
-      driverLicenceName: [''],
-      gender: [''],
-      militaryStatus: [''],
-      nationalStatus: [''],
-      retirementStatus: [''],
-      birthPlaceName: [''],
-      dateOfBirth: [''],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.getModel().userId > 0 &&
-      this.getModel().identityNumber != null &&
-      this.getModel().identityNumber.length == 11 &&
-      this.getModel().licenceDegreeId > 0 &&
-      this.getModel().driverLicenceId > 0 &&
-      this.getModel().birthPlaceId > 0 &&
-      this.getModel().dateOfBirth != null
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message, 'Kullanıcı Eklenemedi');
+        (responseError) => {
+          console.error;
         }
       );
     } else {
@@ -103,33 +79,32 @@ export class PersonelUserAddComponent implements OnInit {
 
   getModel(): PersonelUser {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
-      identityNumber: this.addForm.value.identityNumber,
-      licenceDegreeId: this.getLicenceDegreeId(
-        this.addForm.value.licenceDegreeName
+      id: '',
+      userId: this.getUserId(this.personelUserModel.email),
+      identityNumber: this.personelUserModel.identityNumber,
+      licenseDegreeId: this.getLicenseDegreeId(
+        this.personelUserModel.licenseDegreeName
       ),
       driverLicenceId: this.getDriverLicenceId(
-        this.addForm.value.driverLicenceName
+        this.personelUserModel.driverLicenceName
       ),
-      militaryStatus: this.getBooleanValue(this.addForm.value.militaryStatus),
-      nationalStatus: this.getBooleanValue(this.addForm.value.nationalStatus),
-      retirementStatus: this.getBooleanValue(
-        this.addForm.value.retirementStatus
-      ),
-      gender: this.getBooleanValue(this.addForm.value.gender),
-      birthPlaceId: this.getBirthPlaceId(this.addForm.value.birthPlaceName),
-      dateOfBirth: new Date(this.addForm.value.dateOfBirth).toJSON(),
+      militaryStatus: this.personelUserModel.militaryStatus,
+      nationalStatus: this.personelUserModel.nationalStatus,
+      retirementStatus: this.personelUserModel.retirementStatus,
+      gender: this.personelUserModel.gender,
+      birthPlaceId: this.getBirthPlaceId(this.personelUserModel.birthPlaceName),
+      dateOfBirth: new Date(this.personelUserModel.dateOfBirth).toJSON(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -138,16 +113,8 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
-  }
-
-  getBooleanValue(value: string): boolean {
-    if (value == 'true') {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   getCities() {
@@ -155,18 +122,18 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getLicenceDegrees() {
-    this.licenceDegreeService.getAll().subscribe(
+  getLicenseDegrees() {
+    this.licenseDegreeService.getAll().subscribe(
       (response) => {
-        this.licenceDegrees = response.data.filter(
+        this.licenseDegrees = response.data.filter(
           (f) => f.deletedDate == null
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -177,25 +144,25 @@ export class PersonelUserAddComponent implements OnInit {
           (f) => f.deletedDate == null
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getLicenceDegreeId(licenceDegreeName: string): number {
-    const licenceDegreeId = this.licenceDegrees.filter(
-      (c) => c.licenceDegreeName === licenceDegreeName
+  getLicenseDegreeId(licenseDegreeName: string): string {
+    const licenseDegreeId = this.licenseDegrees.filter(
+      (c) => c.licenseDegreeName === licenseDegreeName
     )[0]?.id;
 
-    return licenceDegreeId;
+    return licenseDegreeId;
   }
 
-  getDriverLicenceId(driverLicenceName: string): number {
+  getDriverLicenceId(driverLicenceName: string): string {
     const driverLicenceId = this.driverLicences.filter(
       (c) => c.driverLicenceName === driverLicenceName
     )[0]?.id;
@@ -203,7 +170,7 @@ export class PersonelUserAddComponent implements OnInit {
     return driverLicenceId;
   }
 
-  getBirthPlaceId(cityName: string): number {
+  getBirthPlaceId(cityName: string): string {
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
     return cityId;
   }
@@ -216,36 +183,27 @@ export class PersonelUserAddComponent implements OnInit {
     }
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('identityNumber');
-    value.reset();
+  identityNumberClear() {
+    this.personelUserModel.identityNumber = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('licenceDegreeName');
-    value.reset();
-    this.getLDriverLicences();
+  licenseDegreeNameClear() {
+    this.personelUserModel.licenseDegreeName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('driverLicenceName');
-    value.reset();
-    this.getCities();
+  driverLicenceNameClear() {
+    this.personelUserModel.driverLicenceName = '';
   }
 
-  clearInput5() {
-    let value = this.addForm.get('birthPlaceName');
-    value.reset();
+  birthPlaceNameClear() {
+    this.personelUserModel.birthPlaceName = '';
   }
 
-  clearInput6() {
-    let value = this.addForm.get('dateOfBirth');
-    value.reset();
+  dateOfBirthClear() {
+    this.personelUserModel.dateOfBirth = '';
   }
 }

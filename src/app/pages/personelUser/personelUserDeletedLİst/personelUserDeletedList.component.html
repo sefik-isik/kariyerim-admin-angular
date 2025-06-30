@@ -38,7 +38,7 @@
             <th>Id</th>
             <th>email</th>
             <th>gender</th>
-            <th>licenceDegreeName</th>
+            <th>licenseDegreeName</th>
             <th>driverLicenceName</th>
             <th>militaryStatus</th>
             <th>nationalStatus</th>
@@ -55,19 +55,27 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
               let personelUserDTO of personelUserDTOs
-                | filterPersonelUser : filter1
+                | filterPersonelUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserDTO.email }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
-            <td>{{ personelUserDTO.licenceDegreeName }}</td>
+            <td>{{ personelUserDTO.licenseDegreeName }}</td>
             <td>{{ personelUserDTO.driverLicenceName }}</td>
             <td>{{ personelUserDTO.militaryStatus | boolenText }}</td>
             <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>
@@ -96,6 +104,13 @@
                 (click)="unDelete(personelUserDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(personelUserDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

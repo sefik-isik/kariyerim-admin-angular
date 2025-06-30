@@ -1,25 +1,21 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { CompanyUserFileService } from './../../../services/companyUserFile.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  Validators,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
-import { CompanyUserFile } from '../../../models/companyUserFile';
+import { CompanyUserFile } from '../../../models/component/companyUserFile';
 import { Router } from '@angular/router';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserFileAdd',
@@ -28,20 +24,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserFileAddComponent {
-  addForm: FormGroup;
+  companyUserFileModel: CompanyUserFileDTO = {} as CompanyUserFileDTO;
   selectedFile: File | null = null;
   filePath: string | null = null;
   fileName: string | null = null;
   fileOwnName: string | null = null;
-  companyUserDTOs: CompanyUserDTO[] = [];
-  companyUserId: number;
-  userId: number;
+  companyUsers: CompanyUserDTO[] = [];
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean;
   componentTitle = 'Company User File Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private companyUserFileService: CompanyUserFileService,
     private router: Router,
@@ -49,20 +41,11 @@ export class CompanyUserFileAddComponent {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
-  }
-
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: ['', [Validators.required, Validators.minLength(3)]],
-      companyUserName: ['', [Validators.required, Validators.minLength(3)]],
-      file: ['', [Validators.required, Validators.minLength(3)]],
-      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
-    });
   }
 
   onFileSelected(event: any) {
@@ -101,7 +84,11 @@ export class CompanyUserFileAddComponent {
     }
   }
 
-  onUpload() {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
     if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
@@ -110,21 +97,19 @@ export class CompanyUserFileAddComponent {
       return;
     }
 
-    if (!this.addForm.valid) {
+    if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
     }
 
-    this.companyUserId = this.getCompanyUserId(
-      this.addForm.value.companyUserName
-    );
-
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
-    formData.append('companyUserId', this.companyUserId.toString());
 
     this.companyUserFileService
-      .uploadFile(formData, this.companyUserId)
+      .uploadFile(
+        formData,
+        this.getCompanyUserId(this.companyUserFileModel.companyUserName)
+      )
       .subscribe(
         (event) => {
           if (event.type === HttpEventType.UploadProgress) {
@@ -142,9 +127,8 @@ export class CompanyUserFileAddComponent {
             );
           }
         },
-        (error) => {
+        (responseError) => {
           console.error;
-          this.toastrService.error('Error uploading file', error);
         }
       );
   }
@@ -158,31 +142,35 @@ export class CompanyUserFileAddComponent {
           '/dashboard/companyuserfile/companyuserfilelisttab',
         ]);
       },
-      (error) => {
-        console.log(error);
+      (responseError) => {
+        console.log(responseError);
       }
     );
   }
 
   getModel(): CompanyUserFile {
     return Object.assign({
-      companyUserId: this.getCompanyUserId(this.addForm.value.companyUserName),
+      id: '',
+      userId: this.getUserId(this.companyUserFileModel.email),
+      companyUserId: this.getCompanyUserId(
+        this.companyUserFileModel.companyUserName
+      ),
       filePath: this.filePath,
       fileName: this.fileName,
-      fileOwnName: this.addForm.value.fileOwnName,
+      fileOwnName: this.companyUserFileModel.fileOwnName,
 
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -191,53 +179,48 @@ export class CompanyUserFileAddComponent {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.addForm.value.userEmail);
+    const userId = this.getUserId(this.companyUserFileModel.email);
 
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.companyUserDTOs = response.data.filter((f) => f.userId === userId);
+        this.companyUsers = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getCompanyUserId(companyUserName: string): number {
-    const companyUserId = this.companyUserDTOs.filter(
+  getCompanyUserId(companyUserName: string): string {
+    const companyUserId = this.companyUsers.filter(
       (c) => c.companyUserName === companyUserName
     )[0]?.id;
 
     return companyUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.companyUserFileModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('companyUserName');
-    value.reset();
-    this.getAdminValues();
-  }
-  clearInput3() {
-    let value = this.addForm.get('fileOwnName');
-    value.reset();
+  companyUserNameClear() {
+    this.companyUserFileModel.companyUserName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('file');
-    value.reset();
+  fileOwnNameClear() {
+    this.companyUserFileModel.fileOwnName = '';
+  }
+
+  fileNameClear() {
+    this.companyUserFileModel.fileName = '';
   }
 }

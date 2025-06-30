@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { PersonelUserImageDTO } from '../models/personelUserImageDTO';
+import { PersonelUserImageDTO } from '../models/dto/personelUserImageDTO';
 
 @Pipe({
   name: 'filterPersonelUserImageByUserPipe',

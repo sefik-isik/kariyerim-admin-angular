@@ -3,328 +3,508 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="updateForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email : {{ userEmail }}</span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Cv Name</span>
-          <input
-            formControlName="cvName"
-            type="text"
-            class="form-control"
-            list="datalistCv"
-            id="input3"
-            placeholder="Select Cv..."
-            minlength="3"
-          />
-          <datalist id="datalistCv">
-            <option
-              *ngFor="let personelUserCv of personelUserCvs"
-              value="{{ personelUserCv.cvName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Company Name</span>
-          <input
-            formControlName="companyName"
-            type="text"
-            class="form-control"
-            id="companyName"
-            placeholder="Company Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Sector Name</span>
-          <input
-            formControlName="companySectorName"
-            type="text"
-            class="form-control"
-            list="datalist4"
-            id="input4"
-            placeholder="Select Sector..."
-            minlength="3"
-          />
-          <datalist id="datalist4">
-            <option
-              *ngFor="let companySector of companySectors"
-              value="{{ companySector.sectorName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">department Name</span>
-          <input
-            formControlName="departmentName"
-            type="text"
-            class="form-control"
-            list="departmentNameData"
-            id="input5"
-            placeholder="Select department..."
-          />
-          <datalist id="departmentNameData">
-            <option
-              *ngFor="let companyUserDepartment of companyUserDepartments"
-              value="{{ companyUserDepartment.departmentName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Working Method Name</span>
-          <input
-            formControlName="workingMethodName"
-            type="text"
-            class="form-control"
-            list="workingMethodData"
-            id="workingMethod"
-            placeholder="Select Working Method..."
-          />
-          <datalist id="workingMethodData">
-            <option
-              *ngFor="let workingMethod of workingMethods"
-              value="{{ workingMethod.methodName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput6()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Country Name</span>
-          <input
-            formControlName="countryName"
-            type="text"
-            class="form-control"
-            list="countryNameData"
-            id="input3"
-            placeholder="Select Country..."
-            minlength="3"
-            (change)="getCities()"
-          />
-          <datalist id="countryNameData">
-            <option
-              *ngFor="let country of countries"
-              value="{{ country.countryName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput7()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">City Name</span>
-          <input
-            formControlName="cityName"
-            type="text"
-            class="form-control"
-            list="cityNameData"
-            id="cityName"
-            placeholder="Select City..."
-            minlength="3"
-            (change)="getRegions()"
-          />
-          <datalist id="cityNameData">
-            <option
-              *ngFor="let city of cities"
-              value="{{ city.cityName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput8()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Region Name</span>
-          <input
-            formControlName="regionName"
-            type="text"
-            class="form-control"
-            list="regionNameData"
-            id="regionName"
-            placeholder="Region Name..."
-          />
-          <datalist id="regionNameData">
-            <option
-              *ngFor="let region of regions"
-              value="{{ region.regionName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput9()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Start Date</span>
-          <input
-            formControlName="startDate"
-            type="date"
-            class="form-control"
-            id="input6"
-            placeholder="Start Date"
-            min="1980-01-01"
-            max="2025-12-31"
-            minlength="10"
-            maxlength="10"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput10()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">End Date</span>
-          <input
-            formControlName="endDate"
-            type="date"
-            class="form-control"
-            id="input7"
-            placeholder="End Date"
-            min="1980-01-01"
-            max="2025-12-31"
-            minlength="10"
-            maxlength="10"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput11()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text">Position</span>
-          <input
-            formControlName="position"
-            type="text"
-            class="form-control"
-            id="position"
-            placeholder="Position"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput12()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >Detail <br />{{ detailCount }} \ 250</span
-          >
-
-          <textarea
-            formControlName="detail"
-            class="form-control"
-            id="detail"
-            style="height: 120px"
-            placeholder="Detail"
-            minlength="50"
-            maxlength="250"
-            (input)="count(detailText)"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput13()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-        <div class="input-group mb-3">
-          <div class="form-check">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
             <input
-              formControlName="foundJobInHere"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="foundJobInHere"
-              checked
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="personelUserCvWorkExperienceDTO.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
             />
-            <label class="form-check-label" for="checkChecked">
-              Found Job In Here
-            </label>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <div class="form-check">
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Cv Name</span>
             <input
-              formControlName="working"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="working"
-              checked
+              class="form-control"
+              placeholder="text"
+              [(ngModel)]="personelUserCvWorkExperienceDTO.cvName"
+              name="cvName"
+              #email="ngModel"
+              disabled="true"
             />
-            <label class="form-check-label" for="checkChecked"> Working </label>
           </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.companyName"
+              type="text"
+              class="form-control"
+              name="companyName"
+              #companyName="ngModel"
+              placeholder="Company Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="companyNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyName.valid && companyName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.companySectorName"
+              type="text"
+              class="form-control"
+              name="companySectorName"
+              #companySectorName="ngModel"
+              placeholder="Sector Name"
+              list="companySectorNameDataList"
+            />
+            <datalist id="companySectorNameDataList">
+              <option
+                *ngFor="let companySector of companySectors"
+                value="{{ companySector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="companySectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companySectorName.valid && companySectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companySectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Department Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.departmentName"
+              type="text"
+              class="form-control"
+              name="departmentName"
+              #departmentName="ngModel"
+              placeholder="Department Name"
+              list="departmentNameDataList"
+            />
+            <datalist id="departmentNameDataList">
+              <option
+                *ngFor="let companyUserDepartment of companyUserDepartments"
+                value="{{ companyUserDepartment.departmentName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="departmentNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!departmentName.valid && departmentName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(departmentName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Working Method Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.workingMethodName"
+              type="text"
+              class="form-control"
+              name="workingMethodName"
+              #workingMethodName="ngModel"
+              placeholder="Working Method Name"
+              list="workingMethodNameDataList"
+            />
+            <datalist id="workingMethodNameDataList">
+              <option
+                *ngFor="let workingMethod of workingMethods"
+                value="{{ workingMethod.methodName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="workingMethodNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workingMethodName.valid && workingMethodName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workingMethodName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="Country Name"
+              (change)="getCities(personelUserCvWorkExperienceDTO.countryName)"
+              list="countryNameDataList"
+            />
+            <datalist id="countryNameDataList">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="countryNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.cityName"
+              type="text"
+              class="form-control"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(personelUserCvWorkExperienceDTO.cityName)"
+              list="cityNameDataList"
+            />
+            <datalist id="cityNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Region Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.regionName"
+              type="text"
+              class="form-control"
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="Region Name"
+              list="regionNameDataList"
+            />
+            <datalist id="regionNameDataList">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="regionNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Start Date</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.startDate"
+              type="date"
+              class="form-control"
+              name="startDate"
+              #startDate="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="startDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!startDate.valid && startDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(startDate)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">End Date</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.endDate"
+              type="date"
+              class="form-control"
+              name="endDate"
+              #endDate="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="endDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!endDate.valid && endDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(endDate)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Position</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceDTO.position"
+              type="text"
+              class="form-control"
+              name="position"
+              #position="ngModel"
+              placeholder="Position"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="positionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!position.valid && position.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(position)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ detailCount }} \ 50</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="250"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="personelUserCvWorkExperienceDTO.detail"
+              name="detail"
+              #detail="ngModel"
+              style="height: 100px"
+              (input)="count(personelUserCvWorkExperienceDTO.detail)"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="detailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!detail.valid && detail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(detail)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserCvWorkExperienceDTO.foundJobInHere"
+            name="foundJobInHere"
+          />
+          <label class="form-check-label" for="checkChecked"> Working </label>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [(ngModel)]="personelUserCvWorkExperienceDTO.working"
+            name="working"
+          />
+          <label class="form-check-label" for="checkChecked">
+            Found Job In Here
+          </label>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="update()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Update
       </button>
       <button

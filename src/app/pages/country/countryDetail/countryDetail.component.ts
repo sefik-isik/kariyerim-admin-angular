@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 
 @Component({
   selector: 'app-countryDetail',

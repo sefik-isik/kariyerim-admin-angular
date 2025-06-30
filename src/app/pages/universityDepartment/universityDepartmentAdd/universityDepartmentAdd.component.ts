@@ -1,23 +1,19 @@
 import { DepartmentService } from './../../../services/department.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
-import { UniversityDepartment } from '../../../models/universityDepartment';
-import { University } from '../../../models/university';
+import { UniversityDepartment } from '../../../models/component/universityDepartment';
+import { University } from '../../../models/component/university';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Department } from '../../../models/department';
-import { Faculty } from '../../../models/faculty';
+import { Department } from '../../../models/component/department';
+import { Faculty } from '../../../models/component/faculty';
 import { FacultyService } from '../../../services/faculty.service';
+import { UniversityDepartmentDTO } from '../../../models/dto/universityDepartmentDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityDepartmentAdd',
@@ -26,45 +22,36 @@ import { FacultyService } from '../../../services/faculty.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityDepartmentAddComponent implements OnInit {
-  addForm: FormGroup;
+  universityDepartmentModel: UniversityDepartmentDTO =
+    {} as UniversityDepartmentDTO;
   universities: University[];
   faculties: Faculty[];
   departments: Department[];
   componentTitle = 'University Department Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private universityService: UniversityService,
     private facultyService: FacultyService,
     private departmentService: DepartmentService,
     private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private router: Router,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getUniversities();
     this.getFaculties();
     this.getDepartments();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      universityName: ['', [Validators.required, Validators.minLength(3)]],
-      facultyName: ['', [Validators.required, Validators.minLength(3)]],
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.addForm.valid &&
-      this.getModel().universityId > 0 &&
-      this.getModel().facultyId > 0 &&
-      this.getModel().departmentId > 0
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.universityDepartmentService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -73,8 +60,8 @@ export class UniversityDepartmentAddComponent implements OnInit {
             '/dashboard/universitydepartment/universitydepartmentlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.error;
         }
       );
     } else {
@@ -84,9 +71,14 @@ export class UniversityDepartmentAddComponent implements OnInit {
 
   getModel(): UniversityDepartment {
     return Object.assign({
-      universityId: this.getUniversityId(this.addForm.value.universityName),
-      facultyId: this.getFacultytId(this.addForm.value.facultyName),
-      departmentId: this.getDepartmentId(this.addForm.value.departmentName),
+      id: '',
+      universityId: this.getUniversityId(
+        this.universityDepartmentModel.universityName
+      ),
+      facultyId: this.getFacultytId(this.universityDepartmentModel.facultyName),
+      departmentId: this.getDepartmentId(
+        this.universityDepartmentModel.departmentName
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -96,7 +88,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -105,7 +97,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -114,11 +106,11 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUniversityId(universityName: string): number {
+  getUniversityId(universityName: string): string {
     const universityId = this.universities.filter(
       (c) => c.universityName === universityName
     )[0]?.id;
@@ -126,7 +118,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
     return universityId;
   }
 
-  getFacultytId(facultyName: string): number {
+  getFacultytId(facultyName: string): string {
     const facultytId = this.faculties.filter(
       (c) => c.facultyName === facultyName
     )[0]?.id;
@@ -134,7 +126,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
     return facultytId;
   }
 
-  getDepartmentId(departmentName: string): number {
+  getDepartmentId(departmentName: string): string {
     const departmentId = this.departments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;
@@ -142,14 +134,15 @@ export class UniversityDepartmentAddComponent implements OnInit {
     return departmentId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('universityName');
-    value.reset();
-    this.getUniversities();
+  universityNameClear() {
+    this.universityDepartmentModel.universityName = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('departmentName');
-    value.reset();
+  facultyNameClear() {
+    this.universityDepartmentModel.facultyName = '';
+  }
+
+  departmentNameClear() {
+    this.universityDepartmentModel.departmentName = '';
   }
 }

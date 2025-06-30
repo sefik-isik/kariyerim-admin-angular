@@ -1,0 +1,218 @@
+<nav
+  class="navbar bg-dark navbar-expand-lg bg-body-tertiary"
+  data-bs-theme="dark"
+>
+  <div class="container-md mt-5">
+    <div class="collapse navbar-collapse" id="navbarNav"></div>
+  </div>
+</nav>
+
+<div class="container-md">
+  <div class="row justify-content-md-center mt-5">
+    <div class="col col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="alert alert-primary" role="alert">
+            {{ title }}
+          </div>
+          <form #form="ngForm">
+            <div class="mb-3">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text">Email</span>
+                  <input
+                    required
+                    minlength="3"
+                    maxlength="30"
+                    pattern=""
+                    email="true"
+                    [(ngModel)]="registerModel.email"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    #email="ngModel"
+                    placeholder="email"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="emailClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div *ngIf="!email.valid && email.touched">
+                  <div
+                    class="error-message"
+                    *ngFor="let error of getValidationErrors(email)"
+                  >
+                    {{ error }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text">Password</span>
+                  <input
+                    required
+                    minlength="6"
+                    maxlength="20"
+                    [(ngModel)]="registerModel.password"
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    #password="ngModel"
+                    placeholder="Password"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="passwordClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="error-message"
+                  *ngIf="!password.valid && password.touched"
+                >
+                  <p *ngFor="let error of getValidationErrors(password)">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text">First Name</span>
+                  <input
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    [(ngModel)]="registerModel.firstName"
+                    type="text"
+                    class="form-control"
+                    name="firstName"
+                    #firstName="ngModel"
+                    placeholder="First Name"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="firstNameClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="error-message"
+                  *ngIf="!firstName.valid && firstName.touched"
+                >
+                  <p *ngFor="let error of getValidationErrors(firstName)">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text">Last Name</span>
+                  <input
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    [(ngModel)]="registerModel.lastName"
+                    type="text"
+                    class="form-control"
+                    name="lastName"
+                    #lastName="ngModel"
+                    placeholder="Last Name"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="lastNameClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="error-message"
+                  *ngIf="!lastName.valid && lastName.touched"
+                >
+                  <p *ngFor="let error of getValidationErrors(lastName)">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-text">Phone Number</span>
+                  <input
+                    required
+                    minlength="10"
+                    maxlength="10"
+                    pattern="[0-9\/]*"
+                    inputmode="numeric"
+                    [(ngModel)]="registerModel.phoneNumber"
+                    type="text"
+                    class="form-control"
+                    name="phoneNumber"
+                    #phoneNumber="ngModel"
+                    placeholder="5055619000"
+                  />
+                  <span class="input-group-text">
+                    <i
+                      (click)="phoneNumberClear()"
+                      class="bi bi-x-circle"
+                      style="cursor: pointer"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="error-message"
+                  *ngIf="!phoneNumber.valid && phoneNumber.touched"
+                >
+                  <p *ngFor="let error of getValidationErrors(phoneNumber)">
+                    {{ error }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                type="button"
+                (click)="onSubmit(form)"
+                [disabled]="!form.valid"
+                class="btn btn-outline-primary"
+              >
+                Register
+              </button>
+            </div>
+          </form>
+          <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-outline-success" (click)="login()">
+              Already have an account? Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

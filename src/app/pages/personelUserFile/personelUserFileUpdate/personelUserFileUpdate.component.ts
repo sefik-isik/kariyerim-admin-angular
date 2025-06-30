@@ -6,21 +6,23 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { HttpEventType } from '@angular/common/http';
-import { AdminService } from '../../../services/admin.service';
-import { AdminModel } from '../../../models/adminModel';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserFile } from '../../../models/personelUserFile';
-import { PersonelUserFileDTO } from '../../../models/personelUserFileDTO';
+import { PersonelUserFile } from '../../../models/component/personelUserFile';
+import { PersonelUserFileDTO } from '../../../models/dto/personelUserFileDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserFileUpdate',
@@ -29,80 +31,62 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserFileUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() personelUserFileDTO: PersonelUserFileDTO;
-  componentTitle = 'Personel User File Update Form';
   selectedFile: File | null = null;
-  filePath: string | null = null;
-  fileName: string | null = null;
-  fileOwnName: string | null = null;
   users: UserDTO[] = [];
+  result: boolean;
   personelUserDTOs: PersonelUserDTO[] = [];
-  personelUserId: number;
-  personelUserName: string;
-  userEmail: string;
-  userId: number;
-  id: number;
-  result: boolean = true;
+  componentTitle = 'Personel User File Update Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-
     private personelUserFileService: PersonelUserFileService,
     private router: Router,
     private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
   ngOnInit() {
     this.getAdminValues();
-    this.createupdateForm();
 
     setTimeout(() => {
       this.getUserValues(this.personelUserFileDTO.id);
     }, 200);
   }
 
-  checkFile(fileName: string) {
-    if (this.fileName == 'noFile') {
+  checkFile() {
+    if (this.personelUserFileDTO.fileName == 'noFile') {
       this.result = false;
     } else {
       this.result = true;
     }
   }
 
-  createupdateForm() {
-    this.updateForm = this.formBuilder.group({
-      file: ['', [Validators.required, Validators.minLength(3)]],
-      fileOwnName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
   }
 
   getById(adminModel: AdminModel) {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.personelUserFileService.getById(adminModel).subscribe(
       (response) => {
-        this.id = response.data.id;
-        this.personelUserId = response.data.personelUserId;
-        this.userEmail = this.getPersonelUserById(this.personelUserId);
-        this.filePath = response.data.filePath;
-        this.fileName = response.data.fileName;
-        this.fileOwnName = response.data.fileOwnName;
-        this.checkFile(this.fileName);
+        this.personelUserFileDTO.id = response.data.id;
+        this.personelUserFileDTO.userId = response.data.userId;
+        this.personelUserFileDTO.personelUserId = response.data.personelUserId;
+        this.personelUserFileDTO.filePath = response.data.filePath;
+        this.personelUserFileDTO.fileName = response.data.fileName;
+        this.personelUserFileDTO.fileOwnName = response.data.fileOwnName;
+        this.checkFile();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -137,8 +121,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       );
     } else {
       this.toastrService.success('File selected successfully', 'Success');
-      this.fileName = this.selectedFile.name;
-      this.fileOwnName = this.updateForm.value.fileOwnName;
+      this.personelUserFileDTO.fileName = this.selectedFile.name;
     }
   }
 
@@ -147,11 +130,20 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  onUpload() {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!form.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
+      return;
+    }
+
     if (!this.selectedFile) {
       this.toastrService.error(
         'Please select a file to upload',
@@ -159,25 +151,20 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       );
       return;
     }
-    if (!this.updateForm.valid) {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
-      return;
-    }
 
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
-    formData.append('personelUserId', this.personelUserId.toString());
 
     this.personelUserFileService
-      .uploadFile(formData, this.personelUserId)
+      .uploadFile(formData, this.personelUserFileDTO.personelUserId)
       .subscribe(
         (event) => {
           if (event.type === HttpEventType.UploadProgress) {
             const percentDone = Math.round(event.loaded / (event.total * 100));
             console.log(`File is ${percentDone}% uploaded.`);
           } else if (event.type === HttpEventType.Response) {
-            this.fileName = event.body.name;
-            this.filePath = event.body.type;
+            this.personelUserFileDTO.fileName = event.body.name;
+            this.personelUserFileDTO.filePath = event.body.type;
 
             this.update();
 
@@ -187,9 +174,9 @@ export class PersonelUserFileUpdateComponent implements OnInit {
             );
           }
         },
-        (error) => {
+        (responseError) => {
           console.error;
-          this.toastrService.error('Error uploading file', error);
+          this.toastrService.error('Error uploading file', responseError);
         }
       );
   }
@@ -203,19 +190,20 @@ export class PersonelUserFileUpdateComponent implements OnInit {
           '/dashboard/personeluserfile/personeluserfilelisttab',
         ]);
       },
-      (error) => {
-        this.toastrService.error(error.error.message);
+      (responseError) => {
+        this.toastrService.error(responseError.error.message);
       }
     );
   }
 
   getModel(): PersonelUserFile {
     return Object.assign({
-      id: this.id,
-      personelUserId: this.personelUserId,
-      filePath: this.filePath,
-      fileName: this.fileName,
-      fileOwnName: this.updateForm.value.fileOwnName,
+      id: this.personelUserFileDTO.id,
+      userId: this.personelUserFileDTO.userId,
+      personelUserId: this.personelUserFileDTO.personelUserId,
+      filePath: this.personelUserFileDTO.filePath,
+      fileName: this.personelUserFileDTO.fileName,
+      fileOwnName: this.personelUserFileDTO.fileOwnName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -223,11 +211,11 @@ export class PersonelUserFileUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues(this.id).subscribe(
+    this.adminService.getAdminValues(this.personelUserFileDTO.id).subscribe(
       (response) => {
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -236,21 +224,19 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getPersonelUserById(personelUserId: number): string {
+  getPersonelUserById(personelUserId: string): string {
     return this.personelUserDTOs.find((c) => c.id == personelUserId)?.email;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('file');
-    value.reset();
+  fileOwnNameClear() {
+    this.personelUserFileDTO.fileOwnName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('fileOwnName');
-    value.reset();
+  fileClear() {
+    this.personelUserFileDTO.fileName = '';
   }
 }

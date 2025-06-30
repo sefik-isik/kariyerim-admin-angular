@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CityDTO } from '../../../models/cityDTO';
-import { ModelMenu } from '../../../models/modelMenu';
+import { CityDTO } from '../../../models/dto/cityDTO';
+import { ModelMenu } from '../../../models/component/modelMenu';
 
 @Component({
   selector: 'app-modelMenuDetail',

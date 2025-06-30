@@ -1,53 +1,60 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { LicenceDegree } from '../models/licenceDegree';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { LicenseDegree } from '../models/component/licenseDegree';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LicenceDegreeService {
-  newUrlPath: string = ApiUrl + 'LicenceDegrees/';
+export class LicenseDegreeService {
+  newUrlPath: string = ApiUrl + 'LicenseDegrees/';
 
   constructor(private httpClient: HttpClient) {}
 
-  add(licenceDegree: LicenceDegree): Observable<ResponseModel> {
+  add(licenseDegree: LicenseDegree): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'add',
-      licenceDegree
+      licenseDegree
     );
   }
 
-  update(licenceDegree: LicenceDegree): Observable<ResponseModel> {
+  update(licenseDegree: LicenseDegree): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'update',
-      licenceDegree
+      licenseDegree
     );
   }
 
-  delete(licenceDegree: LicenceDegree): Observable<ResponseModel> {
+  delete(licenseDegree: LicenseDegree): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
-      licenceDegree
+      licenseDegree
     );
   }
 
-  getAll(): Observable<ListResponseModel<LicenceDegree>> {
+  terminate(licenseDegree: LicenseDegree): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
+      licenseDegree
+    );
+  }
+
+  getAll(): Observable<ListResponseModel<LicenseDegree>> {
     let path = this.newUrlPath + 'getall';
-    return this.httpClient.get<ListResponseModel<LicenceDegree>>(path);
+    return this.httpClient.get<ListResponseModel<LicenseDegree>>(path);
   }
 
-  getDeletedAll(): Observable<ListResponseModel<LicenceDegree>> {
+  getDeletedAll(): Observable<ListResponseModel<LicenseDegree>> {
     let path = this.newUrlPath + 'getdeletedall';
-    return this.httpClient.get<ListResponseModel<LicenceDegree>>(path);
+    return this.httpClient.get<ListResponseModel<LicenseDegree>>(path);
   }
 
-  getById(id: number): Observable<SingleResponseModel<LicenceDegree>> {
+  getById(id: string): Observable<SingleResponseModel<LicenseDegree>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<LicenceDegree>>(path);
+    return this.httpClient.get<SingleResponseModel<LicenseDegree>>(path);
   }
 }

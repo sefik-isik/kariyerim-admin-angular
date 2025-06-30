@@ -1,21 +1,30 @@
-<div class="card tab-page" style="border: none">
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
   <div class="card-body">
-    <p class="card-text"><b>Id: </b>{{ taxOffice.id }}</p>
-    <p class="card-text"><b>cityId: </b>{{ taxOffice.cityId }}</p>
-    <p class="card-text"><b>regionName: </b>{{ taxOffice.regionName }}</p>
-    <p class="card-text"><b>taxOfficeCode: </b>{{ taxOffice.taxOfficeCode }}</p>
-    <p class="card-text"><b>taxOfficeName: </b>{{ taxOffice.taxOfficeName }}</p>
+    <p class="card-text"><b>Id: </b>{{ taxOfficeDTO.id }}</p>
+    <p class="card-text"><b>cityId: </b>{{ taxOfficeDTO.cityId }}</p>
+    <p class="card-text"><b>cityCode: </b>{{ taxOfficeDTO.cityCode }}</p>
+    <p class="card-text"><b>cityName: </b>{{ taxOfficeDTO.cityName }}</p>
+    <p class="card-text"><b>regionName: </b>{{ taxOfficeDTO.regionName }}</p>
+    <p class="card-text">
+      <b>taxOfficeCode: </b>{{ taxOfficeDTO.taxOfficeCode }}
+    </p>
+    <p class="card-text">
+      <b>taxOfficeName: </b>{{ taxOfficeDTO.taxOfficeName }}
+    </p>
     <p class="card-text">
       <b>createdDate: </b
-      >{{ taxOffice.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ taxOfficeDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>updatedDate: </b
-      >{{ taxOffice.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ taxOfficeDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>deletedDate: </b
-      >{{ taxOffice.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ taxOfficeDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
   </div>
 </div>

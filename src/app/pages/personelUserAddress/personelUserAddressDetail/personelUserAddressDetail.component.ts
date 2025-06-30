@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
+import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
 
 @Component({
   selector: 'app-personelUserAddressDetail',

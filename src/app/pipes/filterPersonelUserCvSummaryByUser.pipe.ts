@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { PersonelUserCvSummaryDTO } from '../models/personelUserCvSummaryDTO';
+import { PersonelUserCvSummaryDTO } from '../models/dto/personelUserCvSummaryDTO';
 
 @Pipe({
   name: 'filterPersonelUserCvSummaryByUser',

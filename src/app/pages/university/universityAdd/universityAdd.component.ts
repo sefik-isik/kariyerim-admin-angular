@@ -1,20 +1,16 @@
 import { SectorService } from './../../../services/sectorService';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
-import { University } from '../../../models/university';
-import { CaseService } from '../../../services/case.service';
+import { University } from '../../../models/component/university';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Sector } from '../../../models/sector';
+import { Sector } from '../../../models/component/sector';
+import { UniversityDTO } from '../../../models/dto/universityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityAdd',
@@ -23,58 +19,41 @@ import { Sector } from '../../../models/sector';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class UniversityAddComponent implements OnInit {
-  addForm: FormGroup;
+  universityModel: UniversityDTO = {} as UniversityDTO;
   sectors: Sector[];
-  addressDetail: string;
-  descriptionDetail: string;
-  subDescriptionDetail: string;
+  addressDetail: number;
+  descriptionDetail: number;
+  subDescriptionDetail: number;
   componentTitle = 'Add University Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private universityService: UniversityService,
     private sectorService: SectorService,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getSectors();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      universityName: ['', [Validators.required, Validators.minLength(3)]],
-      sectorName: ['', [Validators.required, Validators.minLength(3)]],
-      yearOfEstablishment: ['', [Validators.required, Validators.minLength(3)]],
-      workerCount: ['', [Validators.required, Validators.minLength(3)]],
-      webAddress: ['', [Validators.required, Validators.minLength(3)]],
-      webNewsAddress: ['', [Validators.required, Validators.minLength(3)]],
-      youTubeEmbedAddress: ['', [Validators.required, Validators.minLength(3)]],
-      facebookAddress: ['', [Validators.required, Validators.minLength(3)]],
-      instagramAddress: ['', [Validators.required, Validators.minLength(3)]],
-      xAddress: ['', [Validators.required, Validators.minLength(3)]],
-      youTubeAddress: ['', [Validators.required, Validators.minLength(3)]],
-      address: ['', [Validators.required, Validators.minLength(20)]],
-      description: ['', [Validators.required, Validators.minLength(100)]],
-      subDescription: ['', [Validators.required, Validators.minLength(100)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    console.log(this.getModel());
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.universityService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -84,24 +63,25 @@ export class UniversityAddComponent implements OnInit {
 
   getModel(): University {
     return Object.assign({
+      id: '',
       universityName: this.caseService.capitalizeFirstLetter(
-        this.addForm.value.universityName
+        this.universityModel.universityName
       ),
-      sectorId: this.getSectorId(this.addForm.value.sectorName),
+      sectorId: this.getSectorId(this.universityModel.sectorName),
       yearOfEstablishment: new Date(
-        this.addForm.value.yearOfEstablishment
+        this.universityModel.yearOfEstablishment
       ).toJSON(),
-      webAddress: this.addForm.value.webAddress,
-      workerCount: this.addForm.value.workerCount,
-      webNewsAddress: this.addForm.value.webNewsAddress,
-      youTubeEmbedAddress: this.addForm.value.youTubeEmbedAddress,
-      address: this.addForm.value.address,
-      facebookAddress: this.addForm.value.facebookAddress,
-      instagramAddress: this.addForm.value.instagramAddress,
-      xAddress: this.addForm.value.xAddress,
-      youTubeAddress: this.addForm.value.youTubeAddress,
-      description: this.addForm.value.description,
-      subDescription: this.addForm.value.subDescription,
+      webAddress: this.universityModel.webAddress,
+      workerCount: this.universityModel.workerCount,
+      webNewsAddress: this.universityModel.webNewsAddress,
+      youTubeEmbedAddress: this.universityModel.youTubeEmbedAddress,
+      address: this.universityModel.address,
+      facebookAddress: this.universityModel.facebookAddress,
+      instagramAddress: this.universityModel.instagramAddress,
+      xAddress: this.universityModel.xAddress,
+      youTubeAddress: this.universityModel.youTubeAddress,
+      description: this.universityModel.description,
+      subDescription: this.universityModel.subDescription,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -111,11 +91,11 @@ export class UniversityAddComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getSectorId(sectorName: string): number {
+  getSectorId(sectorName: string): string {
     const companyUserSectorId = this.sectors.filter(
       (c) => c.sectorName === sectorName
     )[0]?.id;
@@ -124,87 +104,70 @@ export class UniversityAddComponent implements OnInit {
   }
 
   countAddress() {
-    this.addressDetail = this.addForm.value.address.length;
+    this.addressDetail = this.universityModel.address.length;
   }
 
   countDescription() {
-    this.descriptionDetail = this.addForm.value.description.length;
+    this.descriptionDetail = this.universityModel.description.length;
   }
 
   countSubDescription() {
-    this.subDescriptionDetail = this.addForm.value.subDescription.length;
+    this.subDescriptionDetail = this.universityModel.subDescription.length;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('universityName');
-    value.reset();
+  universityNameClear() {
+    this.universityModel.universityName = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('yearOfEstablishment');
-    value.reset();
+  yearOfEstablishmentClear() {
+    this.universityModel.yearOfEstablishment = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('workerCount');
-    value.reset();
+  workerCountClear() {
+    this.universityModel.workerCount = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('sectorName');
-    value.reset();
+  sectorNameClear() {
+    this.universityModel.sectorName = '';
   }
 
-  clearInput5() {
-    let value = this.addForm.get('webAddress');
-    value.reset();
+  webAddressClear() {
+    this.universityModel.webAddress = '';
   }
 
-  clearInput6() {
-    let value = this.addForm.get('webNewsAddress');
-    value.reset();
+  webNewsAddressClear() {
+    this.universityModel.webNewsAddress = '';
   }
 
-  clearInput7() {
-    let value = this.addForm.get('youTubeEmbedAddress');
-    value.reset();
+  youTubeEmbedAddressClear() {
+    this.universityModel.youTubeEmbedAddress = '';
   }
 
-  clearInput8() {
-    let value = this.addForm.get('facebookAddress');
-    value.reset();
+  facebookAddressClear() {
+    this.universityModel.facebookAddress = '';
   }
 
-  clearInput9() {
-    let value = this.addForm.get('instagramAddress');
-    value.reset();
+  instagramAddressClear() {
+    this.universityModel.instagramAddress = '';
   }
 
-  clearInput10() {
-    let value = this.addForm.get('xAddress');
-    value.reset();
+  xAddressClear() {
+    this.universityModel.xAddress = '';
   }
 
-  clearInput11() {
-    let value = this.addForm.get('youTubeAddress');
-    value.reset();
+  youTubeAddressClear() {
+    this.universityModel.youTubeAddress = '';
   }
 
-  clearInput12() {
-    let value = this.addForm.get('address');
-    this.addressDetail = '';
-    value.reset();
+  addressClear() {
+    this.universityModel.address = '';
   }
 
-  clearInput13() {
-    let value = this.addForm.get('description');
-    this.descriptionDetail = '';
-    value.reset();
+  descriptionClear() {
+    this.universityModel.description = '';
   }
 
-  clearInput14() {
-    let value = this.addForm.get('subDescription');
-    this.subDescriptionDetail = '';
-    value.reset();
+  subDescriptionClear() {
+    this.universityModel.subDescription = '';
   }
 }

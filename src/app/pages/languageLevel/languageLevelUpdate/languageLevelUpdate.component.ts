@@ -1,19 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
-import { LanguageLevel } from '../../../models/languageLevel';
-import { CaseService } from '../../../services/case.service';
+import { LanguageLevel } from '../../../models/component/languageLevel';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageLevelUpdate',
@@ -22,54 +17,42 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageLevelUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() languageLevel: LanguageLevel;
-  languageLevelId: number;
-
   componentTitle = 'Language Level Update Form';
 
   constructor(
     private languageLevelService: LanguageLevelService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.languageLevel.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      level: ['', [Validators.required]],
-      levelTitle: ['', [Validators.required, Validators.minLength(3)]],
-      levelDescription: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.languageLevelService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          level: response.data.level,
-          levelTitle: response.data.levelTitle,
-          levelDescription: response.data.levelDescription,
-        });
-        this.languageLevelId = id;
+        this.languageLevel.id = id;
+        this.languageLevel.level = response.data.level;
+        this.languageLevel.levelTitle = response.data.levelTitle;
+        this.languageLevel.levelDescription = response.data.levelDescription;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.languageLevelService.update(this.getLModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -78,8 +61,8 @@ export class LanguageLevelUpdateComponent implements OnInit {
             '/dashboard/languagelevel/languagelevellisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -89,13 +72,13 @@ export class LanguageLevelUpdateComponent implements OnInit {
 
   getLModel(): LanguageLevel {
     return Object.assign({
-      id: this.languageLevelId,
-      level: this.updateForm.value.level,
+      id: this.languageLevel.id,
+      level: this.languageLevel.level,
       levelTitle: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.levelTitle
+        this.languageLevel.levelTitle
       ),
       levelDescription: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.levelDescription
+        this.languageLevel.levelDescription
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -103,18 +86,15 @@ export class LanguageLevelUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('level');
-    value.reset();
+  levelClear() {
+    this.languageLevel.level = 0;
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('levelTitle');
-    value.reset();
+  levelTitleClear() {
+    this.languageLevel.levelTitle = '';
   }
 
-  clearInput3() {
-    let value = this.updateForm.get('levelDescription');
-    value.reset();
+  levelDescriptionClear() {
+    this.languageLevel.levelDescription = '';
   }
 }

@@ -23,8 +23,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let workingMethod of workingMethods">
-              <td>{{ workingMethod.id }}</td>
+            <tr *ngFor="let workingMethod of workingMethods; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ workingMethod.methodName }}</td>
 
               <td>

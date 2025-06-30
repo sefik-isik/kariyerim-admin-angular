@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Country } from '../models/country';
+import { Country } from '../models/component/country';
 
 @Pipe({
   name: 'filterCountry',

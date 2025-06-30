@@ -1,24 +1,20 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
-import { PersonelUserCoverLetter } from '../../../models/personelUserCoverLetter';
+import { PersonelUserCoverLetter } from '../../../models/component/personelUserCoverLetter';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterAdd',
@@ -27,16 +23,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCoverLetterAddComponent implements OnInit {
-  addForm: FormGroup;
+  personelUserCoverLetterMOdel: PersonelUserCoverLetterDTO =
+    {} as PersonelUserCoverLetterDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
-  description: string;
-  componentTitle = 'Personel User Cover Letter Add Form';
-  userId: number;
+  descriptionCount: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
+  componentTitle = 'Personel User Cover Letter Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
     private toastrService: ToastrService,
     private router: Router,
@@ -44,42 +38,20 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      description: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(50),
-          Validators.maxLength(250),
-        ],
-      ],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.getModel().userId > 0 &&
-      this.getModel().personelUserId > 0 &&
-      this.getModel().description.length >= 50
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCoverLetterService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -88,8 +60,8 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
             '/dashboard/personelusercoverletter/personelusercoverletterlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -99,28 +71,30 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
 
   getModel(): PersonelUserCoverLetter {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
+      id: '',
+      userId: this.getUserId(this.personelUserCoverLetterMOdel.email),
       personelUserId: this.getPersonelUserId(
-        this.getUserId(this.addForm.value.userEmail)
+        this.getUserId(this.personelUserCoverLetterMOdel.email)
       ),
-      title: this.addForm.value.title,
-      description: this.addForm.value.description,
+      title: this.personelUserCoverLetterMOdel.title,
+      description: this.personelUserCoverLetterMOdel.description,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   count() {
-    this.description = this.addForm.value.description.length;
+    this.descriptionCount =
+      this.personelUserCoverLetterMOdel.description.length;
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -129,7 +103,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -138,17 +112,17 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getPersonelUserId(userId: number): number {
+  getPersonelUserId(userId: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.userId === userId
     )[0]?.id;
@@ -156,19 +130,15 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserCoverLetterMOdel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('title');
-    value.reset();
+  titleClear() {
+    this.personelUserCoverLetterMOdel.title = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('description');
-    value.reset();
+  descriptionClear() {
+    this.personelUserCoverLetterMOdel.description = '';
   }
 }

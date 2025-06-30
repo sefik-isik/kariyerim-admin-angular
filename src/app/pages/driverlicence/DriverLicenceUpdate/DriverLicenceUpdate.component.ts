@@ -6,14 +6,16 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { DriverLicence } from '../../../models/driverLicence';
-import { CaseService } from '../../../services/case.service';
+import { DriverLicence } from '../../../models/component/driverLicence';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-driverLicenceUpdate',
@@ -24,7 +26,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class DriverLicenceUpdateComponent implements OnInit {
   updateForm: FormGroup;
   @Input() driverLicence: DriverLicence;
-  driverLicenceId: number;
+  driverLicenceId: string;
 
   componentTitle = 'Driver Licence Update Form';
 
@@ -35,37 +37,31 @@ export class DriverLicenceUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.driverLicence.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      driverLicenceName: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.driverLicenceService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          driverLicenceName: response.data.driverLicenceName,
-        });
-        this.driverLicenceId = id;
+        this.driverLicence.id = id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.driverLicenceService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -74,7 +70,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
             '/dashboard/driverlicence/driverlicencelisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -85,9 +81,9 @@ export class DriverLicenceUpdateComponent implements OnInit {
 
   getModel(): DriverLicence {
     return Object.assign({
-      id: this.driverLicenceId,
+      id: this.driverLicence.id,
       driverLicenceName: this.caseService.capitalizeToUpper(
-        this.updateForm.value.driverLicenceName
+        this.driverLicence.driverLicenceName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -95,8 +91,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('driverLicenceName');
-    value.reset();
+  driverLicenceNameClear() {
+    this.driverLicence.driverLicenceName = '';
   }
 }

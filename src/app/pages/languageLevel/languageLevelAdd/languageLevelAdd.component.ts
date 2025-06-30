@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
-import { LanguageLevel } from '../../../models/languageLevel';
-import { CaseService } from '../../../services/case.service';
+import { LanguageLevel } from '../../../models/component/languageLevel';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageLevelAdd',
@@ -21,33 +16,26 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class LanguageLevelAddComponent implements OnInit {
-  addForm: FormGroup;
-
+  languageLevelModel: LanguageLevel = {} as LanguageLevel;
   componentTitle = 'Language Level Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private languageLevelService: LanguageLevelService,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.createAddForm();
+  ngOnInit() {}
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      level: ['', [Validators.required]],
-      levelTitle: ['', [Validators.required, Validators.minLength(3)]],
-      levelDescription: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  add() {
-    if (this.addForm.valid && this.getModel()) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.languageLevelService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -56,8 +44,8 @@ export class LanguageLevelAddComponent implements OnInit {
             '/dashboard/languagelevel/languagelevellisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -67,29 +55,27 @@ export class LanguageLevelAddComponent implements OnInit {
 
   getModel(): LanguageLevel {
     return Object.assign({
-      level: this.addForm.value.level,
+      id: '',
+      level: this.languageLevelModel.level,
       levelTitle: this.caseService.capitalizeFirstLetter(
-        this.addForm.value.levelTitle
+        this.languageLevelModel.levelTitle
       ),
       levelDescription: this.caseService.capitalizeFirstLetter(
-        this.addForm.value.levelDescription
+        this.languageLevelModel.levelDescription
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.addForm.get('level');
-    value.reset();
+  levelClear() {
+    this.languageLevelModel.level = 0;
   }
 
-  clearInput2() {
-    let value = this.addForm.get('levelTitle');
-    value.reset();
+  levelTitleClear() {
+    this.languageLevelModel.levelTitle = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('levelDescription');
-    value.reset();
+  levelDescriptionClear() {
+    this.languageLevelModel.levelDescription = '';
   }
 }

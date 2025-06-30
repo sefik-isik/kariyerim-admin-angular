@@ -60,9 +60,8 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>countryId</th>
               <th>countryName</th>
-              <th>City Id</th>
+              <th>City Code</th>
               <th>City Name</th>
               <th>Region Name</th>
 
@@ -82,13 +81,13 @@
               *ngFor="
                 let regionDTO of regionDTOs
                   | filterRegionByCity : filter1
-                  | filterRegion : filter2
+                  | filterRegion : filter2;
+                index as i
               "
             >
-              <td>{{ regionDTO.id }}</td>
-              <td>{{ regionDTO.countryId }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ regionDTO.countryName }}</td>
-              <td>{{ regionDTO.cityId }}</td>
+              <td>{{ regionDTO.cityCode }}</td>
               <td>{{ regionDTO.cityName }}</td>
               <td>{{ regionDTO.regionName }}</td>
 

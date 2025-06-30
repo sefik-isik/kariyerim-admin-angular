@@ -3,20 +3,25 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
+          <div class="input-group">
             <span class="input-group-text">University Name</span>
             <input
-              formControlName="universityName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityDepartmentDTO.universityName"
               type="text"
               class="form-control"
-              list="universitydatalist"
-              id="university"
-              placeholder="Select University..."
+              name="universityName"
+              #universityName="ngModel"
+              placeholder="University Name"
+              list="universityNameDataList"
             />
-            <datalist id="universitydatalist">
+            <datalist id="universityNameDataList">
               <option
                 *ngFor="let university of universities"
                 value="{{ university.universityName }}"
@@ -24,49 +29,83 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="universityNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!universityName.valid && universityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(universityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Faculty Name</span>
             <input
-              formControlName="facultyName"
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityDepartmentDTO.facultyName"
               type="text"
               class="form-control"
-              list="facultydatalist"
-              id="faculty"
-              placeholder="Select University..."
+              name="facultyName"
+              #facultyName="ngModel"
+              placeholder="Faculty Name"
+              list="facultyNameDataList"
             />
-            <datalist id="facultydatalist">
+            <datalist id="facultyNameDataList">
               <option
-                *ngFor="let university of universities"
-                value="{{ university.universityName }}"
+                *ngFor="let faculty of faculties"
+                value="{{ faculty.facultyName }}"
               ></option>
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="facultyNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!facultyName.valid && facultyName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(facultyName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Department Name</span>
             <input
-              formControlName="departmentName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="universityDepartmentDTO.departmentName"
               type="text"
               class="form-control"
-              list="departmentdatalist"
-              id="department"
-              placeholder="Select Department..."
+              name="departmentName"
+              #departmentName="ngModel"
+              placeholder="Department Name"
+              list="departmentNameDataList"
             />
-            <datalist id="departmentdatalist">
+            <datalist id="departmentNameDataList">
               <option
                 *ngFor="let department of departments"
                 value="{{ department.departmentName }}"
@@ -74,31 +113,39 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput3()"
+                (click)="departmentNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!departmentName.valid && departmentName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(departmentName)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Language } from '../../../models/language';
+import { Language } from '../../../models/component/language';
 
 @Component({
   selector: 'app-languageDetail',

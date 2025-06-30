@@ -1,16 +1,16 @@
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserAddressUpdateComponent } from '../personelUserAddressUpdate/personelUserAddressUpdate.component';
 import { PersonelUserAddressDetailComponent } from '../personelUserAddressDetail/personelUserAddressDetail.component';
@@ -28,7 +28,7 @@ export class PersonelUserAddressListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Addresses';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
@@ -49,13 +49,13 @@ export class PersonelUserAddressListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelAddresses(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class PersonelUserAddressListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class PersonelUserAddressListComponent implements OnInit {
       (response) => {
         this.personelUserAddressDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -87,7 +87,7 @@ export class PersonelUserAddressListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -99,7 +99,7 @@ export class PersonelUserAddressListComponent implements OnInit {
     this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
       this.personelUserAddressService.delete(personelUserAddressDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

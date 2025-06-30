@@ -45,13 +45,23 @@
                   style="color: green"
                 ></i>
               </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr
-              *ngFor="let modelMenu of modelMenus | filterModelMenu : filter1"
+              *ngFor="
+                let modelMenu of modelMenus | filterModelMenu : filter1;
+                index as i
+              "
             >
-              <td>{{ modelMenu.id }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ modelMenu.modelName }}</td>
               <td>
                 <i
@@ -72,6 +82,13 @@
                   (click)="unDelete(modelMenu)"
                   class="bi bi-arrow-up-right-square"
                   style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(modelMenu)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

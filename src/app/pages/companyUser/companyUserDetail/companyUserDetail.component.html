@@ -1,10 +1,10 @@
-<div class="card tab-page" style="border: none">
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
   <div class="card-body">
     <p class="card-text"><b>Id: </b>{{ companyUserDTO.id }}</p>
     <p class="card-text"><b>userId: </b>{{ companyUserDTO.userId }}</p>
-    <p class="card-text">
-      <b>companyUserId: </b>{{ companyUserDTO.companyUserId }}
-    </p>
     <p class="card-text">
       <b>companyUserName: </b>{{ companyUserDTO.companyUserName }}
     </p>
@@ -26,7 +26,18 @@
     <p class="card-text">
       <b>taxOfficeName: </b>{{ companyUserDTO.taxOfficeName }}
     </p>
-    <p class="card-text"><b>taxNumber: </b>{{ companyUserDTO.taxNumber }}</p>
+    <p class="card-text">
+      <b>yearOfEstablishment: </b
+      >{{ companyUserDTO.yearOfEstablishment | date : "dd/MM/yyyy " }}
+    </p>
+    <p class="card-text">
+      <b>workerCount: </b>{{ companyUserDTO.workerCount }}
+    </p>
+    <p class="card-text"><b>webAddress: </b>{{ companyUserDTO.webAddress }}</p>
+    <p class="card-text">
+      <b>clarification: </b>{{ companyUserDTO.clarification }}
+    </p>
+    <p class="card-text"><b>about: </b>{{ companyUserDTO.about }}</p>
 
     <p class="card-text">
       <b>createdDate: </b

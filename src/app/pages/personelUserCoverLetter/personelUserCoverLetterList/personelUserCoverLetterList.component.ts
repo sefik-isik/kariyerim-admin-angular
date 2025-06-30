@@ -1,17 +1,17 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { PersonelUserCoverLetter } from '../../../models/personelUserCoverLetter';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserCoverLetter } from '../../../models/component/personelUserCoverLetter';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
 import { FilterPersonelUserCoverLetterByUserPipe } from '../../../pipes/filterPersonelUserCoverLetterByUser.pipe';
-import { PersonelUserCoverLetterDTO } from '../../../models/PersonelUserCoverLetterDTO';
+import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCoverLetterUpdateComponent } from '../personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
 import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLetterDetail/personelUserCoverLetterDetail.component';
@@ -28,7 +28,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
   dataLoaded: boolean = false;
   filter1: string = '';
   componentTitle = 'Personel User Cover Letters';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
@@ -49,13 +49,13 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCoverLetter(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       (response) => {
         this.personelUserCoverLetterDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -89,7 +89,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (error) => console.error
+        (responseError) => console.error
       );
   }
 
@@ -103,7 +103,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
         .delete(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (error) => console.error
+          (responseError) => console.error
         );
     });
     setTimeout(() => {

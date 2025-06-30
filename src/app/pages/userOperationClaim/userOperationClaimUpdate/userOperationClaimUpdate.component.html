@@ -3,40 +3,62 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="updateForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email : {{ userEmail }}</span>
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Operation Claims</span>
-          <input
-            formControlName="claimName"
-            type="email"
-            class="form-control"
-            list="datalist2"
-            id="input2"
-            placeholder="Select Operation Claim..."
-            minlength="3"
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let operationClaim of operationClaims"
-              value="{{ operationClaim.name }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="input-group mb-3">
+        <span class="input-group-text"
+          >User Email : {{ userOperationClaimDTO.email }}</span
+        >
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Operation Claims</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="userOperationClaimDTO.operationClaimName"
+              type="email"
+              class="form-control"
+              name="operationClaimName"
+              #operationClaimName="ngModel"
+              placeholder="Operation Claims"
+              list="operationClaimNameDataList"
+            />
+            <datalist id="operationClaimNameDataList">
+              <option
+                *ngFor="let operationClaim of operationClaims"
+                value="{{ operationClaim.name }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="operationClaimNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!operationClaimName.valid && operationClaimName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(operationClaimName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="update()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Update
       </button>
       <button

@@ -1,6 +1,6 @@
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,10 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUser } from '../../../models/personelUser';
+import { PersonelUser } from '../../../models/component/personelUser';
 import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
 import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
 import { GenderPipe } from '../../../pipes/gender.pipe';
@@ -39,7 +39,7 @@ export class PersonelUserListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel Users';
-  userId: number;
+  userId: string;
 
   constructor(
     private userService: UserService,
@@ -60,13 +60,13 @@ export class PersonelUserListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -75,7 +75,7 @@ export class PersonelUserListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -84,7 +84,7 @@ export class PersonelUserListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -99,7 +99,7 @@ export class PersonelUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -112,7 +112,7 @@ export class PersonelUserListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.delete(personelUserDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

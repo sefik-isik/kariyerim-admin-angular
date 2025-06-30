@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 
-import { City } from '../../../models/city';
-import { TaxOfficeDTO } from '../../../models/taxOfficeDTO';
+import { City } from '../../../models/component/city';
+import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { FilterTaxOfficePipe } from '../../../pipes/filterTaxOffice.pipe';
 import { FilterTaxOfficeByCityPipe } from '../../../pipes/filterTaxOfficeByCity.pipe';
@@ -54,7 +54,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -63,7 +63,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.taxOfficeDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -81,12 +81,45 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.update(taxOfficeDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(taxOfficeDTO: TaxOfficeDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
+      this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

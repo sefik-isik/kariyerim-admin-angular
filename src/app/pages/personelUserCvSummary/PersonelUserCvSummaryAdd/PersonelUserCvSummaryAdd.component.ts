@@ -1,27 +1,23 @@
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserCv } from '../../../models/personelUserCv';
-import { PersonelUserCvSummary } from '../../../models/personelUserCvSummary';
+import { PersonelUserCv } from '../../../models/component/personelUserCv';
+import { PersonelUserCvSummary } from '../../../models/component/personelUserCvSummary';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvSummaryAdd',
@@ -30,18 +26,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvSummaryAddComponent implements OnInit {
-  addForm: FormGroup;
+  personelUserCvSummaryModel: PersonelUserCvSummaryDTO =
+    {} as PersonelUserCvSummaryDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  detailText: string;
-
-  componentTitle = 'Personel User Cv Summary Add Form';
-  userId: number;
+  detailCount: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
+  componentTitle = 'Personel User Cv Summary Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private personelUserCvSummaryService: PersonelUserCvSummaryService,
     private toastrService: ToastrService,
     private router: Router,
@@ -50,35 +43,20 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private personelUserCvService: PersonelUserCvService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      cvName: ['', [Validators.required, Validators.minLength(3)]],
-      cvSummaryTitle: ['', [Validators.required, Validators.minLength(3)]],
-      cvSummaryDescription: [
-        '',
-        [Validators.required, Validators.minLength(3)],
-      ],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (this.getModel().userId > 0 && this.getModel().cvId > 0) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCvSummaryService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -87,7 +65,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
             '/dashboard/personelusercvsummary/personelusercvsummarylisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -98,23 +76,27 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
 
   getModel(): PersonelUserCvSummary {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
-      cvId: this.getPersonelUserCvId(this.addForm.value.cvName),
-      cvSummaryTitle: this.addForm.value.cvSummaryTitle,
-      cvSummaryDescription: this.addForm.value.cvSummaryDescription,
+      id: '',
+      userId: this.getUserId(this.personelUserCvSummaryModel.email),
+      personelUserId: this.getPersonelUserId(
+        this.personelUserCvSummaryModel.email
+      ),
+      cvId: this.getPersonelUserCvId(this.personelUserCvSummaryModel.cvName),
+      cvSummaryTitle: this.personelUserCvSummaryModel.cvSummaryTitle,
+      cvSummaryDescription:
+        this.personelUserCvSummaryModel.cvSummaryDescription,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -123,7 +105,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -133,11 +115,11 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getPersonelUserId(email: string): number {
+  getPersonelUserId(email: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.email === email
     )[0]?.id;
@@ -148,25 +130,24 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserCvs = response.data.filter(
-          (f) => f.userId == this.getUserId(this.addForm.value.userEmail)
-        );
+        this.personelUserCvs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   count() {
-    this.detailText = this.addForm.value.cvSummaryDescription.length;
+    this.detailCount =
+      this.personelUserCvSummaryModel.cvSummaryDescription.length;
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getPersonelUserCvId(cvName: string): number {
+  getPersonelUserCvId(cvName: string): string {
     const personelUserId = this.personelUserCvs.filter(
       (c) => c.cvName === cvName
     )[0]?.id;
@@ -174,28 +155,19 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserCvSummaryModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('cvName');
-    value.reset();
-    this.getAdminValues();
+  cvNameClear() {
+    this.personelUserCvSummaryModel.cvName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('cvSummaryTitle');
-    value.reset();
-    this.getAdminValues();
+  cvSummaryTitleClear() {
+    this.personelUserCvSummaryModel.cvSummaryTitle = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('cvSummaryDescription');
-    value.reset();
-    this.detailText = '';
-    this.getAdminValues();
+  cvSummaryDescriptionClear() {
+    this.personelUserCvSummaryModel.cvSummaryDescription = '';
   }
 }

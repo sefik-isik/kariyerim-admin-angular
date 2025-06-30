@@ -57,7 +57,7 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th>user Id</th>
+
               <th>email</th>
               <th>operationClaimName</th>
 
@@ -77,11 +77,12 @@
               *ngFor="
                 let userOperationClaimDTO of userOperationClaimDTOs
                   | filterUserOperationClaim : filter1
-                  | filterUserOperationClaimByUser : filter2
+                  | filterUserOperationClaimByUser : filter2;
+                index as i
               "
             >
-              <td>{{ userOperationClaimDTO.id }}</td>
-              <td>{{ userOperationClaimDTO.userId }}</td>
+              <td>{{ i + 1 }}</td>
+
               <td>{{ userOperationClaimDTO.email }}</td>
               <td>{{ userOperationClaimDTO.operationClaimName }}</td>
 

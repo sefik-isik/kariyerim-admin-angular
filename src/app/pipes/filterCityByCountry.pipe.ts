@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CityDTO } from '../models/cityDTO';
+import { CityDTO } from '../models/dto/cityDTO';
 
 @Pipe({
   name: 'filterCityByCountry',

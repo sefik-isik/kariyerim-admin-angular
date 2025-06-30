@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModelMenu } from '../../models/modelMenu';
+import { ModelMenu } from '../../models/component/modelMenu';
 import { ModelMenuService } from '../../services/modelMenu.service';
 import { RouterLink } from '@angular/router';
 
@@ -30,7 +30,7 @@ export class ModelMenuMainComponent implements OnInit {
 
         this.getModelMenuClass(this.modelMenuFirst);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 

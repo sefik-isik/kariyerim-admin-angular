@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CompanyUserImageDTO } from '../models/companyUserImageDTO';
+import { CompanyUserImageDTO } from '../models/dto/companyUserImageDTO';
 
 @Pipe({
   name: 'filterCompanyUserImageByUser',

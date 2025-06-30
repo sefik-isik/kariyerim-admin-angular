@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { PersonelUser } from '../models/personelUser';
-import { PersonelUserDTO } from '../models/personelUserDTO';
-import { AdminModel } from '../models/adminModel';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PersonelUser } from '../models/component/personelUser';
+import { PersonelUserDTO } from '../models/dto/personelUserDTO';
+import { AdminModel } from '../models/auth/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,13 @@ export class PersonelUserService {
   delete(personelUser: PersonelUser): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      personelUser
+    );
+  }
+
+  terminate(personelUser: PersonelUser): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       personelUser
     );
   }

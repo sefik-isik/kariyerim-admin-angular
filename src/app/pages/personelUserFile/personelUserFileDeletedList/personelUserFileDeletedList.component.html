@@ -53,10 +53,11 @@
           <tr
             *ngFor="
               let personelUserFileDTO of personelUserFileDTOs
-                | filterPersonelUserFileByUser : filter1
+                | filterPersonelUserFileByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserFileDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserFileDTO.email }}</td>
             <td *ngIf="personelUserFileDTO.fileName != 'noFile'">
               <a

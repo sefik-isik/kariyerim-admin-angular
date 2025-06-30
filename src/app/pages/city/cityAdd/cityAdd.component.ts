@@ -1,20 +1,16 @@
-import { CaseService } from '../../../services/case.service';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { City } from '../../../models/city';
+import { City } from '../../../models/component/city';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CityDTO } from '../../../models/dto/cityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-cityAdd',
@@ -23,43 +19,38 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CityAddComponent implements OnInit {
-  addForm1: FormGroup;
+  cityModel: CityDTO = {} as CityDTO;
   countries: Country[];
-
   componentTitle = 'City Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private countryService: CountryService,
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getCountries();
   }
 
-  createAddForm() {
-    this.addForm1 = this.formBuilder.group({
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (this.addForm1.valid && this.getModel().countryId > 0) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.cityService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/city/citylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.log(responseError);
         }
       );
     } else {
@@ -69,10 +60,10 @@ export class CityAddComponent implements OnInit {
 
   getModel(): City {
     return Object.assign({
-      cityName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.cityName
-      ),
-      countryId: this.getCountryId(this.addForm1.value.countryName),
+      id: '',
+      cityName: this.caseService.capitalizeFirstLetter(this.cityModel.cityName),
+      cityCode: this.cityModel.cityCode,
+      countryId: this.getCountryId(this.cityModel.countryName),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -82,11 +73,11 @@ export class CityAddComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     const countryId = this.countries.filter(
       (c) => c.countryName === countryName
     )[0]?.id;
@@ -94,14 +85,15 @@ export class CityAddComponent implements OnInit {
     return countryId;
   }
 
-  clearInput1() {
-    let countryName = this.addForm1.get('countryName');
-    countryName.reset();
-    this.getCountries();
+  countryNameClear() {
+    this.cityModel.countryName = '';
   }
 
-  clearInput2() {
-    let cityName = this.addForm1.get('cityName');
-    cityName.reset();
+  cityNameClear() {
+    this.cityModel.cityName = '';
+  }
+
+  cityCodeClear() {
+    this.cityModel.cityCode = '';
   }
 }

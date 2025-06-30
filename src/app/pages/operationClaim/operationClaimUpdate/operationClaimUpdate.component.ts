@@ -1,17 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { OperationClaimService } from '../../../services/operationClaim.service';
-import { OperationClaim } from '../../../models/operationClaim';
+import { OperationClaim } from '../../../models/component/operationClaim';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-operationClaimUpdate',
@@ -20,49 +15,38 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class OperationClaimUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() operationClaim: OperationClaim;
-  operationClaimId: number;
-
   componentTitle = 'Operation Claim Update Form';
 
   constructor(
     private operationClaimService: OperationClaimService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.operationClaim.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(1)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.operationClaimService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          name: response.data.name,
-        });
-        this.operationClaimId = id;
+        this.operationClaim.id = id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.operationClaimService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -71,7 +55,7 @@ export class OperationClaimUpdateComponent implements OnInit {
             '/dashboard/operationclaim/operationclaimlisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -82,16 +66,15 @@ export class OperationClaimUpdateComponent implements OnInit {
 
   getModel(): OperationClaim {
     return Object.assign({
-      id: this.operationClaimId,
-      name: this.updateForm.value.name,
+      id: this.operationClaim.id,
+      name: this.operationClaim.name,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('name');
-    value.reset();
+  nameClear() {
+    this.operationClaim.name = '';
   }
 }

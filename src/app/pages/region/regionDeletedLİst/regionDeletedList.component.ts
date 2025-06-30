@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 
-import { RegionDTO } from '../../../models/regionDTO';
-import { City } from '../../../models/city';
+import { RegionDTO } from '../../../models/dto/regionDTO';
+import { City } from '../../../models/component/city';
 import { RegionService } from '../../../services/region.service';
 import { FilterRegionPipe } from '../../../pipes/filterRegion.pipe';
 import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
@@ -55,7 +55,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.regionDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -74,7 +74,7 @@ export class RegionDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -82,12 +82,45 @@ export class RegionDeletedListComponent implements OnInit {
     this.regionDTOs.forEach((region) => {
       this.regionService.update(region).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(regionDTO: RegionDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.regionService.terminate(regionDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.regionDTOs.forEach((regionDTO) => {
+      this.regionService.terminate(regionDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

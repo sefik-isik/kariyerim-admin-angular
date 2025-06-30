@@ -49,9 +49,12 @@
           </thead>
           <tbody>
             <tr
-              *ngFor="let modelMenu of modelMenus | filterModelMenu : filter1"
+              *ngFor="
+                let modelMenu of modelMenus | filterModelMenu : filter1;
+                index as i
+              "
             >
-              <td>{{ modelMenu.id }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ modelMenu.modelName }}</td>
 
               <td>

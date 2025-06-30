@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
 
 @Component({
   selector: 'app-personelUserImageDetail',

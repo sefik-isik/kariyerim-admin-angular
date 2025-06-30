@@ -54,10 +54,11 @@
           <tr
             *ngFor="
               let companyUserDepartmentDTO of companyUserDepartmentDTOs
-                | filterCompanyUserDepartmentByUser : filter1
+                | filterCompanyUserDepartmentByUser : filter1;
+              index as i
             "
           >
-            <td>{{ companyUserDepartmentDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ companyUserDepartmentDTO.email }}</td>
             <td>{{ companyUserDepartmentDTO.companyUserName }}</td>
             <td>{{ companyUserDepartmentDTO.departmentName }}</td>

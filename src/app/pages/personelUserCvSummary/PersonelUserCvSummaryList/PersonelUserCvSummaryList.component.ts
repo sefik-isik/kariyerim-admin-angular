@@ -1,17 +1,17 @@
 import { FilterPersonelUserCvSummaryByUserPipe } from '../../../pipes/filterPersonelUserCvSummaryByUser.pipe';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { PersonelUserCvSummary } from '../../../models/personelUserCvSummary';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserCvSummary } from '../../../models/component/personelUserCvSummary';
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
-import { PersonelUserCvSummaryDTO } from '../../../models/personelUserCvSummaryDTO';
+import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PersonelUserCvSummaryUpdateComponent } from '../personelUserCvSummaryUpdate/personelUserCvSummaryUpdate.component';
@@ -30,7 +30,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Cv Summaries';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserCvSummaryService: PersonelUserCvSummaryService,
@@ -51,13 +51,13 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCvSummaries(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -66,7 +66,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -75,7 +75,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
       (response) => {
         this.personelUserCvSummaryDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -89,7 +89,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -103,7 +103,7 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
         .delete(personelUserCvSummaryDTO)
         .subscribe(
           (response) => {},
-          (error) => console.error
+          (responseError) => console.error
         );
     });
     setTimeout(() => {

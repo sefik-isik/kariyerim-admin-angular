@@ -1,30 +1,26 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { RegionService } from './../../../services/region.service';
 import { CityService } from './../../../services/city.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { City } from '../../../models/city';
-import { Region } from '../../../models/region';
-import { UserDTO } from '../../../models/userDTO';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
-import { PersonelUserAddress } from '../../../models/personelUserAddress';
+import { PersonelUserAddress } from '../../../models/component/personelUserAddress';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
@@ -33,20 +29,17 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserAddressAddComponent implements OnInit {
-  addForm: FormGroup;
+  personelUserAddressModel: PersonelUserAddressDTO =
+    {} as PersonelUserAddressDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
-  addressDetail: string;
-
-  componentTitle = 'Personel Address Add Form';
-  userId: number;
+  addressDetailCount: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
+  componentTitle = 'Personel Address Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private countryService: CountryService,
     private cityService: CityService,
     private regionService: RegionService,
@@ -57,48 +50,21 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private userService: UserService,
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
     this.getCountries();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      countryName: ['', [Validators.required, Validators.minLength(3)]],
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      addressDetail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(50),
-          Validators.maxLength(250),
-        ],
-      ],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.getModel().userId > 0 &&
-      this.getModel().personelUserId > 0 &&
-      this.getModel().countryId > 0 &&
-      this.getModel().cityId > 0 &&
-      this.getModel().regionId > 0 &&
-      this.getModel().addressDetail.length >= 50
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserAddressService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -107,8 +73,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
             '/dashboard/personeluseraddress/personeluseraddresslisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -118,29 +84,30 @@ export class PersonelUserAddressAddComponent implements OnInit {
 
   getModel(): PersonelUserAddress {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
+      id: '',
+      userId: this.getUserId(this.personelUserAddressModel.email),
       personelUserId: this.getPersonelUserId(
-        this.getUserId(this.addForm.value.userEmail)
+        this.getUserId(this.personelUserAddressModel.email)
       ),
 
-      countryId: this.getCountryId(this.addForm.value.countryName),
+      countryId: this.getCountryId(this.personelUserAddressModel.countryName),
 
-      cityId: this.getCityId(this.addForm.value.cityName),
+      cityId: this.getCityId(this.personelUserAddressModel.cityName),
 
-      regionId: this.getRegionId(this.addForm.value.regionName),
-      addressDetail: this.addForm.value.addressDetail,
+      regionId: this.getRegionId(this.personelUserAddressModel.regionName),
+      addressDetail: this.personelUserAddressModel.addressDetail,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -149,7 +116,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -158,54 +125,53 @@ export class PersonelUserAddressAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   count() {
-    this.addressDetail = this.addForm.value.addressDetail.length;
+    this.addressDetailCount =
+      this.personelUserAddressModel.addressDetail.length;
   }
 
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
         this.countries = response.data;
-        this.getCities();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCities() {
+  getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
         this.cities = response.data.filter(
-          (c) =>
-            c.countryId === this.getCountryId(this.addForm.value.countryName)
+          (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getRegions() {
+  getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
         this.regions = response.data.filter(
-          (r) => r.cityId === this.getCityId(this.addForm.value.cityName)
+          (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     const countryId = this.countries.filter(
       (c) => c.countryName === countryName
     )[0]?.id;
@@ -213,20 +179,20 @@ export class PersonelUserAddressAddComponent implements OnInit {
     return countryId;
   }
 
-  getCityId(cityName: string): number {
+  getCityId(cityName: string): string {
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
 
     return cityId;
   }
 
-  getRegionId(regionName: string): number {
+  getRegionId(regionName: string): string {
     const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
       ?.id;
 
     return regionId;
   }
 
-  getPersonelUserId(userId: number): number {
+  getPersonelUserId(userId: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.userId === userId
     )[0]?.id;
@@ -234,38 +200,23 @@ export class PersonelUserAddressAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserAddressModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('personelUserName');
-    value.reset();
-    this.getCountries();
+  countryNameClear() {
+    this.personelUserAddressModel.countryName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('countryName');
-    value.reset();
-    this.getCountries();
+  cityNameClear() {
+    this.personelUserAddressModel.cityName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('cityName');
-    value.reset();
-    this.getCities();
+  regionNameClear() {
+    this.personelUserAddressModel.regionName = '';
   }
 
-  clearInput5() {
-    let value = this.addForm.get('regionName');
-    value.reset();
-    this.getRegions();
-  }
-
-  clearInput6() {
-    let value = this.addForm.get('addressDetail');
-    value.reset();
+  addressClear() {
+    this.personelUserAddressModel.addressDetail = '';
   }
 }

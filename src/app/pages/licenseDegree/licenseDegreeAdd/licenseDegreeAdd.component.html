@@ -1,0 +1,60 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">License Degree Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="licenseDegreeModel.licenseDegreeName"
+              type="text"
+              class="form-control"
+              name="licenseDegreeName"
+              #licenseDegreeName="ngModel"
+              placeholder="License Degree Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="licenseDegreeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!licenseDegreeName.valid && licenseDegreeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(licenseDegreeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,14 +1,14 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { PersonelUserCvWorkExperienceDTO } from '../../../models/personelUserCvWorkExperienceDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserCvWorkExperienceDTO } from '../../../models/dto/personelUserCvWorkExperienceDTO';
 import { PersonelUserCvWorkExperienceService } from '../../../services/personelUserCvWorkExperience.service';
 import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/filterPersonelUserCvWorkExperienceByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -34,7 +34,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Cv Work Experiences';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserCvWorkExperienceService: PersonelUserCvWorkExperienceService,
@@ -55,13 +55,13 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -70,7 +70,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -79,7 +79,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       (response) => {
         this.personelUserCvWorkExperienceDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -95,7 +95,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (error) => console.error
+        (responseError) => console.error
       );
   }
 
@@ -110,7 +110,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           .delete(personelUserCvWorkExperienceDTO)
           .subscribe(
             (response) => {},
-            (error) => console.error
+            (responseError) => console.error
           );
       }
     );

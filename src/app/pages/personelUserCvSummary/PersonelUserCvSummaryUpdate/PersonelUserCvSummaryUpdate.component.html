@@ -3,83 +3,144 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="updateForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email : {{ userEmail }}</span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="personelUserCvSummaryDTO.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Cv Name</span>
-          <input
-            formControlName="cvName"
-            type="text"
-            class="form-control"
-            list="datalistCv"
-            id="input3"
-            placeholder="Select Cv..."
-            minlength="3"
-          />
-          <datalist id="datalistCv">
-            <option
-              *ngFor="let personelUserCv of personelUserCvs"
-              value="{{ personelUserCv.cvName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Cv Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvSummaryDTO.cvName"
+              type="text"
+              class="form-control"
+              name="cvName"
+              #cvName="ngModel"
+              placeholder="Cv Name"
+              list="cvNameDataList"
+            />
+            <datalist id="cvNameDataList">
+              <option
+                *ngFor="let personelUserCv of personelUserCvs"
+                value="{{ personelUserCv.cvName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cvNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cvName.valid && cvName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cvName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">cvSummaryTitle</span>
-          <input
-            formControlName="cvSummaryTitle"
-            type="text"
-            class="form-control"
-            id="cvSummaryTitle"
-            placeholder="cvSummaryTitle"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Cv Summary Title</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="personelUserCvSummaryDTO.cvSummaryTitle"
+              type="text"
+              class="form-control"
+              name="cvSummaryTitle"
+              #cvSummaryTitle="ngModel"
+              placeholder="Cv Summary Title"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="cvSummaryTitleClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cvSummaryTitle.valid && cvSummaryTitle.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cvSummaryTitle)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >cvSummaryDescription <br />{{ detailCount }} \ 250</span
-          >
-
-          <textarea
-            formControlName="cvSummaryDescription"
-            class="form-control"
-            id="cvSummaryDescription"
-            style="height: 120px"
-            placeholder="cvSummaryDescription"
-            minlength="50"
-            maxlength="250"
-            (input)="count(detailText)"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ detailCount }} \ 50</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="250"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="personelUserCvSummaryDTO.cvSummaryDescription"
+              name="detail"
+              #detail="ngModel"
+              style="height: 100px"
+              (input)="count(personelUserCvSummaryDTO.cvSummaryDescription)"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="cvSummaryDescriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!detail.valid && detail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(detail)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="update()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Update
       </button>
       <button

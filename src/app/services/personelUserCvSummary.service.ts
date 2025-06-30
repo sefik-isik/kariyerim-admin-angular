@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/apiUrl';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ResponseModel } from '../models/responseModel';
-import { ListResponseModel } from '../models/listResponseModel';
-import { SingleResponseModel } from '../models/singleResponseModel';
-import { PersonelUserCvSummary } from '../models/personelUserCvSummary';
-import { AdminModel } from '../models/adminModel';
-import { PersonelUserCvSummaryDTO } from '../models/personelUserCvSummaryDTO';
+import { ResponseModel } from '../models/response/responseModel';
+import { ListResponseModel } from '../models/response/listResponseModel';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PersonelUserCvSummary } from '../models/component/personelUserCvSummary';
+import { AdminModel } from '../models/auth/adminModel';
+import { PersonelUserCvSummaryDTO } from '../models/dto/personelUserCvSummaryDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +38,15 @@ export class PersonelUserCvSummaryService {
   ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      personelUserCvSummary
+    );
+  }
+
+  terminate(
+    personelUserCvSummary: PersonelUserCvSummary
+  ): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'terminate',
       personelUserCvSummary
     );
   }

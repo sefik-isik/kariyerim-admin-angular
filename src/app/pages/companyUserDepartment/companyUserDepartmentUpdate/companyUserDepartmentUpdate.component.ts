@@ -1,24 +1,19 @@
 import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 import { Component, Input, OnInit } from '@angular/core';
 
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { CompanyUserDepartment } from '../../../models/companyUserDepartment';
-import { CompanyUserDTO } from '../../../models/companyUserDTO';
-import { UserDTO } from '../../../models/userDTO';
-import { CaseService } from '../../../services/case.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminModel } from '../../../models/adminModel';
-import { CompanyUserDepartmentDTO } from '../../../models/companyUserDepartmentDTO';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { CaseService } from '../../../services/helperServices/case.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -27,47 +22,32 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserDepartmentUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() companyUserDepartmentDTO: CompanyUserDepartmentDTO;
   companyUsers: CompanyUserDTO[] = [];
-  id: number;
-  companyUserId: number;
-  companyUserName: string;
-
-  componentTitle = 'Company User Department Update Form';
-  userEmail: string;
   users: UserDTO[] = [];
+  componentTitle = 'Company User Department Update Form';
 
   constructor(
     private companyUserDepartmentService: CompanyUserDepartmentService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getUserValues(this.companyUserDepartmentDTO.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
@@ -76,22 +56,18 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserDepartmentService.getById(adminModel).subscribe(
       (response) => {
-        this.id = response.data.id;
-        this.companyUserId = response.data.companyUserId;
-        this.updateForm.patchValue({
-          departmentName: response.data.departmentName,
-        });
+        this.companyUserDepartmentDTO.id = response.data.id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (
-      this.updateForm.valid &&
-      this.getModel().id > 0 &&
-      this.getModel().companyUserId > 0
-    ) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.companyUserDepartmentService.update(this.getModel()).subscribe(
         (response) => {
           this.toastrService.success(response.message, 'Başarılı');
@@ -100,8 +76,8 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
             '/dashboard/companyuserdepartment/companyuserdepartmentlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -111,10 +87,11 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
 
   getModel(): CompanyUserDepartment {
     return Object.assign({
-      id: this.id,
-      companyUserId: this.companyUserId,
+      id: this.companyUserDepartmentDTO.id,
+      userId: this.companyUserDepartmentDTO.userId,
+      companyUserId: this.companyUserDepartmentDTO.companyUserId,
       departmentName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.departmentName
+        this.companyUserDepartmentDTO.departmentName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -122,8 +99,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('departmentName');
-    value.reset();
+  departmentNameClear() {
+    this.companyUserDepartmentDTO.departmentName = '';
   }
 }

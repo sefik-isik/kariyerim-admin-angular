@@ -3,45 +3,58 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
+          <div class="input-group">
             <span class="input-group-text">Faculty Name</span>
             <input
-              formControlName="facultyName"
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="faculty.facultyName"
               type="text"
               class="form-control"
-              id="input1"
+              name="facultyName"
+              #facultyName="ngModel"
               placeholder="Faculty Name"
             />
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="facultyNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!facultyName.valid && facultyName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(facultyName)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

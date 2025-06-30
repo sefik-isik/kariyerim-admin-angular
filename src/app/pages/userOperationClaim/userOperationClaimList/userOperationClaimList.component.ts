@@ -1,6 +1,6 @@
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { UserService } from '../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,13 +8,13 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { UserOperationClaim } from '../../../models/userOperationClaim';
+import { UserOperationClaim } from '../../../models/component/userOperationClaim';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
-import { UserOperationClaimDTO } from '../../../models/userOperationClaimDTO';
+import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
 
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { OperationClaimService } from '../../../services/operationClaim.service';
-import { OperationClaim } from '../../../models/operationClaim';
+import { OperationClaim } from '../../../models/component/operationClaim';
 import { FilterUserOperationClaimByUserPipe } from '../../../pipes/filterUserOperationClaimByUser.pipe';
 import { FilterUserOperationClaimPipe } from '../../../pipes/filterUserOperationClaim.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -39,7 +39,7 @@ export class UserOperationClaimListComponent implements OnInit {
   filter2 = '';
   users: UserDTO[];
   operationClaims: OperationClaim[];
-  userId: number;
+  userId: string;
 
   componentTitle = 'User Operation Claims';
 
@@ -64,14 +64,14 @@ export class UserOperationClaimListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getUsers(response);
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -80,7 +80,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -89,7 +89,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -98,7 +98,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -116,7 +116,7 @@ export class UserOperationClaimListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -132,7 +132,7 @@ export class UserOperationClaimListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaim) => {
       this.userOperationClaimService.delete(userOperationClaim).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

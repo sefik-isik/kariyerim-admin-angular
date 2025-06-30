@@ -9,7 +9,7 @@ import { FilterUniversityPipe } from '../../../pipes/filterUniversity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
-import { UniversityDTO } from '../../../models/universityDTO';
+import { UniversityDTO } from '../../../models/dto/universityDTO';
 
 @Component({
   selector: 'app-universityList',
@@ -43,7 +43,7 @@ export class UniversityListComponent implements OnInit {
       (response) => {
         this.universityDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class UniversityListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class UniversityListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.delete(universityDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

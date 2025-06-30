@@ -1,5 +1,5 @@
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { LanguageLevelService } from './../../../services/languageLevel.service';
 import { LanguageService } from './../../../services/language.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -10,19 +10,21 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
-import { PersonelUserCvDTO } from '../../../models/personelUserCvDTO';
-import { Language } from '../../../models/language';
-import { LanguageLevel } from '../../../models/languageLevel';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
+import { Language } from '../../../models/component/language';
+import { LanguageLevel } from '../../../models/component/languageLevel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvUpdate',
@@ -31,26 +33,15 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() personelUserCvDTO: PersonelUserCvDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
   addressDetailText: string;
-
-  componentTitle = 'Personel User Cv Update Form';
-  id: number;
-  userEmail: string;
-  personelUserName: string;
-  personelUserId: number;
-  cvName: string;
-  userId: number;
   userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
+  componentTitle = 'Personel User Cv Update Form';
 
   constructor(
-    private formBuilder: FormBuilder,
-
     private personelUserService: PersonelUserService,
     private personelUserCvService: PersonelUserCvService,
     private languageService: LanguageService,
@@ -60,11 +51,11 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private localStorageService: LocalStorageService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
     this.getAdminValues();
     this.getLanguages();
     this.getLanguageLevels();
@@ -74,20 +65,11 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      cvName: ['', [Validators.required, Validators.minLength(3)]],
-      languageName: ['', [Validators.required, Validators.minLength(3)]],
-      languageLevel: ['', [Validators.required, Validators.minLength(3)]],
-      isPrivate: ['', [Validators.required]],
-    });
-  }
-
-  getUserValues(id: number) {
+  getUserValues(id: string) {
     const adminModel = {
       id: id,
       email: this.localStorageService.getFromLocalStorage('email'),
-      userId: parseInt(this.localStorageService.getFromLocalStorage('id')),
+      userId: this.localStorageService.getFromLocalStorage('id'),
       status: this.localStorageService.getFromLocalStorage('status'),
     };
     this.getById(adminModel);
@@ -96,30 +78,23 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.personelUserCvService.getById(adminModel).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          cvName: response.data.cvName,
-          languageName: this.getLanguageNameById(response.data.languageId),
-          languageLevel: this.getLanguageLevelById(
-            response.data.languageLevelId
-          ),
-          isPrivate: response.data.isPrivate,
-        });
-        this.id = response.data.id;
-        this.personelUserId = response.data.personelUserId;
-        this.userEmail = this.getEmailByUserId(this.personelUserId);
-        this.cvName = response.data.cvName;
+        this.personelUserCvDTO.id = response.data.id;
+        this.personelUserCvDTO.personelUserId = response.data.personelUserId;
+        this.personelUserCvDTO.email = this.getEmailByUserId(
+          this.personelUserCvDTO.personelUserId
+        );
+        this.personelUserCvDTO.cvName = response.data.cvName;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (
-      this.updateForm.valid &&
-      this.getModel().id > 0 &&
-      this.getModel().languageId > 0 &&
-      this.getModel().languageLevelId > 0
-    ) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCvService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -128,8 +103,8 @@ export class PersonelUserCvUpdateComponent implements OnInit {
             '/dashboard/personelusercv/personelusercvlisttab',
           ]);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          console.log(responseError);
         }
       );
     } else {
@@ -139,14 +114,13 @@ export class PersonelUserCvUpdateComponent implements OnInit {
 
   getModel(): PersonelUserCvDTO {
     return Object.assign({
-      id: this.id,
-      personelUserId: this.personelUserId,
-      cvName: this.updateForm.value.cvName,
-      languageId: this.getLanguageId(this.updateForm.value.languageName),
-      languageLevelId: this.getLanguageLevelId(
-        this.updateForm.value.languageLevel
-      ),
-      isPrivate: this.updateForm.value.isPrivate,
+      id: this.personelUserCvDTO.id,
+      userId: this.personelUserCvDTO.userId,
+      personelUserId: this.personelUserCvDTO.personelUserId,
+      cvName: this.personelUserCvDTO.cvName,
+      languageId: this.getLanguageId(this.personelUserCvDTO.languageName),
+      languageLevelId: this.getLanguageLevelId(this.personelUserCvDTO.level),
+      isPrivate: this.personelUserCvDTO.isPrivate,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -154,12 +128,12 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   }
 
   getAdminValues() {
-    this.adminService.getAdminValues(this.id).subscribe(
+    this.adminService.getAdminValues(this.personelUserCvDTO.id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -168,7 +142,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -177,7 +151,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -186,7 +160,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -195,29 +169,29 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getEmailByUserId(personelUserId: number): string {
+  getEmailByUserId(personelUserId: string): string {
     return this.personelUserDTOs.find((u) => u.id == personelUserId)?.email;
   }
 
-  getLanguageNameById(languageId: number) {
+  getLanguageNameById(languageId: string) {
     return this.languages.find((u) => u.id == languageId)?.languageName;
   }
 
-  getLanguageLevelById(languageLevelId: number) {
+  getLanguageLevelById(languageLevelId: string) {
     return this.languageLevels.find((u) => u.id == languageLevelId)?.levelTitle;
   }
 
-  getUserId(userEmail: string): number {
+  getUserId(userEmail: string): string {
     const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
 
     return userId;
   }
 
-  getLanguageId(languageName: string): number {
+  getLanguageId(languageName: string): string {
     const languageId = this.languages.filter(
       (c) => c.languageName === languageName
     )[0]?.id;
@@ -225,29 +199,21 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     return languageId;
   }
 
-  getLanguageLevelId(languageLevel: string): number {
-    const cityId = this.languageLevels.filter(
-      (c) => c.levelTitle === languageLevel
-    )[0]?.id;
+  getLanguageLevelId(level: number): string {
+    const cityId = this.languageLevels.filter((c) => c.level === level)[0]?.id;
 
     return cityId;
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('cvName');
-    value.reset();
-    this.getAdminValues();
+  cvNameClear() {
+    this.personelUserCvDTO.cvName = '';
   }
 
-  clearInput2() {
-    let value = this.updateForm.get('languageName');
-    value.reset();
-    this.getAdminValues();
+  languageNameClear() {
+    this.personelUserCvDTO.languageName = '';
   }
 
-  clearInput3() {
-    let value = this.updateForm.get('languageLevel');
-    value.reset();
-    this.getLanguages();
+  levelClear() {
+    this.personelUserCvDTO.level = 0;
   }
 }

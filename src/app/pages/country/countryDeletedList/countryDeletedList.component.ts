@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 import { CountryService } from '../../../services/country.service';
 import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -41,7 +41,7 @@ export class CountryDeletedListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -51,7 +51,7 @@ export class CountryDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -59,12 +59,45 @@ export class CountryDeletedListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.update(country).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(country: Country) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.countryService.terminate(country).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.countries.forEach((country) => {
+      this.countryService.terminate(country).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

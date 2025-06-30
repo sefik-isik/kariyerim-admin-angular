@@ -1,15 +1,15 @@
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
-import { PersonelUserImageDTO } from '../../../models/personelUserImageDTO';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/personelUserImageUpdate.component';
@@ -28,7 +28,7 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Personel User Images Deleted List';
-  userId: number;
+  userId: string;
   personelUserImagesLenght: number = 0;
 
   constructor(
@@ -50,13 +50,13 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -65,7 +65,7 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -75,7 +75,7 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
         this.personelUserImageDTOs = response.data;
         this.personelUserImagesLenght = this.personelUserImageDTOs.length;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -85,7 +85,7 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -93,12 +93,45 @@ export class PersonelUserImageDeletedListComponent implements OnInit {
     this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
       this.personelUserImageService.update(personelUserImageDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(personelUserImageDTO: PersonelUserImageDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserImageService.terminate(personelUserImageDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
+      this.personelUserImageService.terminate(personelUserImageDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

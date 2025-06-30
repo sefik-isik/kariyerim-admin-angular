@@ -35,7 +35,6 @@
             <tr>
               <th>Id</th>
               <th>sector Name</th>
-
               <th></th>
               <th></th>
               <th>
@@ -45,11 +44,23 @@
                   style="color: green"
                 ></i>
               </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let sector of sectors | filterSector : filter1">
-              <td>{{ sector.id }}</td>
+            <tr
+              *ngFor="
+                let sector of sectors | filterSector : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ sector.sectorName }}</td>
               <td>
                 <i
@@ -70,6 +81,13 @@
                   (click)="unDelete(sector)"
                   class="bi bi-arrow-up-right-square"
                   style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(sector)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

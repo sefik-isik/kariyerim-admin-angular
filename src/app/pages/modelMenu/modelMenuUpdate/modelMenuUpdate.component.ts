@@ -1,17 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { ModelMenuService } from '../../../services/modelMenu.service';
-import { ModelMenu } from '../../../models/modelMenu';
+import { ModelMenu } from '../../../models/component/modelMenu';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-modelMenuUpdate',
@@ -20,59 +15,47 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class ModelMenuUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() modelMenu: ModelMenu;
-  modelMenuId: number;
 
   componentTitle = 'Model Menu Update Form';
 
   constructor(
     private modelMenuService: ModelMenuService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.modelMenu.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      modelName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.modelMenuService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          modelName: response.data.modelName,
-        });
-        this.modelMenuId = id;
+        this.modelMenu.id = id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.modelMenuService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
-          this.router.navigate([
-            '/dashboard/modelmenulist/modelmenulistlisttab',
-          ]);
+          this.router.navigate(['/dashboard/modelmenu/modelmenulisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -82,16 +65,15 @@ export class ModelMenuUpdateComponent implements OnInit {
 
   getModel(): ModelMenu {
     return Object.assign({
-      id: this.modelMenuId,
-      modelName: this.updateForm.value.modelName,
+      id: this.modelMenu.id,
+      modelName: this.modelMenu.modelName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('modelName');
-    value.reset();
+  modelNameClear() {
+    this.modelMenu.modelName = '';
   }
 }

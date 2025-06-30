@@ -1,33 +1,28 @@
 import { PersonelUserCvService } from './../../../services/personelUserCv.service';
-import { LocalStorageService } from './../../../services/localStorage.service';
-import { AdminModel } from './../../../models/adminModel';
-import { AdminService } from './../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/userDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/personelUserDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
-import { PersonelUserCvEducationDTO } from '../../../models/personelUserCvEducationDTO';
+import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
 import { UniversityService } from '../../../services/university.service';
 import { FacultyService } from '../../../services/faculty.service';
-import { University } from '../../../models/university';
-import { Faculty } from '../../../models/faculty';
-import { PersonelUserCv } from '../../../models/personelUserCv';
+import { University } from '../../../models/component/university';
+import { Faculty } from '../../../models/component/faculty';
+import { PersonelUserCv } from '../../../models/component/personelUserCv';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DepartmentService } from '../../../services/department.service';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -36,20 +31,20 @@ import { Department } from '../../../models/department';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class PersonelUserCvEducationAddComponent implements OnInit {
-  addForm: FormGroup;
+  personelUserCvEducationModel: PersonelUserCvEducationDTO =
+    {} as PersonelUserCvEducationDTO;
+  userDTOs: UserDTO[] = [];
   personelUserDTOs: PersonelUserDTO[] = [];
   universities: University[] = [];
   faculties: Faculty[] = [];
   departments: Department[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  detailText: string;
+  detailCount: number;
+  today: number = Date.now();
+
   componentTitle = 'Personel User Cv Education Add Form';
-  userId: number;
-  userDTOs: UserDTO[] = [];
-  isAdmin: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
     private universityService: UniversityService,
     private departmentService: DepartmentService,
     private facultyService: FacultyService,
@@ -61,56 +56,23 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private personelUserCvService: PersonelUserCvService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getAdminValues();
-
     this.getUniversities();
     this.getUniversityDepartments();
     this.getFaculties();
   }
 
-  createAddForm() {
-    this.addForm = this.formBuilder.group({
-      userEmail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(11),
-          Validators.maxLength(11),
-        ],
-      ],
-      cvName: ['', [Validators.required, Validators.minLength(3)]],
-      educationInfo: ['', [Validators.required, Validators.minLength(3)]],
-      universityName: ['', [Validators.required, Validators.minLength(3)]],
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-      facultyName: ['', [Validators.required, Validators.minLength(3)]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]],
-      abandonment: [false],
-      detail: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(50),
-          Validators.maxLength(250),
-        ],
-      ],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (
-      this.getModel().userId > 0 &&
-      this.getModel().cvId > 0 &&
-      this.getModel().universityId > 0 &&
-      this.getModel().departmentId > 0 &&
-      this.getModel().facultyId > 0 &&
-      this.getModel().detail.length >= 50
-    ) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.personelUserCvEducationService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
@@ -119,7 +81,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
             '/dashboard/personelusercveducation/personelusercveducationlisttab',
           ]);
         },
-        (error) => {
+        (responseError) => {
           console.error;
         }
       );
@@ -130,29 +92,38 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
 
   getModel(): PersonelUserCvEducationDTO {
     return Object.assign({
-      userId: this.getUserId(this.addForm.value.userEmail),
-      personelUserId: this.getPersonelUserId(this.addForm.value.userEmail),
-      cvId: this.getPersonelUserCvId(this.addForm.value.cvName),
-      universityId: this.getUniversityId(this.addForm.value.universityName),
-      departmentId: this.getepartmentId(this.addForm.value.departmentName),
-      facultyId: this.getFacultyId(this.addForm.value.facultyName),
-      abandonment: this.addForm.value.abandonment,
-      educationInfo: this.addForm.value.educationInfo,
-      startDate: new Date(this.addForm.value.startDate).toJSON(),
-      endDate: new Date(this.addForm.value.endDate).toJSON(),
-      detail: this.addForm.value.detail,
+      id: '',
+      userId: this.getUserId(this.personelUserCvEducationModel.email),
+      personelUserId: this.getPersonelUserId(
+        this.personelUserCvEducationModel.email
+      ),
+      cvId: this.getPersonelUserCvId(this.personelUserCvEducationModel.cvName),
+      universityId: this.getUniversityId(
+        this.personelUserCvEducationModel.universityName
+      ),
+      departmentId: this.getepartmentId(
+        this.personelUserCvEducationModel.departmentName
+      ),
+      facultyId: this.getFacultyId(
+        this.personelUserCvEducationModel.facultyName
+      ),
+      abandonment: this.personelUserCvEducationModel.abandonment,
+      educationInfo: this.personelUserCvEducationModel.educationInfo,
+      startDate: new Date(this.personelUserCvEducationModel.startDate).toJSON(),
+      endDate: new Date(this.personelUserCvEducationModel.endDate).toJSON(),
+      detail: this.personelUserCvEducationModel.detail,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -161,7 +132,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -171,11 +142,11 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getPersonelUserId(email: string): number {
+  getPersonelUserId(email: string): string {
     const personelUserId = this.personelUserDTOs.filter(
       (c) => c.email === email
     )[0]?.id;
@@ -186,16 +157,14 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.personelUserCvs = response.data.filter(
-          (f) => f.userId == this.getUserId(this.addForm.value.userEmail)
-        );
+        this.personelUserCvs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
   count() {
-    this.detailText = this.addForm.value.detail.length;
+    this.detailCount = this.personelUserCvEducationModel.detail.length;
   }
 
   getUniversities() {
@@ -203,7 +172,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -212,7 +181,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -221,17 +190,17 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getUserId(userEmail: string): number {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+  getUserId(email: string): string {
+    const userId = this.userDTOs.filter((c) => c.email === email)[0]?.id;
 
     return userId;
   }
 
-  getUniversityId(universityName: string): number {
+  getUniversityId(universityName: string): string {
     const universityId = this.universities.filter(
       (c) => c.universityName === universityName
     )[0]?.id;
@@ -239,7 +208,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return universityId;
   }
 
-  getFacultyId(facultyName: string): number {
+  getFacultyId(facultyName: string): string {
     const facultyId = this.faculties.filter(
       (c) => c.facultyName === facultyName
     )[0]?.id;
@@ -247,7 +216,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return facultyId;
   }
 
-  getepartmentId(departmentName: string): number {
+  getepartmentId(departmentName: string): string {
     const departmentId = this.departments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;
@@ -255,7 +224,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return departmentId;
   }
 
-  getPersonelUserCvId(cvName: string): number {
+  getPersonelUserCvId(cvName: string): string {
     const personelUserId = this.personelUserCvs.filter(
       (c) => c.cvName === cvName
     )[0]?.id;
@@ -263,49 +232,39 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return personelUserId;
   }
 
-  clearInput1() {
-    let value = this.addForm.get('userEmail');
-    value.reset();
-    this.getAdminValues();
+  emailClear() {
+    this.personelUserCvEducationModel.email = '';
   }
 
-  clearInput2() {
-    let value = this.addForm.get('cvName');
-    value.reset();
-    this.getAdminValues();
+  cvNameClear() {
+    this.personelUserCvEducationModel.cvName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm.get('universityName');
-    value.reset();
-    this.getUniversities();
+  universityNameClear() {
+    this.personelUserCvEducationModel.universityName = '';
   }
 
-  clearInput4() {
-    let value = this.addForm.get('facultyName');
-    value.reset();
-    this.getUniversityDepartments();
+  facultyNameClear() {
+    this.personelUserCvEducationModel.facultyName = '';
   }
 
-  clearInput5() {
-    let value = this.addForm.get('departmentName');
-    value.reset();
-    this.getFaculties();
+  departmentNameClear() {
+    this.personelUserCvEducationModel.departmentName = '';
   }
 
-  clearInput6() {
-    let value = this.addForm.get('startDate');
-    value.reset();
+  startDateClear() {
+    this.personelUserCvEducationModel.startDate = '';
   }
 
-  clearInput7() {
-    let value = this.addForm.get('endDate');
-    value.reset();
+  endDateClear() {
+    this.personelUserCvEducationModel.endDate = '';
   }
 
-  clearInput8() {
-    let value = this.addForm.get('detail');
-    value.reset();
-    this.detailText = '';
+  detailClear() {
+    this.personelUserCvEducationModel.detail = '';
+  }
+
+  educationInfoClear() {
+    this.personelUserCvEducationModel.educationInfo = '';
   }
 }

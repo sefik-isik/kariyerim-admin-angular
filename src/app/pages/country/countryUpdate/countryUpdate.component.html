@@ -3,63 +3,93 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
+          <div class="input-group">
             <span class="input-group-text">Country Name</span>
             <input
-              formControlName="countryName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="country.countryName"
               type="text"
               class="form-control"
-              id="input1"
+              name="countryName"
+              #countryName="ngModel"
               placeholder="Country Name"
             />
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="countryNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
-            <span class="input-group-text">Country Iso</span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country ISO</span>
             <input
-              formControlName="countryIso"
+              required
+              minlength="2"
+              maxlength="2"
+              pattern=""
+              [(ngModel)]="country.countryIso"
               type="text"
               class="form-control"
-              id="input2"
-              placeholder="Country Iso"
+              name="countryIso"
+              #countryIso="ngModel"
+              placeholder="Country ISO"
             />
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="countryIsoClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!countryIso.valid && countryIso.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryIso)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

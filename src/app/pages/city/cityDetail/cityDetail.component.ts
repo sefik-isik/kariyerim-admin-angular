@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CityDTO } from '../../../models/cityDTO';
+import { CityDTO } from '../../../models/dto/cityDTO';
 
 @Component({
   selector: 'app-cityDetail',

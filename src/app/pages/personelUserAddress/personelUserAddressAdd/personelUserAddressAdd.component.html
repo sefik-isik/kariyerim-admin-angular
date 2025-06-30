@@ -3,141 +3,222 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-            (change)="getAdminValues()"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="personelUserAddressModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Country Name</span>
-          <input
-            formControlName="countryName"
-            type="text"
-            class="form-control"
-            list="datalist3"
-            id="input3"
-            placeholder="Select Country..."
-            minlength="3"
-            (change)="getCities()"
-          />
-          <datalist id="datalist3">
-            <option
-              *ngFor="let country of countries"
-              value="{{ country.countryName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserAddressModel.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="Country Name"
+              (change)="getCities(personelUserAddressModel.countryName)"
+              list="countryNameDataList"
+            />
+            <datalist id="countryNameDataList">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="countryNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">City Name</span>
-          <input
-            formControlName="cityName"
-            type="text"
-            class="form-control"
-            list="datalist4"
-            id="input4"
-            placeholder="Select City..."
-            minlength="3"
-            (change)="getRegions()"
-          />
-          <datalist id="datalist4">
-            <option
-              *ngFor="let city of cities"
-              value="{{ city.cityName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput4()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserAddressModel.cityName"
+              type="text"
+              class="form-control"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(personelUserAddressModel.cityName)"
+              list="cityNameDataList"
+            />
+            <datalist id="cityNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Region Name</span>
-          <input
-            formControlName="regionName"
-            type="text"
-            class="form-control"
-            list="datalist5"
-            id="input5"
-            placeholder="Region Name..."
-          />
-          <datalist id="datalist5">
-            <option
-              *ngFor="let region of regions"
-              value="{{ region.regionName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput5()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Region Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="personelUserAddressModel.regionName"
+              type="text"
+              class="form-control"
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="Region Name"
+              list="regionNameDataList"
+            />
+            <datalist id="regionNameDataList">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="regionNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text"
-            >Address Detail <br />{{ addressDetail }} \ 250</span
-          >
-
-          <textarea
-            formControlName="addressDetail"
-            class="form-control"
-            id="input6"
-            style="height: 120px"
-            placeholder="addressDetail"
-            minlength="50"
-            maxlength="250"
-            (input)="count()"
-          ></textarea>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput6()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ addressDetailCount }} \ 50</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="250"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="personelUserAddressModel.addressDetail"
+              name="addressDetail"
+              #addressDetail="ngModel"
+              style="height: 100px"
+              (input)="count()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="addressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!addressDetail.valid && addressDetail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(addressDetail)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
-      <button (click)="add()" type="button" class="btn btn-outline-primary">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
         Add
       </button>
       <button

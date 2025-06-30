@@ -45,13 +45,23 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
-            *ngFor="let department of departments | filterDepartment : filter1"
+            *ngFor="
+              let department of departments | filterDepartment : filter1;
+              index as i
+            "
           >
-            <td>{{ department.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ department.departmentName }}</td>
 
             <td>
@@ -73,6 +83,13 @@
                 (click)="unDelete(department)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(department)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

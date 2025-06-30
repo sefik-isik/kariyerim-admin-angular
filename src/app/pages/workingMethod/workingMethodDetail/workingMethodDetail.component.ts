@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 
 @Component({
   selector: 'app-workingMethodDetail',

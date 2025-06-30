@@ -2,21 +2,17 @@ import { TaxOfficeService } from './../../../services/taxOffice.service';
 import { RegionService } from './../../../services/region.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CityService } from '../../../services/city.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { City } from '../../../models/city';
-import { Region } from '../../../models/region';
-import { TaxOffice } from '../../../models/taxOffice';
-import { CaseService } from '../../../services/case.service';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
+import { TaxOffice } from '../../../models/component/taxOffice';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
+import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
 
 @Component({
   selector: 'app-taxOfficeAdd',
@@ -25,49 +21,39 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class TaxOfficeAddComponent implements OnInit {
-  addForm1: FormGroup;
+  taxOfficeModel: TaxOfficeDTO = {} as TaxOfficeDTO;
   cities: City[];
   regions: Region[];
-
   componentTitle = 'Tax Office Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private regionService: RegionService,
     private cityService: CityService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createAddForm();
     this.getCities();
   }
 
-  createAddForm() {
-    this.addForm1 = this.formBuilder.group({
-      cityName: ['', [Validators.required, Validators.minLength(3)]],
-      regionName: ['', [Validators.required, Validators.minLength(3)]],
-      taxOfficeCode: [
-        '',
-        [Validators.required, Validators.minLength(4), Validators.maxLength(5)],
-      ],
-      taxOfficeName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  add() {
-    if (this.addForm1.valid && this.getModel().cityId > 0) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.taxOfficeService.add(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
-        (error) => console.error
+        (responseError) => console.error
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -76,13 +62,14 @@ export class TaxOfficeAddComponent implements OnInit {
 
   getModel(): TaxOffice {
     return Object.assign({
+      id: '',
       regionName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.regionName
+        this.taxOfficeModel.regionName
       ),
-      cityId: this.getCityId(this.addForm1.value.cityName),
-      taxOfficeCode: this.addForm1.value.taxOfficeCode,
+      cityId: this.getCityId(this.taxOfficeModel.cityName),
+      taxOfficeCode: this.taxOfficeModel.taxOfficeCode,
       taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.addForm1.value.taxOfficeName
+        this.taxOfficeModel.taxOfficeName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -93,47 +80,41 @@ export class TaxOfficeAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getRegions() {
+  getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
-        if (this.addForm1.value.cityName) {
-          const cityId = this.getCityId(this.addForm1.value.cityName);
-
+        if (this.taxOfficeModel.cityName) {
+          const cityId = this.getCityId(cityName);
           this.regions = response.data.filter((f) => f.cityId == cityId);
         }
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCityId(cityName: string): number {
+  getCityId(cityName: string): string {
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
 
     return cityId;
   }
 
-  clearInput1() {
-    let value = this.addForm1.get('cityName');
-    value.reset();
-    this.getCities();
+  cityNameClear() {
+    this.taxOfficeModel.cityName = '';
   }
 
-  clearInput2() {
-    let value = this.addForm1.get('regionName');
-    value.reset();
+  regionNameClear() {
+    this.taxOfficeModel.regionName = '';
   }
 
-  clearInput3() {
-    let value = this.addForm1.get('taxOfficeCode');
-    value.reset();
+  taxOfficeCodeClear() {
+    this.taxOfficeModel.taxOfficeCode = '';
   }
 
-  clearInput4() {
-    let value = this.addForm1.get('taxOfficeName');
-    value.reset();
+  taxOfficeNameClear() {
+    this.taxOfficeModel.taxOfficeName = '';
   }
 }

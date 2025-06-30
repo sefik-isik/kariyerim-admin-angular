@@ -1,15 +1,15 @@
-import { AdminModel } from '../../../models/adminModel';
-import { AdminService } from '../../../services/admin.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { FilterCompanyUserImageByUserPipe } from '../../../pipes/filterCompanyUserImageByUser.pipe';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { CompanyUserImageDTO } from '../../../models/companyUserImageDTO';
-import { UserDTO } from '../../../models/userDTO';
+import { CompanyUserImageDTO } from '../../../models/dto/companyUserImageDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
 import { CompanyUserImageService } from '../../../services/companyUserImage.service';
-import { LocalStorageService } from '../../../services/localStorage.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserImageUpdateComponent } from '../companyUserImageUpdate/companyUserImageUpdate.component';
 import { CompanyUserImageDetailComponent } from '../companyUserImageDetail/companyUserImageDetail.component';
@@ -27,7 +27,7 @@ export class CompanyUserImageListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Company User Images';
-  userId: number;
+  userId: string;
 
   companyUserImagesLenght: number = 0;
 
@@ -50,13 +50,13 @@ export class CompanyUserImageListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -65,7 +65,7 @@ export class CompanyUserImageListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -75,7 +75,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.companyUserImageDTOs = response.data;
         this.companyUserImagesLenght = this.companyUserImageDTOs.length;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -89,7 +89,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -101,7 +101,7 @@ export class CompanyUserImageListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImage) => {
       this.companyUserImageService.delete(companyUserImage).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

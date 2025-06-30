@@ -48,8 +48,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let country of countries | filterCountry : filter1">
-              <td>{{ country.id }}</td>
+            <tr
+              *ngFor="
+                let country of countries | filterCountry : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
               <td>{{ country.countryName }}</td>
               <td>{{ country.countryIso }}</td>
 

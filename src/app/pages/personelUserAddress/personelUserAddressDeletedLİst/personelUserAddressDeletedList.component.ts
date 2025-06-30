@@ -1,14 +1,14 @@
-import { LocalStorageService } from '../../../services/localStorage.service';
-import { AdminService } from '../../../services/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/userDTO';
-import { AdminModel } from '../../../models/adminModel';
-import { PersonelUserAddressDTO } from '../../../models/personelUserAddressDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
 import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPersonelUserAddressByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +28,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
   filter1: string = '';
 
   componentTitle = 'Deleted Personel User Addresses';
-  userId: number;
+  userId: string;
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
@@ -49,13 +49,13 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
   }
 
   getAdminValues() {
-    const id = parseInt(this.localStorageService.getFromLocalStorage('id'));
+    const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.getAllPersonelUsers(response);
         this.getPersonelUserAddresses(response);
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -64,7 +64,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -73,7 +73,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserAddressDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -83,7 +83,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -91,12 +91,47 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
     this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
       this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(personelUserAddressDTO: PersonelUserAddressDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserAddressService.terminate(personelUserAddressDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
+      this.personelUserAddressService
+        .terminate(personelUserAddressDTO)
+        .subscribe(
+          (response) => {},
+          (responseError) => console.error
+        );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

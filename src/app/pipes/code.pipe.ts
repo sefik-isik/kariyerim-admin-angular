@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { PersonelUserCode } from '../models/userCodes';
-import { CompanyUserCode } from '../models/userCodes';
+import { PersonelUserCode } from '../models/concrete/userCodes';
+import { CompanyUserCode } from '../models/concrete/userCodes';
 
 @Pipe({
   name: 'code',

@@ -25,8 +25,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let languageLevel of languageLevels">
-              <td>{{ languageLevel.id }}</td>
+            <tr *ngFor="let languageLevel of languageLevels; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ languageLevel.level }}</td>
               <td>{{ languageLevel.levelTitle }}</td>
               <td>{{ languageLevel.levelDescription }}</td>

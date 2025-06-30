@@ -22,11 +22,18 @@
                   style="color: green"
                 ></i>
               </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let languageLevel of languageLevels">
-              <td>{{ languageLevel.id }}</td>
+            <tr *ngFor="let languageLevel of languageLevels; index as i">
+              <td>{{ i + 1 }}</td>
               <td>{{ languageLevel.level }}</td>
               <td>{{ languageLevel.levelTitle }}</td>
               <td>{{ languageLevel.levelDescription }}</td>
@@ -50,6 +57,13 @@
                   (click)="unDelete(languageLevel)"
                   class="bi bi-arrow-up-right-square"
                   style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(languageLevel)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
                 ></i>
               </td>
             </tr>

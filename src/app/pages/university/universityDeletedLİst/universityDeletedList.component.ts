@@ -7,7 +7,7 @@ import { FilterUniversityPipe } from '../../../pipes/filterUniversity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
-import { UniversityDTO } from '../../../models/universityDTO';
+import { UniversityDTO } from '../../../models/dto/universityDTO';
 
 @Component({
   selector: 'app-universityDeletedList',
@@ -40,7 +40,7 @@ export class UniversityDeletedListComponent implements OnInit {
       (response) => {
         this.universityDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -50,7 +50,7 @@ export class UniversityDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -58,12 +58,45 @@ export class UniversityDeletedListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.update(universityDTO).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(universityDTO: UniversityDTO) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.universityService.terminate(universityDTO).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.universityDTOs.forEach((universityDTO) => {
+      this.universityService.terminate(universityDTO).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

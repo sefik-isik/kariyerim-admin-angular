@@ -1,10 +1,9 @@
 import { Routes } from '@angular/router';
-import { ExpirationGuard } from './guards/expiration.guard';
-import { CompanyUserComponent } from './pages/companyUser/companyUser/companyUser.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UpdatePasswordComponent } from './components/updatePassword/updatePassword.component';
+import { ExpirationGuard } from './guards/expiration.guard';
 import { LoginGuard } from './guards/login.guard';
 import { AllUserComponent } from './pages/allUser/allUser/allUser.component';
 import { AllUserDeletedListTab } from './pages/allUser/allUser/allUserDeletedListTab';
@@ -12,6 +11,7 @@ import { AllUserListTab } from './pages/allUser/allUser/allUserListTab';
 import { CityComponent } from './pages/city/city/city.component';
 import { CityListTab } from './pages/city/city/cityListTab';
 import { CityDeletedListComponent } from './pages/city/cityDeletedList/cityDeletedList.component';
+import { CompanyUserComponent } from './pages/companyUser/companyUser/companyUser.component';
 import { CompanyUserListTab } from './pages/companyUser/companyUser/companyUserListTab';
 import { CompanyUserDeletedListComponent } from './pages/companyUser/companyUserDeletedList/companyUserDeletedList.component';
 import { CompanyUserAddressComponent } from './pages/companyUserAddress/companyUserAddress/companyUserAddress.component';
@@ -42,12 +42,22 @@ import { LanguageDeletedListComponent } from './pages/language/languageDeletedLi
 import { LanguageLevelComponent } from './pages/languageLevel/languageLevel/languageLevel.component';
 import { LanguageLevelListTab } from './pages/languageLevel/languageLevel/languageLevelListTab';
 import { LanguageLevelDeletedListComponent } from './pages/languageLevel/languageLevelDeletedList/languageLevelDeletedList.component';
-import { LicenceDegreeComponent } from './pages/licenceDegree/licenceDegree/licenceDegree.component';
-import { LicenceDegreeListTab } from './pages/licenceDegree/licenceDegree/licenceDegreeListTab';
-import { LicenceDegreeDeletedListComponent } from './pages/licenceDegree/licenceDegreeDeletedList/licenceDegreeDeletedList.component';
+
+import { RegisterCompanyUserComponent } from './components/registerCompanyUser/registerCompanyUser.component';
+import { RegisterPersonelUserComponent } from './components/registerPersonelUser/registerPersonelUser.component';
+import { DepartmentComponent } from './pages/department/department/department.component';
+import { DepartmentListTab } from './pages/department/department/departmentListTab';
+import { DepartmentDeletedListComponent } from './pages/department/departmentDeletedList/departmentDeletedList.component';
+import { DepartmentDescriptionComponent } from './pages/departmentDescription/departmentDescription/departmentDescription.component';
+import { DepartmentDescriptionListTab } from './pages/departmentDescription/departmentDescription/departmentDescriptionListTab';
+import { DepartmentDescriptionDeletedListComponent } from './pages/departmentDescription/departmentDescriptionDeletedList/departmentDescriptionDeletedList.component';
+import { LicenseDegreeComponent } from './pages/licenseDegree/licenseDegree/licenseDegree.component';
+import { LicenseDegreeListTab } from './pages/licenseDegree/licenseDegree/licenseDegreeListTab';
+import { LicenseDegreeDeletedListComponent } from './pages/licenseDegree/licenseDegreeDeletedList/licenseDegreeDeletedList.component';
 import { CompanyUserMainComponent } from './pages/main/companyUserMain/companyUserMain.component';
 import { MainComponent } from './pages/main/main/main.component';
 import { PersonelUserMainComponent } from './pages/main/personelUserMain/personelUserMain.component';
+import { ModelMenuComponent } from './pages/modelMenu/modelMenu/modelMenu.component';
 import { ModelMenuListTab } from './pages/modelMenu/modelMenu/modelMenuListTab';
 import { ModelMenuDeletedListComponent } from './pages/modelMenu/modelMenuDeletedLİst/modelMenuDeletedList.component';
 import { OperationClaimComponent } from './pages/operationClaim/operationClaim/operationClaim.component';
@@ -102,21 +112,14 @@ import { UserOperationClaimDeletedListComponent } from './pages/userOperationCla
 import { WorkingMethodComponent } from './pages/workingMethod/workingMethod/workingMethod.component';
 import { WorkingMethodListTab } from './pages/workingMethod/workingMethod/workingMethodListTab';
 import { WorkingMethodDeletedListComponent } from './pages/workingMethod/workingMethodDeletedLİst/workingMethodDeletedList.component';
-import { ModelMenuListComponent } from './pages/modelMenu/modelMenuList/modelMenuList.component';
-import { ModelMenuComponent } from './pages/modelMenu/modelMenu/modelMenu.component';
-import { DepartmentComponent } from './pages/department/department/department.component';
-import { DepartmentListTab } from './pages/department/department/departmentListTab';
-import { DepartmentDeletedListComponent } from './pages/department/departmentDeletedList/departmentDeletedList.component';
-import { DepartmentDetailComponent } from './pages/department/departmentDetail/departmentDetail.component';
-import { DepartmentDetailMainListTab } from './pages/departmentDetail/departmentDetailMain/departmentDetailMainListTab';
-import { DepartmentDetailDeletedListComponent } from './pages/departmentDetail/departmentDetailDeletedList/departmentDetailDeletedList.component';
-import { DepartmentDetailMainComponent } from './pages/departmentDetail/departmentDetailMain/departmentDetailMain.component';
-import { DepartmentDetailMainDeletedListTab } from './pages/departmentDetail/departmentDetailMain/departmentDetailMainDeletedListTab';
+
 //-----------------
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'registerPersonelUser', component: RegisterPersonelUserComponent },
+  { path: 'registerCompanyUser', component: RegisterCompanyUserComponent },
 
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 
@@ -341,18 +344,18 @@ export const routes: Routes = [
       },
 
       {
-        path: 'departmentdetail',
-        component: DepartmentDetailMainComponent,
+        path: 'departmentdescription',
+        component: DepartmentDescriptionComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'departmentdetaillisttab',
-            component: DepartmentDetailMainListTab,
+            path: 'departmentdescriptionlisttab',
+            component: DepartmentDescriptionListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'departmentdetaildeletedlisttab',
-            component: DepartmentDetailMainDeletedListTab,
+            path: 'departmentdescriptiondeletedlisttab',
+            component: DepartmentDescriptionDeletedListComponent,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -449,35 +452,35 @@ export const routes: Routes = [
       },
 
       {
-        path: 'licencedegree',
-        component: LicenceDegreeComponent,
+        path: 'licensedegree',
+        component: LicenseDegreeComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'licencedegreelisttab',
-            component: LicenceDegreeListTab,
+            path: 'licensedegreelisttab',
+            component: LicenseDegreeListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'licencedegreedeletedlisttab',
-            component: LicenceDegreeDeletedListComponent,
+            path: 'licensedegreedeletedlisttab',
+            component: LicenseDegreeDeletedListComponent,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
       },
 
       {
-        path: 'modelmenumain',
+        path: 'modelmenu',
         component: ModelMenuComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'modelmenumainlisttab',
+            path: 'modelmenulisttab',
             component: ModelMenuListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'modelmenumaindeletedlisttab',
+            path: 'modelmenudeletedlisttab',
             component: ModelMenuDeletedListComponent,
             canActivate: [LoginGuard, ExpirationGuard],
           },

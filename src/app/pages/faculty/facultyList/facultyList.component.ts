@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { Faculty } from '../../../models/faculty';
+import { Faculty } from '../../../models/component/faculty';
 import { FilterFacultyPipe } from '../../../pipes/filterFaculty.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FacultyUpdateComponent } from '../facultyUpdate/facultyUpdate.component';
@@ -43,7 +43,7 @@ export class FacultyListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -61,7 +61,7 @@ export class FacultyListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -77,7 +77,7 @@ export class FacultyListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.delete(faculty).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

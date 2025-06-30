@@ -52,8 +52,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let userDTO of userDTOs | filterAllUser : filter1">
-            <td>{{ userDTO.id }}</td>
+          <tr
+            *ngFor="
+              let userDTO of userDTOs | filterAllUser : filter1;
+              index as i
+            "
+          >
+            <td>{{ i + 1 }}</td>
             <td>{{ userDTO.firstName }}</td>
             <td>{{ userDTO.lastName }}</td>
             <td>{{ userDTO.email }}</td>

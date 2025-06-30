@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DriverLicence } from '../../../models/driverLicence';
+import { DriverLicence } from '../../../models/component/driverLicence';
 
 @Component({
   selector: 'app-driverLicenceDetail',

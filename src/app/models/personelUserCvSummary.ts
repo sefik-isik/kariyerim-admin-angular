@@ -1,6 +1,0 @@
-import { BasePersonelUserCvModel } from './basePersonelUserCvModel';
-
-export interface PersonelUserCvSummary extends BasePersonelUserCvModel {
-  cvSummaryTitle: string;
-  cvSummaryDescription: string;
-}

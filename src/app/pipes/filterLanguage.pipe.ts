@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Language } from '../models/language';
+import { Language } from '../models/component/language';
 
 @Pipe({
   name: 'filterLanguage',

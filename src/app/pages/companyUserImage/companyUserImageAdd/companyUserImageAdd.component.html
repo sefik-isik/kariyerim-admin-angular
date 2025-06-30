@@ -3,104 +3,167 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <form [formGroup]="addForm">
-      <div class="form-group">
-        <div class="input-group mb-3">
-          <span class="input-group-text">User Email</span>
-          <input
-            formControlName="userEmail"
-            type="email"
-            class="form-control"
-            list="datalist1"
-            id="input1"
-            placeholder="Select User..."
-            minlength="3"
-            (change)="getAdminValues()"
-          />
-          <datalist id="datalist1">
-            <option
-              *ngFor="let userDTO of userDTOs"
-              value="{{ userDTO.email }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput1()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              email="true"
+              [(ngModel)]="companyUserImageModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Company Name</span>
-          <input
-            formControlName="companyUserName"
-            type="text"
-            class="form-control"
-            list="datalist2"
-            id="input2"
-            placeholder="Select Company..."
-          />
-          <datalist id="datalist2">
-            <option
-              *ngFor="let companyUserDTO of companyUserDTOs"
-              value="{{ companyUserDTO.companyUserName }}"
-            ></option>
-          </datalist>
-          <span class="input-group-text">
-            <i
-              (click)="clearInput2()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
+      </div>
 
-        <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserImageModel.companyUserName"
+              type="text"
+              class="form-control"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company User Name"
+              list="companyUserNameDataList"
+            />
+            <datalist id="companyUserNameDataList">
+              <option
+                *ngFor="let companyUser of companyUsers"
+                value="{{ companyUser.companyUserName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="companyUserNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
           <input
-            formControlName="image"
             type="file"
+            required
+            pattern=""
+            [(ngModel)]="companyUserImageModel.imageName"
             class="form-control"
-            id="input3"
+            name="imageName"
+            #imageName="ngModel"
             placeholder="Upload Image"
             (change)="onImageSelected($event)"
-            aria-label="Upload Image"
+            aria-label="Upload File"
           />
           <span class="input-group-text">
             <i
-              (click)="clearInput4()"
+              (click)="imageNameClear()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>
           </span>
         </div>
+        <div *ngIf="!imageName.valid && imageName.touched">
+          <div
+            class="error-message"
+            *ngFor="let error of getValidationErrors(imageName)"
+          >
+            {{ error }}
+          </div>
+        </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">Image Name</span>
-          <input
-            formControlName="imageOwnName"
-            type="text"
-            class="form-control"
-            id="imageOwnName"
-            placeholder="Image Name"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="clearInput3()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Image Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="companyUserImageModel.imageOwnName"
+              type="text"
+              class="form-control"
+              name="imageOwnName"
+              #imageOwnName="ngModel"
+              placeholder="Image Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="imageOwnNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!imageOwnName.valid && imageOwnName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(imageOwnName)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>
     <div class="d-grid gap-2">
       <button
+        [disabled]="!form.valid"
         type="button"
         class="btn btn-outline-primary"
-        (click)="onUpload()"
+        (click)="onSubmit(form)"
       >
-        Upload
+        Add
       </button>
       <button
         type="button"

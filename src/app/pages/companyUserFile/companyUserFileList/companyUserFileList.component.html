@@ -35,6 +35,7 @@
             <tr>
               <th>Id</th>
               <th>email</th>
+              <th>companyUserName</th>
               <th>file Name</th>
 
               <th></th>
@@ -52,11 +53,13 @@
             <tr
               *ngFor="
                 let companyUserFileDTO of companyUserFileDTOS
-                  | filterCompanyUserFileByUser : filter1
+                  | filterCompanyUserFileByUser : filter1;
+                index as i
               "
             >
-              <td>{{ companyUserFileDTO.id }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ companyUserFileDTO.email }}</td>
+              <td>{{ companyUserFileDTO.companyUserName }}</td>
               <td *ngIf="companyUserFileDTO.fileName != 'noFile'">
                 <a
                   href="{{

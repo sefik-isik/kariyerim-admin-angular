@@ -36,8 +36,8 @@
           <tr>
             <th>Id</th>
             <th>email</th>
+            <th>companyUserName</th>
             <th>file Name</th>
-
             <th></th>
             <th></th>
             <th>
@@ -47,17 +47,26 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
               let companyUserFileDTO of companyUserFileDTOs
-                | filterCompanyUserFileByUser : filter1
+                | filterCompanyUserFileByUser : filter1;
+              index as i
             "
           >
-            <td>{{ companyUserFileDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ companyUserFileDTO.email }}</td>
+            <td>{{ companyUserFileDTO.companyUserName }}</td>
             <td *ngIf="companyUserFileDTO.fileName != 'noFile'">
               <a
                 href="{{
@@ -89,6 +98,13 @@
                 (click)="unDelete(companyUserFileDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(companyUserFileDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

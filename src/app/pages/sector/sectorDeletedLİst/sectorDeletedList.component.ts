@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { Sector } from '../../../models/sector';
+import { Sector } from '../../../models/component/sector';
 import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SectorUpdateComponent } from '../sectorUpdate/sectorUpdate.component';
@@ -44,7 +44,7 @@ export class SectorDeletedListComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -54,7 +54,7 @@ export class SectorDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -62,12 +62,45 @@ export class SectorDeletedListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.update(sector).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(sector: Sector) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.sectorService.terminate(sector).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.sectors.forEach((sector) => {
+      this.sectorService.terminate(sector).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Status } from '../models/status';
+import { AdminStatus, UserStatus } from '../models/concrete/status';
 
 @Pipe({
   name: 'status',
@@ -7,13 +7,10 @@ import { Status } from '../models/status';
 export class StatusPipe implements PipeTransform {
   transform(value: string): string {
     let result: string = '';
-    if (value == Status) {
+    if (value == AdminStatus) {
       result = 'Admin';
-    } else if (
-      value ==
-      'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9'
-    ) {
-      result = 'Normal User';
+    } else if (value == UserStatus) {
+      result = 'User';
     } else {
       result = 'Unknown User';
     }

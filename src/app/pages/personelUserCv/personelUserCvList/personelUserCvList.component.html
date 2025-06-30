@@ -40,7 +40,7 @@
             <th>birthPlaceName</th>
             <th>isPrivate</th>
             <th>languageName</th>
-            <th>levelTitle</th>
+            <th>level</th>
             <th>levelDescription</th>
 
             <th></th>
@@ -58,10 +58,11 @@
           <tr
             *ngFor="
               let personelUserCvDTO of personelUserCvDTOs
-                | filterPersonelUserCvByUser : filter1
+                | filterPersonelUserCvByUser : filter1;
+              index as i
             "
           >
-            <td>{{ personelUserCvDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ personelUserCvDTO.email }}</td>
             <td>{{ personelUserCvDTO.cvName }}</td>
             <td>{{ personelUserCvDTO.birthPlaceName }}</td>

@@ -6,11 +6,11 @@ import { CityService } from '../../../services/city.service';
 import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
-import { Country } from '../../../models/country';
+import { Country } from '../../../models/component/country';
 import { AuthService } from '../../../services/auth.service';
-import { CityDTO } from '../../../models/cityDTO';
+import { CityDTO } from '../../../models/dto/cityDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { City } from '../../../models/city';
+import { City } from '../../../models/component/city';
 import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
 import { CityDetailComponent } from '../cityDetail/cityDetail.component';
 
@@ -50,7 +50,7 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -59,11 +59,11 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  getCountryId(countryName: string): number {
+  getCountryId(countryName: string): string {
     return this.countries.find((f) => f.countryName == countryName)?.id;
   }
 
@@ -81,7 +81,7 @@ export class CityListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -97,7 +97,7 @@ export class CityListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.delete(city).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

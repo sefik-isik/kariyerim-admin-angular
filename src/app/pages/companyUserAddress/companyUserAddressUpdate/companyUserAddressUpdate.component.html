@@ -3,21 +3,59 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
-            <span class="input-group-text">Country Name</span>
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
             <input
-              formControlName="countryName"
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserAddressDTO.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company Name</span>
+            <input
               type="text"
               class="form-control"
-              list="datalist1"
-              id="input1"
-              placeholder="Select Country..."
-              (change)="getCities()"
+              [(ngModel)]="companyUserAddressDTO.companyUserName"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company Name"
+              disabled="true"
             />
-            <datalist id="datalist1">
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserAddressDTO.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="Country Name"
+              (change)="getCities(companyUserAddressDTO.countryName)"
+              list="countryNameDataList"
+            />
+            <datalist id="countryNameDataList">
               <option
                 *ngFor="let country of countries"
                 value="{{ country.countryName }}"
@@ -25,25 +63,42 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="countryNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">City Name</span>
             <input
-              formControlName="cityName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserAddressDTO.cityName"
               type="text"
               class="form-control"
-              list="datalist2"
-              id="input2"
-              placeholder="Select City..."
-              (change)="getRegions()"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(companyUserAddressDTO.cityName)"
+              list="cityNameDataList"
             />
-            <datalist id="datalist2">
+            <datalist id="cityNameDataList">
               <option
                 *ngFor="let city of cities"
                 value="{{ city.cityName }}"
@@ -51,24 +106,41 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="cityNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Region Name</span>
             <input
-              formControlName="regionName"
+              required
+              minlength="3"
+              maxlength="30"
+              pattern=""
+              [(ngModel)]="companyUserAddressDTO.regionName"
               type="text"
               class="form-control"
-              list="datalist3"
-              id="input3"
-              placeholder="Select Region..."
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="Region Name"
+              list="regionNameDataList"
             />
-            <datalist id="datalist3">
+            <datalist id="regionNameDataList">
               <option
                 *ngFor="let region of regions"
                 value="{{ region.regionName }}"
@@ -76,54 +148,76 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput3()"
+                (click)="regionNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text"
-              >Address Detail <br />{{ addressDetailCount }} \ 250</span
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
             >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ addressDetailCount }} \ 50</span
+            >
             <textarea
-              formControlName="addressDetail"
-              class="form-control"
-              id="input4"
-              style="height: 120px"
+              required
               minlength="50"
               maxlength="250"
-              (input)="count(addressDetail)"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="companyUserAddressDTO.addressDetail"
+              name="addressDetail"
+              #addressDetail="ngModel"
+              style="height: 100px"
+              (input)="count(companyUserAddressDTO.addressDetail)"
             ></textarea>
             <span class="input-group-text">
               <i
-                (click)="clearInput4()"
+                (click)="addressClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!addressDetail.valid && addressDetail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(addressDetail)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { WorkingMethod } from '../../../models/workingMethod';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkingMethodUpdateComponent } from '../workingMethodUpdate/workingMethodUpdate.component';
@@ -41,7 +41,7 @@ export class WorkingMethodListComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -59,7 +59,7 @@ export class WorkingMethodListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -75,7 +75,7 @@ export class WorkingMethodListComponent implements OnInit {
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.delete(workingMethod).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {

@@ -1,19 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { SectorService } from '../../../services/sectorService';
-import { Sector } from '../../../models/sector';
-import { CaseService } from '../../../services/case.service';
+import { Sector } from '../../../models/component/sector';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-sectorUpdate',
@@ -22,58 +17,47 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class SectorUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() sector: Sector;
-  sectorId: number;
-
   componentTitle = 'Sector Update Form';
 
   constructor(
     private sectorService: SectorService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.sector.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      sectorName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
-
-  getById(id: number) {
+  getById(id: string) {
     this.sectorService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          sectorName: response.data.sectorName,
-        });
-        this.sectorId = id;
+        this.sector.id = id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.sectorService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/sector/sectorlisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -83,9 +67,9 @@ export class SectorUpdateComponent implements OnInit {
 
   getModel(): Sector {
     return Object.assign({
-      id: this.sectorId,
+      id: this.sector.id,
       sectorName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.sectorName
+        this.sector.sectorName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -93,8 +77,7 @@ export class SectorUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('sectorName');
-    value.reset();
+  sectorNameClear() {
+    this.sector.sectorName = '';
   }
 }

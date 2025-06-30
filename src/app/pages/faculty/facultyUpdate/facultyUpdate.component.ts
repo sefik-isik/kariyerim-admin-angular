@@ -1,18 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FacultyService } from '../../../services/faculty.service';
-import { Faculty } from '../../../models/faculty';
-import { CaseService } from '../../../services/case.service';
+import { Faculty } from '../../../models/component/faculty';
+import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-facultyUpdate',
@@ -21,58 +16,48 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class FacultyUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() faculty: Faculty;
-  facultyId: number;
-
   componentTitle = 'Faculty Update Form';
 
   constructor(
     private facultyService: FacultyService,
 
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.faculty.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      facultyName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  getById(facultyId: number) {
+  getById(facultyId: string) {
     this.facultyService.getById(facultyId).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          facultyName: response.data.facultyName,
-        });
-        this.facultyId = facultyId;
+        this.faculty.id = facultyId;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.facultyService.update(this.getModel()).subscribe(
         (response) => {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/faculty/facultylisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -82,9 +67,9 @@ export class FacultyUpdateComponent implements OnInit {
 
   getModel(): Faculty {
     return Object.assign({
-      id: this.facultyId,
+      id: this.faculty.id,
       facultyName: this.caseService.capitalizeFirstLetter(
-        this.updateForm.value.facultyName
+        this.faculty.facultyName
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -92,8 +77,7 @@ export class FacultyUpdateComponent implements OnInit {
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('facultyName');
-    value.reset();
+  facultyNameClear() {
+    this.faculty.facultyName = '';
   }
 }

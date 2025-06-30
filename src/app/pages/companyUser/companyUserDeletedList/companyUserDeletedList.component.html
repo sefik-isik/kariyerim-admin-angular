@@ -36,10 +36,10 @@
           <tr>
             <th>Id</th>
             <th>email</th>
-            <th>companyUserName</th>
-            <th>sectorName</th>
-            <th>taxCityName</th>
-            <th>taxOfficeName</th>
+            <th>company</th>
+            <th>sector</th>
+            <th>taxCity</th>
+            <th>taxOffice</th>
             <th>taxNumber</th>
 
             <th></th>
@@ -51,15 +51,23 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="
-              let companyUserDTO of companyUserDTOs | filterUser : filter1
+              let companyUserDTO of companyUserDTOs | filterUser : filter1;
+              index as i
             "
           >
-            <td>{{ companyUserDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ companyUserDTO.email }}</td>
             <td>{{ companyUserDTO.companyUserName }}</td>
             <td>{{ companyUserDTO.sectorName }}</td>
@@ -86,6 +94,13 @@
                 (click)="unDelete(companyUserDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(companyUserDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

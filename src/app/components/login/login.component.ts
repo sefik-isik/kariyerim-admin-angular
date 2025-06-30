@@ -1,17 +1,12 @@
+import { ValidationService } from './../../services/validation.service';
+import { LoginModel } from './../../models/auth/loginModel';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { LoginModel } from '../../models/loginModel';
-import { AddToLocalStorageService } from '../../services/addToLocalStorage.service';
+import { AddToLocalStorageService } from '../../services/helperServices/addToLocalStorage.service';
 
 @Component({
   selector: 'app-login',
@@ -19,42 +14,35 @@ import { AddToLocalStorageService } from '../../services/addToLocalStorage.servi
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit {
-  loginFom: FormGroup;
-
-  componentTitle = 'Please sign in';
+export class LoginComponent {
+  title: string = 'Please Login In';
+  loginModel: LoginModel = {} as LoginModel;
 
   constructor(
-    private formBuilder: FormBuilder,
     private autService: AuthService,
     private toastrService: ToastrService,
     private router: Router,
-    private addToLocalStorageService: AddToLocalStorageService
+    private addToLocalStorageService: AddToLocalStorageService,
+    private validationService: ValidationService
   ) {}
 
-  ngOnInit(): void {
-    this.createLoginForm();
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  createLoginForm() {
-    this.loginFom = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-  }
-
-  login() {
-    if (this.loginFom.valid) {
-      let loginModel: LoginModel = Object.assign({}, this.loginFom.value);
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      const loginModel: LoginModel = Object.assign({ id: '' }, form.value);
 
       this.autService.login(loginModel).subscribe(
         (response) => {
           this.addToLocalStorageService.addToken(response.data.token);
-          this.addToLocalStorageService.addId(response.data.id.toString());
+          this.addToLocalStorageService.addId(response.data.id);
           this.addToLocalStorageService.addFirstName(response.data.firstName);
           this.addToLocalStorageService.addLasttName(response.data.lastName);
           this.addToLocalStorageService.addEmail(response.data.email);
           this.addToLocalStorageService.addPhone(response.data.phoneNumber);
+          this.addToLocalStorageService.addCode(response.data.code);
           this.addToLocalStorageService.addExpiration(
             response.data.expiration.toString()
           );
@@ -67,9 +55,7 @@ export class LoginComponent implements OnInit {
           this.addToLocalStorageService.addDeletedDate(
             response.data.deletedDate?.toString()
           );
-          this.addToLocalStorageService.addStatus(
-            response.data.status.toString()
-          );
+          this.addToLocalStorageService.addStatus(response.data.status);
 
           this.toastrService.success(
             'Sisteme Giriş Başarılı',
@@ -80,7 +66,7 @@ export class LoginComponent implements OnInit {
           );
           this.router.navigate(['']);
         },
-        (error) => console.error
+        (responseError) => console.log(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -89,5 +75,12 @@ export class LoginComponent implements OnInit {
 
   register() {
     this.router.navigate(['register']);
+  }
+
+  emailClear() {
+    this.loginModel.email = '';
+  }
+  passwordClear() {
+    this.loginModel.password = '';
   }
 }

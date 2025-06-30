@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LanguageService } from '../../../services/language.service';
-import { Language } from '../../../models/language';
+import { Language } from '../../../models/component/language';
 import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageUpdateComponent } from '../languageUpdate/languageUpdate.component';
@@ -40,7 +40,7 @@ export class LanguageDeletedListComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -50,7 +50,7 @@ export class LanguageDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
@@ -58,12 +58,45 @@ export class LanguageDeletedListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.update(language).subscribe(
         (response) => {},
-        (error) => console.error
+        (responseError) => console.error
       );
     });
     setTimeout(() => {
       this.ngOnInit();
       this.toastrService.success('Tümü Başarı ile geri alındı');
+    }, 500);
+  }
+
+  terminate(language: Language) {
+    if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.languageService.terminate(language).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile kalıcı olarak silindi');
+        this.ngOnInit();
+      },
+      (responseError) => console.log(responseError)
+    );
+  }
+
+  terminateAll() {
+    if (!confirm('Tümünü Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
+      this.toastrService.info('Silme İşlemi İptal Edildi');
+      return;
+    }
+
+    this.languages.forEach((language) => {
+      this.languageService.terminate(language).subscribe(
+        (response) => {},
+        (responseError) => console.error
+      );
+    });
+    setTimeout(() => {
+      this.ngOnInit();
+      this.toastrService.success('Tümü Başarı ile kalıcı olarak silindi');
     }, 500);
   }
 

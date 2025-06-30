@@ -36,10 +36,10 @@
           <tr>
             <th>Id</th>
             <th>email</th>
-            <th>companyUserName</th>
-            <th>sectorName</th>
-            <th>taxCityName</th>
-            <th>taxOfficeName</th>
+            <th>company</th>
+            <th>sector</th>
+            <th>taxCity</th>
+            <th>taxOffice</th>
             <th>taxNumber</th>
 
             <th></th>
@@ -56,10 +56,11 @@
         <tbody>
           <tr
             *ngFor="
-              let companyUserDTO of companyUserDTOs | filterUser : filter1
+              let companyUserDTO of companyUserDTOs | filterUser : filter1;
+              index as i
             "
           >
-            <td>{{ companyUserDTO.id }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ companyUserDTO.email }}</td>
             <td>{{ companyUserDTO.companyUserName }}</td>
             <td>{{ companyUserDTO.sectorName }}</td>

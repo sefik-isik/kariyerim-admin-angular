@@ -3,21 +3,26 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <div>
-      <form [formGroup]="updateForm">
+    <form #form="ngForm">
+      <div class="mb-3">
         <div class="form-group">
-          <div class="input-group mb-3">
+          <div class="input-group">
             <span class="input-group-text">City Name</span>
             <input
-              formControlName="cityName"
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="taxOfficeDTO.cityName"
               type="text"
               class="form-control"
-              list="datalist1"
-              id="input1"
-              placeholder="Select City..."
-              (change)="getRegions()"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(taxOfficeDTO.cityName)"
+              list="cityNameDataList"
             />
-            <datalist id="datalist1">
+            <datalist id="cityNameDataList">
               <option
                 *ngFor="let city of cities"
                 value="{{ city.cityName }}"
@@ -25,25 +30,41 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput1()"
+                (click)="cityNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="input-group mb-3">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Region Name</span>
             <input
-              formControlName="regionName"
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="taxOfficeDTO.regionName"
               type="text"
               class="form-control"
-              list="datalist2"
-              id="input2"
-              placeholder="Select Region..."
-              (input)="getRegions()"
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="City Name"
+              list="regionNameDataList"
             />
-            <datalist id="datalist2">
+            <datalist id="regionNameDataList">
               <option
                 *ngFor="let region of regions"
                 value="{{ region.regionName }}"
@@ -51,69 +72,110 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="clearInput2()"
+                (click)="regionNameClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">Tax Office Code</span>
-            <input
-              formControlName="taxOfficeCode"
-              type="number"
-              class="form-control"
-              id="input3"
-              placeholder="Type Tax Office Code"
-              minLength="4"
-              maxlength="5"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput3()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="input-group mb-3">
-            <span class="input-group-text">Tax Office Name</span>
-            <input
-              formControlName="taxOfficeName"
-              type="text"
-              class="form-control"
-              id="input4"
-              placeholder="Type Tax Office Name"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="clearInput4()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-
-          <div class="d-grid gap-2">
-            <button
-              (click)="update()"
-              type="button"
-              class="btn btn-outline-primary"
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
             >
-              Update
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-dark"
-              (click)="activeModal.close('Close click')"
-            >
-              Close
-            </button>
+              {{ error }}
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax Office Code</span>
+            <input
+              required
+              minlength="4"
+              maxlength="4"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="taxOfficeDTO.taxOfficeCode"
+              type="text"
+              class="form-control"
+              name="taxOfficeCode"
+              #taxOfficeCode="ngModel"
+              placeholder="Tax Office Code"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="taxOfficeCodeClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxOfficeCode.valid && taxOfficeCode.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxOfficeCode)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax Office Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="taxOfficeDTO.taxOfficeName"
+              type="text"
+              class="form-control"
+              name="taxOfficeName"
+              #taxOfficeName="ngModel"
+              placeholder="Tax Office Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="taxOfficeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxOfficeName.valid && taxOfficeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxOfficeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>

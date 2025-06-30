@@ -5,13 +5,15 @@ import {
   Validators,
   FormGroup,
   FormBuilder,
+  NgForm,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Department } from '../../../models/department';
+import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-departmentUpdate',
@@ -20,10 +22,9 @@ import { DepartmentService } from '../../../services/department.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DepartmentUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() department: Department;
   departments: Department[];
-  departmentId: number;
+
   componentTitle = 'Department Update Form';
 
   constructor(
@@ -31,37 +32,31 @@ export class DepartmentUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
-    this.createUpdateForm();
-
     setTimeout(() => {
       this.getById(this.department.id);
     }, 200);
   }
 
-  createUpdateForm() {
-    this.updateForm = this.formBuilder.group({
-      departmentName: ['', [Validators.required, Validators.minLength(3)]],
-    });
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
-  getById(id: number) {
+  getById(id: string) {
     this.departmentService.getById(id).subscribe(
       (response) => {
-        this.updateForm.patchValue({
-          departmentName: response.data.departmentName,
-        });
-        this.departmentId = response.data.id;
+        this.department.id = response.data.id;
       },
-      (error) => console.error
+      (responseError) => console.error
     );
   }
 
-  update() {
-    if (this.updateForm.valid) {
+  onSubmit(form: NgForm) {
+    if (form.valid) {
       this.departmentService.update(this.getModel()).subscribe(
         (response) => {
           console.log(response);
@@ -69,8 +64,8 @@ export class DepartmentUpdateComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/department/departmentlisttab']);
         },
-        (error) => {
-          this.toastrService.error(error.error.message);
+        (responseError) => {
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -80,16 +75,15 @@ export class DepartmentUpdateComponent implements OnInit {
 
   getModel(): Department {
     return Object.assign({
-      id: this.departmentId,
-      departmentName: this.updateForm.value.departmentName,
+      id: this.department.id,
+      departmentName: this.department.departmentName,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  clearInput1() {
-    let value = this.updateForm.get('departmentName');
-    value.reset();
+  departmentNameClear() {
+    this.department.departmentName = '';
   }
 }
