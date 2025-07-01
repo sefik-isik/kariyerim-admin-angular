@@ -7,52 +7,68 @@ import { SingleResponseModel } from '../models/response/singleResponseModel';
 import { ResponseModel } from '../models/response/responseModel';
 import { AdminModel } from '../models/auth/adminModel';
 import { AdvertFollowDTO } from '../models/dto/advertFollowDTO';
-import { AdvertFollow } from '../models/component/advertFollow';
+import { PersonelUserAdvertFollow } from '../models/component/personelUserAdvertFollow';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AdvertFollowService {
-  newUrlPath: string = ApiUrl + 'AdvertFollows/';
+export class PersonelUserAdvertFollowService {
+  newUrlPath: string = ApiUrl + 'PersonelUserAdvertFollows/';
 
   constructor(private httpClient: HttpClient) {}
 
-  add(advertFollow: AdvertFollow): Observable<ResponseModel> {
+  add(
+    personelUserAdvertFollow: PersonelUserAdvertFollow
+  ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'add',
-      advertFollow
+      personelUserAdvertFollow
     );
   }
 
-  terminate(advertFollow: AdvertFollow): Observable<ResponseModel> {
+  terminate(
+    personelUserAdvertFollow: PersonelUserAdvertFollow
+  ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'terminate',
-      advertFollow
+      personelUserAdvertFollow
     );
   }
 
-  getAll(adminModel: AdminModel): Observable<ListResponseModel<AdvertFollow>> {
-    return this.httpClient.post<ListResponseModel<AdvertFollow>>(
+  getAll(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertFollow>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserAdvertFollow>>(
       this.newUrlPath + 'getall',
       adminModel
     );
   }
 
-  getById(id: string): Observable<SingleResponseModel<AdvertFollow>> {
+  getById(
+    id: string
+  ): Observable<SingleResponseModel<PersonelUserAdvertFollow>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<AdvertFollow>>(path);
+    return this.httpClient.get<SingleResponseModel<PersonelUserAdvertFollow>>(
+      path
+    );
   }
 
-  getAllByCompanyId(id: string): Observable<SingleResponseModel<AdvertFollow>> {
+  getAllByCompanyId(
+    id: string
+  ): Observable<SingleResponseModel<PersonelUserAdvertFollow>> {
     let path = this.newUrlPath + 'getallbycompanyid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<AdvertFollow>>(path);
+    return this.httpClient.get<SingleResponseModel<PersonelUserAdvertFollow>>(
+      path
+    );
   }
 
   getAllByPersonelId(
     id: string
-  ): Observable<SingleResponseModel<AdvertFollow>> {
+  ): Observable<SingleResponseModel<PersonelUserAdvertFollow>> {
     let path = this.newUrlPath + 'getallbypersonelid?id=' + id;
-    return this.httpClient.get<SingleResponseModel<AdvertFollow>>(path);
+    return this.httpClient.get<SingleResponseModel<PersonelUserAdvertFollow>>(
+      path
+    );
   }
 
   getAllDTO(

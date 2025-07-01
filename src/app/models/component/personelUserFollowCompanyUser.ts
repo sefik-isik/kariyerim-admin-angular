@@ -1,6 +1,6 @@
 import { BaseModel } from '../base/baseModel';
 
-export interface CompanyFollow extends BaseModel {
+export interface PersonelUserFollowCompanyUser extends BaseModel {
   companyUserId: string;
   personelUserId: string;
 }

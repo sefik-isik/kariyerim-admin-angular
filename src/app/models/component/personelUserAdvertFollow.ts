@@ -1,6 +1,6 @@
 import { BaseAdvertModel } from '../base/baseAdvertModel';
 
-export interface AdvertFollow extends BaseAdvertModel {
+export interface PersonelUserAdvertFollow extends BaseAdvertModel {
   companyUserId: string;
   personelUserId: string;
 }
