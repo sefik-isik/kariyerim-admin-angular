@@ -40,7 +40,7 @@ export class WorkingMethodListComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
-        this.workingMethods = response.data;
+        this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

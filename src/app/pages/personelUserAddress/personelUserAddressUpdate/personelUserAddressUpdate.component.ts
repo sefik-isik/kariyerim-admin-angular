@@ -96,7 +96,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data;
+        this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -116,9 +116,9 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
-        this.regions = response.data.filter(
-          (r) => r.cityId === this.getCityId(cityName)
-        );
+        this.regions = response.data
+          .filter((r) => r.cityId === this.getCityId(cityName))
+          .filter((f) => f.regionName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

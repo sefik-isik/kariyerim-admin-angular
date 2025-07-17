@@ -42,7 +42,7 @@ export class SectorListComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data;
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

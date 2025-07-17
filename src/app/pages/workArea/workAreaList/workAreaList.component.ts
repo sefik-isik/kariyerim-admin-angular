@@ -42,7 +42,7 @@ export class WorkAreaListComponent implements OnInit {
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
-        this.workAreas = response.data;
+        this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

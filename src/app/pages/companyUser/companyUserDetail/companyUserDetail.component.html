@@ -28,7 +28,11 @@
     </p>
     <p class="card-text">
       <b>yearOfEstablishment: </b
-      >{{ companyUserDTO.yearOfEstablishment | date : "dd/MM/yyyy " }}
+      >{{
+        companyUserDTO.yearOfEstablishment
+          | date : "dd/MM/yyyy"
+          | nullDateFormat
+      }}
     </p>
     <p class="card-text">
       <b>workerCountId: </b>{{ companyUserDTO.workerCountId }}

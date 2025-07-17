@@ -50,7 +50,7 @@ export class CityListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data;
+        this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -59,7 +59,7 @@ export class CityListComponent implements OnInit {
   getCities() {
     this.cityService.getAllDTO().subscribe(
       (response) => {
-        this.cityDTOs = response.data;
+        this.cityDTOs = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

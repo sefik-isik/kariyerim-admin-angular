@@ -48,7 +48,9 @@ export class UniversityImageListComponent implements OnInit {
   getUniversityImages() {
     this.universityImageService.getAll().subscribe(
       (response) => {
-        this.universityImages = response.data;
+        this.universityImages = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -57,7 +59,9 @@ export class UniversityImageListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data;
+        this.universities = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

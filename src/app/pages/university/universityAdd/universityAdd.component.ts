@@ -58,8 +58,7 @@ export class UniversityAddComponent implements OnInit {
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
         (responseError) => {
-          console.log(responseError);
-          this.toastrService.error(responseError.error.message);
+          console.error;
         }
       );
     } else {
@@ -71,33 +70,52 @@ export class UniversityAddComponent implements OnInit {
     return Object.assign({
       id: '',
       universityName: this.caseService.capitalizeFirstLetter(
-        this.universityModel.universityName.trim()
+        this.universityModel.universityName
       ),
-      sectorId: this.getSectorId(this.universityModel.sectorName.trim()),
+      address: this.universityModel.address,
+      description: this.universityModel.description,
+      subDescription: this.universityModel.subDescription,
+
+      sectorId: this.getSectorId(this.universityModel.sectorName),
       yearOfEstablishment: new Date(
-        this.universityModel.yearOfEstablishment
+        this.setNullDateValue(this.universityModel.yearOfEstablishment)
       ).toJSON(),
-      webAddress: this.universityModel.webAddress.trim(),
-      workerCountId: this.getCountId(
-        this.universityModel.workerCountValue.trim()
+      webAddress: this.setNullValue(this.universityModel.webAddress),
+      workerCountId: this.getCountId(this.universityModel.workerCountValue),
+      webNewsAddress: this.setNullValue(this.universityModel.webNewsAddress),
+      youTubeEmbedAddress: this.setNullValue(
+        this.universityModel.youTubeEmbedAddress
       ),
-      webNewsAddress: this.universityModel.webNewsAddress.trim(),
-      youTubeEmbedAddress: this.universityModel.youTubeEmbedAddress.trim(),
-      address: this.universityModel.address.trim(),
-      facebookAddress: this.universityModel.facebookAddress.trim(),
-      instagramAddress: this.universityModel.instagramAddress.trim(),
-      xAddress: this.universityModel.xAddress.trim(),
-      youTubeAddress: this.universityModel.youTubeAddress.trim(),
-      description: this.universityModel.description.trim(),
-      subDescription: this.universityModel.subDescription.trim(),
+      facebookAddress: this.setNullValue(this.universityModel.facebookAddress),
+      instagramAddress: this.setNullValue(
+        this.universityModel.instagramAddress
+      ),
+      xAddress: this.setNullValue(this.universityModel.xAddress),
+      youTubeAddress: this.setNullValue(this.universityModel.youTubeAddress),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  setNullValue(value: string) {
+    if (value == null || value == '') {
+      value = '-';
+    } else {
+      this.caseService.capitalizeFirstLetter(value);
+    }
+    return value;
+  }
+
+  setNullDateValue(value: string) {
+    if (value == null || value == '') {
+      value = '01.01.1900';
+    }
+    return value;
   }
 
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
-        this.counts = response.data;
+        this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -106,13 +124,16 @@ export class UniversityAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data;
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getSectorId(sectorName: string): string {
+    if (sectorName == null || sectorName == '') {
+      sectorName = '-';
+    }
     const companyUserSectorId = this.sectors.filter(
       (c) => c.sectorName === sectorName
     )[0]?.id;
@@ -121,6 +142,9 @@ export class UniversityAddComponent implements OnInit {
   }
 
   getCountId(countValue: string): string {
+    if (countValue == null || countValue == '') {
+      countValue = '-';
+    }
     const countId = this.counts.filter((c) => c.countValue === countValue)[0]
       ?.id;
 

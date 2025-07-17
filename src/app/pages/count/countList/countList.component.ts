@@ -30,18 +30,18 @@ export class CountListComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
 
-    this.getLicenseDegrees();
+    this.getCounts();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getLicenseDegrees();
+        this.getCounts();
       }
     });
   }
 
-  getLicenseDegrees() {
+  getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
-        this.counts = response.data;
+        this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

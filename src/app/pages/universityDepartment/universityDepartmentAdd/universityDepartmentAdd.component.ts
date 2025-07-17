@@ -88,7 +88,9 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data;
+        this.universities = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -97,7 +99,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
-        this.faculties = response.data;
+        this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -106,7 +108,9 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data.filter((c) => c.isCompany === false);
+        this.departments = response.data
+          .filter((c) => c.isCompany === false)
+          .filter((f) => f.departmentName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

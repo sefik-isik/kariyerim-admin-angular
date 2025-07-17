@@ -44,7 +44,9 @@ export class DepartmentDescriptionListComponent implements OnInit {
   getDepartmentDescriptions() {
     this.departmentDescriptionService.getAllDTO().subscribe(
       (response) => {
-        this.departmentDescriptionDTOs = response.data;
+        this.departmentDescriptionDTOs = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

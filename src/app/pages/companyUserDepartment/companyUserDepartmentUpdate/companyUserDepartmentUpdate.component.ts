@@ -83,7 +83,9 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data.filter((c) => c.isCompany === true);
+        this.departments = response.data
+          .filter((c) => c.isCompany === true)
+          .filter((f) => f.departmentName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

@@ -92,7 +92,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
-        this.operationClaims = response.data;
+        this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

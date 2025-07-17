@@ -74,6 +74,17 @@ export class UserOperationClaimListComponent implements OnInit {
     );
   }
 
+  getUserOperationClaims(adminModel: AdminModel) {
+    this.userOperationClaimService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.userOperationClaimDTOs = response.data.filter(
+          (f) => f.operationClaimName != '-'
+        );
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
+  }
+
   getUsers(adminModel: AdminModel) {
     this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
@@ -83,19 +94,10 @@ export class UserOperationClaimListComponent implements OnInit {
     );
   }
 
-  getUserOperationClaims(adminModel: AdminModel) {
-    this.userOperationClaimService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.userOperationClaimDTOs = response.data;
-      },
-      (responseError) => this.toastrService.error(responseError.error.message)
-    );
-  }
-
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
-        this.operationClaims = response.data;
+        this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

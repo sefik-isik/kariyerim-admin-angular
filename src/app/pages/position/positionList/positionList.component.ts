@@ -42,7 +42,7 @@ export class PositionListComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
-        this.positions = response.data;
+        this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => console.log(responseError)
     );

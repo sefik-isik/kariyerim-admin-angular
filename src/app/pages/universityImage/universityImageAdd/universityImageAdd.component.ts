@@ -145,7 +145,9 @@ export class UniversityImageAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
-        this.universities = response.data;
+        this.universities = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

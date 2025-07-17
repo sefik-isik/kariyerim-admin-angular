@@ -76,7 +76,7 @@ export class RegionAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data;
+        this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -85,7 +85,7 @@ export class RegionAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

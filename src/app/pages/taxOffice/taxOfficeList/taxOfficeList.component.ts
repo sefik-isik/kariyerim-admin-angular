@@ -50,30 +50,26 @@ export class TaxOfficeListComponent implements OnInit {
       }
     });
   }
-
-  getCities() {
-    this.cityService.getAll().subscribe(
+  getTaxOffices() {
+    this.taxOfficeService.getAllDTO().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.taxOfficeDTOs = response.data.filter(
+          (f) => f.taxOfficeName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
-  getTaxOffices() {
-    this.taxOfficeService.getAllDTO().subscribe(
+  getCities() {
+    this.cityService.getAll().subscribe(
       (response) => {
-        this.taxOfficeDTOs = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(taxOfficeDTO: TaxOfficeDTO) {
-    // if (!this.authService.isAdmin()) {
-    //   this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
-    //   return;
-    // }
     if (!confirm('Silmek istediğinize emin misiniz?')) {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;

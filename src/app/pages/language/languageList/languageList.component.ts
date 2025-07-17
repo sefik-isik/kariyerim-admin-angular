@@ -19,7 +19,6 @@ import { LanguageDetailComponent } from '../languageDetail/languageDetail.compon
 export class LanguageListComponent implements OnInit {
   languages: Language[] = [];
   admin: boolean = false;
-
   componentTitle = 'Languages';
   filter1: string;
 
@@ -43,7 +42,7 @@ export class LanguageListComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data;
+        this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

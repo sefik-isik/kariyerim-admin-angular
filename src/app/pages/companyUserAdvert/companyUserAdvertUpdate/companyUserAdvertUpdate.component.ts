@@ -33,6 +33,8 @@ import { LanguageLevel } from '../../../models/component/languageLevel';
 import { DriverLicence } from '../../../models/component/driverLicence';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { AuthService } from '../../../services/auth.service';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 
 @Component({
   selector: 'app-companyUserAdvertUpdate',
@@ -42,6 +44,8 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class CompanyUserAdvertUpdateComponent implements OnInit {
   @Input() companyUserAdvertDTO: CompanyUserAdvertDTO;
+  userDTOs: UserDTO[] = [];
+  companyUsers: CompanyUserDTO[] = [];
   workAreas: WorkArea[] = [];
   workingMethods: WorkingMethod[] = [];
   experiences: Experience[] = [];
@@ -112,7 +116,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
     if (!allowedImageTypes.includes(this.selectedImage.type)) {
       this.toastrService.error(
-        'Please select a image with .png, .jpeg, or .gif extension',
+        'Please select a image with .png, .jpeg, webp or .gif extension',
         'Invalid image type'
       );
     } else if (this.selectedImage.size > 5 * 1024 * 1024) {
@@ -258,7 +262,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
-        this.workAreas = response.data;
+        this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -266,7 +270,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
-        this.workingMethods = response.data;
+        this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -274,7 +278,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
-        this.experiences = response.data;
+        this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -301,7 +305,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
-        this.positions = response.data;
+        this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -310,7 +314,9 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
-        this.positionLevels = response.data;
+        this.positionLevels = response.data.filter(
+          (f) => f.positionLevelName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -319,7 +325,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data;
+        this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -328,7 +334,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data;
+        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -337,10 +343,26 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.driverLicenceName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
+  }
+
+  getCompanyUserId(companyUserName: string): string {
+    const companyUserId = this.companyUsers.filter(
+      (c) => c.companyUserName === companyUserName
+    )[0]?.id;
+
+    return companyUserId;
+  }
+
+  getUserId(email: string): string {
+    const userId = this.userDTOs.filter((u) => u.email === email)[0]?.id;
+
+    return userId;
   }
 
   getWorkAreaId(workAreaName: string): string {
@@ -357,12 +379,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
     return workingMethodId;
   }
-  getExperienceId(experienceName: string): string {
-    const experienceId = this.experiences.filter(
-      (e) => e.experienceName === experienceName
-    )[0]?.id;
-    return experienceId;
-  }
 
   getCompanyUserDepartmentId(departmentName: string): string {
     const departmentId = this.companyUserDepartments.filter(
@@ -370,13 +386,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     )[0]?.id;
 
     return departmentId;
-  }
-  getLicenseDegreeId(licenseDegreeName: string): string {
-    const licenceDegreeId = this.licenseDegrees.filter(
-      (l) => l.licenseDegreeName === licenseDegreeName
-    )[0]?.id;
-
-    return licenceDegreeId;
   }
 
   getPositionId(positionName: string): string {
@@ -395,7 +404,42 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     return positionLevelNameId;
   }
 
+  getExperienceId(experienceName: string): string {
+    if (experienceName == null || experienceName == '') {
+      experienceName = '-';
+    }
+    const experienceId = this.experiences.filter(
+      (e) => e.experienceName === experienceName
+    )[0]?.id;
+    return experienceId;
+  }
+
+  getLicenseDegreeId(licenseDegreeName: string): string {
+    if (licenseDegreeName == null || licenseDegreeName == '') {
+      licenseDegreeName = '-';
+    }
+    const licenceDegreeId = this.licenseDegrees.filter(
+      (l) => l.licenseDegreeName === licenseDegreeName
+    )[0]?.id;
+
+    return licenceDegreeId;
+  }
+
+  getDriverLicenceId(driverLicenceName: string): string {
+    if (driverLicenceName == null || driverLicenceName == '') {
+      driverLicenceName = '-';
+    }
+    const languageLevelId = this.driverLicences.filter(
+      (l) => l.driverLicenceName === driverLicenceName
+    )[0]?.id;
+
+    return languageLevelId;
+  }
+
   getLanguageId(languageName: string): string {
+    if (languageName == null || languageName == '') {
+      languageName = '-';
+    }
     const languageId = this.languages.filter(
       (l) => l.languageName === languageName
     )[0]?.id;
@@ -404,16 +448,11 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   }
 
   getLanguageLevelId(languageLevelName: string): string {
+    if (languageLevelName == null || languageLevelName == '') {
+      languageLevelName = '-';
+    }
     const languageLevelId = this.languageLevels.filter(
       (l) => l.levelTitle === languageLevelName
-    )[0]?.id;
-
-    return languageLevelId;
-  }
-
-  getDriverLicenceId(driverLicenceName: string): string {
-    const languageLevelId = this.driverLicences.filter(
-      (l) => l.driverLicenceName === driverLicenceName
     )[0]?.id;
 
     return languageLevelId;

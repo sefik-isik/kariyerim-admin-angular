@@ -53,7 +53,7 @@ export class DepartmentListComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data;
+        this.departments = response.data.filter((f) => f.departmentName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

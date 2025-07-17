@@ -42,7 +42,7 @@ export class LanguageLevelListComponent implements OnInit {
   getFaculties() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data;
+        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

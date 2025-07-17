@@ -41,7 +41,9 @@ export class DriverLicenceListComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.driverLicenceName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

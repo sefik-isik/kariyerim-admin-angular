@@ -43,7 +43,7 @@ export class CountryListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data;
+        this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

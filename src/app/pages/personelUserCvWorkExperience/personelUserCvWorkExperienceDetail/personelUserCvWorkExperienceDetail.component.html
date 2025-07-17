@@ -58,10 +58,12 @@
       <b>position: </b>{{ personelUserCvWorkExperienceDTO.positionName }}
     </p>
     <p class="card-text">
-      <b>startDate: </b>{{ personelUserCvWorkExperienceDTO.startDate }}
+      <b>startDate: </b
+      >{{ personelUserCvWorkExperienceDTO.startDate | nullDateFormat }}
     </p>
     <p class="card-text">
-      <b>endDate: </b>{{ personelUserCvWorkExperienceDTO.endDate }}
+      <b>endDate: </b
+      >{{ personelUserCvWorkExperienceDTO.endDate | nullDateFormat }}
     </p>
     <p class="card-text">
       <b>foundJobInHere: </b

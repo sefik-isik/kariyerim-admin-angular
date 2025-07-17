@@ -43,7 +43,9 @@ export class PositionLevelListComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
-        this.positionLevels = response.data;
+        this.positionLevels = response.data.filter(
+          (f) => f.positionLevelName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

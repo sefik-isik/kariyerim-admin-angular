@@ -72,10 +72,18 @@
             <td>{{ personelUserCvEducationDTO.departmentName }}</td>
             <td>{{ personelUserCvEducationDTO.educationInfo }}</td>
             <td>
-              {{ personelUserCvEducationDTO.startDate | date : "dd/MM/yyyy" }}
+              {{
+                personelUserCvEducationDTO.startDate
+                  | date : "dd/MM/yyyy"
+                  | nullDateFormat
+              }}
             </td>
             <td>
-              {{ personelUserCvEducationDTO.endDate | date : "dd/MM/yyyy" }}
+              {{
+                personelUserCvEducationDTO.endDate
+                  | date : "dd/MM/yyyy"
+                  | nullDateFormat
+              }}
             </td>
 
             <td>

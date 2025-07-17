@@ -73,7 +73,7 @@ export class UniversityUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          console.error;
         }
       );
     } else {
@@ -85,29 +85,46 @@ export class UniversityUpdateComponent implements OnInit {
     return Object.assign({
       id: this.universityDTO.id,
       universityName: this.caseService.capitalizeFirstLetter(
-        this.universityDTO.universityName.trim()
+        this.universityDTO.universityName
       ),
-      sectorId: this.getSectorId(this.universityDTO.sectorName.trim()),
+      address: this.universityDTO.address,
+      description: this.universityDTO.description,
+      subDescription: this.universityDTO.subDescription,
+
+      sectorId: this.getSectorId(this.universityDTO.sectorName),
       yearOfEstablishment: new Date(
-        this.universityDTO.yearOfEstablishment
+        this.setNullDateValue(this.universityDTO.yearOfEstablishment)
       ).toJSON(),
-      webAddress: this.universityDTO.webAddress.trim(),
-      workerCountId: this.getCountId(
-        this.universityDTO.workerCountValue.trim()
+      webAddress: this.setNullValue(this.universityDTO.webAddress),
+      workerCountId: this.getCountId(this.universityDTO.workerCountValue),
+      webNewsAddress: this.setNullValue(this.universityDTO.webNewsAddress),
+      youTubeEmbedAddress: this.setNullValue(
+        this.universityDTO.youTubeEmbedAddress
       ),
-      webNewsAddress: this.universityDTO.webNewsAddress.trim(),
-      youTubeEmbedAddress: this.universityDTO.youTubeEmbedAddress.trim(),
-      address: this.universityDTO.address.trim(),
-      facebookAddress: this.universityDTO.facebookAddress.trim(),
-      instagramAddress: this.universityDTO.instagramAddress.trim(),
-      xAddress: this.universityDTO.xAddress.trim(),
-      youTubeAddress: this.universityDTO.youTubeAddress.trim(),
-      description: this.universityDTO.description.trim(),
-      subDescription: this.universityDTO.subDescription.trim(),
+      facebookAddress: this.setNullValue(this.universityDTO.facebookAddress),
+      instagramAddress: this.setNullValue(this.universityDTO.instagramAddress),
+      xAddress: this.setNullValue(this.universityDTO.xAddress),
+      youTubeAddress: this.setNullValue(this.universityDTO.youTubeAddress),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  setNullValue(value: string) {
+    if (value == null || value == '') {
+      value = '-';
+    } else {
+      this.caseService.capitalizeFirstLetter(value);
+    }
+    return value;
+  }
+
+  setNullDateValue(value: string) {
+    if (value == null || value == '') {
+      value = '01.01.1900';
+    }
+    return value;
   }
 
   formatDate(dateString: string): string {
@@ -121,7 +138,7 @@ export class UniversityUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
-        this.counts = response.data;
+        this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -130,13 +147,16 @@ export class UniversityUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data;
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getCountId(countValue: string): string {
+    if (countValue == null || countValue == '') {
+      countValue = '-';
+    }
     const countId = this.counts.filter((c) => c.countValue === countValue)[0]
       ?.id;
 
@@ -148,6 +168,9 @@ export class UniversityUpdateComponent implements OnInit {
   }
 
   getSectorId(sectorName: string): string {
+    if (sectorName == null || sectorName == '') {
+      sectorName = '-';
+    }
     const companyUserSectorId = this.sectors.filter(
       (c) => c.sectorName === sectorName
     )[0]?.id;

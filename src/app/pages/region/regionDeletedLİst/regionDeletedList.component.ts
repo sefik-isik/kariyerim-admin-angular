@@ -53,7 +53,7 @@ export class RegionDeletedListComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

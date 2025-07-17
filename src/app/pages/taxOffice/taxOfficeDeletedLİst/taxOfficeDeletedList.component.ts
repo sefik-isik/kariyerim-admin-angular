@@ -52,7 +52,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   getCities() {
     this.cityService.getDeletedAllDTO().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

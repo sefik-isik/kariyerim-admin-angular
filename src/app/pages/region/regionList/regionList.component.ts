@@ -51,19 +51,19 @@ export class RegionListComponent implements OnInit {
     });
   }
 
-  getCities() {
-    this.cityService.getAll().subscribe(
+  getRegions() {
+    this.regionService.getAllDTO().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.regionDTOs = response.data.filter((f) => f.regionName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getRegions() {
-    this.regionService.getAllDTO().subscribe(
+  getCities() {
+    this.cityService.getAll().subscribe(
       (response) => {
-        this.regionDTOs = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

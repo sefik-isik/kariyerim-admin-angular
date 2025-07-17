@@ -18,7 +18,9 @@
     </p>
     <p class="card-text">
       <b>yearOfEstablishment: </b
-      >{{ universityDTO.yearOfEstablishment | date : "dd/MM/yyyy" }}
+      >{{
+        universityDTO.yearOfEstablishment | date : "dd/MM/yyyy" | nullDateFormat
+      }}
     </p>
     <p class="card-text"><b>description: </b>{{ universityDTO.description }}</p>
     <p class="card-text">

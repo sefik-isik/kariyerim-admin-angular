@@ -147,7 +147,7 @@ export class PersonelUserAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -157,7 +157,7 @@ export class PersonelUserAddComponent implements OnInit {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
         this.licenseDegrees = response.data.filter(
-          (f) => f.deletedDate == null
+          (f) => f.licenseDegreeName != '-'
         );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
@@ -168,7 +168,7 @@ export class PersonelUserAddComponent implements OnInit {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
         this.driverLicences = response.data.filter(
-          (f) => f.deletedDate == null
+          (f) => f.driverLicenceName != '-'
         );
       },
       (responseError) => this.toastrService.error(responseError.error.message)

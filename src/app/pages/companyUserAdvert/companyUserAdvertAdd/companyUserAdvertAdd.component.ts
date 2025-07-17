@@ -200,45 +200,40 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getModel(): CompanyUserAdvert {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.companyUserAdvertModel.email.trim()),
+      userId: this.getUserId(this.companyUserAdvertModel.email),
       companyUserId: this.getCompanyUserId(
-        this.companyUserAdvertModel.companyUserName.trim()
+        this.companyUserAdvertModel.companyUserName
       ),
-      advertName: this.companyUserAdvertModel.advertName.trim(),
-      advertImageName: this.imageName.trim(),
-      advertImagePath: this.imagePath.trim(),
-      advertImageOwnName: this.companyUserAdvertModel.advertImageOwnName.trim(),
-      workAreaId: this.getWorkAreaId(
-        this.companyUserAdvertModel.workAreaName.trim()
-      ),
+      advertName: this.companyUserAdvertModel.advertName,
+      advertImageName: this.imageName,
+      advertImagePath: this.imagePath,
+      advertImageOwnName: this.companyUserAdvertModel.advertImageOwnName,
+      workAreaId: this.getWorkAreaId(this.companyUserAdvertModel.workAreaName),
       workingMethodId: this.getWorkingMethodId(
-        this.companyUserAdvertModel.workingMethodName.trim()
-      ),
-      experienceId: this.getExperienceId(
-        this.companyUserAdvertModel.experienceName.trim()
+        this.companyUserAdvertModel.workingMethodName
       ),
       departmentId: this.getCompanyUserDepartmentId(
-        this.companyUserAdvertModel.departmentName.trim()
+        this.companyUserAdvertModel.departmentName
+      ),
+      positionId: this.getPositionId(this.companyUserAdvertModel.positionName),
+      positionLevelId: this.getPositionLevelId(
+        this.companyUserAdvertModel.positionLevelName
+      ),
+
+      experienceId: this.getExperienceId(
+        this.companyUserAdvertModel.experienceName
       ),
       licenseDegreeId: this.getLicenseDegreeId(
-        this.companyUserAdvertModel.licenseDegreeName.trim()
-      ),
-      positionId: this.getPositionId(
-        this.companyUserAdvertModel.positionName.trim()
-      ),
-      positionLevelId: this.getPositionLevelId(
-        this.companyUserAdvertModel.positionLevelName.trim()
-      ),
-      militaryStatus: this.companyUserAdvertModel.militaryStatus,
-      languageId: this.getLanguageId(
-        this.companyUserAdvertModel.languageName.trim()
-      ),
-      languageLevelId: this.getLanguageLevelId(
-        this.companyUserAdvertModel.languageLevelName.trim()
+        this.companyUserAdvertModel.licenseDegreeName
       ),
       driverLicenceId: this.getDriverLicenceId(
-        this.companyUserAdvertModel.driverLicenceName.trim()
+        this.companyUserAdvertModel.driverLicenceName
       ),
+      languageId: this.getLanguageId(this.companyUserAdvertModel.languageName),
+      languageLevelId: this.getLanguageLevelId(
+        this.companyUserAdvertModel.languageLevelName
+      ),
+      militaryStatus: this.companyUserAdvertModel.militaryStatus,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -254,7 +249,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
@@ -270,7 +264,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getCompanyUsers(adminModel: AdminModel) {
     const userId = this.getUserId(this.companyUserAdvertModel.email);
 
@@ -281,56 +274,54 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
-        this.positions = response.data;
+        this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
-        this.driverLicences = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.driverLicenceName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
-        this.positionLevels = response.data;
+        this.positionLevels = response.data.filter(
+          (f) => f.positionLevelName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data;
+        this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data;
+        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
-        this.workAreas = response.data;
+        this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -338,7 +329,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
-        this.workingMethods = response.data;
+        this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -346,12 +337,11 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
-        this.experiences = response.data;
+        this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
   getCompanyUserDepartments(adminModel: AdminModel) {
     this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
       (response) => {
@@ -368,6 +358,14 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
+  }
+
+  getCompanyUserId(companyUserName: string): string {
+    const companyUserId = this.companyUsers.filter(
+      (c) => c.companyUserName === companyUserName
+    )[0]?.id;
+
+    return companyUserId;
   }
 
   getUserId(email: string): string {
@@ -390,12 +388,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
 
     return workingMethodId;
   }
-  getExperienceId(experienceName: string): string {
-    const experienceId = this.experiences.filter(
-      (e) => e.experienceName === experienceName
-    )[0]?.id;
-    return experienceId;
-  }
 
   getCompanyUserDepartmentId(departmentName: string): string {
     const departmentId = this.companyUserDepartments.filter(
@@ -403,13 +395,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     )[0]?.id;
 
     return departmentId;
-  }
-  getLicenseDegreeId(licenseDegreeName: string): string {
-    const licenceDegreeId = this.licenseDegrees.filter(
-      (l) => l.licenseDegreeName === licenseDegreeName
-    )[0]?.id;
-
-    return licenceDegreeId;
   }
 
   getPositionId(positionName: string): string {
@@ -428,7 +413,42 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     return positionLevelNameId;
   }
 
+  getExperienceId(experienceName: string): string {
+    if (experienceName == null || experienceName == '') {
+      experienceName = '-';
+    }
+    const experienceId = this.experiences.filter(
+      (e) => e.experienceName === experienceName
+    )[0]?.id;
+    return experienceId;
+  }
+
+  getLicenseDegreeId(licenseDegreeName: string): string {
+    if (licenseDegreeName == null || licenseDegreeName == '') {
+      licenseDegreeName = '-';
+    }
+    const licenceDegreeId = this.licenseDegrees.filter(
+      (l) => l.licenseDegreeName === licenseDegreeName
+    )[0]?.id;
+
+    return licenceDegreeId;
+  }
+
+  getDriverLicenceId(driverLicenceName: string): string {
+    if (driverLicenceName == null || driverLicenceName == '') {
+      driverLicenceName = '-';
+    }
+    const languageLevelId = this.driverLicences.filter(
+      (l) => l.driverLicenceName === driverLicenceName
+    )[0]?.id;
+
+    return languageLevelId;
+  }
+
   getLanguageId(languageName: string): string {
+    if (languageName == null || languageName == '') {
+      languageName = '-';
+    }
     const languageId = this.languages.filter(
       (l) => l.languageName === languageName
     )[0]?.id;
@@ -437,27 +457,14 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   }
 
   getLanguageLevelId(languageLevelName: string): string {
+    if (languageLevelName == null || languageLevelName == '') {
+      languageLevelName = '-';
+    }
     const languageLevelId = this.languageLevels.filter(
       (l) => l.levelTitle === languageLevelName
     )[0]?.id;
 
     return languageLevelId;
-  }
-
-  getDriverLicenceId(driverLicenceName: string): string {
-    const languageLevelId = this.driverLicences.filter(
-      (l) => l.driverLicenceName === driverLicenceName
-    )[0]?.id;
-
-    return languageLevelId;
-  }
-
-  getCompanyUserId(companyUserName: string): string {
-    const companyUserId = this.companyUsers.filter(
-      (c) => c.companyUserName === companyUserName
-    )[0]?.id;
-
-    return companyUserId;
   }
 
   emailClear() {

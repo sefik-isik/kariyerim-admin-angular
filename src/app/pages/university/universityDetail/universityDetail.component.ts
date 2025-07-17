@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
+import { NullDateFormatPipe } from '../../../pipes/nullDateFormat.pipe';
 
 @Component({
   selector: 'app-universityDetail',
   templateUrl: './universityDetail.component.html',
   styleUrls: ['./universityDetail.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, NullDateFormatPipe],
 })
 export class UniversityDetailComponent implements OnInit {
   @Input() universityDTO: UniversityDTO;

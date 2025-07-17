@@ -15,12 +15,18 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { NullDateFormatPipe } from '../../../pipes/nullDateFormat.pipe';
 
 @Component({
   selector: 'app-personelUserCvEducationList',
   templateUrl: './personelUserCvEducationList.component.html',
   styleUrls: ['./personelUserCvEducationList.component.css'],
-  imports: [CommonModule, FormsModule, FilterPersonelUserCvEducationByUserPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FilterPersonelUserCvEducationByUserPipe,
+    NullDateFormatPipe,
+  ],
 })
 export class PersonelUserCvEducationListComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];

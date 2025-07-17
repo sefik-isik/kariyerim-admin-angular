@@ -21,7 +21,8 @@
       <b>birthPlaceName: </b>{{ personelUserDTO.birthPlaceName }}
     </p>
     <p class="card-text">
-      <b>dateOfBirth: </b>{{ personelUserDTO.dateOfBirth }}
+      <b>dateOfBirth: </b
+      >{{ personelUserDTO.dateOfBirth | date : "dd/MM/yyyy" | nullDateFormat }}
     </p>
     <p class="card-text">
       <b>driverLicenceId: </b>{{ personelUserDTO.driverLicenceId }}

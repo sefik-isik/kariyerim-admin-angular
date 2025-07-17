@@ -222,7 +222,7 @@
               class="form-control"
               name="workAreaName"
               #workAreaName="ngModel"
-              placeholder="Work Area Name"
+              placeholder="Work Area"
               list="workAreaNameDataList"
             />
             <datalist id="workAreaNameDataList">
@@ -264,7 +264,7 @@
               class="form-control"
               name="workingMethodName"
               #workingMethodName="ngModel"
-              placeholder="Working Method Name"
+              placeholder="Working Method"
               list="workingMethodNameDataList"
             />
             <datalist id="workingMethodNameDataList">
@@ -295,48 +295,6 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Experience Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              [(ngModel)]="companyUserAdvertModel.experienceName"
-              type="text"
-              class="form-control"
-              name="experienceName"
-              #experienceName="ngModel"
-              placeholder="Experience Name"
-              list="experienceNameDataList"
-            />
-            <datalist id="experienceNameDataList">
-              <option
-                *ngFor="let experience of experiences"
-                value="{{ experience.experienceName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="experienceNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!experienceName.valid && experienceName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(experienceName)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
             <span class="input-group-text">Department Name</span>
             <input
               required
@@ -348,7 +306,7 @@
               class="form-control"
               name="companyUserDepartmentName"
               #companyUserDepartmentName="ngModel"
-              placeholder="Department Name"
+              placeholder="Department"
               list="companyUserDepartmentNameDataList"
             />
             <datalist id="companyUserDepartmentNameDataList">
@@ -383,89 +341,6 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">License Degree Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              [(ngModel)]="companyUserAdvertModel.licenseDegreeName"
-              type="text"
-              class="form-control"
-              name="licenseDegreeName"
-              #licenseDegreeName="ngModel"
-              placeholder="License Degree Name"
-              list="licenseDegreeNameDataList"
-            />
-            <datalist id="licenseDegreeNameDataList">
-              <option
-                *ngFor="let licenseDegree of licenseDegrees"
-                value="{{ licenseDegree.licenseDegreeName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="licenseDegreeNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!licenseDegreeName.valid && licenseDegreeName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(licenseDegreeName)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Driver Licence Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="3"
-              pattern=""
-              [(ngModel)]="companyUserAdvertModel.driverLicenceName"
-              type="text"
-              class="form-control"
-              name="driverLicenceName"
-              #driverLicenceName="ngModel"
-              placeholder="Driver Licence Name"
-              list="driverLicenceNameDataList"
-            />
-            <datalist id="driverLicenceNameDataList">
-              <option
-                *ngFor="let driverLicence of driverLicences"
-                value="{{ driverLicence.driverLicenceName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="driverLicenceNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!driverLicenceName.valid && driverLicenceName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(driverLicenceName)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -522,7 +397,7 @@
               class="form-control"
               name="positionLevelName"
               #positionLevelName="ngModel"
-              placeholder="Position"
+              placeholder="Position Level"
               list="positionLevelNameDataList"
             />
             <datalist id="positionLevelNameDataList">
@@ -550,13 +425,133 @@
         </div>
       </div>
 
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Experience Name</span>
+            <input
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.experienceName"
+              type="text"
+              class="form-control"
+              name="experienceName"
+              #experienceName="ngModel"
+              placeholder="Experience"
+              list="experienceNameDataList"
+            />
+            <datalist id="experienceNameDataList">
+              <option
+                *ngFor="let experience of experiences"
+                value="{{ experience.experienceName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="experienceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!experienceName.valid && experienceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(experienceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">License Degree Name</span>
+            <input
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.licenseDegreeName"
+              type="text"
+              class="form-control"
+              name="licenseDegreeName"
+              #licenseDegreeName="ngModel"
+              placeholder="License Degree"
+              list="licenseDegreeNameDataList"
+            />
+            <datalist id="licenseDegreeNameDataList">
+              <option
+                *ngFor="let licenseDegree of licenseDegrees"
+                value="{{ licenseDegree.licenseDegreeName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="licenseDegreeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!licenseDegreeName.valid && licenseDegreeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(licenseDegreeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Driver Licence Name</span>
+            <input
+              maxlength="3"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.driverLicenceName"
+              type="text"
+              class="form-control"
+              name="driverLicenceName"
+              #driverLicenceName="ngModel"
+              placeholder="Driver Licence"
+              list="driverLicenceNameDataList"
+            />
+            <datalist id="driverLicenceNameDataList">
+              <option
+                *ngFor="let driverLicence of driverLicences"
+                value="{{ driverLicence.driverLicenceName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="driverLicenceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!driverLicenceName.valid && driverLicenceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(driverLicenceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Language Name</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAdvertModel.languageName"
@@ -564,7 +559,7 @@
               class="form-control"
               name="languageName"
               #languageName="ngModel"
-              placeholder="Language Name"
+              placeholder="Language"
               list="languageNameDataList"
             />
             <datalist id="languageNameDataList">
@@ -597,8 +592,6 @@
           <div class="input-group">
             <span class="input-group-text">Language Level Name</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAdvertModel.languageLevelName"
@@ -606,7 +599,7 @@
               class="form-control"
               name="languageLevelName"
               #languageLevelName="ngModel"
-              placeholder="Language"
+              placeholder="Language Level"
               list="languageLevelNameDataList"
             />
             <datalist id="languageLevelNameDataList">

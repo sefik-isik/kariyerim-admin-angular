@@ -40,7 +40,9 @@ export class LicenseDegreeListComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
-        this.licenseDegrees = response.data;
+        this.licenseDegrees = response.data.filter(
+          (f) => f.licenseDegreeName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

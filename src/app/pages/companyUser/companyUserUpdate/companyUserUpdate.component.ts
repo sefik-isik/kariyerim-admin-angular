@@ -155,7 +155,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
-        this.counts = response.data;
+        this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -164,7 +164,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -173,7 +173,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.sectors = response.data;
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -183,11 +183,11 @@ export class CompanyUserUpdateComponent implements OnInit {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
         if (taxCityName == '-') {
-          this.taxOffices = response.data;
+          this.taxOffices = response.data.filter((f) => f.taxOfficeName != '-');
         } else {
-          this.taxOffices = response.data.filter(
-            (f) => f.cityId === this.getCityId(taxCityName)
-          );
+          this.taxOffices = response.data
+            .filter((f) => f.cityId === this.getCityId(taxCityName))
+            .filter((f) => f.taxOfficeName != '-');
         }
       },
       (responseError) => this.toastrService.error(responseError.error.message)

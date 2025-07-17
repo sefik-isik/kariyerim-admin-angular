@@ -4,6 +4,7 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -42,10 +43,121 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ addressDetail }} \ 50-500</span
+            >
+            <textarea
+              required
+              minlength="50"
+              maxlength="500"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.address"
+              name="address"
+              #address="ngModel"
+              style="height: 80px"
+              (input)="countAddress()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="addressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!address.valid && address.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(address)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Description <br />{{ descriptionDetail }} \ 100-3000</span
+            >
+            <textarea
+              required
+              minlength="100"
+              maxlength="3000"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.description"
+              name="description"
+              #description="ngModel"
+              style="height: 100px"
+              (input)="countDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Sub Description <br />{{ subDescriptionDetail }} \ 100-3000</span
+            >
+            <textarea
+              required
+              minlength="100"
+              maxlength="3000"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityModel.subDescription"
+              name="subDescription"
+              #subDescription="ngModel"
+              style="height: 100px"
+              (input)="countSubDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="subDescriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!subDescription.valid && subDescription.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(subDescription)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Year Of Establishment</span>
             <input
-              required
-              minlength="3"
               maxlength="10"
               pattern=""
               [(ngModel)]="universityModel.yearOfEstablishment"
@@ -53,7 +165,7 @@
               class="form-control"
               name="yearOfEstablishment"
               #yearOfEstablishment="ngModel"
-              placeholder="yearOfEstablishment"
+              placeholder="Year Of Establishment"
             />
             <span class="input-group-text">
               <i
@@ -81,8 +193,6 @@
           <div class="input-group">
             <span class="input-group-text">Worker Count</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.workerCountValue"
@@ -123,8 +233,6 @@
           <div class="input-group">
             <span class="input-group-text">Sector Name</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.sectorName"
@@ -165,8 +273,6 @@
           <div class="input-group">
             <span class="input-group-text">Web Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.webAddress"
@@ -200,8 +306,6 @@
           <div class="input-group">
             <span class="input-group-text">Web News Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.webNewsAddress"
@@ -235,8 +339,6 @@
           <div class="input-group">
             <span class="input-group-text">YouTube Embed Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.youTubeEmbedAddress"
@@ -272,8 +374,6 @@
           <div class="input-group">
             <span class="input-group-text">Facebook Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.facebookAddress"
@@ -307,8 +407,6 @@
           <div class="input-group">
             <span class="input-group-text">Instagram Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.instagramAddress"
@@ -342,8 +440,6 @@
           <div class="input-group">
             <span class="input-group-text">X Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.xAddress"
@@ -377,8 +473,6 @@
           <div class="input-group">
             <span class="input-group-text">YouTube Address</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.youTubeAddress"
@@ -400,117 +494,6 @@
             <div
               class="error-message"
               *ngFor="let error of getValidationErrors(youTubeAddress)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Address <br />{{ addressDetail }} \ 50</span
-            >
-            <textarea
-              required
-              minlength="50"
-              maxlength="500"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.address"
-              name="address"
-              #address="ngModel"
-              style="height: 80px"
-              (input)="countAddress()"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="addressClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!address.valid && address.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(address)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Description <br />{{ descriptionDetail }} \ 100</span
-            >
-            <textarea
-              required
-              minlength="100"
-              maxlength="3000"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.description"
-              name="description"
-              #description="ngModel"
-              style="height: 100px"
-              (input)="countDescription()"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="descriptionClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!description.valid && description.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(description)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Sub Description <br />{{ subDescriptionDetail }} \ 100</span
-            >
-            <textarea
-              required
-              minlength="100"
-              maxlength="3000"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.subDescription"
-              name="subDescription"
-              #subDescription="ngModel"
-              style="height: 100px"
-              (input)="countSubDescription()"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="subDescriptionClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!subDescription.valid && subDescription.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(subDescription)"
             >
               {{ error }}
             </div>

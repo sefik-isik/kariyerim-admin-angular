@@ -42,7 +42,7 @@ export class FacultyListComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
-        this.faculties = response.data;
+        this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

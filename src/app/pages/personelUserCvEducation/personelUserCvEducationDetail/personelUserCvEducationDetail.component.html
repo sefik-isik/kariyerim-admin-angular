@@ -45,10 +45,11 @@
       <b>departmentName: </b>{{ personelUserCvEducationDTO.departmentName }}
     </p>
     <p class="card-text">
-      <b>startDate: </b>{{ personelUserCvEducationDTO.startDate }}
+      <b>startDate: </b
+      >{{ personelUserCvEducationDTO.startDate | nullDateFormat }}
     </p>
     <p class="card-text">
-      <b>endDate: </b>{{ personelUserCvEducationDTO.endDate }}
+      <b>endDate: </b>{{ personelUserCvEducationDTO.endDate | nullDateFormat }}
     </p>
     <p class="card-text">
       <b>educationInfo: </b>{{ personelUserCvEducationDTO.educationInfo }}

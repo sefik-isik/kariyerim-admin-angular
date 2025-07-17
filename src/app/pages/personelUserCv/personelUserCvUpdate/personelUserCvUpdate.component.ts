@@ -87,7 +87,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
-        this.languages = response.data;
+        this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -96,7 +96,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
-        this.languageLevels = response.data;
+        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

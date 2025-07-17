@@ -24,7 +24,6 @@ import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWo
   imports: [
     CommonModule,
     FormsModule,
-
     FilterPersonelUserCvWorkExperienceByUserPipe,
   ],
 })

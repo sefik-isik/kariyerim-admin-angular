@@ -33,18 +33,18 @@ export class ExperienceListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getFaculties();
+    this.getExperiences();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getFaculties();
+        this.getExperiences();
       }
     });
   }
 
-  getFaculties() {
+  getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
-        this.experiences = response.data;
+        this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -117,6 +117,6 @@ export class ExperienceListComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getFaculties();
+    this.getExperiences();
   }
 }

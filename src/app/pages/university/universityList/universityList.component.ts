@@ -43,7 +43,9 @@ export class UniversityListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAllDTO().subscribe(
       (response) => {
-        this.universityDTOs = response.data;
+        this.universityDTOs = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

@@ -29,7 +29,7 @@ export class ModelMenuMainComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getAll().subscribe(
       (response) => {
-        this.modelMenus = response.data;
+        this.modelMenus = response.data.filter((f) => f.modelName != '-');
         this.dataLoaded = true;
 
         this.getModelMenuClass(this.modelMenuFirst);

@@ -4,6 +4,7 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -39,17 +40,34 @@
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="departmentModel.isCompany"
-            name="isCompany"
-          />
-          <label class="form-check-label" for="checkChecked">
-            isCompany Department?
-          </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >isCompany</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="departmentModel.isCompany"
+                name="isCompany"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </form>

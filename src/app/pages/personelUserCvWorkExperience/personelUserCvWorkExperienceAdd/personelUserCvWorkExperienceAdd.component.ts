@@ -229,7 +229,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
-        this.companySectors = response.data;
+        this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -238,7 +238,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
-        this.positions = response.data;
+        this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -247,7 +247,9 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
-        this.positionLevels = response.data;
+        this.positionLevels = response.data.filter(
+          (f) => f.positionLevelName != '-'
+        );
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -256,7 +258,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
-        this.workingMethods = response.data;
+        this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -265,7 +267,9 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data.filter((f) => f.isCompany === true);
+        this.departments = response.data
+          .filter((f) => f.isCompany === true)
+          .filter((f) => f.departmentName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -274,7 +278,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
-        this.countries = response.data;
+        this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -299,11 +303,11 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     this.regionService.getAll().subscribe(
       (response) => {
         if (cityName == '-' || cityName == '') {
-          this.regions = response.data;
+          this.regions = response.data.filter((f) => f.regionName != '-');
         } else {
-          this.regions = response.data.filter(
-            (r) => r.cityId === this.getCityId(cityName)
-          );
+          this.regions = response.data
+            .filter((r) => r.cityId === this.getCityId(cityName))
+            .filter((f) => f.regionName != '-');
         }
       },
       (responseError) => this.toastrService.error(responseError.error.message)

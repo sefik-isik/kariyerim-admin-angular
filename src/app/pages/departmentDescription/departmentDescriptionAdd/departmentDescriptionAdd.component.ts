@@ -75,7 +75,9 @@ export class DepartmentDescriptionAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data.filter((f) => f.isCompany == false);
+        this.departments = response.data
+          .filter((f) => f.isCompany == false)
+          .filter((f) => f.departmentName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );

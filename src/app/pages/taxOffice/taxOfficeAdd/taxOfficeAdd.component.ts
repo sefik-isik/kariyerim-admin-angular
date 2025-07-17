@@ -78,7 +78,7 @@ export class TaxOfficeAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
-        this.cities = response.data;
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.toastrService.error(responseError.error.message)
     );
@@ -89,7 +89,9 @@ export class TaxOfficeAddComponent implements OnInit {
       (response) => {
         if (this.taxOfficeModel.cityName) {
           const cityId = this.getCityId(cityName);
-          this.regions = response.data.filter((f) => f.cityId == cityId);
+          this.regions = response.data
+            .filter((f) => f.cityId == cityId)
+            .filter((f) => f.regionName != '-');
         }
       },
       (responseError) => this.toastrService.error(responseError.error.message)
