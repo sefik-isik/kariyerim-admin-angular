@@ -22,7 +22,7 @@ export class StatusGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | boolean {
-    if (this.authService.isAdmin('status')) {
+    if (this.authService.isAdmin()) {
       return true;
     } else {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');

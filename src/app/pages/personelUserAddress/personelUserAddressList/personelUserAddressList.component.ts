@@ -14,6 +14,9 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserAddressUpdateComponent } from '../personelUserAddressUpdate/personelUserAddressUpdate.component';
 import { PersonelUserAddressDetailComponent } from '../personelUserAddressDetail/personelUserAddressDetail.component';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { AuthService } from '../../../services/auth.service';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 
 @Component({
   selector: 'app-personelUserAddressList',
@@ -22,24 +25,26 @@ import { PersonelUserAddressDetailComponent } from '../personelUserAddressDetail
   imports: [CommonModule, FormsModule, FilterPersonelUserAddressByUserPipe],
 })
 export class PersonelUserAddressListComponent implements OnInit {
-  userDTOs: UserDTO[] = [];
   personelUserAddressDTOs: PersonelUserAddressDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Addresses';
-  userId: string;
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
+    private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -52,19 +57,19 @@ export class PersonelUserAddressListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelAddresses(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +78,7 @@ export class PersonelUserAddressListComponent implements OnInit {
       (response) => {
         this.personelUserAddressDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -87,7 +92,7 @@ export class PersonelUserAddressListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -99,7 +104,7 @@ export class PersonelUserAddressListComponent implements OnInit {
     this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
       this.personelUserAddressService.delete(personelUserAddressDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -114,9 +119,9 @@ export class PersonelUserAddressListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -130,9 +135,9 @@ export class PersonelUserAddressListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

@@ -1,0 +1,140 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <p class="card-text"><b>Id: </b>{{ companyUserAdvertDTO.id }}</p>
+          <p class="card-text">
+            <b>userId: </b>{{ companyUserAdvertDTO.userId }}
+          </p>
+          <p class="card-text">
+            <b>email: </b>{{ companyUserAdvertDTO.email }}
+          </p>
+          <p class="card-text">
+            <b>firstName: </b>{{ companyUserAdvertDTO.firstName }}
+          </p>
+          <p class="card-text">
+            <b>lastName: </b>{{ companyUserAdvertDTO.lastName }}
+          </p>
+          <p class="card-text">
+            <b>phoneNumber: </b>{{ companyUserAdvertDTO.phoneNumber }}
+          </p>
+          <p class="card-text">
+            <b>companyUserId: </b>{{ companyUserAdvertDTO.companyUserId }}
+          </p>
+          <p class="card-text">
+            <b>companyUserName: </b>{{ companyUserAdvertDTO.companyUserName }}
+          </p>
+          <p class="card-text">
+            <b>advertName: </b>{{ companyUserAdvertDTO.advertName }}
+          </p>
+          <p class="card-text">
+            <b>workAreaId: </b>{{ companyUserAdvertDTO.workAreaId }}
+          </p>
+          <p class="card-text">
+            <b>workAreaName: </b>{{ companyUserAdvertDTO.workAreaName }}
+          </p>
+          <p class="card-text">
+            <b>workingMethodId: </b>{{ companyUserAdvertDTO.workingMethodId }}
+          </p>
+          <p class="card-text">
+            <b>workingMethodName: </b
+            >{{ companyUserAdvertDTO.workingMethodName }}
+          </p>
+          <p class="card-text">
+            <b>experienceId: </b>{{ companyUserAdvertDTO.experienceId }}
+          </p>
+          <p class="card-text">
+            <b>experienceName: </b>{{ companyUserAdvertDTO.experienceName }}
+          </p>
+          <p class="card-text">
+            <b>departmentId: </b>{{ companyUserAdvertDTO.departmentId }}
+          </p>
+          <p class="card-text">
+            <b>departmentName: </b>{{ companyUserAdvertDTO.departmentName }}
+          </p>
+          <p class="card-text">
+            <b>licenseDegreeId: </b>{{ companyUserAdvertDTO.licenseDegreeId }}
+          </p>
+          <p class="card-text">
+            <b>licenseDegreeName: </b
+            >{{ companyUserAdvertDTO.licenseDegreeName }}
+          </p>
+          <p class="card-text">
+            <b>positionId: </b>{{ companyUserAdvertDTO.positionId }}
+          </p>
+          <p class="card-text">
+            <b>positionName: </b>{{ companyUserAdvertDTO.positionName }}
+          </p>
+          <p class="card-text">
+            <b>positionLevelId: </b>{{ companyUserAdvertDTO.positionLevelId }}
+          </p>
+          <p class="card-text">
+            <b>positionLevelId: </b>{{ companyUserAdvertDTO.positionLevelName }}
+          </p>
+          <p class="card-text">
+            <b>militaryStatus: </b>{{ companyUserAdvertDTO.militaryStatus }}
+          </p>
+        </div>
+        <div class="col-6">
+          <h5 class="card-text" style="text-align: center">Advert Image</h5>
+          <div class="card-text">
+            <img
+              src="{{
+                companyUserAdvertDTO.advertImagePath +
+                  'thumbs/' +
+                  companyUserAdvertDTO.advertImageName
+              }}"
+              class="img-fluid img-thumbnail"
+              style="height: 100%; width: 100%"
+              alt="{{ companyUserAdvertDTO.advertImageOwnName }}"
+            />
+          </div>
+          <p class="card-text">
+            <b>languageId: </b>{{ companyUserAdvertDTO.languageId }}
+          </p>
+          <p class="card-text">
+            <b>languageName: </b>{{ companyUserAdvertDTO.languageName }}
+          </p>
+          <p class="card-text">
+            <b>languageLevelId: </b>{{ companyUserAdvertDTO.languageLevelId }}
+          </p>
+          <p class="card-text">
+            <b>languageLevelName: </b
+            >{{ companyUserAdvertDTO.languageLevelName }}
+          </p>
+          <p class="card-text">
+            <b>createdDate: </b
+            >{{
+              companyUserAdvertDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss"
+            }}
+          </p>
+          <p class="card-text">
+            <b>updatedDate: </b
+            >{{
+              companyUserAdvertDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss"
+            }}
+          </p>
+          <p class="card-text">
+            <b>deletedDate: </b
+            >{{
+              companyUserAdvertDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss"
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

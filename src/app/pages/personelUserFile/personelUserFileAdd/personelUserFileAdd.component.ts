@@ -16,6 +16,7 @@ import { PersonelUserFile } from '../../../models/component/personelUserFile';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserFileDTO } from '../../../models/dto/personelUserFileDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserFileAdd',
@@ -31,6 +32,7 @@ export class PersonelUserFileAddComponent implements OnInit {
   fileOwnName: string | null = null;
   personelUsers: PersonelUserDTO[] = [];
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User File Add Form';
 
   constructor(
@@ -42,9 +44,11 @@ export class PersonelUserFileAddComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -150,11 +154,13 @@ export class PersonelUserFileAddComponent implements OnInit {
   getModel(): PersonelUserFile {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserFileModel.email),
-      personelUserId: this.getPersonelUserId(this.personelUserFileModel.email),
-      filePath: this.filePath,
-      fileName: this.fileName,
-      fileOwnName: this.personelUserFileModel.fileOwnName,
+      userId: this.getUserId(this.personelUserFileModel.email.trim()),
+      personelUserId: this.getPersonelUserId(
+        this.personelUserFileModel.email.trim()
+      ),
+      filePath: this.filePath.trim(),
+      fileName: this.fileName.trim(),
+      fileOwnName: this.personelUserFileModel.fileOwnName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -166,16 +172,23 @@ export class PersonelUserFileAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserFileModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserFileModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -186,12 +199,18 @@ export class PersonelUserFileAddComponent implements OnInit {
       (response) => {
         this.personelUsers = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserFileModel.userId;
+    }
 
     return userId;
   }

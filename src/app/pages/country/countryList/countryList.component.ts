@@ -18,9 +18,9 @@ import { CountryDetailComponent } from '../countryDetail/countryDetail.component
 })
 export class CountryListComponent implements OnInit {
   countries: Country[] = [];
-
-  componentTitle = 'Countries';
   filter1: string;
+  componentTitle = 'Countries';
+  admin: boolean = false;
 
   constructor(
     private toastrService: ToastrService,
@@ -30,6 +30,8 @@ export class CountryListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
+
     this.getCountries();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +45,12 @@ export class CountryListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(country: Country) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +63,12 @@ export class CountryListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +79,7 @@ export class CountryListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.delete(country).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +92,9 @@ export class CountryListComponent implements OnInit {
     const modalRef = this.modalService.open(CountryUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +105,9 @@ export class CountryListComponent implements OnInit {
     const modalRef = this.modalService.open(CountryDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

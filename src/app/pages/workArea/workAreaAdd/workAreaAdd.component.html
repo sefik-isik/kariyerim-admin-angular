@@ -1,0 +1,61 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">WorkArea Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="workAreaModel.areaName"
+              type="text"
+              class="form-control"
+              name="areaName"
+              #areaName="ngModel"
+              placeholder="WorkArea Name"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="areaNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!areaName.valid && areaName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(areaName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

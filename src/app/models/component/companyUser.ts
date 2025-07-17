@@ -5,7 +5,7 @@ export interface CompanyUser extends BaseUserModel {
   sectorId: string;
   about: string;
   clarification: string;
-  workerCount: string;
+  workerCountId: string;
   yearOfEstablishment: string;
   webAddress: string;
   taxCityId: string;

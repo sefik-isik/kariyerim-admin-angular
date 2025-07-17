@@ -25,7 +25,7 @@ export class CityDeletedListComponent implements OnInit {
   filter1 = '';
   filter2 = '';
 
-  componentTitle = 'Deleted Cities';
+  componentTitle = 'Cities';
   constructor(
     private cityService: CityService,
     private toastrService: ToastrService,
@@ -48,7 +48,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -57,7 +57,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -67,7 +67,7 @@ export class CityDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -75,7 +75,7 @@ export class CityDeletedListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.update(city).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -108,7 +108,7 @@ export class CityDeletedListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.terminate(city).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -121,9 +121,9 @@ export class CityDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -134,9 +134,9 @@ export class CityDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CityDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

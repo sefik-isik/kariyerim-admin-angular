@@ -1,20 +1,19 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Personel User Images By User..."
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} ..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -25,30 +24,29 @@
           ></i>
         </span>
       </div>
+    </div>
 
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <carousel>
-            <slide
-              *ngFor="
-                let personelUserImageDTO of personelUserImageDTOs
-                  | filterPersonelUserImageByUserPipe : filter1
-              "
-            >
-              <img
-                src="{{
-                  personelUserImageDTO.imagePath +
-                    personelUserImageDTO.imageName
-                }}"
-                alt="first slide"
-                style="display: block; width: 100%"
-              />
-              <div class="carousel-caption d-none d-md-block">
-                <h3>{{ personelUserImageDTO.imageOwnName }}</h3>
-              </div>
-            </slide>
-          </carousel>
-        </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <carousel>
+          <slide
+            *ngFor="
+              let personelUserImageDTO of personelUserImageDTOs
+                | filterPersonelUserImageByUserPipe : filter1
+            "
+          >
+            <img
+              src="{{
+                personelUserImageDTO.imagePath + personelUserImageDTO.imageName
+              }}"
+              alt="first slide"
+              style="display: block; width: 100%"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <h3>{{ personelUserImageDTO.imageOwnName }}</h3>
+            </div>
+          </slide>
+        </carousel>
       </div>
     </div>
   </div>

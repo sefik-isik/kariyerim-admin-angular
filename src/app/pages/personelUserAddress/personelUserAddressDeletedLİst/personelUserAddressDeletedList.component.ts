@@ -14,6 +14,9 @@ import { FilterPersonelUserAddressByUserPipe } from '../../../pipes/filterPerson
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserAddressUpdateComponent } from '../personelUserAddressUpdate/personelUserAddressUpdate.component';
 import { PersonelUserAddressDetailComponent } from '../personelUserAddressDetail/personelUserAddressDetail.component';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserAddressDeletedList',
@@ -23,23 +26,25 @@ import { PersonelUserAddressDetailComponent } from '../personelUserAddressDetail
 })
 export class PersonelUserAddressDeletedListComponent implements OnInit {
   personelUserAddressDTOs: PersonelUserAddressDTO[] = [];
-  userDTOs: UserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
-  componentTitle = 'Deleted Personel User Addresses';
-  userId: string;
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
+  componentTitle = 'Personel User Addresses';
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
     private toastrService: ToastrService,
-    private userService: UserService,
+    private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -52,19 +57,19 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserAddresses(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +78,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserAddressDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -83,7 +88,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -91,7 +96,7 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
     this.personelUserAddressDTOs.forEach((personelUserAddressDTO) => {
       this.personelUserAddressService.update(personelUserAddressDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -126,7 +131,8 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
         .terminate(personelUserAddressDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -141,9 +147,9 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -157,9 +163,9 @@ export class PersonelUserAddressDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

@@ -4,7 +4,8 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
@@ -23,41 +24,15 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Cv Name</span>
+            <span class="input-group-text">cvName</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
-              pattern=""
-              [(ngModel)]="personelUserCvSummaryDTO.cvName"
-              type="text"
               class="form-control"
+              placeholder="email"
+              [(ngModel)]="personelUserCvSummaryDTO.cvName"
               name="cvName"
               #cvName="ngModel"
-              placeholder="Cv Name"
-              list="cvNameDataList"
+              disabled="true"
             />
-            <datalist id="cvNameDataList">
-              <option
-                *ngFor="let personelUserCv of personelUserCvs"
-                value="{{ personelUserCv.cvName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="cvNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!cvName.valid && cvName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(cvName)"
-            >
-              {{ error }}
-            </div>
           </div>
         </div>
       </div>
@@ -101,12 +76,12 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Address <br />{{ detailCount }} \ 50</span
+              >Address <br />{{ detailCount }} \ 2000</span
             >
             <textarea
               required
-              minlength="50"
-              maxlength="250"
+              minlength="100"
+              maxlength="2000"
               pattern=""
               class="form-control"
               [(ngModel)]="personelUserCvSummaryDTO.cvSummaryDescription"

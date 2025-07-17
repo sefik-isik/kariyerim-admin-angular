@@ -3,7 +3,6 @@ import { CompanyUserAddressService } from '../../../services/companyUserAddress.
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
 import { UserService } from '../../../services/user.service';
@@ -14,6 +13,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserAddressUpdateComponent } from '../companyUserAddressUpdate/companyUserAddressUpdate.component';
 import { CompanyUserAddressDetailComponent } from '../companyUserAddressDetail/companyUserAddressDetail.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserAddressDeletedList',
@@ -26,7 +26,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
+  admin: boolean = false;
   componentTitle = 'Deleted Company User Addresses';
   userId: string;
 
@@ -36,10 +36,12 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
     private userService: UserService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -55,7 +57,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -64,7 +66,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +75,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserAddressDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -83,7 +85,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -91,7 +93,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
     this.companyUserAddressDTOs.forEach((companyUserAddressDTO) => {
       this.companyUserAddressService.update(companyUserAddressDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -124,7 +126,7 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
     this.companyUserAddressDTOs.forEach((companyUserAddress) => {
       this.companyUserAddressService.terminate(companyUserAddress).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -137,9 +139,9 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserAddressUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -150,9 +152,9 @@ export class CompanyUserAddressDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserAddressDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

@@ -21,6 +21,7 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
@@ -37,6 +38,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
   regions: Region[] = [];
   addressDetailCount: number;
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel Address Add Form';
 
   constructor(
@@ -51,10 +53,12 @@ export class PersonelUserAddressAddComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.getCountries();
   }
@@ -85,17 +89,21 @@ export class PersonelUserAddressAddComponent implements OnInit {
   getModel(): PersonelUserAddress {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserAddressModel.email),
+      userId: this.getUserId(this.personelUserAddressModel.email.trim()),
       personelUserId: this.getPersonelUserId(
-        this.getUserId(this.personelUserAddressModel.email)
+        this.getUserId(this.personelUserAddressModel.email.trim())
       ),
 
-      countryId: this.getCountryId(this.personelUserAddressModel.countryName),
+      countryId: this.getCountryId(
+        this.personelUserAddressModel.countryName.trim()
+      ),
 
-      cityId: this.getCityId(this.personelUserAddressModel.cityName),
+      cityId: this.getCityId(this.personelUserAddressModel.cityName.trim()),
 
-      regionId: this.getRegionId(this.personelUserAddressModel.regionName),
-      addressDetail: this.personelUserAddressModel.addressDetail,
+      regionId: this.getRegionId(
+        this.personelUserAddressModel.regionName.trim()
+      ),
+      addressDetail: this.personelUserAddressModel.addressDetail.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -107,16 +115,21 @@ export class PersonelUserAddressAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserAddressModel.email = response.data[0].email;
+          this.personelUserAddressModel.userId = response.data[0].id;
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -125,7 +138,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -139,7 +152,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -150,7 +163,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -161,12 +174,18 @@ export class PersonelUserAddressAddComponent implements OnInit {
           (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserAddressModel.userId;
+    }
 
     return userId;
   }

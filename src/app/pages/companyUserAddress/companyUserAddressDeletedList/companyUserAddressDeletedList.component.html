@@ -1,7 +1,7 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
-      <div class="input-group mb-3">
+      <div class="input-group mb-3" *ngIf="admin">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
@@ -34,8 +34,8 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
-            <th>countryName</th>
+            <th *ngIf="admin">email</th>
+            <th>companyUserName</th>
             <th>cityName</th>
             <th>regionName</th>
             <th>addressDetail</th>
@@ -66,8 +66,8 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ companyUserAddressDTO.email }}</td>
-            <td>{{ companyUserAddressDTO.countryName }}</td>
+            <td *ngIf="admin">{{ companyUserAddressDTO.email }}</td>
+            <td>{{ companyUserAddressDTO.companyUserName }}</td>
             <td>{{ companyUserAddressDTO.cityName }}</td>
             <td>{{ companyUserAddressDTO.regionName }}</td>
             <td>

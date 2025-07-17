@@ -2,7 +2,6 @@ import { BasePersonelUserCvDTOModel } from '../base/basePersonelUserCvDTOModel';
 
 export interface PersonelUserCvWorkExperienceDTO
   extends BasePersonelUserCvDTOModel {
-  position: string;
   companyName: string;
   working: boolean;
   startDate: string;
@@ -21,4 +20,8 @@ export interface PersonelUserCvWorkExperienceDTO
   regionName: string;
   foundJobInHere: boolean;
   detail: string;
+  positionId: string;
+  positionName: string;
+  positionLevelId: string;
+  positionLevelName: string;
 }

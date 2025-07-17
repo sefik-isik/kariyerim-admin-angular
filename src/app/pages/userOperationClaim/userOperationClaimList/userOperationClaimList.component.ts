@@ -5,13 +5,11 @@ import { UserService } from '../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { UserOperationClaim } from '../../../models/component/userOperationClaim';
 import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
-
 import { UserDTO } from '../../../models/dto/userDTO';
 import { OperationClaimService } from '../../../services/operationClaim.service';
 import { OperationClaim } from '../../../models/component/operationClaim';
@@ -40,7 +38,7 @@ export class UserOperationClaimListComponent implements OnInit {
   users: UserDTO[];
   operationClaims: OperationClaim[];
   userId: string;
-
+  admin: boolean = false;
   componentTitle = 'User Operation Claims';
 
   constructor(
@@ -55,6 +53,7 @@ export class UserOperationClaimListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -71,7 +70,7 @@ export class UserOperationClaimListComponent implements OnInit {
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -80,7 +79,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -89,7 +88,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -98,12 +97,12 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(userOperationClaim: UserOperationClaim) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -116,12 +115,12 @@ export class UserOperationClaimListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -132,7 +131,7 @@ export class UserOperationClaimListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaim) => {
       this.userOperationClaimService.delete(userOperationClaim).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -145,9 +144,9 @@ export class UserOperationClaimListComponent implements OnInit {
     const modalRef = this.modalService.open(UserOperationClaimUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -158,9 +157,9 @@ export class UserOperationClaimListComponent implements OnInit {
     const modalRef = this.modalService.open(UserOperationClaimDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

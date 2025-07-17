@@ -50,7 +50,7 @@ export class CityAddComponent implements OnInit {
           this.router.navigate(['/dashboard/city/citylisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -61,9 +61,11 @@ export class CityAddComponent implements OnInit {
   getModel(): City {
     return Object.assign({
       id: '',
-      cityName: this.caseService.capitalizeFirstLetter(this.cityModel.cityName),
-      cityCode: this.cityModel.cityCode,
-      countryId: this.getCountryId(this.cityModel.countryName),
+      cityName: this.caseService.capitalizeFirstLetter(
+        this.cityModel.cityName.trim()
+      ),
+      cityCode: this.cityModel.cityCode.trim(),
+      countryId: this.getCountryId(this.cityModel.countryName.trim()),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -73,7 +75,7 @@ export class CityAddComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

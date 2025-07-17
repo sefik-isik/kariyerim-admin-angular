@@ -54,7 +54,7 @@ export class RegionAddComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/region/regionlisttab']);
         },
-        (responseError) => console.error(responseError)
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -65,10 +65,10 @@ export class RegionAddComponent implements OnInit {
     return Object.assign({
       id: '',
       regionName: this.caseService.capitalizeFirstLetter(
-        this.regionModel.regionName
+        this.regionModel.regionName.trim()
       ),
-      countryId: this.getCountryId(this.regionModel.countryName),
-      cityId: this.getCityId(this.regionModel.cityName),
+      countryId: this.getCountryId(this.regionModel.countryName.trim()),
+      cityId: this.getCityId(this.regionModel.cityName.trim()),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -78,7 +78,7 @@ export class RegionAddComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -87,7 +87,7 @@ export class RegionAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

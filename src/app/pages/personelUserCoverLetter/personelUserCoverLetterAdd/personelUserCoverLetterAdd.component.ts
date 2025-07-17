@@ -15,6 +15,7 @@ import { PersonelUserCoverLetter } from '../../../models/component/personelUserC
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterAdd',
@@ -28,6 +29,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   descriptionCount: number;
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Cover Letter Add Form';
 
   constructor(
@@ -39,10 +41,12 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -72,12 +76,12 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   getModel(): PersonelUserCoverLetter {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserCoverLetterMOdel.email),
+      userId: this.getUserId(this.personelUserCoverLetterMOdel.email.trim()),
       personelUserId: this.getPersonelUserId(
-        this.getUserId(this.personelUserCoverLetterMOdel.email)
+        this.getUserId(this.personelUserCoverLetterMOdel.email.trim())
       ),
-      title: this.personelUserCoverLetterMOdel.title,
-      description: this.personelUserCoverLetterMOdel.description,
+      title: this.personelUserCoverLetterMOdel.title.trim(),
+      description: this.personelUserCoverLetterMOdel.description.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -94,16 +98,23 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserCoverLetterMOdel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserCoverLetterMOdel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -112,12 +123,18 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserCoverLetterMOdel.userId;
+    }
 
     return userId;
   }

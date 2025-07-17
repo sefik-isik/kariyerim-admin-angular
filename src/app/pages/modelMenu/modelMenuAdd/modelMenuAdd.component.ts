@@ -60,7 +60,7 @@ export class ModelMenuAddComponent implements OnInit {
   getModel(): ModelMenu {
     return Object.assign({
       id: '',
-      modelName: this.modelMenuModel.modelName,
+      modelName: this.modelMenuModel.modelName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

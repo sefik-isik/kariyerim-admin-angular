@@ -1,19 +1,20 @@
-import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
+import { AdminService } from '../../../services/helperServices/admin.service';
 
-import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
-import { FilterPersonelUserCvEducationByUserPipe } from '../../../pipes/filterPersonelUserCvEducationByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
+import { ToastrService } from 'ngx-toastr';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { FilterPersonelUserCvEducationByUserPipe } from '../../../pipes/filterPersonelUserCvEducationByUser.pipe';
+import { AuthService } from '../../../services/auth.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducationDetail/personelUserCvEducationDetail.component';
+import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
 
 @Component({
   selector: 'app-personelUserCvEducationDeletedList',
@@ -22,24 +23,26 @@ import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducati
   imports: [CommonModule, FormsModule, FilterPersonelUserCvEducationByUserPipe],
 })
 export class PersonelUserCvEducationDeletedListComponent implements OnInit {
-  userDTOs: UserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvEducationDTOs: PersonelUserCvEducationDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Cv Educations';
-  userId: string;
 
   constructor(
     private personelUserCvEducationService: PersonelUserCvEducationService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService,
+    private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -52,19 +55,19 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserCvEducations(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +76,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCvEducationDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +88,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
   }
 
@@ -95,7 +98,8 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
         .update(personelUserCvEducationDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -132,7 +136,8 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
         .terminate(personelUserCvEducationDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -147,9 +152,9 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -164,9 +169,9 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

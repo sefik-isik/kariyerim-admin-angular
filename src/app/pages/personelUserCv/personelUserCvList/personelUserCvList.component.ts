@@ -1,20 +1,22 @@
-import { PrivatePipe } from '../../../pipes/private.pipe';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PrivatePipe } from '../../../pipes/private.pipe';
+import { AdminService } from '../../../services/helperServices/admin.service';
 
-import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { PersonelUserCvService } from '../../../services/personelUserCv.service';
-import { FilterPersonelUserCvByUserPipe } from '../../../pipes/filterPersonelUserCvByUser.pipe';
-import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserCvUpdateComponent } from '../personelUserCvUpdate/personelUserCvUpdate.component';
+import { ToastrService } from 'ngx-toastr';
+import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { FilterPersonelUserCvByUserPipe } from '../../../pipes/filterPersonelUserCvByUser.pipe';
+import { AuthService } from '../../../services/auth.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 import { PersonelUserCvDetailComponent } from '../personelUserCvDetail/personelUserCvDetail.component';
+import { PersonelUserCvUpdateComponent } from '../personelUserCvUpdate/personelUserCvUpdate.component';
 
 @Component({
   selector: 'app-personelUserCvList',
@@ -23,31 +25,32 @@ import { PersonelUserCvDetailComponent } from '../personelUserCvDetail/personelU
   imports: [
     CommonModule,
     FormsModule,
-
     FilterPersonelUserCvByUserPipe,
-
     PrivatePipe,
   ],
 })
 export class PersonelUserCvListComponent implements OnInit {
   personelUserCvDTOs: PersonelUserCvDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-  userId: string;
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Cvs';
 
   constructor(
     private personelUserCvService: PersonelUserCvService,
+    private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -60,19 +63,19 @@ export class PersonelUserCvListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserCvs(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -81,7 +84,7 @@ export class PersonelUserCvListComponent implements OnInit {
       (response) => {
         this.personelUserCvDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -95,7 +98,7 @@ export class PersonelUserCvListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -107,7 +110,7 @@ export class PersonelUserCvListComponent implements OnInit {
     this.personelUserCvDTOs.forEach((personelUserCvDTO) => {
       this.personelUserCvService.delete(personelUserCvDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -120,9 +123,9 @@ export class PersonelUserCvListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserCvUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -133,9 +136,9 @@ export class PersonelUserCvListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserCvDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

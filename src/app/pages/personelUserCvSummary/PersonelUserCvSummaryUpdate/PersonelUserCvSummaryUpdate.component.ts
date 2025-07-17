@@ -1,28 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { PersonelUserCvService } from '../../../services/personelUserCv.service';
-import { PersonelUserCv } from '../../../models/component/personelUserCv';
-import { UserService } from '../../../services/user.service';
-import { PersonelUserService } from '../../../services/personelUser.service';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
-import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
+import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCvSummaryUpdate',
@@ -32,53 +17,21 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class PersonelUserCvSummaryUpdateComponent implements OnInit {
   @Input() personelUserCvSummaryDTO: PersonelUserCvSummaryDTO;
-  personelUserDTOs: PersonelUserDTO[] = [];
-  users: UserDTO[] = [];
-  personelUserCvs: PersonelUserCv[] = [];
-  userDTOs: UserDTO[] = [];
   detailCount: number;
+  admin: boolean = false;
   componentTitle = 'Personel User Cv Summary Update Form';
 
   constructor(
     private personelUserCvSummaryService: PersonelUserCvSummaryService,
-    private userService: UserService,
-    private personelUserService: PersonelUserService,
-    private personelUserCvService: PersonelUserCvService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
-    private adminService: AdminService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.getAdminValues();
-
-    setTimeout(() => {
-      this.getUserValues(this.personelUserCvSummaryDTO.id);
-    }, 200);
-  }
-
-  getUserValues(id: string) {
-    const adminModel = {
-      id: id,
-      email: this.localStorageService.getFromLocalStorage('email'),
-      userId: this.localStorageService.getFromLocalStorage('id'),
-      status: this.localStorageService.getFromLocalStorage('status'),
-    };
-    this.getById(adminModel);
-  }
-
-  getById(adminModel: AdminModel) {
-    this.personelUserCvSummaryService.getById(adminModel).subscribe(
-      (response) => {
-        this.personelUserCvSummaryDTO.id = response.data.id;
-        this.personelUserCvSummaryDTO.personelUserId =
-          response.data.personelUserId;
-      },
-      (responseError) => console.error
-    );
+    this.admin = this.authService.isAdmin();
   }
 
   getValidationErrors(state: any) {
@@ -96,7 +49,7 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -108,12 +61,11 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
     return Object.assign({
       id: this.personelUserCvSummaryDTO.id,
       userId: this.personelUserCvSummaryDTO.userId,
-      personelUserId: this.getPersonelUserId(
-        this.personelUserCvSummaryDTO.email
-      ),
-      cvId: this.getPersonelUserCvId(this.personelUserCvSummaryDTO.cvName),
-      cvSummaryTitle: this.personelUserCvSummaryDTO.cvSummaryTitle,
-      cvSummaryDescription: this.personelUserCvSummaryDTO.cvSummaryDescription,
+      personelUserId: this.personelUserCvSummaryDTO.personelUserId,
+      cvId: this.personelUserCvSummaryDTO.cvId,
+      cvSummaryTitle: this.personelUserCvSummaryDTO.cvSummaryTitle.trim(),
+      cvSummaryDescription:
+        this.personelUserCvSummaryDTO.cvSummaryDescription.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -122,70 +74,6 @@ export class PersonelUserCvSummaryUpdateComponent implements OnInit {
 
   count(text: string) {
     return text.length;
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  getAdminValues() {
-    const id = this.localStorageService.getFromLocalStorage('id');
-    this.adminService.getAdminValues(id).subscribe(
-      (response) => {
-        this.getAllPersonelUsers(response);
-        this.getPersonelUsers(response);
-        this.getPersonelUserCvs(response);
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
-      (response) => {
-        this.userDTOs = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUsers(adminModel: AdminModel) {
-    this.personelUserService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.personelUserDTOs = response.data;
-        this.getPersonelUserCvs(adminModel);
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUserCvs(adminModel: AdminModel) {
-    this.personelUserCvService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.personelUserCvs = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUserId(email: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
-      (c) => c.email === email
-    )[0]?.id;
-
-    return personelUserId;
-  }
-
-  getPersonelUserCvId(cvName: string): string {
-    const personelUserId = this.personelUserCvs.filter(
-      (c) => c.cvName === cvName
-    )[0]?.id;
-
-    return personelUserId;
   }
 
   cvNameClear() {

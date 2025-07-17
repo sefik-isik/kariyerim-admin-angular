@@ -1,0 +1,60 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Count Value</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="countModel.countValue"
+              type="text"
+              class="form-control"
+              name="countValue"
+              #countValue="ngModel"
+              placeholder="200-250"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="countValueClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countValue.valid && countValue.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countValue)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

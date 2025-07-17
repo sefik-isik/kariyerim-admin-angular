@@ -1,18 +1,17 @@
-import { CountryService } from '../../../services/country.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CityService } from '../../../services/city.service';
-import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
-import { ToastrService } from 'ngx-toastr';
-import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
-import { Country } from '../../../models/component/country';
-import { AuthService } from '../../../services/auth.service';
-import { CityDTO } from '../../../models/dto/cityDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { City } from '../../../models/component/city';
-import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
+import { ToastrService } from 'ngx-toastr';
+import { Country } from '../../../models/component/country';
+import { CityDTO } from '../../../models/dto/cityDTO';
+import { FilterCityPipe } from '../../../pipes/filterCity.pipe';
+import { FilterCityByCountryPipe } from '../../../pipes/filterCityByCountry.pipe';
+import { AuthService } from '../../../services/auth.service';
+import { CityService } from '../../../services/city.service';
+import { CountryService } from '../../../services/country.service';
 import { CityDetailComponent } from '../cityDetail/cityDetail.component';
+import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
 
 @Component({
   selector: 'app-cityList',
@@ -26,6 +25,7 @@ export class CityListComponent implements OnInit {
   countries: Country[] = [];
   filter1 = '';
   filter2 = '';
+  admin: boolean = false;
 
   constructor(
     private cityService: CityService,
@@ -36,6 +36,8 @@ export class CityListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
+
     this.getCities();
     this.getCountries();
     this.modalService.activeInstances.subscribe((x) => {
@@ -50,7 +52,7 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -59,7 +61,7 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -68,7 +70,7 @@ export class CityListComponent implements OnInit {
   }
 
   delete(city: CityDTO) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.admin) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -81,12 +83,12 @@ export class CityListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.admin) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -97,7 +99,7 @@ export class CityListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.delete(city).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -107,12 +109,17 @@ export class CityListComponent implements OnInit {
   }
 
   open(cityDTO: CityDTO) {
+    if (!this.admin) {
+      this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
+      return;
+    }
+
     const modalRef = this.modalService.open(CityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -120,12 +127,16 @@ export class CityListComponent implements OnInit {
   }
 
   openDetail(cityDTO: CityDTO) {
+    if (!this.admin) {
+      this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
+      return;
+    }
     const modalRef = this.modalService.open(CityDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

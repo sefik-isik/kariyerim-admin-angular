@@ -1,0 +1,61 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ companyUserAdvertCityDTO.id }}</p>
+    <p class="card-text">
+      <b>userId: </b>{{ companyUserAdvertCityDTO.userId }}
+    </p>
+    <p class="card-text"><b>email: </b>{{ companyUserAdvertCityDTO.email }}</p>
+    <p class="card-text">
+      <b>firstName: </b>{{ companyUserAdvertCityDTO.firstName }}
+    </p>
+    <p class="card-text">
+      <b>lastName: </b>{{ companyUserAdvertCityDTO.lastName }}
+    </p>
+    <p class="card-text">
+      <b>phoneNumber: </b>{{ companyUserAdvertCityDTO.phoneNumber }}
+    </p>
+    <p class="card-text">
+      <b>companyUserId: </b>{{ companyUserAdvertCityDTO.companyUserId }}
+    </p>
+    <p class="card-text">
+      <b>companyUserName: </b>{{ companyUserAdvertCityDTO.companyUserName }}
+    </p>
+    <p class="card-text">
+      <b>advertId: </b>{{ companyUserAdvertCityDTO.advertId }}
+    </p>
+
+    <p class="card-text">
+      <b>advertName: </b>{{ companyUserAdvertCityDTO.advertName }}
+    </p>
+    <p class="card-text">
+      <b>workCityId: </b>{{ companyUserAdvertCityDTO.workCityId }}
+    </p>
+    <p class="card-text">
+      <b>workCityName: </b>{{ companyUserAdvertCityDTO.workCityName }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ companyUserAdvertCityDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ companyUserAdvertCityDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ companyUserAdvertCityDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

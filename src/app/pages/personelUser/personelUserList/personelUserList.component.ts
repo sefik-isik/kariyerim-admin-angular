@@ -4,9 +4,7 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
-
 import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/dto/userDTO';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
@@ -19,6 +17,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserUpdateComponent } from '../personelUserUpdate/personelUserUpdate.component';
 import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserDetail.component';
 
+import { AuthService } from '../../../services/auth.service';
+import { PersonelUserFollowListComponent } from '../personelUserFollowList/personelUserFollowList.component';
+import { PersonelUserAdvertFollowListComponent } from '../personelUserAdvertFollowList/personelUserAdvertFollowList.component';
+import { PersonelUserAdvertApplicationListComponent } from '../personelUserAdvertApplicationList/personelUserAdvertApplicationList.component';
+
 @Component({
   selector: 'app-personelUserList',
   templateUrl: './personelUserList.component.html',
@@ -26,31 +29,29 @@ import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserD
   imports: [
     CommonModule,
     FormsModule,
-
     FilterPersonelUserPipe,
     BoolenTextPipe,
     GenderPipe,
   ],
 })
 export class PersonelUserListComponent implements OnInit {
-  userDTOs: UserDTO[] = [];
   personelUserDTOs: PersonelUserDTO[] = [];
-  dataLoaded: boolean = false;
   filter1: string = '';
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel Users';
-  userId: string;
 
   constructor(
-    private userService: UserService,
     private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -63,19 +64,9 @@ export class PersonelUserListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
-    );
-  }
-
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
-      (response) => {
-        this.userDTOs = response.data;
-      },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -84,7 +75,7 @@ export class PersonelUserListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -99,7 +90,7 @@ export class PersonelUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -112,7 +103,7 @@ export class PersonelUserListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.delete(personelUserDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -121,13 +112,58 @@ export class PersonelUserListComponent implements OnInit {
     }, 500);
   }
 
+  openFollowList(personelUserDTO: PersonelUserDTO) {
+    const modalRef = this.modalService.open(PersonelUserFollowListComponent, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: true,
+      centered: true,
+      scrollable: false,
+      windowClass: 'modal-holder',
+      backdropClass: 'modal-backdrop',
+    });
+    modalRef.componentInstance.personelUserDTO = personelUserDTO;
+  }
+
+  openAdvertFollowList(personelUserDTO: PersonelUserDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserAdvertFollowListComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: true,
+        centered: true,
+        scrollable: false,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserDTO = personelUserDTO;
+  }
+
+  openAdvertApplicationList(personelUserDTO: PersonelUserDTO) {
+    const modalRef = this.modalService.open(
+      PersonelUserAdvertApplicationListComponent,
+      {
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: true,
+        centered: true,
+        scrollable: false,
+        windowClass: 'modal-holder',
+        backdropClass: 'modal-backdrop',
+      }
+    );
+    modalRef.componentInstance.personelUserDTO = personelUserDTO;
+  }
+
   open(personelUserDTO: PersonelUserDTO) {
     const modalRef = this.modalService.open(PersonelUserUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -138,9 +174,9 @@ export class PersonelUserListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

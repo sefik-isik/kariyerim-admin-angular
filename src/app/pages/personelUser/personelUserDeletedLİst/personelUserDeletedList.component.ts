@@ -18,6 +18,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserUpdateComponent } from '../personelUserUpdate/personelUserUpdate.component';
 import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserDetail.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserDeletedList',
@@ -36,9 +37,8 @@ export class PersonelUserDeletedListComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
-
+  admin: boolean = false;
   componentTitle = 'Personel Users';
-  userId: string;
 
   constructor(
     private personelUserService: PersonelUserService,
@@ -46,10 +46,12 @@ export class PersonelUserDeletedListComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -65,7 +67,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -74,7 +76,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -83,7 +85,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -93,7 +95,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -101,7 +103,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.update(personelUserDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -134,7 +136,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.terminate(personelUserDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -147,9 +149,9 @@ export class PersonelUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -160,9 +162,9 @@ export class PersonelUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

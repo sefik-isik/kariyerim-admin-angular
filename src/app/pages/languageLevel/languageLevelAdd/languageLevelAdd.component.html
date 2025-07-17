@@ -10,7 +10,7 @@
             <span class="input-group-text">Level</span>
             <input
               required
-              minlength="1"
+              minlength="3"
               maxlength="1"
               pattern="[1-9\/]*"
               [(ngModel)]="languageLevelModel.level"
@@ -46,7 +46,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="languageLevelModel.levelTitle"
               type="text"
@@ -81,7 +81,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="250"
               pattern=""
               [(ngModel)]="languageLevelModel.levelDescription"
               type="text"

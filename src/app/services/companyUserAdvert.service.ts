@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminModel } from '../models/auth/adminModel';
@@ -34,6 +34,24 @@ export class CompanyUserAdvertService {
   delete(companyUserAdvert: CompanyUserAdvert): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
+      companyUserAdvert
+    );
+  }
+
+  uploadImage(formData: FormData, id: string): Observable<HttpEvent<File>> {
+    return this.httpClient.post<File>(
+      this.newUrlPath + 'uploadimage?id=' + id,
+      formData,
+      {
+        reportProgress: true,
+        observe: 'events',
+      }
+    );
+  }
+
+  deleteImage(companyUserAdvert: CompanyUserAdvert): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.newUrlPath + 'deleteimage',
       companyUserAdvert
     );
   }

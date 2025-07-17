@@ -1,13 +1,6 @@
-import { BaseCompanyUserAdvertModel } from '../base/baseCompanyUserAdvertModel';
+import { BaseCompanyUserModel } from '../base/baseCompanyUserModel';
 
-export interface CompanyUserAdvertCity extends BaseCompanyUserAdvertModel {
-  advertName: string;
-  advertImageName: string;
-  advertImagePath: string;
-  advertImageOwnName: string;
-  workAreaId: string;
-  workingMethodId: string;
-  experienceId: string;
-  departmentId: string;
-  licenseDegreeId: string;
+export interface CompanyUserAdvertCity extends BaseCompanyUserModel {
+  advertId: string;
+  workCityId: string;
 }

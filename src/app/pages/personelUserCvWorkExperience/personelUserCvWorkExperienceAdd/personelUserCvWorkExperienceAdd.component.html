@@ -4,14 +4,15 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               email="true"
               [(ngModel)]="personelUserCvWorkExperienceModel.email"
@@ -47,6 +48,22 @@
         </div>
       </div>
 
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="personelUserCvWorkExperienceModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -54,7 +71,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.cvName"
               type="text"
@@ -96,7 +113,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.companyName"
               type="text"
@@ -127,11 +144,204 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Sector Name</span>
+            <span class="input-group-text">Position</span>
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.positionName"
+              type="text"
+              class="form-control"
+              name="positionName"
+              #positionName="ngModel"
+              placeholder="Position"
+              list="positionNameDataList"
+            />
+            <datalist id="positionNameDataList">
+              <option
+                *ngFor="let position of positions"
+                value="{{ position.positionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="positionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!positionName.valid && positionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(positionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Position Level</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.positionLevelName"
+              type="text"
+              class="form-control"
+              name="positionLevelName"
+              #positionLevelName="ngModel"
+              placeholder="Position Level"
+              list="positionLevelNameDataList"
+            />
+            <datalist id="positionLevelNameDataList">
+              <option
+                *ngFor="let positionLevel of positionLevels"
+                value="{{ positionLevel.positionLevelName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="positionLevelNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!positionLevelName.valid && positionLevelName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(positionLevelName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Still Working?</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserCvWorkExperienceModel.working"
+                name="working"
+                (change)="endDateClear()"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Start Date</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.startDate"
+              type="date"
+              class="form-control"
+              name="startDate"
+              #startDate="ngModel"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="startDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!startDate.valid && startDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(startDate)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">End Date</span>
+            <input
+              [required]="personelUserCvWorkExperienceModel.working == false"
+              minlength="3"
+              maxlength="50"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.endDate"
+              type="date"
+              class="form-control"
+              name="endDate"
+              #endDate="ngModel"
+              [disabled]="
+                this.personelUserCvWorkExperienceModel.working == true
+              "
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="endDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!endDate.valid && endDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(endDate)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.companySectorName"
               type="text"
@@ -171,9 +381,7 @@
           <div class="input-group">
             <span class="input-group-text">Department Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.departmentName"
               type="text"
@@ -185,8 +393,8 @@
             />
             <datalist id="departmentNameDataList">
               <option
-                *ngFor="let companyUserDepartment of companyUserDepartments"
-                value="{{ companyUserDepartment.departmentName }}"
+                *ngFor="let department of departments"
+                value="{{ department.departmentName }}"
               ></option>
             </datalist>
             <span class="input-group-text">
@@ -210,12 +418,41 @@
 
       <div class="mb-3">
         <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Found Job In Here?</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserCvWorkExperienceModel.foundJobInHere"
+                name="foundJobInHere"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Working Method Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.workingMethodName"
               type="text"
@@ -255,9 +492,7 @@
           <div class="input-group">
             <span class="input-group-text">Country Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.countryName"
               type="text"
@@ -300,9 +535,7 @@
           <div class="input-group">
             <span class="input-group-text">City Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.cityName"
               type="text"
@@ -343,9 +576,7 @@
           <div class="input-group">
             <span class="input-group-text">Region Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvWorkExperienceModel.regionName"
               type="text"
@@ -383,123 +614,11 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Start Date</span>
-            <input
-              required
-              minlength="3"
-              maxlength="20"
-              min="1950-01-01"
-              max="{{ today | date : 'yyyy/MM/dd' }}"
-              pattern=""
-              [(ngModel)]="personelUserCvWorkExperienceModel.startDate"
-              type="date"
-              class="form-control"
-              name="startDate"
-              #startDate="ngModel"
-            />
-
-            <span class="input-group-text">
-              <i
-                (click)="startDateClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!startDate.valid && startDate.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(startDate)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">End Date</span>
-            <input
-              required
-              minlength="3"
-              maxlength="20"
-              min="1950-01-01"
-              max="{{ today | date : 'yyyy/MM/dd' }}"
-              pattern=""
-              [(ngModel)]="personelUserCvWorkExperienceModel.endDate"
-              type="date"
-              class="form-control"
-              name="endDate"
-              #endDate="ngModel"
-            />
-
-            <span class="input-group-text">
-              <i
-                (click)="endDateClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!endDate.valid && endDate.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(endDate)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Position</span>
-            <input
-              required
-              minlength="3"
-              maxlength="30"
-              pattern=""
-              [(ngModel)]="personelUserCvWorkExperienceModel.position"
-              type="text"
-              class="form-control"
-              name="position"
-              #position="ngModel"
-              placeholder="Position"
-            />
-
-            <span class="input-group-text">
-              <i
-                (click)="positionClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!position.valid && position.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(position)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
             <span class="input-group-text"
-              >Address <br />{{ detailCount }} \ 50</span
+              >Detail <br />{{ detailCount }} \ 2000</span
             >
             <textarea
-              required
-              minlength="50"
-              maxlength="250"
+              maxlength="2000"
               pattern=""
               class="form-control"
               [(ngModel)]="personelUserCvWorkExperienceModel.detail"
@@ -524,32 +643,6 @@
               {{ error }}
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserCvWorkExperienceModel.foundJobInHere"
-            name="foundJobInHere"
-          />
-          <label class="form-check-label" for="checkChecked"> Working </label>
-        </div>
-      </div>
-
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserCvWorkExperienceModel.working"
-            name="working"
-          />
-          <label class="form-check-label" for="checkChecked">
-            Found Job In Here
-          </label>
         </div>
       </div>
     </form>

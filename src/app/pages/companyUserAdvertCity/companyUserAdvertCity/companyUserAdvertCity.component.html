@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="alert alert-dark" role="alert">
+    <i
+      (click)="open()"
+      class="bi bi-plus-circle"
+      style="color: black; font-size: 16px; cursor: pointer"
+    >
+      {{ componentTitle }}</i
+    >
+  </div>
+
+  <div class="nav nav-tabs d-flex mt-3" id="nav-tab" role="tablist">
+    <a
+      class="w-100 nav-item nav-link"
+      routerLink="companyuseradvertcitylisttab"
+      routerLinkActive="active"
+      style="flex: 1"
+    >
+      {{ componentTitle }} List
+    </a>
+
+    <a
+      class="w-100 nav-item nav-link"
+      routerLink="companyuseradvertcitydeletedlisttab"
+      routerLinkActive="active"
+      style="flex: 1"
+    >
+      {{ componentTitle }} Deleted List
+    </a>
+  </div>
+</div>
+<router-outlet></router-outlet>

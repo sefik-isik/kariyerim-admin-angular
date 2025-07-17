@@ -57,7 +57,7 @@ export class AllUserDeletedListComponent implements OnInit {
       (response) => {
         this.getUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -66,7 +66,7 @@ export class AllUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -89,7 +89,7 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.update(userDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -127,7 +127,7 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.terminate(userDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -140,9 +140,9 @@ export class AllUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(AllUserUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -153,9 +153,9 @@ export class AllUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(AllUserDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

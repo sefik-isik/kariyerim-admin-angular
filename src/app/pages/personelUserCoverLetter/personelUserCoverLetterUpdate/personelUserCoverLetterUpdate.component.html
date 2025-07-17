@@ -4,7 +4,8 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
@@ -27,7 +28,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="100"
               pattern=""
               [(ngModel)]="personelUserCoverLetterDTO.title"
               type="text"
@@ -57,13 +58,13 @@
 
       <div class="input-group mb-3">
         <span class="input-group-text"
-          >Description <br />{{ descriptionCount }} \ 250</span
+          >Description <br />{{ descriptionCount }} \ 100</span
         >
 
         <textarea
           required
-          minlength="50"
-          maxlength="250"
+          minlength="100"
+          maxlength="1500"
           pattern=""
           class="form-control"
           [(ngModel)]="personelUserCoverLetterDTO.description"

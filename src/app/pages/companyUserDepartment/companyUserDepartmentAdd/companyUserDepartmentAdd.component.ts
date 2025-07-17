@@ -1,21 +1,23 @@
-import { CompanyUserDepartmentDTO } from './../../../models/dto/companyUserDepartmentDTO';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { CompanyUser } from '../../../models/component/companyUser';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
-import { CompanyUserService } from '../../../services/companyUser.service';
+import { Department } from '../../../models/component/department';
 import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { CaseService } from '../../../services/helperServices/case.service';
+import { CompanyUserService } from '../../../services/companyUser.service';
+import { DepartmentService } from '../../../services/department.service';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUser } from '../../../models/component/companyUser';
+import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
+import { CompanyUserDepartmentDTO } from './../../../models/dto/companyUserDepartmentDTO';
+import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserDepartmentAdd',
@@ -28,23 +30,28 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     {} as CompanyUserDepartmentDTO;
   companyUsers: CompanyUser[] = [];
   userDTOs: UserDTO[] = [];
+  departments: Department[] = [];
+  admin: boolean = false;
   componentTitle = 'Company User Department Add Form';
 
   constructor(
     private toastrService: ToastrService,
     private router: Router,
     private companyUserDepartmentService: CompanyUserDepartmentService,
+    private departmentService: DepartmentService,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private caseService: CaseService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
+    this.getDepartments();
   }
 
   getValidationErrors(state: any) {
@@ -62,7 +69,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -73,12 +80,12 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   getModel(): CompanyUserDepartment {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.companyUserDepartmentModel.email),
+      userId: this.getUserId(this.companyUserDepartmentModel.email.trim()),
       companyUserId: this.getCompanyUserId(
-        this.companyUserDepartmentModel.companyUserName
+        this.companyUserDepartmentModel.companyUserName.trim()
       ),
-      departmentName: this.caseService.capitalizeFirstLetter(
-        this.companyUserDepartmentModel.departmentName
+      departmentId: this.getDepartmentId(
+        this.companyUserDepartmentModel.departmentName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -91,30 +98,52 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.companyUserDepartmentModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.companyUserDepartmentModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+    this.companyUserService.getAll(adminModel).subscribe(
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
+  }
+
+  getDepartments() {
+    this.departmentService.getAll().subscribe(
+      (response) => {
+        this.departments = response.data.filter((c) => c.isCompany === true);
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.companyUserDepartmentModel.userId;
+    }
     return userId;
   }
 
@@ -124,6 +153,14 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     )[0]?.id;
 
     return companyId;
+  }
+
+  getDepartmentId(departmentName: string): string {
+    const departmentId = this.departments.filter(
+      (c) => c.departmentName === departmentName
+    )[0]?.id;
+
+    return departmentId;
   }
 
   emailClear() {

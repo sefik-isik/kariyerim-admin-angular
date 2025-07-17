@@ -3,7 +3,6 @@ import { DepartmentService } from './../../../services/department.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { UniversityDepartmentDTO } from '../../../models/dto/universityDepartmentDTO';
@@ -39,6 +38,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   filter1 = '';
   filter2 = '';
   filter3 = '';
+  admin: boolean = false;
 
   componentTitle = 'University Departments';
   constructor(
@@ -52,6 +52,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getUniversities();
     this.getFaculties();
     this.getDepartments();
@@ -69,7 +70,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -78,7 +79,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -87,7 +88,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -96,12 +97,12 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.universityDepartmentDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(universityDepartment: UniversityDepartmentDTO) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -114,12 +115,12 @@ export class UniversityDepartmentListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -132,7 +133,8 @@ export class UniversityDepartmentListComponent implements OnInit {
         .delete(universityDepartmentDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -147,9 +149,9 @@ export class UniversityDepartmentListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -164,9 +166,9 @@ export class UniversityDepartmentListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

@@ -55,7 +55,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -64,7 +64,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.regionDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -74,7 +74,7 @@ export class RegionDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -82,7 +82,7 @@ export class RegionDeletedListComponent implements OnInit {
     this.regionDTOs.forEach((region) => {
       this.regionService.update(region).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -115,7 +115,7 @@ export class RegionDeletedListComponent implements OnInit {
     this.regionDTOs.forEach((regionDTO) => {
       this.regionService.terminate(regionDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -128,9 +128,9 @@ export class RegionDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(RegionUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -141,9 +141,9 @@ export class RegionDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(RegionDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

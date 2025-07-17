@@ -18,7 +18,7 @@ import { ModelMenuDetailComponent } from '../modelMenuDetail/modelMenuDetail.com
 })
 export class ModelMenuListComponent implements OnInit {
   modelMenus: ModelMenu[] = [];
-
+  admin: boolean = false;
   componentTitle = 'Model Menus';
   filter1: string;
 
@@ -30,6 +30,7 @@ export class ModelMenuListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getModelMenus();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +44,12 @@ export class ModelMenuListComponent implements OnInit {
       (response) => {
         this.modelMenus = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(modelMenu: ModelMenu) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +62,12 @@ export class ModelMenuListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +78,7 @@ export class ModelMenuListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.delete(modelMenu).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +91,9 @@ export class ModelMenuListComponent implements OnInit {
     const modalRef = this.modalService.open(ModelMenuUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +104,9 @@ export class ModelMenuListComponent implements OnInit {
     const modalRef = this.modalService.open(ModelMenuDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

@@ -1,16 +1,14 @@
-import { LocalStorageService } from './helperServices/localStorage.service';
 import { Injectable, OnInit } from '@angular/core';
 import { ApiUrl } from '../models/concrete/apiUrl';
-
+import { LocalStorageService } from './helperServices/localStorage.service';
 import { HttpClient } from '@angular/common/http';
-import { SingleResponseModel } from '../models/response/singleResponseModel';
-import { LoginModel } from '../models/auth/loginModel';
-import { TokenModel } from '../models/auth/tokenModel';
-import { RegisterModel } from '../models/auth/registerModel';
-import { PasswordModel } from '../models/auth/passwordModel';
 import { Router } from '@angular/router';
-import { UserDTO } from '../models/dto/userDTO';
+import { LoginModel } from '../models/auth/loginModel';
+import { PasswordModel } from '../models/auth/passwordModel';
+import { RegisterModel } from '../models/auth/registerModel';
+import { TokenModel } from '../models/auth/tokenModel';
 import { AdminStatus } from '../models/concrete/status';
+import { SingleResponseModel } from '../models/response/singleResponseModel';
 
 @Injectable({
   providedIn: 'root',
@@ -47,16 +45,6 @@ export class AuthService implements OnInit {
     );
   }
 
-  isAuthenticated(key: string): boolean {
-    const token = this.localStorageService.getFromLocalStorage(key);
-
-    if (token) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   checkTokenExpiration(key: string): boolean {
     const expirationTime = this.localStorageService.getFromLocalStorage(key);
 
@@ -71,8 +59,8 @@ export class AuthService implements OnInit {
     return false;
   }
 
-  isAdmin(key: string) {
-    if (this.localStorageService.getFromLocalStorage(key) == AdminStatus) {
+  isAdmin() {
+    if (this.localStorageService.getFromLocalStorage('status') == AdminStatus) {
       return true;
     }
     return false;

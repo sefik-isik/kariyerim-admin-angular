@@ -1,0 +1,76 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <b>Id: </b>{{ companyUserAdvertJobDescriptionDTO.id }}
+    </p>
+    <p class="card-text">
+      <b>userId: </b>{{ companyUserAdvertJobDescriptionDTO.userId }}
+    </p>
+    <p class="card-text">
+      <b>email: </b>{{ companyUserAdvertJobDescriptionDTO.email }}
+    </p>
+    <p class="card-text">
+      <b>firstName: </b>{{ companyUserAdvertJobDescriptionDTO.firstName }}
+    </p>
+    <p class="card-text">
+      <b>lastName: </b>{{ companyUserAdvertJobDescriptionDTO.lastName }}
+    </p>
+    <p class="card-text">
+      <b>phoneNumber: </b>{{ companyUserAdvertJobDescriptionDTO.phoneNumber }}
+    </p>
+    <p class="card-text">
+      <b>companyUserId: </b
+      >{{ companyUserAdvertJobDescriptionDTO.companyUserId }}
+    </p>
+    <p class="card-text">
+      <b>companyUserName: </b
+      >{{ companyUserAdvertJobDescriptionDTO.companyUserName }}
+    </p>
+    <p class="card-text">
+      <b>advertId: </b>{{ companyUserAdvertJobDescriptionDTO.advertId }}
+    </p>
+
+    <p class="card-text">
+      <b>advertName: </b>{{ companyUserAdvertJobDescriptionDTO.advertName }}
+    </p>
+    <p class="card-text">
+      <b>title: </b>{{ companyUserAdvertJobDescriptionDTO.title }}
+    </p>
+    <p class="card-text">
+      <b>description: </b>{{ companyUserAdvertJobDescriptionDTO.description }}
+    </p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{
+        companyUserAdvertJobDescriptionDTO.createdDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{
+        companyUserAdvertJobDescriptionDTO.updatedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{
+        companyUserAdvertJobDescriptionDTO.deletedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

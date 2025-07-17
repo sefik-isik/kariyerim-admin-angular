@@ -17,7 +17,7 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class LicenseDegreeAddComponent implements OnInit {
   licenseDegreeModel: LicenseDegree = {} as LicenseDegree;
-  componentTitle = 'Licence Degree Add Form';
+  componentTitle = 'License Degree Add Form';
 
   constructor(
     private toastrService: ToastrService,
@@ -41,10 +41,10 @@ export class LicenseDegreeAddComponent implements OnInit {
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
-            '/dashboard/licencedegree/licencedegreelisttab',
+            '/dashboard/licensedegree/licensedegreelisttab',
           ]);
         },
-        (responseError) => console.error(responseError)
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -55,7 +55,7 @@ export class LicenseDegreeAddComponent implements OnInit {
     return Object.assign({
       id: '',
       licenseDegreeName: this.caseService.capitalizeFirstLetter(
-        this.licenseDegreeModel.licenseDegreeName
+        this.licenseDegreeModel.licenseDegreeName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

@@ -1,24 +1,22 @@
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
-import { CountryService } from './../../../services/country.service';
-import { City } from '../../../models/component/city';
-import { Component, Input, OnInit } from '@angular/core';
-
-import { CityService } from '../../../services/city.service';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { City } from '../../../models/component/city';
+import { CompanyUserAddress } from '../../../models/component/companyUserAddress';
 import { Country } from '../../../models/component/country';
 import { Region } from '../../../models/component/region';
-import { RegionService } from '../../../services/region.service';
 import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CityService } from '../../../services/city.service';
+import { RegionService } from '../../../services/region.service';
 import { ValidationService } from '../../../services/validation.service';
-import { CompanyUserAddress } from '../../../models/component/companyUserAddress';
+import { CompanyUserAddressService } from './../../../services/companyUserAddress.service';
+import { CountryService } from './../../../services/country.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
@@ -28,11 +26,11 @@ import { CompanyUserAddress } from '../../../models/component/companyUserAddress
 })
 export class CompanyUserAddressUpdateComponent implements OnInit {
   @Input() companyUserAddressDTO: CompanyUserAddressDTO;
-  companyUsers: CompanyUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
   regions: Region[] = [];
   addressDetailCount: number;
+  admin: boolean = false;
   componentTitle = 'Company User Address Update Form';
 
   constructor(
@@ -41,13 +39,15 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     private cityService: CityService,
     private regionService: RegionService,
     public activeModal: NgbActiveModal,
+    private localStorageService: LocalStorageService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getCountries();
 
     setTimeout(() => {
@@ -68,12 +68,10 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserAddressService.getById(adminModel).subscribe(
       (response) => {
-        this.companyUserAddressDTO.id = response.data.id;
-        this.companyUserAddressDTO.cityId = response.data.cityId;
-        this.companyUserAddressDTO.regionId = response.data.regionId;
-        this.addressDetailCount = this.count(response.data.addressDetail);
+        this.getCities(this.companyUserAddressDTO.countryId);
+        this.getRegions(this.companyUserAddressDTO.cityId);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -92,7 +90,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -105,10 +103,12 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
       id: this.companyUserAddressDTO.id,
       userId: this.companyUserAddressDTO.userId,
       companyUserId: this.companyUserAddressDTO.companyUserId,
-      countryId: this.getCountryId(this.companyUserAddressDTO.countryName),
-      cityId: this.getCityId(this.companyUserAddressDTO.cityName),
-      regionId: this.getRegionId(this.companyUserAddressDTO.regionName),
-      addressDetail: this.companyUserAddressDTO.addressDetail,
+      countryId: this.getCountryId(
+        this.companyUserAddressDTO.countryName.trim()
+      ),
+      cityId: this.getCityId(this.companyUserAddressDTO.cityName.trim()),
+      regionId: this.getRegionId(this.companyUserAddressDTO.regionName.trim()),
+      addressDetail: this.companyUserAddressDTO.addressDetail.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -124,7 +124,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -135,7 +135,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -146,7 +146,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

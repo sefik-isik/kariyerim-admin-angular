@@ -26,20 +26,7 @@ export class OperationClaimUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.operationClaim.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.operationClaimService.getById(id).subscribe(
-      (response) => {
-        this.operationClaim.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -56,7 +43,7 @@ export class OperationClaimUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -67,7 +54,7 @@ export class OperationClaimUpdateComponent implements OnInit {
   getModel(): OperationClaim {
     return Object.assign({
       id: this.operationClaim.id,
-      name: this.operationClaim.name,
+      name: this.operationClaim.name.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

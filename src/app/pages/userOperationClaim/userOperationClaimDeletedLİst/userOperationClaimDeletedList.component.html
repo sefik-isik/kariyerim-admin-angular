@@ -9,7 +9,7 @@
           class="form-control"
           list="datalist1"
           id="input1"
-          placeholder="Filter Cities By Users..."
+          placeholder="Filter {{ componentTitle }} By User..."
           (change)="getAdminValues()"
         />
         <datalist id="datalist1">
@@ -32,7 +32,7 @@
           class="form-control"
           list="datalist2"
           id="input2"
-          placeholder="Filter By Operation Claim..."
+          placeholder="Filter {{ componentTitle }} By Operation Claim Name..."
         />
         <datalist id="datalist2">
           <option

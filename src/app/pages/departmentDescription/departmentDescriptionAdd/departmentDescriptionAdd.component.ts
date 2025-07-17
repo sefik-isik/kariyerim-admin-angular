@@ -52,7 +52,7 @@ export class DepartmentDescriptionAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.Message);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -64,10 +64,10 @@ export class DepartmentDescriptionAddComponent implements OnInit {
     return Object.assign({
       id: '',
       departmentId: this.getDepartmentId(
-        this.departmentDescriptionModel.departmentName
+        this.departmentDescriptionModel.departmentName.trim()
       ),
-      title: this.departmentDescriptionModel.title,
-      description: this.departmentDescriptionModel.description,
+      title: this.departmentDescriptionModel.title.trim(),
+      description: this.departmentDescriptionModel.description.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -75,9 +75,9 @@ export class DepartmentDescriptionAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data;
+        this.departments = response.data.filter((f) => f.isCompany == false);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

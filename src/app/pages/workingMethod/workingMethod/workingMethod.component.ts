@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkingMethodAddComponent } from '../workingMethodAdd/workingMethodAdd.component';
+import { AuthService } from '../../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-workingMethod',
@@ -12,15 +14,29 @@ import { WorkingMethodAddComponent } from '../workingMethodAdd/workingMethodAdd.
 })
 export class WorkingMethodComponent {
   componentTitle = 'Working Methods';
-  constructor(private modalService: NgbModal) {}
+  admin: boolean = false;
+
+  constructor(
+    private modalService: NgbModal,
+    private authService: AuthService,
+    private toastrService: ToastrService
+  ) {}
+
+  ngOnInit() {
+    this.admin = this.authService.isAdmin();
+  }
 
   open() {
+    if (!this.admin) {
+      this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
+      return;
+    }
     const modalRef = this.modalService.open(WorkingMethodAddComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

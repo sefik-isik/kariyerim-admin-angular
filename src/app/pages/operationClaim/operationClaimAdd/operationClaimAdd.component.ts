@@ -43,7 +43,7 @@ export class OperationClaimAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -54,7 +54,7 @@ export class OperationClaimAddComponent implements OnInit {
   getModel(): OperationClaim {
     return Object.assign({
       id: '',
-      name: this.operationClaimModel.name,
+      name: this.operationClaimModel.name.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

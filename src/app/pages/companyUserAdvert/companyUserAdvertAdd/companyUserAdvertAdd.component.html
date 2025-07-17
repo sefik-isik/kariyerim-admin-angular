@@ -1,0 +1,686 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              email="true"
+              [(ngModel)]="companyUserAdvertModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserAdvertModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.companyUserName"
+              type="text"
+              class="form-control"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company Name"
+              list="companyUserNameDataList"
+            />
+            <datalist id="companyUserNameDataList">
+              <option
+                *ngFor="let companyUser of companyUsers"
+                value="{{ companyUser.companyUserName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="companyUserNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Advert Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.advertName"
+              type="text"
+              class="form-control"
+              name="advertName"
+              #advertName="ngModel"
+              placeholder="Advert Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="advertNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!advertName.valid && advertName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(advertName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="file"
+            required
+            pattern=""
+            [(ngModel)]="companyUserAdvertModel.advertImageName"
+            class="form-control"
+            name="advertImageName"
+            #advertImageName="ngModel"
+            placeholder="Upload Image"
+            (change)="onImageSelected($event)"
+            aria-label="Upload File"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="advertImageNameClear()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div *ngIf="!advertImageName.valid && advertImageName.touched">
+          <div
+            class="error-message"
+            *ngFor="let error of getValidationErrors(advertImageName)"
+          >
+            {{ error }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Image Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.advertImageOwnName"
+              type="text"
+              class="form-control"
+              name="advertImageOwnName"
+              #advertImageOwnName="ngModel"
+              placeholder="Image Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="advertImageOwnNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!advertImageOwnName.valid && advertImageOwnName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(advertImageOwnName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Work Area Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.workAreaName"
+              type="text"
+              class="form-control"
+              name="workAreaName"
+              #workAreaName="ngModel"
+              placeholder="Work Area Name"
+              list="workAreaNameDataList"
+            />
+            <datalist id="workAreaNameDataList">
+              <option
+                *ngFor="let workArea of workAreas"
+                value="{{ workArea.areaName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="workAreaNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workAreaName.valid && workAreaName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workAreaName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Working Method Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.workingMethodName"
+              type="text"
+              class="form-control"
+              name="workingMethodName"
+              #workingMethodName="ngModel"
+              placeholder="Working Method Name"
+              list="workingMethodNameDataList"
+            />
+            <datalist id="workingMethodNameDataList">
+              <option
+                *ngFor="let workingMethod of workingMethods"
+                value="{{ workingMethod.methodName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="workingMethodNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workingMethodName.valid && workingMethodName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workingMethodName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Experience Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.experienceName"
+              type="text"
+              class="form-control"
+              name="experienceName"
+              #experienceName="ngModel"
+              placeholder="Experience Name"
+              list="experienceNameDataList"
+            />
+            <datalist id="experienceNameDataList">
+              <option
+                *ngFor="let experience of experiences"
+                value="{{ experience.experienceName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="experienceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!experienceName.valid && experienceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(experienceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Department Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.departmentName"
+              type="text"
+              class="form-control"
+              name="companyUserDepartmentName"
+              #companyUserDepartmentName="ngModel"
+              placeholder="Department Name"
+              list="companyUserDepartmentNameDataList"
+            />
+            <datalist id="companyUserDepartmentNameDataList">
+              <option
+                *ngFor="let companyUserDepartment of companyUserDepartments"
+                value="{{ companyUserDepartment.departmentName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="departmentNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              !companyUserDepartmentName.valid &&
+              companyUserDepartmentName.touched
+            "
+          >
+            <div
+              class="error-message"
+              *ngFor="
+                let error of getValidationErrors(companyUserDepartmentName)
+              "
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">License Degree Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.licenseDegreeName"
+              type="text"
+              class="form-control"
+              name="licenseDegreeName"
+              #licenseDegreeName="ngModel"
+              placeholder="License Degree Name"
+              list="licenseDegreeNameDataList"
+            />
+            <datalist id="licenseDegreeNameDataList">
+              <option
+                *ngFor="let licenseDegree of licenseDegrees"
+                value="{{ licenseDegree.licenseDegreeName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="licenseDegreeNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!licenseDegreeName.valid && licenseDegreeName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(licenseDegreeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Driver Licence Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="3"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.driverLicenceName"
+              type="text"
+              class="form-control"
+              name="driverLicenceName"
+              #driverLicenceName="ngModel"
+              placeholder="Driver Licence Name"
+              list="driverLicenceNameDataList"
+            />
+            <datalist id="driverLicenceNameDataList">
+              <option
+                *ngFor="let driverLicence of driverLicences"
+                value="{{ driverLicence.driverLicenceName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="driverLicenceNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!driverLicenceName.valid && driverLicenceName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(driverLicenceName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Position</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.positionName"
+              type="text"
+              class="form-control"
+              name="positionName"
+              #positionName="ngModel"
+              placeholder="Position"
+              list="positionNameDataList"
+            />
+            <datalist id="positionNameDataList">
+              <option
+                *ngFor="let position of positions"
+                value="{{ position.positionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="positionNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!positionName.valid && positionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(positionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Position Level</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.positionLevelName"
+              type="text"
+              class="form-control"
+              name="positionLevelName"
+              #positionLevelName="ngModel"
+              placeholder="Position"
+              list="positionLevelNameDataList"
+            />
+            <datalist id="positionLevelNameDataList">
+              <option
+                *ngFor="let positionLevel of positionLevels"
+                value="{{ positionLevel.positionLevelName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="positionLevelNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!positionLevelName.valid && positionLevelName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(positionLevelName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Language Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.languageName"
+              type="text"
+              class="form-control"
+              name="languageName"
+              #languageName="ngModel"
+              placeholder="Language Name"
+              list="languageNameDataList"
+            />
+            <datalist id="languageNameDataList">
+              <option
+                *ngFor="let language of languages"
+                value="{{ language.languageName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="languageNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!languageName.valid && languageName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(languageName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Language Level Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.languageLevelName"
+              type="text"
+              class="form-control"
+              name="languageLevelName"
+              #languageLevelName="ngModel"
+              placeholder="Language"
+              list="languageLevelNameDataList"
+            />
+            <datalist id="languageLevelNameDataList">
+              <option
+                *ngFor="let languageLevel of languageLevels"
+                value="{{ languageLevel.levelTitle }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="languageLevelNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!languageLevelName.valid && languageLevelName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(languageLevelName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Military Status</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="companyUserAdvertModel.militaryStatus"
+                name="militaryStatus"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

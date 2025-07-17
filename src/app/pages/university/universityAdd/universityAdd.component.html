@@ -11,7 +11,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.universityName"
               type="text"
@@ -83,15 +83,22 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
-              [(ngModel)]="universityModel.workerCount"
+              [(ngModel)]="universityModel.workerCountValue"
               type="text"
               class="form-control"
               name="workerCount"
               #workerCount="ngModel"
               placeholder="Worker Count"
+              list="workerCountDataList"
             />
+            <datalist id="workerCountDataList">
+              <option
+                *ngFor="let count of counts"
+                value="{{ count.countValue }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
                 (click)="workerCountClear()"
@@ -118,7 +125,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.sectorName"
               type="text"
@@ -160,7 +167,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.webAddress"
               type="text"
@@ -195,7 +202,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.webNewsAddress"
               type="text"
@@ -230,7 +237,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.youTubeEmbedAddress"
               type="text"
@@ -267,7 +274,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.facebookAddress"
               type="text"
@@ -302,7 +309,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.instagramAddress"
               type="text"
@@ -337,7 +344,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.xAddress"
               type="text"
@@ -372,7 +379,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityModel.youTubeAddress"
               type="text"

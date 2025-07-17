@@ -13,20 +13,23 @@ import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserUpdateComponent } from '../companyUserUpdate/companyUserUpdate.component';
 import { CompanyUserDetailComponent } from '../companyUserDetail/companyUserDetail.component';
+import { AuthService } from '../../../services/auth.service';
+import { FilterCompanyUserPipe } from '../../../pipes/filterCompanyUser.pipe';
 
 @Component({
   selector: 'app-companyUserDeletedList',
   templateUrl: './companyUserDeletedList.component.html',
   styleUrls: ['./companyUserDeletedList.component.css'],
-  imports: [CommonModule, FormsModule, FilterUserPipe],
+  imports: [CommonModule, FormsModule, FilterUserPipe, FilterCompanyUserPipe],
 })
 export class CompanyUserDeletedListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   companyUserDTOs: CompanyUserDTO[] = [];
   dataLoaded = false;
   filter1 = '';
-
-  componentTitle = 'Deleted Company Users';
+  filter2: string = '';
+  admin: boolean = false;
+  componentTitle = 'Company Users';
   userId: string;
 
   constructor(
@@ -35,10 +38,12 @@ export class CompanyUserDeletedListComponent implements OnInit {
     private toastrService: ToastrService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -49,7 +54,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -58,7 +63,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -67,7 +72,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -83,7 +88,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -91,7 +96,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.update(companyUser).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -124,7 +129,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.terminate(companyUser).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -137,9 +142,9 @@ export class CompanyUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -150,9 +155,9 @@ export class CompanyUserDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -161,6 +166,11 @@ export class CompanyUserDeletedListComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
+    this.ngOnInit();
+  }
+
+  clearInput2() {
+    this.filter2 = null;
     this.ngOnInit();
   }
 }

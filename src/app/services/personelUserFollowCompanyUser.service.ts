@@ -8,6 +8,7 @@ import { ResponseModel } from '../models/response/responseModel';
 import { AdminModel } from '../models/auth/adminModel';
 import { CompanyFollowDTO } from '../models/dto/companyFollowDTO';
 import { PersonelUserFollowCompanyUser } from '../models/component/personelUserFollowCompanyUser';
+import { PersonelUserFollowCompanyUserDTO } from '../models/dto/personelUserFollowCompanyUserDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -72,24 +73,25 @@ export class PersonelUserFollowCompanyUserService {
 
   getAllDTO(
     adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyFollowDTO>> {
-    return this.httpClient.post<ListResponseModel<CompanyFollowDTO>>(
-      this.newUrlPath + 'getalldto',
-      adminModel
-    );
+  ): Observable<ListResponseModel<PersonelUserFollowCompanyUserDTO>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserFollowCompanyUserDTO>
+    >(this.newUrlPath + 'getalldto', adminModel);
   }
 
   getAllByCompanyIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<CompanyFollowDTO>> {
-    let path = this.newUrlPath + 'getallbycompanyiddto?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyFollowDTO>>(path);
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserFollowCompanyUserDTO>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserFollowCompanyUserDTO>
+    >(this.newUrlPath + 'getallbycompanyiddto', adminModel);
   }
 
   getAllByPersonelIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<CompanyFollowDTO>> {
-    let path = this.newUrlPath + 'getallbypersoneliddto?id=' + id;
-    return this.httpClient.get<SingleResponseModel<CompanyFollowDTO>>(path);
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserFollowCompanyUserDTO>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserFollowCompanyUserDTO>
+    >(this.newUrlPath + 'getallbypersoneliddto', adminModel);
   }
 }

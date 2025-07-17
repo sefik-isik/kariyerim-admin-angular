@@ -1,14 +1,6 @@
 import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, Input, OnInit } from '@angular/core';
-
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -36,20 +28,7 @@ export class WorkingMethodUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.workingMethod.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.workingMethodService.getById(id).subscribe(
-      (response) => {
-        this.workingMethod.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -78,7 +57,7 @@ export class WorkingMethodUpdateComponent implements OnInit {
     return Object.assign({
       id: this.workingMethod.id,
       methodName: this.caseService.capitalizeFirstLetter(
-        this.workingMethod.methodName
+        this.workingMethod.methodName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

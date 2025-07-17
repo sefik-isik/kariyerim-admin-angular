@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
+import { AuthService } from '../../../services/auth.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
-import { UserService } from '../../../services/user.service';
 import { PersonelUserImageDetailComponent } from '../personelUserImageDetail/personelUserImageDetail.component';
 import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/personelUserImageUpdate.component';
 
@@ -23,25 +23,25 @@ import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/per
 })
 export class PersonelUserImageListComponent implements OnInit {
   personelUserImageDTOs: PersonelUserImageDTO[] = [];
-  userDTOs: UserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Images';
-  userId: string;
-
-  personelUserImagesLenght: number = 0;
 
   constructor(
     private toastrService: ToastrService,
     private personelUserImageService: PersonelUserImageService,
-    private userService: UserService,
+    private personelUserService: PersonelUserService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -54,19 +54,19 @@ export class PersonelUserImageListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -74,9 +74,23 @@ export class PersonelUserImageListComponent implements OnInit {
     this.personelUserImageService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.personelUserImageDTOs = response.data;
-        this.personelUserImagesLenght = this.personelUserImageDTOs.length;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
+  }
+
+  updateProfilImage(personelUserImage: PersonelUserImageDTO) {
+    if (!confirm('Ana Resim Olarak Güncellemek istediğinize emin misiniz?')) {
+      this.toastrService.info('Güncelleme İşlemi İptal Edildi');
+      return;
+    }
+    personelUserImage.isProfilImage = true;
+    this.personelUserImageService.update(personelUserImage).subscribe(
+      (response) => {
+        this.toastrService.success('Başarı ile güncellendi');
+        this.ngOnInit();
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -90,7 +104,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -102,7 +116,7 @@ export class PersonelUserImageListComponent implements OnInit {
     this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
       this.personelUserImageService.delete(personelUserImageDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -115,9 +129,9 @@ export class PersonelUserImageListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserImageUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -128,9 +142,9 @@ export class PersonelUserImageListComponent implements OnInit {
     const modalRef = this.modalService.open(PersonelUserImageDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

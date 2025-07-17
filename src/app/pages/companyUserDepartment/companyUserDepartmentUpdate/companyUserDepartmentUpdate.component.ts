@@ -1,19 +1,18 @@
-import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 import { Component, Input, OnInit } from '@angular/core';
-
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
+import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { Department } from '../../../models/component/department';
+import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { UserDTO } from '../../../models/dto/userDTO';
-import { CaseService } from '../../../services/helperServices/case.service';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DepartmentService } from '../../../services/department.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -25,41 +24,23 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   @Input() companyUserDepartmentDTO: CompanyUserDepartmentDTO;
   companyUsers: CompanyUserDTO[] = [];
   users: UserDTO[] = [];
+  departments: Department[] = [];
+  admin: boolean = false;
   componentTitle = 'Company User Department Update Form';
 
   constructor(
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
-    private localStorageService: LocalStorageService,
+    private departmentService: DepartmentService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.getUserValues(this.companyUserDepartmentDTO.id);
-    }, 200);
-  }
-
-  getUserValues(id: string) {
-    const adminModel = {
-      id: id,
-      email: this.localStorageService.getFromLocalStorage('email'),
-      userId: this.localStorageService.getFromLocalStorage('id'),
-      status: this.localStorageService.getFromLocalStorage('status'),
-    };
-    this.getById(adminModel);
-  }
-
-  getById(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getById(adminModel).subscribe(
-      (response) => {
-        this.companyUserDepartmentDTO.id = response.data.id;
-      },
-      (responseError) => console.error
-    );
+    this.admin = this.authService.isAdmin();
+    this.getDepartments();
   }
 
   getValidationErrors(state: any) {
@@ -90,13 +71,30 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
       id: this.companyUserDepartmentDTO.id,
       userId: this.companyUserDepartmentDTO.userId,
       companyUserId: this.companyUserDepartmentDTO.companyUserId,
-      departmentName: this.caseService.capitalizeFirstLetter(
-        this.companyUserDepartmentDTO.departmentName
+      departmentId: this.getDepartmentId(
+        this.companyUserDepartmentDTO.departmentName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  getDepartments() {
+    this.departmentService.getAll().subscribe(
+      (response) => {
+        this.departments = response.data.filter((c) => c.isCompany === true);
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
+  }
+
+  getDepartmentId(departmentName: string): string {
+    const departmentId = this.departments.filter(
+      (c) => c.departmentName === departmentName
+    )[0]?.id;
+
+    return departmentId;
   }
 
   departmentNameClear() {

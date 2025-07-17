@@ -8,4 +8,4 @@ import { DepartmentDescriptionDeletedListComponent } from '../departmentDescript
   </div> `,
   imports: [DepartmentDescriptionDeletedListComponent],
 })
-export class DepartmentDetailMainDeletedListTab {}
+export class DepartmentDescriptionDeletedListTab {}

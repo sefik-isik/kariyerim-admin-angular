@@ -22,7 +22,7 @@ export class NaviComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.authService.isAdmin('status')) {
+    if (this.authService.isAdmin()) {
       this.isAdmin = true;
     }
     this.firstName = this.localStorageService.getFromLocalStorage('firstName');
@@ -36,7 +36,7 @@ export class NaviComponent implements OnInit {
   }
 
   isAuthenticated() {
-    if (this.authService.isAuthenticated('token')) {
+    if (this.localStorageService.getFromLocalStorage('token')) {
       this.isAuth = true;
     } else {
       this.isAuth = false;

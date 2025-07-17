@@ -69,6 +69,7 @@
               <th></th>
               <th>
                 <i
+                  *ngIf="admin"
                   (click)="deleteAll()"
                   class="bi bi-trash"
                   style="color: red"
@@ -93,6 +94,7 @@
 
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="openDetail(regionDTO)"
                   class="bi bi-journal-text"
                   style="color: midnightblue"
@@ -100,6 +102,7 @@
               </td>
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="open(regionDTO)"
                   class="bi bi-pencil-square"
                   style="color: midnightblue"
@@ -107,6 +110,7 @@
               </td>
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="delete(regionDTO)"
                   class="bi bi-trash"
                   style="color: red"

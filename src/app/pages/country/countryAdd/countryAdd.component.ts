@@ -43,7 +43,7 @@ export class CountryAddComponent implements OnInit {
           this.router.navigate(['/dashboard/country/countrylisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -55,10 +55,10 @@ export class CountryAddComponent implements OnInit {
     return Object.assign({
       id: '',
       countryName: this.caseService.capitalizeFirstLetter(
-        this.countryModel.countryName
+        this.countryModel.countryName.trim()
       ),
       countryIso: this.caseService.capitalizeToUpper(
-        this.countryModel.countryIso
+        this.countryModel.countryIso.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

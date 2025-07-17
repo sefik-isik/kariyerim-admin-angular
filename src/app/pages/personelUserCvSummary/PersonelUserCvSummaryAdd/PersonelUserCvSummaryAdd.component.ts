@@ -18,6 +18,7 @@ import { PersonelUserCvSummary } from '../../../models/component/personelUserCvS
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCvSummaryAdd',
@@ -32,6 +33,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   personelUserCvs: PersonelUserCv[] = [];
   detailCount: number;
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Cv Summary Add Form';
 
   constructor(
@@ -44,10 +46,12 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private personelUserCvService: PersonelUserCvService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -66,7 +70,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -77,14 +81,16 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   getModel(): PersonelUserCvSummary {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserCvSummaryModel.email),
+      userId: this.getUserId(this.personelUserCvSummaryModel.email.trim()),
       personelUserId: this.getPersonelUserId(
-        this.personelUserCvSummaryModel.email
+        this.personelUserCvSummaryModel.email.trim()
       ),
-      cvId: this.getPersonelUserCvId(this.personelUserCvSummaryModel.cvName),
-      cvSummaryTitle: this.personelUserCvSummaryModel.cvSummaryTitle,
+      cvId: this.getPersonelUserCvId(
+        this.personelUserCvSummaryModel.cvName.trim()
+      ),
+      cvSummaryTitle: this.personelUserCvSummaryModel.cvSummaryTitle.trim(),
       cvSummaryDescription:
-        this.personelUserCvSummaryModel.cvSummaryDescription,
+        this.personelUserCvSummaryModel.cvSummaryDescription.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -96,16 +102,23 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserCvSummaryModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserCvSummaryModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -115,7 +128,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -132,7 +145,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -142,7 +155,13 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserCvSummaryModel.userId;
+    }
 
     return userId;
   }

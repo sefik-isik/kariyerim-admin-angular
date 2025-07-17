@@ -21,6 +21,8 @@ import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { CompanyUser } from '../../../models/component/companyUser';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserAddressAdd',
@@ -31,11 +33,12 @@ import { ValidationService } from '../../../services/validation.service';
 export class CompanyUserAddressAddComponent implements OnInit {
   companyUserAddressModel: CompanyUserAddressDTO = {} as CompanyUserAddressDTO;
   userDTOs: UserDTO[] = [];
-  companyUsers: CompanyUserDTO[] = [];
+  companyUsers: CompanyUser[] = [];
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
   addressDetailCount: number;
+  admin: boolean = false;
   componentTitle = 'Company Address Add Form';
 
   constructor(
@@ -50,10 +53,12 @@ export class CompanyUserAddressAddComponent implements OnInit {
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
     private companyUserService: CompanyUserService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.getCountries();
   }
@@ -84,14 +89,18 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getModel(): CompanyUserAddress {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.companyUserAddressModel.email),
+      userId: this.getUserId(this.companyUserAddressModel.email.trim()),
       companyUserId: this.getCompanyUserId(
-        this.companyUserAddressModel.companyUserName
+        this.companyUserAddressModel.companyUserName.trim()
       ),
-      countryId: this.getCountryId(this.companyUserAddressModel.countryName),
-      cityId: this.getCityId(this.companyUserAddressModel.cityName),
-      regionId: this.getRegionId(this.companyUserAddressModel.regionName),
-      addressDetail: this.companyUserAddressModel.addressDetail,
+      countryId: this.getCountryId(
+        this.companyUserAddressModel.countryName.trim()
+      ),
+      cityId: this.getCityId(this.companyUserAddressModel.cityName.trim()),
+      regionId: this.getRegionId(
+        this.companyUserAddressModel.regionName.trim()
+      ),
+      addressDetail: this.companyUserAddressModel.addressDetail.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -103,27 +112,32 @@ export class CompanyUserAddressAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.companyUserAddressModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.companyUserAddressModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.companyUserAddressModel.email);
-
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+    this.companyUserService.getAll(adminModel).subscribe(
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -136,7 +150,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -147,7 +161,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -158,7 +172,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
           (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

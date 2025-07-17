@@ -55,7 +55,7 @@ export class LanguageAddComponent implements OnInit {
     return Object.assign({
       id: '',
       languageName: this.caseService.capitalizeFirstLetter(
-        this.languageModel.languageName
+        this.languageModel.languageName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

@@ -18,6 +18,7 @@ import { LicenseDegreeDetailComponent } from '../licenseDegreeDetail/licenceDegr
 export class LicenseDegreeListComponent implements OnInit {
   licenseDegrees: LicenseDegree[] = [];
   componentTitle = 'Licence Degree';
+  admin: boolean = false;
 
   constructor(
     private toastrService: ToastrService,
@@ -27,6 +28,7 @@ export class LicenseDegreeListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getLicenseDegrees();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -40,12 +42,12 @@ export class LicenseDegreeListComponent implements OnInit {
       (response) => {
         this.licenseDegrees = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(licenseDegree: LicenseDegree) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -58,12 +60,12 @@ export class LicenseDegreeListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -74,7 +76,7 @@ export class LicenseDegreeListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegrees) => {
       this.licenseDegreeService.delete(licenseDegrees).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -87,9 +89,9 @@ export class LicenseDegreeListComponent implements OnInit {
     const modalRef = this.modalService.open(LicenseDegreeUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -100,9 +102,9 @@ export class LicenseDegreeListComponent implements OnInit {
     const modalRef = this.modalService.open(LicenseDegreeDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

@@ -64,7 +64,7 @@ export class WorkingMethodAddComponent implements OnInit {
     return Object.assign({
       id: '',
       methodName: this.caseService.capitalizeFirstLetter(
-        this.workingMethodModel.methodName
+        this.workingMethodModel.methodName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

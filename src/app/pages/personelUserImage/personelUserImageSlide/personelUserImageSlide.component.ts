@@ -12,6 +12,9 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonelUserImageByUser.pipe';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserImageSlide',
@@ -20,30 +23,30 @@ import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonel
   imports: [
     CommonModule,
     FormsModule,
-
     FilterPersonelUserImageByUserPipe,
-
     CarouselModule,
   ],
 })
 export class PersonelUserImageSlideComponent implements OnInit {
   personelUserImageDTOs: PersonelUserImageDTO[] = [];
-  userDTOs: UserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
-  componentTitle = 'Personel User Images Slide';
-  userId: string;
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
+  componentTitle = 'Personel User Images';
 
   constructor(
     private toastrService: ToastrService,
     private personelUserImageService: PersonelUserImageService,
     private adminService: AdminService,
-    private userService: UserService,
-    private localStorageService: LocalStorageService
+    private personelUserService: PersonelUserService,
+    private localStorageService: LocalStorageService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -51,19 +54,19 @@ export class PersonelUserImageSlideComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -72,7 +75,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
       (response) => {
         this.personelUserImageDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -87,7 +90,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
         this.getAdminValues();
       },
       (responseError) => {
-        console.error(responseError);
+        this.toastrService.error(responseError.error.message);
         if (responseError.error) {
           this.toastrService.error(responseError.error.message);
         } else {

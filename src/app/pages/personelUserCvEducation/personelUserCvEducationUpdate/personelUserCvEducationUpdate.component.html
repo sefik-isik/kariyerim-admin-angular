@@ -4,7 +4,8 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
@@ -163,12 +164,44 @@
       </div>
 
       <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >is Abandonment?</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserCvEducationDTO.abandonment"
+                name="abandonment"
+                (change)="endDateClear()"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
         <div class="input-group">
           <span class="input-group-text">Start Date</span>
           <input
             required
             minlength="3"
-            maxlength="20"
+            maxlength="50"
             min="1950-01-01"
             max="{{ today | date : 'yyyy/MM/dd' }}"
             pattern=""
@@ -200,9 +233,8 @@
         <div class="input-group">
           <span class="input-group-text">End Date</span>
           <input
-            required
-            minlength="3"
-            maxlength="20"
+            [required]="personelUserCvEducationDTO.abandonment == false"
+            maxlength="50"
             min="1950-01-01"
             max="{{ today | date : 'yyyy/MM/dd' }}"
             pattern=""
@@ -211,6 +243,7 @@
             class="form-control"
             name="endDate"
             #endDate="ngModel"
+            [disabled]="personelUserCvEducationDTO.abandonment == true"
           />
           <span class="input-group-text">
             <i
@@ -229,14 +262,12 @@
           </div>
         </div>
       </div>
-
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Education Info</span>
             <input
-              required
-              minlength="3"
               maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvEducationDTO.educationInfo"
@@ -269,19 +300,17 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Address <br />{{ detailCount }} \ 50</span
+              >Detail <br />{{ detailCount }} \ 2000</span
             >
             <textarea
-              required
-              minlength="50"
-              maxlength="250"
+              maxlength="2000"
               pattern=""
               class="form-control"
               [(ngModel)]="personelUserCvEducationDTO.detail"
               name="detail"
               #detail="ngModel"
               style="height: 100px"
-              (input)="count(personelUserCvEducationDTO.detail)"
+              (input)="count()"
             ></textarea>
             <span class="input-group-text">
               <i
@@ -299,20 +328,6 @@
               {{ error }}
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserCvEducationDTO.abandonment"
-            name="abandonment"
-          />
-          <label class="form-check-label" for="checkChecked">
-            Abandonment
-          </label>
         </div>
       </div>
     </form>

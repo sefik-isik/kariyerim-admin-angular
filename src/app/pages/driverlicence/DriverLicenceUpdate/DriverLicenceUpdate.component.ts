@@ -1,13 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -24,7 +17,6 @@ import { ValidationService } from '../../../services/validation.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class DriverLicenceUpdateComponent implements OnInit {
-  updateForm: FormGroup;
   @Input() driverLicence: DriverLicence;
   driverLicenceId: string;
 
@@ -32,8 +24,6 @@ export class DriverLicenceUpdateComponent implements OnInit {
 
   constructor(
     private driverLicenceService: DriverLicenceService,
-
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
@@ -41,20 +31,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.driverLicence.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.driverLicenceService.getById(id).subscribe(
-      (response) => {
-        this.driverLicence.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -71,7 +48,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -83,7 +60,7 @@ export class DriverLicenceUpdateComponent implements OnInit {
     return Object.assign({
       id: this.driverLicence.id,
       driverLicenceName: this.caseService.capitalizeToUpper(
-        this.driverLicence.driverLicenceName
+        this.driverLicence.driverLicenceName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

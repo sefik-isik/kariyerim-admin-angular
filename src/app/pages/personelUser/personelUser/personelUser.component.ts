@@ -18,9 +18,9 @@ export class PersonelUserComponent {
     const modalRef = this.modalService.open(PersonelUserAddComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

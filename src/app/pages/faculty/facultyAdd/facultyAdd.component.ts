@@ -55,7 +55,7 @@ export class FacultyAddComponent implements OnInit {
     return Object.assign({
       id: '',
       facultyName: this.caseService.capitalizeFirstLetter(
-        this.facultModel.facultyName
+        this.facultModel.facultyName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

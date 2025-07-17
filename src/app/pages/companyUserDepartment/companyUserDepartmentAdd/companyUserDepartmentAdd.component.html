@@ -4,14 +4,15 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               email="true"
               [(ngModel)]="companyUserDepartmentModel.email"
@@ -47,6 +48,22 @@
         </div>
       </div>
 
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserDepartmentModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -54,7 +71,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDepartmentModel.companyUserName"
               type="text"
@@ -96,7 +113,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDepartmentModel.departmentName"
               type="text"
@@ -104,7 +121,14 @@
               name="departmentName"
               #departmentName="ngModel"
               placeholder="Department Name"
+              list="departmentNameDataList"
             />
+            <datalist id="departmentNameDataList">
+              <option
+                *ngFor="let department of departments"
+                value="{{ department.departmentName }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
                 (click)="departmentNameClear()"

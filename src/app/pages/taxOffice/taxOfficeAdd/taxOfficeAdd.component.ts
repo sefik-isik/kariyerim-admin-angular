@@ -53,7 +53,7 @@ export class TaxOfficeAddComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -64,12 +64,12 @@ export class TaxOfficeAddComponent implements OnInit {
     return Object.assign({
       id: '',
       regionName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeModel.regionName
+        this.taxOfficeModel.regionName.trim()
       ),
-      cityId: this.getCityId(this.taxOfficeModel.cityName),
-      taxOfficeCode: this.taxOfficeModel.taxOfficeCode,
+      cityId: this.getCityId(this.taxOfficeModel.cityName.trim()),
+      taxOfficeCode: this.taxOfficeModel.taxOfficeCode.trim(),
       taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeModel.taxOfficeName
+        this.taxOfficeModel.taxOfficeName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -80,7 +80,7 @@ export class TaxOfficeAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -92,7 +92,7 @@ export class TaxOfficeAddComponent implements OnInit {
           this.regions = response.data.filter((f) => f.cityId == cityId);
         }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

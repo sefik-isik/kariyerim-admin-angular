@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-
 import { CompanyUserImageDTO } from '../../../models/dto/companyUserImageDTO';
 import { UserDTO } from '../../../models/dto/userDTO';
 import { UserService } from '../../../services/user.service';
@@ -14,6 +13,7 @@ import { CompanyUserImageService } from '../../../services/companyUserImage.serv
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserImageUpdateComponent } from '../companyUserImageUpdate/companyUserImageUpdate.component';
 import { CompanyUserImageDetailComponent } from '../companyUserImageDetail/companyUserImageDetail.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserImageDeletedList',
@@ -26,10 +26,8 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
+  admin: boolean = false;
   componentTitle = 'Deleted Company User Images';
-  userId: string;
-  companyUserImagesLenght: number = 0;
 
   constructor(
     private toastrService: ToastrService,
@@ -37,10 +35,12 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -56,7 +56,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -65,7 +65,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,9 +73,8 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     this.companyUserImageService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
         this.companyUserImageDTOs = response.data;
-        this.companyUserImagesLenght = this.companyUserImageDTOs.length;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +84,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -93,7 +92,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImageDTO) => {
       this.companyUserImageService.update(companyUserImageDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -126,7 +125,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImage) => {
       this.companyUserImageService.terminate(companyUserImage).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -139,9 +138,9 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserImageUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -152,16 +151,16 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserImageDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
     modalRef.componentInstance.companyUserImageDTO = companyUserImageDTO;
   }
 
-  clear1Input1() {
+  clearInput1() {
     this.filter1 = null;
     this.getAdminValues();
   }

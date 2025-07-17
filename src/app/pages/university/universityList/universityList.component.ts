@@ -21,6 +21,7 @@ export class UniversityListComponent implements OnInit {
   universityDTOs: UniversityDTO[] = [];
   componentTitle = 'Universities';
   filter1: string;
+  admin: boolean = false;
 
   constructor(
     private toastrService: ToastrService,
@@ -30,6 +31,7 @@ export class UniversityListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getUniversities();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +45,12 @@ export class UniversityListComponent implements OnInit {
       (response) => {
         this.universityDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(universityDTO: UniversityDTO) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +63,12 @@ export class UniversityListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +79,7 @@ export class UniversityListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.delete(universityDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +92,9 @@ export class UniversityListComponent implements OnInit {
     const modalRef = this.modalService.open(UniversityUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +105,9 @@ export class UniversityListComponent implements OnInit {
     const modalRef = this.modalService.open(UniversityDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

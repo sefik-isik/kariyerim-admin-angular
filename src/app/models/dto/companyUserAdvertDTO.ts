@@ -10,9 +10,20 @@ export interface CompanyUserAdvertDTO extends BaseCompanyUserDTOModel {
   workingMethodId: string;
   workingMethodName: string;
   experienceId: string;
-  rxperienceName: string;
+  experienceName: string;
   departmentId: string;
   departmentName: string;
   licenseDegreeId: string;
   licenseDegreeName: string;
+  positionId: string;
+  positionName: string;
+  positionLevelId: string;
+  positionLevelName: string;
+  militaryStatus: boolean;
+  languageId: string;
+  languageName: string;
+  languageLevelId: string;
+  languageLevelName: string;
+  driverLicenceId: string;
+  driverLicenceName: string;
 }

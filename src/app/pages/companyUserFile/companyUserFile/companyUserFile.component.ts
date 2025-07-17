@@ -18,9 +18,9 @@ export class CompanyUserFileComponent {
     const modalRef = this.modalService.open(CompanyUserFileAddComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

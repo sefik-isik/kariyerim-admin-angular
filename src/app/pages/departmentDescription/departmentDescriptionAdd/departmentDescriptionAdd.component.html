@@ -11,7 +11,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="60"
               pattern=""
               [(ngModel)]="departmentDescriptionModel.departmentName"
               type="text"
@@ -53,7 +53,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="departmentDescriptionModel.title"
               type="text"
@@ -89,8 +89,8 @@
             >
             <textarea
               required
-              minlength="50"
-              maxlength="250"
+              minlength="100"
+              maxlength="4000"
               pattern=""
               class="form-control"
               [(ngModel)]="departmentDescriptionModel.description"

@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="admin">
         <div class="input-group">
           <span class="input-group-text"
             >Email : {{ personelUserImageDTO.email }}</span
@@ -43,7 +43,9 @@
           </i>
         </div>
       </div>
-
+      <div class="mandatoryInformation" *ngIf="result == false">
+        Zorunlu Bilgiler
+      </div>
       <div class="mb-3" *ngIf="result == false">
         <div class="input-group">
           <input
@@ -73,7 +75,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserImageDTO.imageOwnName"
               type="text"

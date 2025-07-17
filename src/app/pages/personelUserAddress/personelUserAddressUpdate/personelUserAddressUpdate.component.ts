@@ -1,30 +1,20 @@
-import { CountryService } from './../../../services/country.service';
-import { City } from '../../../models/component/city';
 import { Component, Input, OnInit } from '@angular/core';
+import { City } from '../../../models/component/city';
+import { CountryService } from './../../../services/country.service';
 
-import { CityService } from '../../../services/city.service';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Country } from '../../../models/component/country';
 import { Region } from '../../../models/component/region';
-import { RegionService } from '../../../services/region.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
 import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CityService } from '../../../services/city.service';
+import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
+import { RegionService } from '../../../services/region.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserAddressUpdate',
@@ -34,21 +24,12 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class PersonelUserAddressUpdateComponent implements OnInit {
   @Input() personelUserAddressDTO: PersonelUserAddressDTO;
-  personelUserDTOs: PersonelUserDTO[] = [];
   cities: City[] = [];
   countries: Country[] = [];
   regions: Region[] = [];
-  users: UserDTO[] = [];
-  id: string;
-  personelUserId: string;
-  personelUserName: string;
-  userEmail: string;
-  countrId: string;
-  cityId: string;
-  regionId: string;
   addressDetail: string;
   addressDetailCount: number;
-
+  admin: boolean = false;
   componentTitle = 'Personel User Address Update Form';
 
   constructor(
@@ -58,41 +39,14 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
     private regionService: RegionService,
     private toastrService: ToastrService,
     private router: Router,
-    private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getCountries();
-
-    setTimeout(() => {
-      this.getUserValues(this.personelUserAddressDTO.id);
-    }, 200);
-  }
-
-  getUserValues(id: string) {
-    const adminModel = {
-      id: id,
-      email: this.localStorageService.getFromLocalStorage('email'),
-      userId: this.localStorageService.getFromLocalStorage('id'),
-      status: this.localStorageService.getFromLocalStorage('status'),
-    };
-    this.getById(adminModel);
-  }
-
-  getById(adminModel: AdminModel) {
-    this.personelUserAddressService.getById(adminModel).subscribe(
-      (response) => {
-        this.personelUserAddressDTO.id = response.data.id;
-        this.personelUserAddressDTO.personelUserId =
-          response.data.personelUserId;
-        this.personelUserAddressDTO.cityId = response.data.cityId;
-        this.personelUserAddressDTO.regionId = response.data.regionId;
-        this.addressDetailCount = this.count(response.data.addressDetail);
-      },
-      (responseError) => console.error
-    );
   }
 
   getValidationErrors(state: any) {
@@ -110,7 +64,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -123,10 +77,12 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
       id: this.personelUserAddressDTO.id,
       userId: this.personelUserAddressDTO.userId,
       personelUserId: this.personelUserAddressDTO.personelUserId,
-      countryId: this.getCountryId(this.personelUserAddressDTO.countryName),
-      cityId: this.getCityId(this.personelUserAddressDTO.cityName),
-      regionId: this.getRegionId(this.personelUserAddressDTO.regionName),
-      addressDetail: this.personelUserAddressDTO.addressDetail,
+      countryId: this.getCountryId(
+        this.personelUserAddressDTO.countryName.trim()
+      ),
+      cityId: this.getCityId(this.personelUserAddressDTO.cityName.trim()),
+      regionId: this.getRegionId(this.personelUserAddressDTO.regionName.trim()),
+      addressDetail: this.personelUserAddressDTO.addressDetail.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -142,7 +98,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -153,7 +109,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -164,7 +120,7 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
           (r) => r.cityId === this.getCityId(cityName)
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

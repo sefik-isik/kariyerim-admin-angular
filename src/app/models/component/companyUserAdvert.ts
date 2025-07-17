@@ -1,3 +1,4 @@
+import { DriverLicence } from './driverLicence';
 import { BaseCompanyUserModel } from '../base/baseCompanyUserModel';
 
 export interface CompanyUserAdvert extends BaseCompanyUserModel {
@@ -10,4 +11,10 @@ export interface CompanyUserAdvert extends BaseCompanyUserModel {
   experienceId: string;
   departmentId: string;
   licenseDegreeId: string;
+  positionId: string;
+  positionLevelId: string;
+  militaryStatus: boolean;
+  languageId: string;
+  languageLevelId: string;
+  driverLicenceId: string;
 }

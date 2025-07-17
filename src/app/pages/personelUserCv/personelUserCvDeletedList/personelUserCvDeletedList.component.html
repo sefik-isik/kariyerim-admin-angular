@@ -1,20 +1,19 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Personel User Cvs By User..."
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} ..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -35,15 +34,12 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
+            <th *ngIf="admin">email</th>
             <th>cvName</th>
-            <th>birthPlaceName</th>
+            <th>birthPlace</th>
             <th>isPrivate</th>
             <th>languageName</th>
             <th>level</th>
-            <th>level</th>
-            <th>levelDescription</th>
-
             <th></th>
             <th></th>
             <th>
@@ -71,15 +67,12 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ personelUserCvDTO.email }}</td>
+            <td *ngIf="admin">{{ personelUserCvDTO.email }}</td>
             <td>{{ personelUserCvDTO.cvName }}</td>
             <td>{{ personelUserCvDTO.birthPlaceName }}</td>
             <td>{{ personelUserCvDTO.isPrivate }}</td>
             <td>{{ personelUserCvDTO.languageName }}</td>
-            <td>{{ personelUserCvDTO.level }}</td>
             <td>{{ personelUserCvDTO.levelTitle }}</td>
-            <td>{{ personelUserCvDTO.levelDescription }}</td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCvDTO)"

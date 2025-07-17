@@ -1,21 +1,19 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Personel User..."
-          (change)="getAdminValues()"
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} ..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -36,16 +34,15 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
+            <th *ngIf="admin">email</th>
             <th>gender</th>
-            <th>licenseDegreeName</th>
-            <th>driverLicenceName</th>
-            <th>militaryStatus</th>
-            <th>nationalStatus</th>
-            <th>retirementStatus</th>
-            <th>birthPlaceName</th>
-            <th>dateOfBirth</th>
-
+            <th>licenseDegree</th>
+            <th>driverLicence</th>
+            <th>national</th>
+            <th>birthPlace</th>
+            <th></th>
+            <th></th>
+            <th></th>
             <th></th>
             <th></th>
             <th>
@@ -66,18 +63,36 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ personelUserDTO.email }}</td>
+            <td *ngIf="admin">{{ personelUserDTO.email }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
             <td>{{ personelUserDTO.licenseDegreeName }}</td>
             <td>{{ personelUserDTO.driverLicenceName }}</td>
-            <td>{{ personelUserDTO.militaryStatus | boolenText }}</td>
             <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>
-            <td>{{ personelUserDTO.retirementStatus | boolenText }}</td>
             <td>{{ personelUserDTO.birthPlaceName }}</td>
             <td>
-              {{ personelUserDTO.dateOfBirth | date : "dd/MM/yyyy" }}
+              <i
+                *ngIf="isPersonelUser || admin"
+                (click)="openFollowList(personelUserDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(171, 25, 190); cursor: pointer"
+              ></i>
             </td>
-
+            <td>
+              <i
+                *ngIf="isPersonelUser || admin"
+                (click)="openAdvertFollowList(personelUserDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(28, 25, 190); cursor: pointer"
+              ></i>
+            </td>
+            <td>
+              <i
+                *ngIf="isPersonelUser || admin"
+                (click)="openAdvertApplicationList(personelUserDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(25, 190, 80); cursor: pointer"
+              ></i>
+            </td>
             <td>
               <i
                 (click)="openDetail(personelUserDTO)"

@@ -9,7 +9,7 @@
           class="form-control"
           list="datalist2"
           id="input2"
-          placeholder="Filter By University Department..."
+          placeholder="Filter Departments..."
         />
         <datalist id="datalist2">
           <option
@@ -36,6 +36,7 @@
           <tr>
             <th>Id</th>
             <th>Department Name</th>
+            <th>isCompanyDepartment</th>
             <th></th>
             <th></th>
             <th>
@@ -63,7 +64,7 @@
           >
             <td>{{ i + 1 }}</td>
             <td>{{ department.departmentName }}</td>
-
+            <td>{{ department.isCompany | isCompany }}</td>
             <td>
               <i
                 (click)="openDetail(department)"

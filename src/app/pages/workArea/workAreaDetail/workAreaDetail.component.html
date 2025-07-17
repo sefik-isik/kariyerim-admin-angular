@@ -1,0 +1,30 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <p class="card-text"><b>Id: </b>{{ workArea.id }}</p>
+    <p class="card-text"><b>areaName: </b>{{ workArea.areaName }}</p>
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{ workArea.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{ workArea.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{ workArea.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

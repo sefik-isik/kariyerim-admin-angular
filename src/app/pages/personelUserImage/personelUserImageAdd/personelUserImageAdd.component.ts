@@ -23,6 +23,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserImageAdd',
@@ -38,6 +39,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   imageOwnName: string | null = null;
   personelUserDTOs: PersonelUserDTO[] = [];
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Image Add Form';
 
   constructor(
@@ -49,10 +51,12 @@ export class PersonelUserImageAddComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -126,7 +130,7 @@ export class PersonelUserImageAddComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
           this.toastrService.error('Error uploading file', responseError);
         }
       );
@@ -149,11 +153,13 @@ export class PersonelUserImageAddComponent implements OnInit {
   getModel(): PersonelUserImage {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserImageModel.email),
-      personelUserId: this.getPersonelUserId(this.personelUserImageModel.email),
-      imagePath: this.imagePath,
-      imageName: this.imageName,
-      imageOwnName: this.personelUserImageModel.imageOwnName,
+      userId: this.getUserId(this.personelUserImageModel.email.trim()),
+      personelUserId: this.getPersonelUserId(
+        this.personelUserImageModel.email.trim()
+      ),
+      imagePath: this.imagePath.trim(),
+      imageName: this.imageName.trim(),
+      imageOwnName: this.personelUserImageModel.imageOwnName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -165,16 +171,23 @@ export class PersonelUserImageAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserImageModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserImageModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -184,12 +197,18 @@ export class PersonelUserImageAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserImageModel.userId;
+    }
 
     return userId;
   }

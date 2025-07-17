@@ -9,39 +9,13 @@
           <div class="input-group">
             <span class="input-group-text">Country</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
-              pattern=""
-              [(ngModel)]="regionDTO.countryName"
-              type="text"
               class="form-control"
+              placeholder="email"
+              [(ngModel)]="regionDTO.countryName"
               name="countryName"
               #countryName="ngModel"
-              placeholder="countryName"
-              list="countryNameDataList"
+              disabled="true"
             />
-            <datalist id="countryNameDataList">
-              <option
-                *ngFor="let country of countries"
-                value="{{ country.countryName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="countryNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!countryName.valid && countryName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(countryName)"
-            >
-              {{ error }}
-            </div>
           </div>
         </div>
       </div>
@@ -50,39 +24,13 @@
           <div class="input-group">
             <span class="input-group-text">City</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
-              pattern=""
-              [(ngModel)]="regionDTO.cityName"
-              type="text"
               class="form-control"
+              placeholder="email"
+              [(ngModel)]="regionDTO.cityName"
               name="cityName"
               #cityName="ngModel"
-              placeholder="City"
-              list="cityNameDataList"
+              disabled="true"
             />
-            <datalist id="cityNameDataList">
-              <option
-                *ngFor="let city of cities"
-                value="{{ city.cityName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="cityNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!cityName.valid && cityName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(cityName)"
-            >
-              {{ error }}
-            </div>
           </div>
         </div>
       </div>
@@ -94,7 +42,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="regionDTO.regionName"
               type="text"

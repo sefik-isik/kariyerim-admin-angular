@@ -6,7 +6,8 @@ export interface CompanyUserDTO extends BaseUserModel {
   sectorName: string;
   about: string;
   clarification: string;
-  workerCount: string;
+  workerCountId: string;
+  workerCountValue: string;
   yearOfEstablishment: string;
   webAddress: string;
   taxCityId: string;

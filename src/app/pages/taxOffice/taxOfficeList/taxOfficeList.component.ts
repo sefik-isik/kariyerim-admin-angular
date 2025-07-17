@@ -30,7 +30,7 @@ export class TaxOfficeListComponent implements OnInit {
   cities: City[] = [];
   filter1 = '';
   filter2 = '';
-
+  admin: boolean = false;
   componentTitle = 'Tax Offices';
   constructor(
     private cityService: CityService,
@@ -41,6 +41,7 @@ export class TaxOfficeListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getCities();
     this.getTaxOffices();
     this.modalService.activeInstances.subscribe((x) => {
@@ -55,7 +56,7 @@ export class TaxOfficeListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -64,12 +65,12 @@ export class TaxOfficeListComponent implements OnInit {
       (response) => {
         this.taxOfficeDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(taxOfficeDTO: TaxOfficeDTO) {
-    // if (!this.authService.isAdmin('status')) {
+    // if (!this.authService.isAdmin()) {
     //   this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
     //   return;
     // }
@@ -82,12 +83,12 @@ export class TaxOfficeListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    // if (!this.authService.isAdmin('status')) {
+    // if (!this.authService.isAdmin()) {
     //   this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
     //   return;
     // }
@@ -98,7 +99,7 @@ export class TaxOfficeListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.delete(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -111,9 +112,9 @@ export class TaxOfficeListComponent implements OnInit {
     const modalRef = this.modalService.open(TaxOfficeUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -124,9 +125,9 @@ export class TaxOfficeListComponent implements OnInit {
     const modalRef = this.modalService.open(TaxOfficeDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

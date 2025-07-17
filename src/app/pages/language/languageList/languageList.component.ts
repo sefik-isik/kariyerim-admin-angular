@@ -18,6 +18,7 @@ import { LanguageDetailComponent } from '../languageDetail/languageDetail.compon
 })
 export class LanguageListComponent implements OnInit {
   languages: Language[] = [];
+  admin: boolean = false;
 
   componentTitle = 'Languages';
   filter1: string;
@@ -30,6 +31,7 @@ export class LanguageListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getLanguages();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +45,12 @@ export class LanguageListComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(language: Language) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +63,12 @@ export class LanguageListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +79,7 @@ export class LanguageListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.delete(language).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +92,9 @@ export class LanguageListComponent implements OnInit {
     const modalRef = this.modalService.open(LanguageUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +105,9 @@ export class LanguageListComponent implements OnInit {
     const modalRef = this.modalService.open(LanguageDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

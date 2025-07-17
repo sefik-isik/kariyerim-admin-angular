@@ -16,7 +16,6 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class ModelMenuUpdateComponent implements OnInit {
   @Input() modelMenu: ModelMenu;
-
   componentTitle = 'Model Menu Update Form';
 
   constructor(
@@ -27,20 +26,7 @@ export class ModelMenuUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.modelMenu.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.modelMenuService.getById(id).subscribe(
-      (response) => {
-        this.modelMenu.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -66,7 +52,7 @@ export class ModelMenuUpdateComponent implements OnInit {
   getModel(): ModelMenu {
     return Object.assign({
       id: this.modelMenu.id,
-      modelName: this.modelMenu.modelName,
+      modelName: this.modelMenu.modelName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

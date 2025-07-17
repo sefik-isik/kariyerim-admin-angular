@@ -26,8 +26,8 @@ import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFacu
     CommonModule,
     FormsModule,
     FilterUniversityDepartmentPipe,
-    FilterUniversityFacultyPipe,
     FilterUniversityDepartmentsByUniversityPipe,
+    FilterUniversityFacultyPipe,
   ],
 })
 export class UniversityDepartmentDeletedListComponent implements OnInit {
@@ -67,7 +67,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -76,7 +76,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +85,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -94,7 +94,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.universityDepartmentDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -104,7 +104,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -112,7 +112,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
     this.universityDepartmentDTOs.forEach((universityDepartment) => {
       this.universityDepartmentService.update(universityDepartment).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -149,7 +149,8 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
         .terminate(universityDepartmentDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -164,9 +165,9 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -181,9 +182,9 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

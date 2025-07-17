@@ -11,6 +11,8 @@ import { Sector } from '../../../models/component/sector';
 import { SectorService } from '../../../services/sectorService';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { Count } from '../../../models/component/count';
+import { CountService } from '../../../services/count.service';
 
 @Component({
   selector: 'app-universityUpdate',
@@ -24,11 +26,13 @@ export class UniversityUpdateComponent implements OnInit {
   addressDetail: number;
   descriptionDetail: number;
   subDescriptionDetail: number;
+  counts: Count[] = [];
   componentTitle = 'University Update Form';
 
   constructor(
     private universityService: UniversityService,
     private sectorService: SectorService,
+    private countService: CountService,
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
@@ -37,6 +41,7 @@ export class UniversityUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getCounts();
     this.getSectors();
     setTimeout(() => {
       this.getById(this.universityDTO.id);
@@ -55,7 +60,7 @@ export class UniversityUpdateComponent implements OnInit {
           this.universityDTO.yearOfEstablishment
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -80,23 +85,25 @@ export class UniversityUpdateComponent implements OnInit {
     return Object.assign({
       id: this.universityDTO.id,
       universityName: this.caseService.capitalizeFirstLetter(
-        this.universityDTO.universityName
+        this.universityDTO.universityName.trim()
       ),
-      sectorId: this.getSectorId(this.universityDTO.sectorName),
+      sectorId: this.getSectorId(this.universityDTO.sectorName.trim()),
       yearOfEstablishment: new Date(
         this.universityDTO.yearOfEstablishment
       ).toJSON(),
-      webAddress: this.universityDTO.webAddress,
-      workerCount: this.universityDTO.workerCount,
-      webNewsAddress: this.universityDTO.webNewsAddress,
-      youTubeEmbedAddress: this.universityDTO.youTubeEmbedAddress,
-      address: this.universityDTO.address,
-      facebookAddress: this.universityDTO.facebookAddress,
-      instagramAddress: this.universityDTO.instagramAddress,
-      xAddress: this.universityDTO.xAddress,
-      youTubeAddress: this.universityDTO.youTubeAddress,
-      description: this.universityDTO.description,
-      subDescription: this.universityDTO.subDescription,
+      webAddress: this.universityDTO.webAddress.trim(),
+      workerCountId: this.getCountId(
+        this.universityDTO.workerCountValue.trim()
+      ),
+      webNewsAddress: this.universityDTO.webNewsAddress.trim(),
+      youTubeEmbedAddress: this.universityDTO.youTubeEmbedAddress.trim(),
+      address: this.universityDTO.address.trim(),
+      facebookAddress: this.universityDTO.facebookAddress.trim(),
+      instagramAddress: this.universityDTO.instagramAddress.trim(),
+      xAddress: this.universityDTO.xAddress.trim(),
+      youTubeAddress: this.universityDTO.youTubeAddress.trim(),
+      description: this.universityDTO.description.trim(),
+      subDescription: this.universityDTO.subDescription.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -111,13 +118,29 @@ export class UniversityUpdateComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  getCounts() {
+    this.countService.getAll().subscribe(
+      (response) => {
+        this.counts = response.data;
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
+  }
+
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
+  }
+
+  getCountId(countValue: string): string {
+    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
+      ?.id;
+
+    return countId;
   }
 
   getSectorNameById(sectorId: string): string {
@@ -153,7 +176,7 @@ export class UniversityUpdateComponent implements OnInit {
   }
 
   workerCountClear() {
-    this.universityDTO.workerCount = '';
+    this.universityDTO.workerCountValue = '';
   }
 
   sectorNameClear() {

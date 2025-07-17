@@ -4,14 +4,15 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               email="true"
               [(ngModel)]="companyUserAddressModel.email"
@@ -47,6 +48,22 @@
         </div>
       </div>
 
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserAddressModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
@@ -54,7 +71,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAddressModel.companyUserName"
               type="text"
@@ -96,7 +113,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAddressModel.countryName"
               type="text"
@@ -139,7 +156,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAddressModel.cityName"
               type="text"
@@ -182,7 +199,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserAddressModel.regionName"
               type="text"

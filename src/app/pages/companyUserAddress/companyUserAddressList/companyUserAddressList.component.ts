@@ -1,19 +1,20 @@
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
-import { UserService } from '../../../services/user.service';
 import { UserDTO } from '../../../models/dto/userDTO';
 import { FilterCompanyUserAddressByUserPipe } from '../../../pipes/filterCompanyUserAddressByUser.pipe';
+import { AuthService } from '../../../services/auth.service';
 import { AdminService } from '../../../services/helperServices/admin.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUserAddressUpdateComponent } from '../companyUserAddressUpdate/companyUserAddressUpdate.component';
+import { UserService } from '../../../services/user.service';
 import { CompanyUserAddressDetailComponent } from '../companyUserAddressDetail/companyUserAddressDetail.component';
+import { CompanyUserAddressUpdateComponent } from '../companyUserAddressUpdate/companyUserAddressUpdate.component';
 
 @Component({
   selector: 'app-companyUserAddressList',
@@ -26,8 +27,9 @@ export class CompanyUserAddressListComponent implements OnInit {
   companyUserAddressDTOs: CompanyUserAddressDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+  filter2: string = '';
   componentTitle = 'Company User Addresses';
-  userId: string;
+  admin: boolean = false;
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
@@ -35,10 +37,12 @@ export class CompanyUserAddressListComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -54,7 +58,7 @@ export class CompanyUserAddressListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -63,7 +67,7 @@ export class CompanyUserAddressListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -72,7 +76,7 @@ export class CompanyUserAddressListComponent implements OnInit {
       (response) => {
         this.companyUserAddressDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -86,7 +90,7 @@ export class CompanyUserAddressListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -98,7 +102,7 @@ export class CompanyUserAddressListComponent implements OnInit {
     this.companyUserAddressDTOs.forEach((companyUserAddressDTO) => {
       this.companyUserAddressService.delete(companyUserAddressDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -111,9 +115,9 @@ export class CompanyUserAddressListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserAddressUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -124,9 +128,9 @@ export class CompanyUserAddressListComponent implements OnInit {
     const modalRef = this.modalService.open(CompanyUserAddressDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

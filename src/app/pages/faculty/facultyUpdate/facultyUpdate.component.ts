@@ -21,7 +21,6 @@ export class FacultyUpdateComponent implements OnInit {
 
   constructor(
     private facultyService: FacultyService,
-
     private toastrService: ToastrService,
     private router: Router,
     private caseService: CaseService,
@@ -29,23 +28,10 @@ export class FacultyUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.faculty.id);
-    }, 200);
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
-  }
-
-  getById(facultyId: string) {
-    this.facultyService.getById(facultyId).subscribe(
-      (response) => {
-        this.faculty.id = facultyId;
-      },
-      (responseError) => console.error
-    );
   }
 
   onSubmit(form: NgForm) {
@@ -69,7 +55,7 @@ export class FacultyUpdateComponent implements OnInit {
     return Object.assign({
       id: this.faculty.id,
       facultyName: this.caseService.capitalizeFirstLetter(
-        this.faculty.facultyName
+        this.faculty.facultyName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

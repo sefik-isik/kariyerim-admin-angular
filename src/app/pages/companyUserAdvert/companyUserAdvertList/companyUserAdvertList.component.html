@@ -1,0 +1,137 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3" *ngIf="admin">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="usersDatalistOptions"
+          id="usersData"
+          placeholder="Filter Company User Adverts By User..."
+        />
+        <datalist id="usersDatalistOptions">
+          <option
+            *ngFor="let userDTO of userDTOs"
+            value="{{ userDTO.email }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+    </div>
+    <div class="mt-3 table-responsive-xxl">
+      <table
+        *ngIf="companyUserAdvertDTOs.length > 0"
+        class="table table-striped table-hover table-sm"
+      >
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th *ngIf="admin">email</th>
+            <th>companyName</th>
+            <th>advertName</th>
+            <th *ngIf="!isCompanyUser"></th>
+            <th *ngIf="!isCompanyUser"></th>
+            <th *ngIf="isCompanyUser"></th>
+            <th *ngIf="isCompanyUser"></th>
+            <th *ngIf="admin"></th>
+            <th *ngIf="admin"></th>
+            <th *ngIf="admin"></th>
+            <th *ngIf="admin"></th>
+            <th *ngIf="admin">
+              <i
+                (click)="deleteAll()"
+                class="bi bi-trash"
+                style="color: crimson"
+              ></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let companyUserAdvertDTO of companyUserAdvertDTOs
+                | filterCompanyUserAdvertByUser : filter1;
+              index as i
+            "
+          >
+            <td>{{ i + 1 }}</td>
+            <td *ngIf="admin">{{ companyUserAdvertDTO.email }}</td>
+            <td>{{ companyUserAdvertDTO.companyUserName }}</td>
+            <td>{{ companyUserAdvertDTO.advertName }}</td>
+            <td *ngIf="admin">
+              <i
+                (click)="openFollowAdd(companyUserAdvertDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(30, 20, 179); cursor: pointer"
+              ></i>
+            </td>
+            <td *ngIf="!isCompanyUser">
+              <i
+                (click)="followAdd(companyUserAdvertDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(69, 25, 190)"
+              ></i>
+            </td>
+            <td *ngIf="isCompanyUser || admin">
+              <i
+                (click)="openFollowList(companyUserAdvertDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(69, 25, 190); cursor: pointer"
+              ></i>
+            </td>
+            <td *ngIf="admin">
+              <i
+                (click)="openApplicationAdd(companyUserAdvertDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(25, 190, 47)"
+              ></i>
+            </td>
+            <td *ngIf="!isCompanyUser">
+              <i
+                (click)="applicationAdd(companyUserAdvertDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(25, 190, 47)"
+              ></i>
+            </td>
+            <td *ngIf="isCompanyUser || admin">
+              <i
+                (click)="openApplicationList(companyUserAdvertDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(25, 190, 47); cursor: pointer"
+              ></i>
+            </td>
+            <td *ngIf="admin">
+              <i
+                (click)="openDetail(companyUserAdvertDTO)"
+                class="bi bi-journal-text"
+                style="color: midnightblue"
+              ></i>
+            </td>
+            <td *ngIf="admin">
+              <i
+                (click)="open(companyUserAdvertDTO)"
+                class="bi bi-pencil-square"
+                style="color: midnightblue"
+              ></i>
+            </td>
+            <td *ngIf="admin">
+              <i
+                (click)="delete(companyUserAdvertDTO)"
+                class="bi bi-trash"
+                style="color: crimson"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

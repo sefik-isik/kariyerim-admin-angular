@@ -1,0 +1,52 @@
+<div class="card">
+  <div class="alert alert-dark" role="alert">
+    Adverts Application By Personel Users List
+  </div>
+  <div class="card-header">
+    <div class="card-text">
+      Company User Name:
+      {{ companyUserAdvertDTO.companyUserName }}
+    </div>
+    <div class="card-text">
+      Advert Name:
+      {{ companyUserAdvertDTO.advertName }}
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table">
+      <table
+        *ngIf="personelUserAdvertApplicationDTOs.length > 0"
+        class="table table-striped table-hover table-sm"
+      >
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Personel User Mail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let personelUserAdvertApplicationDTO of personelUserAdvertApplicationDTOs;
+              index as i
+            "
+          >
+            <td>{{ i + 1 }}</td>
+            <td>{{ personelUserAdvertApplicationDTO.personelUserMail }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-grid gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          (click)="activeModal.close('Close click')"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

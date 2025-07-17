@@ -1,0 +1,134 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">University Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityImageModel.universityName"
+              type="text"
+              class="form-control"
+              name="universityName"
+              #universityName="ngModel"
+              placeholder="University Name"
+              list="universityNameDataList"
+            />
+            <datalist id="universityNameDataList">
+              <option
+                *ngFor="let university of universities"
+                value="{{ university.universityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="universityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!universityName.valid && universityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(universityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="input-group">
+          <input
+            type="file"
+            required
+            pattern=""
+            [(ngModel)]="universityImageModel.imageName"
+            class="form-control"
+            name="imageName"
+            #imageName="ngModel"
+            placeholder="Upload Image"
+            (change)="onImageSelected($event)"
+            aria-label="Upload File"
+          />
+          <span class="input-group-text">
+            <i
+              (click)="imageNameClear()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+        <div *ngIf="!imageName.valid && imageName.touched">
+          <div
+            class="error-message"
+            *ngFor="let error of getValidationErrors(imageName)"
+          >
+            {{ error }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Image Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityImageModel.imageOwnName"
+              type="text"
+              class="form-control"
+              name="imageOwnName"
+              #imageOwnName="ngModel"
+              placeholder="Image Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="imageOwnNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!imageOwnName.valid && imageOwnName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(imageOwnName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,6 @@ import { FacultyDetailComponent } from '../facultyDetail/facultyDetail.component
 })
 export class FacultyDeletedListComponent implements OnInit {
   faculties: Faculty[] = [];
-
   componentTitle = 'Faculties Deleted List';
   filter1: string;
 
@@ -41,7 +40,7 @@ export class FacultyDeletedListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -51,7 +50,7 @@ export class FacultyDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -59,7 +58,7 @@ export class FacultyDeletedListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.update(faculty).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -92,7 +91,7 @@ export class FacultyDeletedListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.terminate(faculty).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -105,9 +104,9 @@ export class FacultyDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(FacultyUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -118,9 +117,9 @@ export class FacultyDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(FacultyDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

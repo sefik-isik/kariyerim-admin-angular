@@ -19,7 +19,7 @@ import { OperationClaimDetailComponent } from '../operationClaimDetail/operation
 })
 export class OperationClaimListComponent implements OnInit {
   operationClaims: OperationClaim[] = [];
-
+  admin: boolean = false;
   componentTitle = 'Operation Claims';
 
   constructor(
@@ -32,6 +32,7 @@ export class OperationClaimListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -46,7 +47,7 @@ export class OperationClaimListComponent implements OnInit {
       (response) => {
         this.getOperationClaims();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -55,12 +56,12 @@ export class OperationClaimListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(operationClaim: OperationClaim) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -73,12 +74,12 @@ export class OperationClaimListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -89,7 +90,7 @@ export class OperationClaimListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.delete(operationClaim).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -102,9 +103,9 @@ export class OperationClaimListComponent implements OnInit {
     const modalRef = this.modalService.open(OperationClaimUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -115,9 +116,9 @@ export class OperationClaimListComponent implements OnInit {
     const modalRef = this.modalService.open(OperationClaimDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

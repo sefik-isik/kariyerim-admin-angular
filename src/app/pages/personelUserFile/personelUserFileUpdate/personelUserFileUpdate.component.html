@@ -35,7 +35,9 @@
           </span>
         </span>
       </div>
-
+      <div class="mandatoryInformation" *ngIf="result == false">
+        Zorunlu Bilgiler
+      </div>
       <div class="mb-3" *ngIf="result == false">
         <div class="input-group">
           <input
@@ -65,7 +67,7 @@
             <input
               required
               minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserFileDTO.fileOwnName"
               type="text"

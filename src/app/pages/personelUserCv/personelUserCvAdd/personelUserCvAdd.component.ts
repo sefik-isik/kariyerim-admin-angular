@@ -18,6 +18,7 @@ import { LanguageLevel } from '../../../models/component/languageLevel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCvAdd',
@@ -32,6 +33,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   languageLevels: LanguageLevel[] = [];
   addressDetailText: string;
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Cv Add Form';
 
   constructor(
@@ -45,10 +47,12 @@ export class PersonelUserCvAddComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.getLanguages();
     this.getLanguageLevels();
@@ -68,7 +72,7 @@ export class PersonelUserCvAddComponent implements OnInit {
             '/dashboard/personelusercv/personelusercvlisttab',
           ]);
         },
-        (responseError) => console.error
+        (responseError) => console.log(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -82,7 +86,9 @@ export class PersonelUserCvAddComponent implements OnInit {
       personelUserId: this.getPersonelUserId(this.personelUserCvModel.email),
       cvName: this.personelUserCvModel.cvName,
       languageId: this.getLanguageId(this.personelUserCvModel.languageName),
-      languageLevelId: this.getLanguageLevelId(this.personelUserCvModel.level),
+      languageLevelId: this.getLanguageLevelId(
+        this.personelUserCvModel.levelTitle
+      ),
       isPrivate: this.personelUserCvModel.isPrivate,
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -95,16 +101,23 @@ export class PersonelUserCvAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserCvModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserCvModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -113,7 +126,7 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -122,7 +135,7 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -131,12 +144,18 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserCvModel.userId;
+    }
 
     return userId;
   }
@@ -150,6 +169,10 @@ export class PersonelUserCvAddComponent implements OnInit {
   }
 
   getLanguageId(languageName: string): string {
+    if (languageName == null || languageName == '') {
+      languageName = '-';
+    }
+
     const languageId = this.languages.filter(
       (c) => c.languageName === languageName
     )[0]?.id;
@@ -157,8 +180,14 @@ export class PersonelUserCvAddComponent implements OnInit {
     return languageId;
   }
 
-  getLanguageLevelId(level: number): string {
-    const cityId = this.languageLevels.filter((c) => c.level === level)[0]?.id;
+  getLanguageLevelId(levelTitle: string): string {
+    if (levelTitle == null || levelTitle == '') {
+      levelTitle = '-';
+    }
+
+    const cityId = this.languageLevels.filter(
+      (c) => c.levelTitle === levelTitle
+    )[0]?.id;
 
     return cityId;
   }
@@ -175,7 +204,7 @@ export class PersonelUserCvAddComponent implements OnInit {
     this.personelUserCvModel.languageName = '';
   }
 
-  levelClear() {
+  levelTitleClear() {
     this.personelUserCvModel.level = 0;
   }
 }

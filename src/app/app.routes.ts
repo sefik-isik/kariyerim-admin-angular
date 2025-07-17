@@ -5,134 +5,157 @@ import { RegisterComponent } from './components/register/register.component';
 import { UpdatePasswordComponent } from './components/updatePassword/updatePassword.component';
 import { ExpirationGuard } from './guards/expiration.guard';
 import { LoginGuard } from './guards/login.guard';
+import { StatusGuard } from './guards/status.guard';
 import { AllUserComponent } from './pages/allUser/allUser/allUser.component';
 import { AllUserDeletedListTab } from './pages/allUser/allUser/allUserDeletedListTab';
 import { AllUserListTab } from './pages/allUser/allUser/allUserListTab';
 import { CityComponent } from './pages/city/city/city.component';
 import { CityListTab } from './pages/city/city/cityListTab';
-import { CityDeletedListComponent } from './pages/city/cityDeletedList/cityDeletedList.component';
 import { CompanyUserComponent } from './pages/companyUser/companyUser/companyUser.component';
 import { CompanyUserListTab } from './pages/companyUser/companyUser/companyUserListTab';
-import { CompanyUserDeletedListComponent } from './pages/companyUser/companyUserDeletedList/companyUserDeletedList.component';
 import { CompanyUserAddressComponent } from './pages/companyUserAddress/companyUserAddress/companyUserAddress.component';
 import { CompanyUserAddressListTab } from './pages/companyUserAddress/companyUserAddress/companyUserAddressListTab';
-import { CompanyUserAddressDeletedListComponent } from './pages/companyUserAddress/companyUserAddressDeletedList/companyUserAddressDeletedList.component';
+import { CompanyUserAdvertDeletedListTab } from './pages/companyUserAdvert/companyUserAdvert/companyUserAdvertDeletedListTab';
+import { CompanyUserAdvertListTab } from './pages/companyUserAdvert/companyUserAdvert/companyUserAdvertListTab';
 import { CompanyUserDepartmentComponent } from './pages/companyUserDepartment/companyUserDepartment/companyUserDepartment.component';
 import { CompanyUserDepartmentListTab } from './pages/companyUserDepartment/companyUserDepartment/companyUserDepartmentListTab';
-import { CompanyUserDepartmentDeletedListComponent } from './pages/companyUserDepartment/companyUserDepartmentDeletedList/companyUserDepartmentDeletedList.component';
 import { CompanyUserFileComponent } from './pages/companyUserFile/companyUserFile/companyUserFile.component';
+import { CompanyUserFileDeletedListTab } from './pages/companyUserFile/companyUserFile/companyUserFileDeletedListTab';
 import { CompanyUserFileListTab } from './pages/companyUserFile/companyUserFile/companyUserFileListTab';
-import { CompanyUserFileDeletedListComponent } from './pages/companyUserFile/companyUserFileDeletedList/companyUserFileDeletedList.component';
 import { CompanyUserImageComponent } from './pages/companyUserImage/companyUserImage/companyUserImage.component';
 import { CompanyUserImageListTab } from './pages/companyUserImage/companyUserImage/companyUserImageListTab';
-import { CompanyUserImageDeletedListComponent } from './pages/companyUserImage/companyUserImageDeletedList/companyUserImageDeletedList.component';
-import { CompanyUserImageSlideComponent } from './pages/companyUserImage/companyUserImageSlide/companyUserImageSlide.component';
+import { CompanyUserImageSlideTab } from './pages/companyUserImage/companyUserImage/companyUserImageSlideTab';
 import { CountryComponent } from './pages/country/country/country.component';
 import { CountryListTab } from './pages/country/country/countryListTab';
-import { CountryDeletedListComponent } from './pages/country/countryDeletedList/countryDeletedList.component';
 import { DriverLicenceComponent } from './pages/driverlicence/driverLicence/driverLicence.component';
 import { DriverLicenceListTab } from './pages/driverlicence/driverLicence/driverLicenceListTab';
-import { DriverLicenceDeletedListComponent } from './pages/driverlicence/driverLicenceDeletedList/driverLicenceDeletedList.component';
 import { FacultyComponent } from './pages/faculty/faculty/faculty.component';
 import { FacultyListTab } from './pages/faculty/faculty/facultyListTab';
-import { FacultyDeletedListComponent } from './pages/faculty/facultyDeletedList/facultyDeletedList.component';
 import { LanguageComponent } from './pages/language/language/language.component';
 import { LanguageListTab } from './pages/language/language/languageListTab';
-import { LanguageDeletedListComponent } from './pages/language/languageDeletedList/languageDeletedList.component';
 import { LanguageLevelComponent } from './pages/languageLevel/languageLevel/languageLevel.component';
 import { LanguageLevelListTab } from './pages/languageLevel/languageLevel/languageLevelListTab';
-import { LanguageLevelDeletedListComponent } from './pages/languageLevel/languageLevelDeletedList/languageLevelDeletedList.component';
-
+import { UniversityImageSlideTab } from './pages/universityImage/universityImage/universityImageSlideTab';
 import { RegisterCompanyUserComponent } from './components/registerCompanyUser/registerCompanyUser.component';
 import { RegisterPersonelUserComponent } from './components/registerPersonelUser/registerPersonelUser.component';
+import { CityDeletedListTab } from './pages/city/city/cityDeletedListTab';
+import { CompanyUserDeletedListTab } from './pages/companyUser/companyUser/companyUserDeletedListTab';
+
+import { CompanyUserAddressDeletedListTab } from './pages/companyUserAddress/companyUserAddress/companyUserAddressDeletedListTab';
+import { CompanyUserAdvertComponent } from './pages/companyUserAdvert/companyUserAdvert/companyUserAdvert.component';
+
+import { CompanyUserAdvertCityComponent } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCity.component';
+import { CompanyUserAdvertCityDeletedListTab } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCityDeletedListTab';
+import { CompanyUserAdvertCityListTab } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCityListTab';
+import { CompanyUserAdvertJobDescriptionComponent } from './pages/companyUserAdvertJobDescription/companyUserAdvertJobDescription/companyUserAdvertJobDescription.component';
+import { CompanyUserAdvertJobDescriptionDeletedListTab } from './pages/companyUserAdvertJobDescription/companyUserAdvertJobDescription/companyUserAdvertJobDescriptionDeletedListTab';
+import { CompanyUserAdvertJobDescriptionListTab } from './pages/companyUserAdvertJobDescription/companyUserAdvertJobDescription/companyUserAdvertJobDescriptionListTab';
+import { CompanyUserDepartmentDeletedListTab } from './pages/companyUserDepartment/companyUserDepartment/companyUserDepartmentDeletedListTab';
+import { CompanyUserImageDeletedListTab } from './pages/companyUserImage/companyUserImage/companyUserImageDeletedListTab';
+import { CountComponent } from './pages/count/count/count.component';
+import { CountListTab } from './pages/count/count/countListTab';
+import { CountryDeletedListTab } from './pages/country/country/countryDeletedListTab';
 import { DepartmentComponent } from './pages/department/department/department.component';
+import { DepartmentDeletedListTab } from './pages/department/department/departmentDeletedListTab';
 import { DepartmentListTab } from './pages/department/department/departmentListTab';
-import { DepartmentDeletedListComponent } from './pages/department/departmentDeletedList/departmentDeletedList.component';
 import { DepartmentDescriptionComponent } from './pages/departmentDescription/departmentDescription/departmentDescription.component';
+import { DepartmentDescriptionDeletedListTab } from './pages/departmentDescription/departmentDescription/departmentDescriptionDeletedListTab';
 import { DepartmentDescriptionListTab } from './pages/departmentDescription/departmentDescription/departmentDescriptionListTab';
-import { DepartmentDescriptionDeletedListComponent } from './pages/departmentDescription/departmentDescriptionDeletedList/departmentDescriptionDeletedList.component';
+import { DriverLicenceDeletedListTab } from './pages/driverlicence/driverLicence/driverLicenceDeletedListTab';
+import { ExperienceComponent } from './pages/experience/experience/experience.component';
+import { ExperienceDeletedListTab } from './pages/experience/experience/experienceDeletedListTab';
+import { ExperienceListTab } from './pages/experience/experience/experienceListTab';
+import { FacultyDeletedListTab } from './pages/faculty/faculty/facultyDeletedListTab';
+import { LanguageDeletedListTab } from './pages/language/language/languageDeletedListTab';
+import { LanguageLevelDeletedListTab } from './pages/languageLevel/languageLevel/languageLevelDeletedListTab';
 import { LicenseDegreeComponent } from './pages/licenseDegree/licenseDegree/licenseDegree.component';
+import { LicenseDegreeDeletedListTab } from './pages/licenseDegree/licenseDegree/licenseDegreeDeletedListTab';
 import { LicenseDegreeListTab } from './pages/licenseDegree/licenseDegree/licenseDegreeListTab';
-import { LicenseDegreeDeletedListComponent } from './pages/licenseDegree/licenseDegreeDeletedList/licenseDegreeDeletedList.component';
 import { CompanyUserMainComponent } from './pages/main/companyUserMain/companyUserMain.component';
 import { MainComponent } from './pages/main/main/main.component';
 import { PersonelUserMainComponent } from './pages/main/personelUserMain/personelUserMain.component';
 import { ModelMenuComponent } from './pages/modelMenu/modelMenu/modelMenu.component';
+import { ModelMenuDeletedListTab } from './pages/modelMenu/modelMenu/modelMenuDeletedListTab';
 import { ModelMenuListTab } from './pages/modelMenu/modelMenu/modelMenuListTab';
-import { ModelMenuDeletedListComponent } from './pages/modelMenu/modelMenuDeletedLİst/modelMenuDeletedList.component';
 import { OperationClaimComponent } from './pages/operationClaim/operationClaim/operationClaim.component';
+import { OperationClaimDeletedListTab } from './pages/operationClaim/operationClaim/operationClaimDeletedListTab';
 import { OperationClaimListTab } from './pages/operationClaim/operationClaim/operationClaimListTab';
-import { OperationClaimDeletedListComponent } from './pages/operationClaim/operationClaimDeletedLİst/operationClaimDeletedList.component';
 import { PersonelUserComponent } from './pages/personelUser/personelUser/personelUser.component';
+import { PersonelUserDeletedListTab } from './pages/personelUser/personelUser/personelUserDeletedListTab';
 import { PersonelUserListTab } from './pages/personelUser/personelUser/personelUserListTab';
-import { PersonelUserDeletedListComponent } from './pages/personelUser/personelUserDeletedLİst/personelUserDeletedList.component';
 import { PersonelUserAddressComponent } from './pages/personelUserAddress/personelUserAddress/personelUserAddress.component';
+import { PersonelUserAddressDeletedListTab } from './pages/personelUserAddress/personelUserAddress/personelUserAddressDeletedListTab';
 import { PersonelUserAddressListTab } from './pages/personelUserAddress/personelUserAddress/personelUserAddressListTab';
-import { PersonelUserAddressDeletedListComponent } from './pages/personelUserAddress/personelUserAddressDeletedLİst/personelUserAddressDeletedList.component';
 import { PersonelUserCoverLetterComponent } from './pages/personelUserCoverLetter/personelUserCoverLetter/personelUserCoverLetter.component';
+import { PersonelUserCoverLetterDeletedListTab } from './pages/personelUserCoverLetter/personelUserCoverLetter/personelUserCoverLetterDeletedListTab';
 import { PersonelUserCoverLetterListTab } from './pages/personelUserCoverLetter/personelUserCoverLetter/personelUserCoverLetterListTab';
-import { PersonelUserCoverLetterDeletedListComponent } from './pages/personelUserCoverLetter/personelUserCoverLetterDeletedList/personelUserCoverLetterDeletedList.component';
 import { PersonelUserCvComponent } from './pages/personelUserCv/personelUserCv/personelUserCv.component';
+import { PersonelUserCvDeletedListTab } from './pages/personelUserCv/personelUserCv/personelUserCvDeletedListTab';
 import { PersonelUserCvListTab } from './pages/personelUserCv/personelUserCv/personelUserCvListTab';
-import { PersonelUserCvDeletedListComponent } from './pages/personelUserCv/personelUserCvDeletedList/personelUserCvDeletedList.component';
 import { PersonelUserCvEducationComponent } from './pages/personelUserCvEducation/personelUserCvEducation/personelUserCvEducation.component';
+import { PersonelUserCvEducationDeletedListTab } from './pages/personelUserCvEducation/personelUserCvEducation/personelUserCvEducationDeletedListTab';
 import { PersonelUserCvEducationListTab } from './pages/personelUserCvEducation/personelUserCvEducation/personelUserCvEducationListTab';
-import { PersonelUserCvEducationDeletedListComponent } from './pages/personelUserCvEducation/personelUserCvEducationDeletedList/personelUserCvEducationDeletedList.component';
 import { PersonelUserCvSummaryComponent } from './pages/personelUserCvSummary/personelUserCvSummary/personelUserCvSummary.component';
+import { PersonelUserCvSummaryDeletedListTab } from './pages/personelUserCvSummary/personelUserCvSummary/personelUserCvSummaryDeletedListTab';
 import { PersonelUserCvSummaryListTab } from './pages/personelUserCvSummary/personelUserCvSummary/personelUserCvSummaryListTab';
-import { PersonelUserCvSummaryDeletedListComponent } from './pages/personelUserCvSummary/personelUserCvSummaryDeletedList/personelUserCvSummaryDeletedList.component';
 import { PersonelUserCvWorkExperienceComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperience/personelUserCvWorkExperience.component';
+import { PersonelUserCvWorkExperienceDeletedListTab } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperience/personelUserCvWorkExperienceDeletedListTab';
 import { PersonelUserCvWorkExperienceListTab } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperience/personelUserCvWorkExperienceListTab';
-import { PersonelUserCvWorkExperienceDeletedListComponent } from './pages/personelUserCvWorkExperience/personelUserCvWorkExperienceDeletedList/personelUserCvWorkExperienceDeletedList.component';
 import { PersonelUserFileComponent } from './pages/personelUserFile/personelUserFile/personelUserFile.component';
+import { PersonelUserFileDeletedListTab } from './pages/personelUserFile/personelUserFile/personelUserFileDeletedListTab';
 import { PersonelUserFileListTab } from './pages/personelUserFile/personelUserFile/personelUserFileListTab';
-import { PersonelUserFileDeletedListComponent } from './pages/personelUserFile/personelUserFileDeletedList/personelUserFileDeletedList.component';
 import { PersonelUserImageComponent } from './pages/personelUserImage/personelUserImage/personelUserImage.component';
+import { PersonelUserImageDeletedListTab } from './pages/personelUserImage/personelUserImage/personelUserImageDeletedListTab';
 import { PersonelUserImageListTab } from './pages/personelUserImage/personelUserImage/personelUserImageListTab';
-import { PersonelUserImageDeletedListComponent } from './pages/personelUserImage/personelUserImageDeletedList/personelUserImageDeletedList.component';
-import { PersonelUserImageSlideComponent } from './pages/personelUserImage/personelUserImageSlide/personelUserImageSlide.component';
+import { PersonelUserImageSlideTab } from './pages/personelUserImage/personelUserImage/personelUserImageSlideTab';
 import { RegionComponent } from './pages/region/region/region.component';
+import { RegionDeletedListTab } from './pages/region/region/regionDeletedListTab';
 import { RegionListTab } from './pages/region/region/regionListTab';
-import { RegionDeletedListComponent } from './pages/region/regionDeletedLİst/regionDeletedList.component';
 import { SectorComponent } from './pages/sector/sector/sector.component';
+import { SectorDeletedListTab } from './pages/sector/sector/sectorDeletedListTab';
 import { SectorListTab } from './pages/sector/sector/sectorListTab';
-import { SectorDeletedListComponent } from './pages/sector/sectorDeletedLİst/sectorDeletedList.component';
 import { TaxOfficeComponent } from './pages/taxOffice/taxOffice/taxOffice.component';
+import { TaxOfficeDeletedListTab } from './pages/taxOffice/taxOffice/taxOfficeDeletedListTab';
 import { TaxOfficeListTab } from './pages/taxOffice/taxOffice/taxOfficeListTab';
-import { TaxOfficeDeletedListComponent } from './pages/taxOffice/taxOfficeDeletedLİst/taxOfficeDeletedList.component';
 import { UniversityComponent } from './pages/university/university/university.component';
+import { UniversityDeletedListTab } from './pages/university/university/universityDeletedListTab';
 import { UniversityListTab } from './pages/university/university/universityListTab';
-import { UniversityDeletedListComponent } from './pages/university/universityDeletedLİst/universityDeletedList.component';
 import { UniversityDepartmentComponent } from './pages/universityDepartment/universityDepartment/universityDepartment.component';
+import { UniversityDepartmentDeletedListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentDeletedListTab';
 import { UniversityDepartmentListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentListTab';
-import { UniversityDepartmentDeletedListComponent } from './pages/universityDepartment/universityDepartmentDeletedLİst/universityDepartmentDeletedList.component';
+import { UniversityImageComponent } from './pages/universityImage/universityImage/universityImage.component';
+import { UniversityImageDeletedListTab } from './pages/universityImage/universityImage/UniversityImageDeletedListTab';
+import { UniversityImageListTab } from './pages/universityImage/universityImage/universityImageListTab';
 import { UserOperationClaimComponent } from './pages/userOperationClaim/userOperationClaim/userOperationClaim.component';
+import { UserOperationClaimDeletedListTab } from './pages/userOperationClaim/userOperationClaim/userOperationClaimDeletedListTab';
 import { UserOperationClaimListTab } from './pages/userOperationClaim/userOperationClaim/userOperationClaimListTab';
-import { UserOperationClaimDeletedListComponent } from './pages/userOperationClaim/userOperationClaimDeletedLİst/userOperationClaimDeletedList.component';
 import { WorkingMethodComponent } from './pages/workingMethod/workingMethod/workingMethod.component';
+import { WorkingMethodDeletedListTab } from './pages/workingMethod/workingMethod/workingMethodDeletedListTab';
 import { WorkingMethodListTab } from './pages/workingMethod/workingMethod/workingMethodListTab';
-import { WorkingMethodDeletedListComponent } from './pages/workingMethod/workingMethodDeletedLİst/workingMethodDeletedList.component';
+import { WorkAreaComponent } from './pages/workArea/workArea/workArea.component';
+import { CompanyUserGuard } from './guards/company-user.guard';
+import { PersonelUserGuard } from './guards/personel-user.guard';
+import { CountDeletedListTab } from './pages/count/count/countDeletedListTab';
+import { PositionComponent } from './pages/position/position/position.component';
+import { PositionDeletedListTab } from './pages/position/position/positionDeletedListTab';
+import { PositionListTab } from './pages/position/position/positionListTab';
+import { PositionLevelComponent } from './pages/positionLevel/positionLevel/positionLevel.component';
+import { PositionLevelDeletedListTab } from './pages/positionLevel/positionLevel/positionLevelDeletedListTab';
+import { PositionLevelListTab } from './pages/positionLevel/positionLevel/positionLevelListTab';
+import { WorkAreaDeletedListTab } from './pages/workArea/workArea/workAreaDeletedListTab';
+import { WorkAreaListTab } from './pages/workArea/workArea/workAreaListTab';
 
 //-----------------
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'registerPersonelUser', component: RegisterPersonelUserComponent },
-  { path: 'registerCompanyUser', component: RegisterCompanyUserComponent },
-
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [LoginGuard, ExpirationGuard],
     title: 'Kariyerim Admin',
     children: [
-      {
-        path: '',
-        component: MainComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
-      },
       {
         path: 'main',
         component: MainComponent,
@@ -183,8 +206,8 @@ export const routes: Routes = [
           },
           {
             path: 'citydeletedlisttab',
-            component: CityDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: CityDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -201,8 +224,8 @@ export const routes: Routes = [
           },
           {
             path: 'companyuserdeletedlisttab',
-            component: CompanyUserDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: CompanyUserDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
           },
         ],
       },
@@ -210,7 +233,7 @@ export const routes: Routes = [
       {
         path: 'companyuseraddress',
         component: CompanyUserAddressComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
         children: [
           {
             path: 'companyuseraddresslisttab',
@@ -219,16 +242,69 @@ export const routes: Routes = [
           },
           {
             path: 'companyuseraddressdeletedlisttab',
-            component: CompanyUserAddressDeletedListComponent,
+            component: CompanyUserAddressDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
       },
 
       {
+        path: 'companyuseradvert',
+        component: CompanyUserAdvertComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'companyuseradvertlisttab',
+            component: CompanyUserAdvertListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'companyuseradvertdeletedlisttab',
+            component: CompanyUserAdvertDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'companyuseradvertcity',
+        component: CompanyUserAdvertCityComponent,
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
+        children: [
+          {
+            path: 'companyuseradvertcitylisttab',
+            component: CompanyUserAdvertCityListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'companyuseradvertcitydeletedlisttab',
+            component: CompanyUserAdvertCityDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'companyuseradvertjobdescription',
+        component: CompanyUserAdvertJobDescriptionComponent,
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
+        children: [
+          {
+            path: 'companyuseradvertjobdescriptionlisttab',
+            component: CompanyUserAdvertJobDescriptionListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'companyuseradvertjobdescriptiondeletedlisttab',
+            component: CompanyUserAdvertJobDescriptionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
+      },
+      {
         path: 'companyuserdepartment',
         component: CompanyUserDepartmentComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
         children: [
           {
             path: 'companyuserdepartmentlisttab',
@@ -237,7 +313,7 @@ export const routes: Routes = [
           },
           {
             path: 'companyuserdepartmentdeletedlisttab',
-            component: CompanyUserDepartmentDeletedListComponent,
+            component: CompanyUserDepartmentDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -246,7 +322,7 @@ export const routes: Routes = [
       {
         path: 'companyuserfile',
         component: CompanyUserFileComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
         children: [
           {
             path: 'companyuserfilelisttab',
@@ -255,7 +331,7 @@ export const routes: Routes = [
           },
           {
             path: 'companyuserfiledeletedlisttab',
-            component: CompanyUserFileDeletedListComponent,
+            component: CompanyUserFileDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -264,7 +340,7 @@ export const routes: Routes = [
       {
         path: 'companyuserimage',
         component: CompanyUserImageComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, CompanyUserGuard],
         children: [
           {
             path: 'companyuserimagelisttab',
@@ -273,20 +349,15 @@ export const routes: Routes = [
           },
           {
             path: 'companyuserimagedeletedlisttab',
-            component: CompanyUserImageDeletedListComponent,
+            component: CompanyUserImageDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
             path: 'companyuserimageslidetab',
-            component: CompanyUserImageSlideComponent,
+            component: CompanyUserImageSlideTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
-      },
-      {
-        path: 'companyuserimages/companyuserimageslide',
-        component: CompanyUserImageSlideComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
       },
 
       {
@@ -301,8 +372,8 @@ export const routes: Routes = [
           },
           {
             path: 'sectordeletedlisttab',
-            component: SectorDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: SectorDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -319,8 +390,8 @@ export const routes: Routes = [
           },
           {
             path: 'countrydeletedlisttab',
-            component: CountryDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: CountryDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -337,8 +408,8 @@ export const routes: Routes = [
           },
           {
             path: 'departmentdeletedlisttab',
-            component: DepartmentDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: DepartmentDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -355,8 +426,8 @@ export const routes: Routes = [
           },
           {
             path: 'departmentdescriptiondeletedlisttab',
-            component: DepartmentDescriptionDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: DepartmentDescriptionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -373,7 +444,7 @@ export const routes: Routes = [
           },
           {
             path: 'personelusercvdeletedlisttab',
-            component: PersonelUserCvDeletedListComponent,
+            component: PersonelUserCvDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -391,12 +462,47 @@ export const routes: Routes = [
           },
           {
             path: 'driverlicencedeletedlisttab',
-            component: DriverLicenceDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: DriverLicenceDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
 
+      {
+        path: 'count',
+        component: CountComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'countlisttab',
+            component: CountListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'countdeletedlisttab',
+            component: CountDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'experience',
+        component: ExperienceComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'experiencelisttab',
+            component: ExperienceListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'experiencedeletedlisttab',
+            component: ExperienceDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
       {
         path: 'faculty',
         component: FacultyComponent,
@@ -409,8 +515,8 @@ export const routes: Routes = [
           },
           {
             path: 'facultydeletedlisttab',
-            component: FacultyDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: FacultyDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -427,8 +533,8 @@ export const routes: Routes = [
           },
           {
             path: 'languageleveldeletedlisttab',
-            component: LanguageLevelDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: LanguageLevelDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -445,8 +551,8 @@ export const routes: Routes = [
           },
           {
             path: 'languagedeletedlisttab',
-            component: LanguageDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: LanguageDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -463,8 +569,8 @@ export const routes: Routes = [
           },
           {
             path: 'licensedegreedeletedlisttab',
-            component: LicenseDegreeDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: LicenseDegreeDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -472,7 +578,7 @@ export const routes: Routes = [
       {
         path: 'modelmenu',
         component: ModelMenuComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
         children: [
           {
             path: 'modelmenulisttab',
@@ -481,7 +587,7 @@ export const routes: Routes = [
           },
           {
             path: 'modelmenudeletedlisttab',
-            component: ModelMenuDeletedListComponent,
+            component: ModelMenuDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -490,7 +596,7 @@ export const routes: Routes = [
       {
         path: 'operationclaim',
         component: OperationClaimComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
         children: [
           {
             path: 'operationclaimlisttab',
@@ -499,7 +605,7 @@ export const routes: Routes = [
           },
           {
             path: 'operationclaimdeletedlisttab',
-            component: OperationClaimDeletedListComponent,
+            component: OperationClaimDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -517,8 +623,8 @@ export const routes: Routes = [
           },
           {
             path: 'regiondeletedlisttab',
-            component: RegionDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: RegionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -535,8 +641,8 @@ export const routes: Routes = [
           },
           {
             path: 'taxofficedeletedlisttab',
-            component: TaxOfficeDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: TaxOfficeDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -553,8 +659,8 @@ export const routes: Routes = [
           },
           {
             path: 'universitydeletedlisttab',
-            component: UniversityDeletedListComponent,
-            canActivate: [LoginGuard, ExpirationGuard],
+            component: UniversityDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -571,8 +677,67 @@ export const routes: Routes = [
           },
           {
             path: 'universitydepartmentdeletedlisttab',
-            component: UniversityDepartmentDeletedListComponent,
+            component: UniversityDepartmentDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'universityimage',
+        component: UniversityImageComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'universityimagelisttab',
+            component: UniversityImageListTab,
             canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'universityimagedeletedlisttab',
+            component: UniversityImageDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+          {
+            path: 'universityimageslidetab',
+            component: UniversityImageSlideTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'position',
+        component: PositionComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'positionlisttab',
+            component: PositionListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'positiondeletedlisttab',
+            component: PositionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'positionlevel',
+        component: PositionLevelComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'positionlevellisttab',
+            component: PositionLevelListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'positionleveldeletedlisttab',
+            component: PositionLevelDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -580,7 +745,7 @@ export const routes: Routes = [
       {
         path: 'useroperationclaim',
         component: UserOperationClaimComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
         children: [
           {
             path: 'useroperationclaimlisttab',
@@ -589,7 +754,7 @@ export const routes: Routes = [
           },
           {
             path: 'useroperationclaimdeletedlisttab',
-            component: UserOperationClaimDeletedListComponent,
+            component: UserOperationClaimDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -607,8 +772,26 @@ export const routes: Routes = [
           },
           {
             path: 'workingmethoddeletedlisttab',
-            component: WorkingMethodDeletedListComponent,
+            component: WorkingMethodDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+
+      {
+        path: 'workarea',
+        component: WorkAreaComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'workarealisttab',
+            component: WorkAreaListTab,
             canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'workareadeletedlisttab',
+            component: WorkAreaDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
@@ -616,7 +799,7 @@ export const routes: Routes = [
       {
         path: 'personeluser',
         component: PersonelUserComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personeluserlisttab',
@@ -625,7 +808,7 @@ export const routes: Routes = [
           },
           {
             path: 'personeluserdeletedlisttab',
-            component: PersonelUserDeletedListComponent,
+            component: PersonelUserDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -634,7 +817,7 @@ export const routes: Routes = [
       {
         path: 'personeluseraddress',
         component: PersonelUserAddressComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personeluseraddresslisttab',
@@ -643,7 +826,7 @@ export const routes: Routes = [
           },
           {
             path: 'personeluseraddressdeletedlisttab',
-            component: PersonelUserAddressDeletedListComponent,
+            component: PersonelUserAddressDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -652,7 +835,7 @@ export const routes: Routes = [
       {
         path: 'personelusercoverletter',
         component: PersonelUserCoverLetterComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personelusercoverletterlisttab',
@@ -661,7 +844,7 @@ export const routes: Routes = [
           },
           {
             path: 'personelusercoverletterdeletedlisttab',
-            component: PersonelUserCoverLetterDeletedListComponent,
+            component: PersonelUserCoverLetterDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -670,7 +853,7 @@ export const routes: Routes = [
       {
         path: 'personelusercveducation',
         component: PersonelUserCvEducationComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personelusercveducationlisttab',
@@ -679,7 +862,7 @@ export const routes: Routes = [
           },
           {
             path: 'personelusercveducationdeletedlisttab',
-            component: PersonelUserCvEducationDeletedListComponent,
+            component: PersonelUserCvEducationDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -688,7 +871,7 @@ export const routes: Routes = [
       {
         path: 'personelusercvsummary',
         component: PersonelUserCvSummaryComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personelusercvsummarylisttab',
@@ -697,7 +880,7 @@ export const routes: Routes = [
           },
           {
             path: 'personelusercvsummarydeletedlisttab',
-            component: PersonelUserCvSummaryDeletedListComponent,
+            component: PersonelUserCvSummaryDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -706,7 +889,7 @@ export const routes: Routes = [
       {
         path: 'personeluserfile',
         component: PersonelUserFileComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personeluserfilelisttab',
@@ -715,7 +898,7 @@ export const routes: Routes = [
           },
           {
             path: 'personeluserfiledeletedlisttab',
-            component: PersonelUserFileDeletedListComponent,
+            component: PersonelUserFileDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
@@ -724,7 +907,7 @@ export const routes: Routes = [
       {
         path: 'personeluserimage',
         component: PersonelUserImageComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personeluserimagelisttab',
@@ -733,26 +916,21 @@ export const routes: Routes = [
           },
           {
             path: 'personeluserimagedeletedlisttab',
-            component: PersonelUserImageDeletedListComponent,
+            component: PersonelUserImageDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
             path: 'personeluserimageslidetab',
-            component: PersonelUserImageSlideComponent,
+            component: PersonelUserImageSlideTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
-      },
-      {
-        path: 'personeluserimages/personeluserimageslide',
-        component: PersonelUserImageSlideComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
       },
 
       {
         path: 'personelusercvworkexperience',
         component: PersonelUserCvWorkExperienceComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
           {
             path: 'personelusercvworkexperiencelisttab',
@@ -761,14 +939,16 @@ export const routes: Routes = [
           },
           {
             path: 'personelusercvworkexperiencedeletedlisttab',
-            component: PersonelUserCvWorkExperienceDeletedListComponent,
+            component: PersonelUserCvWorkExperienceDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
         ],
       },
     ],
-    canActivate: [LoginGuard, ExpirationGuard],
   },
-
-  //{ path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'registerPersonelUser', component: RegisterPersonelUserComponent },
+  { path: 'registerCompanyUser', component: RegisterCompanyUserComponent },
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

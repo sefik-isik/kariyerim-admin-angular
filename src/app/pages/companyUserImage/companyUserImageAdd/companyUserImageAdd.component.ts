@@ -16,6 +16,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserImageDTO } from '../../../models/dto/companyUserImageDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserImageAdd',
@@ -31,6 +32,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   imageOwnName: string | null = null;
   companyUsers: CompanyUserDTO[] = [];
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Company User Image Add Form';
 
   constructor(
@@ -42,20 +44,27 @@ export class CompanyUserImageAddComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
   onImageSelected(event: any) {
     this.selectedImage = <File>event.target.files[0];
 
-    const allowedImageTypes = ['image/png', 'image/jpeg', 'image/gif'];
+    const allowedImageTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/gif',
+      'image/webp',
+    ];
 
     if (!allowedImageTypes.includes(this.selectedImage.type)) {
       this.toastrService.error(
-        'Please select a image with .png, .jpeg, or .gif extension',
+        'Please select a image with .png, .jpeg, webp or .gif extension',
         'Invalid image type'
       );
     } else if (this.selectedImage.size > 5 * 1024 * 1024) {
@@ -118,7 +127,7 @@ export class CompanyUserImageAddComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
   }
@@ -132,7 +141,7 @@ export class CompanyUserImageAddComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        console.log(responseError);
+        this.toastrService.error(responseError.error.message);
       }
     );
   }
@@ -140,13 +149,13 @@ export class CompanyUserImageAddComponent implements OnInit {
   getModel(): CompanyUserImage {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.companyUserImageModel.email),
+      userId: this.getUserId(this.companyUserImageModel.email.trim()),
       companyUserId: this.getCompanyUserId(
-        this.companyUserImageModel.companyUserName
+        this.companyUserImageModel.companyUserName.trim()
       ),
-      imagePath: this.imagePath,
-      imageName: this.imageName,
-      imageOwnName: this.companyUserImageModel.imageOwnName,
+      imagePath: this.imagePath.trim(),
+      imageName: this.imageName.trim(),
+      imageOwnName: this.companyUserImageModel.imageOwnName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -158,16 +167,23 @@ export class CompanyUserImageAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.companyUserImageModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.companyUserImageModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -177,12 +193,18 @@ export class CompanyUserImageAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.companyUserImageModel.userId;
+    }
 
     return userId;
   }

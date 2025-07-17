@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ModelMenu } from '../../models/component/modelMenu';
 import { ModelMenuService } from '../../services/modelMenu.service';
 import { RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modelMenuMain',
@@ -16,7 +17,10 @@ export class ModelMenuMainComponent implements OnInit {
   currentModelMenu: ModelMenu;
   dataLoaded = false;
 
-  constructor(private modelMenuService: ModelMenuService) {}
+  constructor(
+    private modelMenuService: ModelMenuService,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.getModelMenus();
@@ -30,7 +34,7 @@ export class ModelMenuMainComponent implements OnInit {
 
         this.getModelMenuClass(this.modelMenuFirst);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

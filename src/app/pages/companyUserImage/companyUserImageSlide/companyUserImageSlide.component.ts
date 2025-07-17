@@ -11,6 +11,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserImageSlide',
@@ -20,7 +21,6 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
     CommonModule,
     FormsModule,
     FilterCompanyUserImageByUserPipe,
-
     CarouselModule,
   ],
 })
@@ -29,19 +29,20 @@ export class CompanyUserImageSlideComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
-
+  admin: boolean = false;
   componentTitle = 'Company User Images Slide';
-  userId: string;
 
   constructor(
     private toastrService: ToastrService,
     private companyUserImageService: CompanyUserImageService,
     private adminService: AdminService,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -52,7 +53,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -61,7 +62,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -70,7 +71,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
       (response) => {
         this.companyUserImageDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +86,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
         this.getAdminValues();
       },
       (responseError) => {
-        console.error(responseError);
+        this.toastrService.error(responseError.error.message);
         if (responseError.error) {
           this.toastrService.error(responseError.error.message);
         } else {

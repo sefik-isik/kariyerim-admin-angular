@@ -1,25 +1,25 @@
-import { AdminModel } from '../../../models/auth/adminModel';
-import { Sector } from '../../../models/component/sector';
-import { City } from '../../../models/component/city';
-import { Component, Input, OnInit } from '@angular/core';
-import { CityService } from '../../../services/city.service';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CompanyUser } from '../../../models/component/companyUser';
-import { CompanyUserService } from '../../../services/companyUser.service';
-import { SectorService } from '../../../services/sectorService';
-import { TaxOffice } from '../../../models/component/taxOffice';
-import { TaxOfficeService } from '../../../services/taxOffice.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { CaseService } from '../../../services/helperServices/case.service';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { City } from '../../../models/component/city';
+import { CompanyUser } from '../../../models/component/companyUser';
+import { Sector } from '../../../models/component/sector';
+import { TaxOffice } from '../../../models/component/taxOffice';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { CityService } from '../../../services/city.service';
+import { CompanyUserService } from '../../../services/companyUser.service';
+import { CaseService } from '../../../services/helperServices/case.service';
+import { SectorService } from '../../../services/sectorService';
+import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { ValidationService } from '../../../services/validation.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { Count } from '../../../models/component/count';
+import { CountService } from '../../../services/count.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserUpdate',
@@ -29,13 +29,13 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class CompanyUserUpdateComponent implements OnInit {
   @Input() companyUserDTO: CompanyUserDTO;
-  companyUserDTOs: CompanyUserDTO[];
   sectors: Sector[];
   cities: City[];
   taxOffices: TaxOffice[];
-  userDTOs: UserDTO[] = [];
+  counts: Count[] = [];
   aboutDetail: number;
   today: number = Date.now();
+  admin: boolean = false;
   componentTitle = 'Company User Update Form';
 
   constructor(
@@ -43,27 +43,26 @@ export class CompanyUserUpdateComponent implements OnInit {
     private sectorService: SectorService,
     private cityService: CityService,
     private taxOfficeService: TaxOfficeService,
-    private userService: UserService,
+    private countService: CountService,
     public activeModal: NgbActiveModal,
     private toastrService: ToastrService,
-    private router: Router,
-    private adminService: AdminService,
-    private caseService: CaseService,
     private localStorageService: LocalStorageService,
-    private validationService: ValidationService
+    private router: Router,
+    private caseService: CaseService,
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
+    this.getCounts();
     this.getSectors();
     this.getCities();
+    this.getTaxOffices('-');
 
     setTimeout(() => {
       this.getUserValues(this.companyUserDTO.id);
     }, 200);
-  }
-
-  getValidationErrors(state: any) {
-    return this.validationService.getValidationErrors(state);
   }
 
   getUserValues(id: string) {
@@ -79,25 +78,21 @@ export class CompanyUserUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserService.getById(adminModel).subscribe(
       (response) => {
-        this.companyUserDTO.id = response.data.id;
-        this.companyUserDTO.userId = response.data.userId;
-        this.companyUserDTO.email = this.companyUserDTO.email;
-        this.companyUserDTO.sectorId = response.data.sectorId;
-        this.companyUserDTO.taxCityId = response.data.taxCityId;
-        this.companyUserDTO.taxOfficeId = response.data.taxOfficeId;
-        this.companyUserDTO.taxNumber = response.data.taxNumber;
         this.companyUserDTO.yearOfEstablishment = this.formatDate(
           response.data.yearOfEstablishment
         );
-        this.companyUserDTO.workerCount = response.data.workerCount;
-        this.companyUserDTO.webAddress = response.data.webAddress;
-        this.companyUserDTO.clarification = response.data.clarification;
-        this.companyUserDTO.about = response.data.about;
 
-        this.getAdminValues();
+        if (this.companyUserDTO.yearOfEstablishment == '1899-12-31') {
+          this.yearOfEstablishmentClear();
+        }
+        this.getTaxOffices(this.companyUserDTO.taxCityName);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
+  }
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
   }
 
   onSubmit(form: NgForm) {
@@ -109,7 +104,7 @@ export class CompanyUserUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          console.log(responseError);
         }
       );
     } else {
@@ -122,52 +117,47 @@ export class CompanyUserUpdateComponent implements OnInit {
       id: this.companyUserDTO.id,
       userId: this.companyUserDTO.userId,
       companyUserName: this.caseService.capitalizeFirstLetter(
-        this.companyUserDTO.companyUserName
+        this.companyUserDTO.companyUserName.trim()
       ),
-      sectorId: this.getsectorId(this.companyUserDTO.sectorName),
+      sectorId: this.getSectorId(this.companyUserDTO.sectorName),
       taxCityId: this.getCityId(this.companyUserDTO.taxCityName),
       taxOfficeId: this.getTaxOfficeId(this.companyUserDTO.taxOfficeName),
-      taxNumber: this.companyUserDTO.taxNumber,
+      taxNumber: this.setNullValue(this.companyUserDTO.taxNumber),
       yearOfEstablishment: new Date(
-        this.companyUserDTO.yearOfEstablishment
+        this.setNullDateValue(this.companyUserDTO.yearOfEstablishment)
       ).toJSON(),
-      workerCount: this.companyUserDTO.workerCount,
-      webAddress: this.caseService.capitalizeToLower(
-        this.companyUserDTO.webAddress
-      ),
-      clarification: this.companyUserDTO.clarification,
-      about: this.companyUserDTO.about,
+      workerCountId: this.getCountId(this.companyUserDTO.workerCountValue),
+      webAddress: this.setNullValue(this.companyUserDTO.webAddress),
+      clarification: this.setNullValue(this.companyUserDTO.clarification),
+      about: this.setNullValue(this.companyUserDTO.about),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  getAdminValues() {
-    this.adminService.getAdminValues(this.companyUserDTO.id).subscribe(
-      (response) => {
-        this.getAllCompanyUsers(response);
-        this.getCompanyUsers(response);
-      },
-      (responseError) => console.error
-    );
+  setNullValue(value: string) {
+    if (value == '' || value == null) {
+      value = '-';
+    } else {
+      this.caseService.capitalizeFirstLetter(value);
+    }
+    return value;
   }
 
-  getAllCompanyUsers(adminModel: AdminModel) {
-    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
-      (response) => {
-        this.userDTOs = response.data;
-      },
-      (responseError) => console.log(responseError)
-    );
+  setNullDateValue(value: string) {
+    if (value == '' || value == null) {
+      value = '01.01.1900';
+    }
+    return value;
   }
 
-  getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAllDTO(adminModel).subscribe(
+  getCounts() {
+    this.countService.getAll().subscribe(
       (response) => {
-        this.companyUserDTOs = response.data;
+        this.counts = response.data;
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -176,7 +166,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -185,28 +175,63 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getTaxOffices(taxCityName: string) {
-    if (taxCityName == null) {
-      return;
-    }
     this.taxOfficeService.getAll().subscribe(
       (response) => {
-        this.taxOffices = response.data.filter(
-          (f) => f.cityId === this.getCityId(taxCityName)
-        );
+        if (taxCityName == '-') {
+          this.taxOffices = response.data;
+        } else {
+          this.taxOffices = response.data.filter(
+            (f) => f.cityId === this.getCityId(taxCityName)
+          );
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getsectorId(sectorName: string): string {
-    return this.sectors.find(
-      (c) => c.sectorName.toLocaleLowerCase() == sectorName.toLocaleLowerCase()
-    )?.id;
+  getSectorId(sectorName: string): string {
+    if (sectorName == null || sectorName == '') {
+      sectorName = '-';
+    }
+    const companyUserSectorId = this.sectors.filter(
+      (c) => c.sectorName === sectorName
+    )[0]?.id;
+
+    return companyUserSectorId;
+  }
+
+  getCityId(cityName: string): string {
+    if (cityName == null || cityName == '') {
+      cityName = '-';
+    }
+    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    return cityId;
+  }
+
+  getTaxOfficeId(taxOfficeName: string): string {
+    if (taxOfficeName == null || taxOfficeName == '') {
+      taxOfficeName = '-';
+    }
+    const taxOfficeId = this.taxOffices.filter(
+      (c) => c.taxOfficeName === taxOfficeName
+    )[0]?.id;
+
+    return taxOfficeId;
+  }
+
+  getCountId(countValue: string): string {
+    if (countValue == null || countValue == '') {
+      countValue = '-';
+    }
+    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
+      ?.id;
+
+    return countId;
   }
 
   formatDate(dateString: string): string {
@@ -215,24 +240,6 @@ export class CompanyUserUpdateComponent implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-indexed
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  getCityId(cityName: string): string {
-    return this.cities.find(
-      (c) => c.cityName.toLocaleLowerCase() == cityName.toLocaleLowerCase()
-    )?.id;
-  }
-
-  getTaxOfficeId(taxOfficeName: string): string {
-    if (this.taxOffices) {
-      return this.taxOffices.find(
-        (c) =>
-          c.taxOfficeName.toLocaleLowerCase() ==
-          taxOfficeName.toLocaleLowerCase()
-      )?.id;
-    } else {
-      return this.companyUserDTO.taxOfficeId;
-    }
   }
 
   count() {
@@ -260,7 +267,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   workerCountClear() {
-    this.companyUserDTO.workerCount = '';
+    this.companyUserDTO.workerCountValue = '';
   }
 
   webAddressClear() {

@@ -28,23 +28,10 @@ export class CountryUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.country.id);
-    }, 200);
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
-  }
-
-  getById(countryId: string) {
-    this.countryService.getById(countryId).subscribe(
-      (response) => {
-        this.country.id = countryId;
-      },
-      (responseError) => console.error
-    );
   }
 
   onSubmit(form: NgForm) {
@@ -68,9 +55,11 @@ export class CountryUpdateComponent implements OnInit {
     return Object.assign({
       id: this.country.id,
       countryName: this.caseService.capitalizeFirstLetter(
-        this.country.countryName
+        this.country.countryName.trim()
       ),
-      countryIso: this.caseService.capitalizeToUpper(this.country.countryIso),
+      countryIso: this.caseService.capitalizeToUpper(
+        this.country.countryIso.trim()
+      ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

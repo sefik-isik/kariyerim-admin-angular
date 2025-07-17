@@ -1,15 +1,13 @@
-import { SectorService } from '../../../services/sectorService';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { SectorService } from '../../../services/sectorService';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/auth.service';
 import { Sector } from '../../../models/component/sector';
 import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SectorUpdateComponent } from '../sectorUpdate/sectorUpdate.component';
 import { SectorDetailComponent } from '../sectorDetail/sectorDetail.component';
+import { SectorUpdateComponent } from '../sectorUpdate/sectorUpdate.component';
 
 @Component({
   selector: 'app-sectorDeletedList',
@@ -25,7 +23,6 @@ export class SectorDeletedListComponent implements OnInit {
 
   constructor(
     private toastrService: ToastrService,
-    private authService: AuthService,
     private sectorService: SectorService,
     private modalService: NgbModal
   ) {}
@@ -44,7 +41,7 @@ export class SectorDeletedListComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -54,7 +51,7 @@ export class SectorDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -62,7 +59,7 @@ export class SectorDeletedListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.update(sector).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -95,7 +92,7 @@ export class SectorDeletedListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.terminate(sector).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -108,9 +105,9 @@ export class SectorDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(SectorUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -121,9 +118,9 @@ export class SectorDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(SectorDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

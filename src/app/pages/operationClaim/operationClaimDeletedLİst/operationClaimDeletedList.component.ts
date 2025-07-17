@@ -46,7 +46,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.getOperationClaims();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -55,7 +55,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -65,7 +65,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +73,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.update(operationClaim).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -106,7 +106,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.terminate(operationClaim).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -119,9 +119,9 @@ export class OperationClaimDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(OperationClaimUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -132,9 +132,9 @@ export class OperationClaimDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(OperationClaimDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

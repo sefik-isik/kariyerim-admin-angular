@@ -11,6 +11,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Sector } from '../../../models/component/sector';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { Count } from '../../../models/component/count';
+import { CountService } from '../../../services/count.service';
 
 @Component({
   selector: 'app-universityAdd',
@@ -24,19 +26,22 @@ export class UniversityAddComponent implements OnInit {
   addressDetail: number;
   descriptionDetail: number;
   subDescriptionDetail: number;
-  componentTitle = 'Add University Form';
+  counts: Count[] = [];
+  componentTitle = 'University Add Form';
 
   constructor(
     private toastrService: ToastrService,
     private router: Router,
     private universityService: UniversityService,
     private sectorService: SectorService,
+    private countService: CountService,
     private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
 
   ngOnInit() {
+    this.getCounts();
     this.getSectors();
   }
 
@@ -53,6 +58,7 @@ export class UniversityAddComponent implements OnInit {
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
         (responseError) => {
+          console.log(responseError);
           this.toastrService.error(responseError.error.message);
         }
       );
@@ -65,25 +71,36 @@ export class UniversityAddComponent implements OnInit {
     return Object.assign({
       id: '',
       universityName: this.caseService.capitalizeFirstLetter(
-        this.universityModel.universityName
+        this.universityModel.universityName.trim()
       ),
-      sectorId: this.getSectorId(this.universityModel.sectorName),
+      sectorId: this.getSectorId(this.universityModel.sectorName.trim()),
       yearOfEstablishment: new Date(
         this.universityModel.yearOfEstablishment
       ).toJSON(),
-      webAddress: this.universityModel.webAddress,
-      workerCount: this.universityModel.workerCount,
-      webNewsAddress: this.universityModel.webNewsAddress,
-      youTubeEmbedAddress: this.universityModel.youTubeEmbedAddress,
-      address: this.universityModel.address,
-      facebookAddress: this.universityModel.facebookAddress,
-      instagramAddress: this.universityModel.instagramAddress,
-      xAddress: this.universityModel.xAddress,
-      youTubeAddress: this.universityModel.youTubeAddress,
-      description: this.universityModel.description,
-      subDescription: this.universityModel.subDescription,
+      webAddress: this.universityModel.webAddress.trim(),
+      workerCountId: this.getCountId(
+        this.universityModel.workerCountValue.trim()
+      ),
+      webNewsAddress: this.universityModel.webNewsAddress.trim(),
+      youTubeEmbedAddress: this.universityModel.youTubeEmbedAddress.trim(),
+      address: this.universityModel.address.trim(),
+      facebookAddress: this.universityModel.facebookAddress.trim(),
+      instagramAddress: this.universityModel.instagramAddress.trim(),
+      xAddress: this.universityModel.xAddress.trim(),
+      youTubeAddress: this.universityModel.youTubeAddress.trim(),
+      description: this.universityModel.description.trim(),
+      subDescription: this.universityModel.subDescription.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  getCounts() {
+    this.countService.getAll().subscribe(
+      (response) => {
+        this.counts = response.data;
+      },
+      (responseError) => this.toastrService.error(responseError.error.message)
+    );
   }
 
   getSectors() {
@@ -91,7 +108,7 @@ export class UniversityAddComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -101,6 +118,13 @@ export class UniversityAddComponent implements OnInit {
     )[0]?.id;
 
     return companyUserSectorId;
+  }
+
+  getCountId(countValue: string): string {
+    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
+      ?.id;
+
+    return countId;
   }
 
   countAddress() {
@@ -124,7 +148,7 @@ export class UniversityAddComponent implements OnInit {
   }
 
   workerCountClear() {
-    this.universityModel.workerCount = '';
+    this.universityModel.workerCountValue = '';
   }
 
   sectorNameClear() {

@@ -11,6 +11,7 @@ import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserFileUpdate',
@@ -22,6 +23,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   @Input() companyUserFileDTO: CompanyUserFileDTO;
   selectedFile: File | null = null;
   result: boolean;
+  admin: boolean = false;
   componentTitle = 'Company User File Update Form';
 
   constructor(
@@ -30,10 +32,12 @@ export class CompanyUserFileUpdateComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     setTimeout(() => {
       this.getUserValues(this.companyUserFileDTO.id);
     }, 200);
@@ -60,15 +64,11 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserFileService.getById(adminModel).subscribe(
       (response) => {
-        this.companyUserFileDTO.id = response.data.id;
-        this.companyUserFileDTO.userId = response.data.userId;
-        this.companyUserFileDTO.companyUserId = response.data.companyUserId;
         this.companyUserFileDTO.filePath = response.data.filePath;
         this.companyUserFileDTO.fileName = response.data.fileName;
-        this.companyUserFileDTO.fileOwnName = response.data.fileOwnName;
         this.checkFile();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -112,7 +112,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -157,7 +157,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
           this.toastrService.error('Error uploading file', responseError);
         }
       );
@@ -183,9 +183,9 @@ export class CompanyUserFileUpdateComponent implements OnInit {
       id: this.companyUserFileDTO.id,
       userId: this.companyUserFileDTO.userId,
       companyUserId: this.companyUserFileDTO.companyUserId,
-      filePath: this.companyUserFileDTO.filePath,
-      fileName: this.companyUserFileDTO.fileName,
-      fileOwnName: this.companyUserFileDTO.fileOwnName,
+      filePath: this.companyUserFileDTO.filePath.trim(),
+      fileName: this.companyUserFileDTO.fileName.trim(),
+      fileOwnName: this.companyUserFileDTO.fileOwnName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

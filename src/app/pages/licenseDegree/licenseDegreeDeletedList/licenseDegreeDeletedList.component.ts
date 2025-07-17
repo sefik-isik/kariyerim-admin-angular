@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { LicenseDegree } from '../../../models/component/licenseDegree';
 import { LicenseDegreeService } from '../../../services/licenseDegree.service';
@@ -41,7 +40,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
       (response) => {
         this.licenseDegrees = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -51,7 +50,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -59,7 +58,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.update(licenseDegree).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -92,7 +91,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.terminate(licenseDegree).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -105,9 +104,9 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(LicenseDegreeUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -118,9 +117,9 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(LicenseDegreeDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

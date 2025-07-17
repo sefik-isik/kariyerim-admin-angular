@@ -14,6 +14,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserDepartmentUpdateComponent } from '../companyUserDepartmentUpdate/companyUserDepartmentUpdate.component';
 import { CompanyUserDepartmentDetailComponent } from '../companyUserDepartmentDetail/companyUserDepartmentDetail.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserDepartmentList',
@@ -27,8 +28,8 @@ export class CompanyUserDepartmentListComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   dataLoaded = false;
   filter1: string = '';
+  admin: boolean = false;
   componentTitle = 'Company User Departments';
-  userId: string;
 
   constructor(
     private companyUserDepartmentService: CompanyUserDepartmentService,
@@ -36,10 +37,12 @@ export class CompanyUserDepartmentListComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -55,7 +58,7 @@ export class CompanyUserDepartmentListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserDepartments(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -64,7 +67,7 @@ export class CompanyUserDepartmentListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +76,7 @@ export class CompanyUserDepartmentListComponent implements OnInit {
       (response) => {
         this.companyUserDepartmentDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -87,7 +90,7 @@ export class CompanyUserDepartmentListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -99,7 +102,7 @@ export class CompanyUserDepartmentListComponent implements OnInit {
     this.companyUserDepartmentDTOs.forEach((companyUserDepartment) => {
       this.companyUserDepartmentService.delete(companyUserDepartment).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -114,9 +117,9 @@ export class CompanyUserDepartmentListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -131,9 +134,9 @@ export class CompanyUserDepartmentListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

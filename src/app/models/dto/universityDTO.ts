@@ -5,7 +5,8 @@ export interface UniversityDTO extends BaseModel {
   sectorId: string;
   sectorName: string;
   yearOfEstablishment: string;
-  workerCount: string;
+  workerCountId: string;
+  workerCountValue: string;
   webAddress: string;
   webNewsAddress: string;
   youTubeEmbedAddress: string;

@@ -18,9 +18,9 @@ export class CompanyUserAddressComponent {
     const modalRef = this.modalService.open(CompanyUserAddressAddComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

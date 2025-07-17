@@ -1,28 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/dto/userDTO';
 import { HttpEventType } from '@angular/common/http';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserFileService } from '../../../services/personelUserFile.service';
-import { PersonelUserService } from '../../../services/personelUser.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { PersonelUserFile } from '../../../models/component/personelUserFile';
 import { PersonelUserFileDTO } from '../../../models/dto/personelUserFileDTO';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserFileUpdate',
@@ -33,27 +20,21 @@ import { ValidationService } from '../../../services/validation.service';
 export class PersonelUserFileUpdateComponent implements OnInit {
   @Input() personelUserFileDTO: PersonelUserFileDTO;
   selectedFile: File | null = null;
-  users: UserDTO[] = [];
   result: boolean;
-  personelUserDTOs: PersonelUserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User File Update Form';
 
   constructor(
     private toastrService: ToastrService,
     private personelUserFileService: PersonelUserFileService,
     private router: Router,
-    private personelUserService: PersonelUserService,
-    private adminService: AdminService,
-    private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
   ngOnInit() {
-    this.getAdminValues();
-
-    setTimeout(() => {
-      this.getUserValues(this.personelUserFileDTO.id);
-    }, 200);
+    this.admin = this.authService.isAdmin();
+    this.checkFile();
   }
 
   checkFile() {
@@ -62,32 +43,6 @@ export class PersonelUserFileUpdateComponent implements OnInit {
     } else {
       this.result = true;
     }
-  }
-
-  getUserValues(id: string) {
-    const adminModel = {
-      id: id,
-      email: this.localStorageService.getFromLocalStorage('email'),
-      userId: this.localStorageService.getFromLocalStorage('id'),
-      status: this.localStorageService.getFromLocalStorage('status'),
-    };
-    this.getById(adminModel);
-  }
-
-  getById(adminModel: AdminModel) {
-    const id = this.localStorageService.getFromLocalStorage('id');
-    this.personelUserFileService.getById(adminModel).subscribe(
-      (response) => {
-        this.personelUserFileDTO.id = response.data.id;
-        this.personelUserFileDTO.userId = response.data.userId;
-        this.personelUserFileDTO.personelUserId = response.data.personelUserId;
-        this.personelUserFileDTO.filePath = response.data.filePath;
-        this.personelUserFileDTO.fileName = response.data.fileName;
-        this.personelUserFileDTO.fileOwnName = response.data.fileOwnName;
-        this.checkFile();
-      },
-      (responseError) => console.error
-    );
   }
 
   onFileSelected(event: any) {
@@ -130,7 +85,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -175,7 +130,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
           this.toastrService.error('Error uploading file', responseError);
         }
       );
@@ -201,35 +156,13 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       id: this.personelUserFileDTO.id,
       userId: this.personelUserFileDTO.userId,
       personelUserId: this.personelUserFileDTO.personelUserId,
-      filePath: this.personelUserFileDTO.filePath,
-      fileName: this.personelUserFileDTO.fileName,
-      fileOwnName: this.personelUserFileDTO.fileOwnName,
+      filePath: this.personelUserFileDTO.filePath.trim(),
+      fileName: this.personelUserFileDTO.fileName.trim(),
+      fileOwnName: this.personelUserFileDTO.fileOwnName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  getAdminValues() {
-    this.adminService.getAdminValues(this.personelUserFileDTO.id).subscribe(
-      (response) => {
-        this.getPersonelUsers(response);
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUsers(adminModel: AdminModel) {
-    this.personelUserService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.personelUserDTOs = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUserById(personelUserId: string): string {
-    return this.personelUserDTOs.find((c) => c.id == personelUserId)?.email;
   }
 
   fileOwnNameClear() {

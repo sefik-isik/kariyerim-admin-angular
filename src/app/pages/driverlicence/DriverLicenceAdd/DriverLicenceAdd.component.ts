@@ -45,7 +45,7 @@ export class DriverLicenceAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -57,7 +57,7 @@ export class DriverLicenceAddComponent implements OnInit {
     return Object.assign({
       id: '',
       driverLicenceName: this.caseService.capitalizeToUpper(
-        this.driverLicence.driverLicenceName
+        this.driverLicence.driverLicenceName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

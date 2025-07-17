@@ -1,6 +1,6 @@
-import { BaseUniversityModel } from '../base/baseUniversityModel';
+import { BaseUniversityDTOModel } from '../base/baseUniversityDTOModel';
 
-export interface UniversityImage extends BaseUniversityModel {
+export interface UniversityImage extends BaseUniversityDTOModel {
   imageName: string;
   imageOwnName: string;
   imagePath: string;

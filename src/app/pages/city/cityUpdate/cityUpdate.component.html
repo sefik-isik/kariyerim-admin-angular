@@ -9,39 +9,13 @@
           <div class="input-group">
             <span class="input-group-text">Country</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
-              pattern=""
-              [(ngModel)]="cityDTO.countryName"
-              type="text"
               class="form-control"
+              placeholder="email"
+              [(ngModel)]="cityDTO.countryName"
               name="countryName"
               #countryName="ngModel"
-              placeholder="countryName"
-              list="countryNameDataList"
+              disabled="true"
             />
-            <datalist id="countryNameDataList">
-              <option
-                *ngFor="let country of countries"
-                value="{{ country.countryName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="countryNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!countryName.valid && countryName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(countryName)"
-            >
-              {{ error }}
-            </div>
           </div>
         </div>
       </div>
@@ -53,7 +27,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="cityDTO.cityName"
               type="text"
@@ -87,7 +61,7 @@
             <span class="input-group-text">City Code</span>
             <input
               required
-              minlength="1"
+              minlength="3"
               maxlength="2"
               pattern="[0-9\/]*"
               inputmode="numeric"

@@ -2,7 +2,6 @@ import { FacultyService } from './../../../services/faculty.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { University } from '../../../models/component/university';
@@ -45,19 +44,6 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
     this.getUniversities();
     this.getFaculties();
     this.getDepartments();
-
-    setTimeout(() => {
-      this.getById(this.universityDepartmentDTO.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.universityDepartmentService.getById(id).subscribe(
-      (response) => {
-        this.universityDepartmentDTO.id = response.data.id;
-      },
-      (responseError) => console.error
-    );
   }
 
   getValidationErrors(state: any) {
@@ -87,11 +73,13 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
     return Object.assign({
       id: this.universityDepartmentDTO.id,
       universityId: this.getUniversityId(
-        this.universityDepartmentDTO.universityName
+        this.universityDepartmentDTO.universityName.trim()
       ),
-      facultyId: this.getFacultyId(this.universityDepartmentDTO.facultyName),
+      facultyId: this.getFacultyId(
+        this.universityDepartmentDTO.facultyName.trim()
+      ),
       departmentId: this.getDepartmentId(
-        this.universityDepartmentDTO.departmentName
+        this.universityDepartmentDTO.departmentName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -104,7 +92,7 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -113,29 +101,17 @@ export class UniversityDepartmentUpdateComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data;
+        this.departments = response.data.filter((c) => c.isCompany === false);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
-  }
-
-  getUniversityById(universityId: string): string {
-    return this.universities.find((c) => c.id == universityId)?.universityName;
-  }
-
-  getDepartmentById(departmentId: string): string {
-    return this.departments.find((c) => c.id == departmentId)?.departmentName;
-  }
-
-  getFacultyById(facultyId: string): string {
-    return this.faculties.find((c) => c.id == facultyId)?.facultyName;
   }
 
   getUniversityId(universityName: string): string {

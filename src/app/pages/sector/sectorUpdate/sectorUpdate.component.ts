@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -29,20 +28,7 @@ export class SectorUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.sector.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.sectorService.getById(id).subscribe(
-      (response) => {
-        this.sector.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -68,9 +54,7 @@ export class SectorUpdateComponent implements OnInit {
   getModel(): Sector {
     return Object.assign({
       id: this.sector.id,
-      sectorName: this.caseService.capitalizeFirstLetter(
-        this.sector.sectorName
-      ),
+      sectorName: this.sector.sectorName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

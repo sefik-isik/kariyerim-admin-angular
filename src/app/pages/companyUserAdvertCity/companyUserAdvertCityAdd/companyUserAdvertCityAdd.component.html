@@ -1,0 +1,211 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              email="true"
+              [(ngModel)]="companyUserAdvertCityModel.email"
+              type="email"
+              class="form-control"
+              name="email"
+              #email="ngModel"
+              placeholder="email"
+              list="emailDataList"
+            />
+            <datalist id="emailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="emailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!email.valid && email.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(email)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="companyUserAdvertCityModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertCityModel.companyUserName"
+              type="text"
+              class="form-control"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              placeholder="Company Name"
+              list="companyUserNameDataList"
+            />
+            <datalist id="companyUserNameDataList">
+              <option
+                *ngFor="let companyUser of companyUsers"
+                value="{{ companyUser.companyUserName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="companyUserNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!companyUserName.valid && companyUserName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(companyUserName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Advert Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertCityModel.advertName"
+              type="text"
+              class="form-control"
+              name="advertName"
+              #advertName="ngModel"
+              placeholder="Company User Advert Name"
+              list="advertNameDataList"
+            />
+            <datalist id="advertNameDataList">
+              <option
+                *ngFor="let companyUserAdverts of companyUserAdverts"
+                value="{{ companyUserAdverts.advertName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="advertNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!advertName.valid && advertName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(advertName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Work City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertCityModel.workCityName"
+              type="text"
+              class="form-control"
+              name="workCityName"
+              #workCityName="ngModel"
+              placeholder="Work City Name"
+              list="workCityNameDataList"
+            />
+            <datalist id="workCityNameDataList">
+              <option
+                *ngFor="let workCity of workCities"
+                value="{{ workCity.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="workCityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!workCityName.valid && workCityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(workCityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

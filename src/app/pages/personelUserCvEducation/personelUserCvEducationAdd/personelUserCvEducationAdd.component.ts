@@ -5,7 +5,6 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UserDTO } from '../../../models/dto/userDTO';
@@ -23,6 +22,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DepartmentService } from '../../../services/department.service';
 import { Department } from '../../../models/component/department';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -41,7 +41,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   personelUserCvs: PersonelUserCv[] = [];
   detailCount: number;
   today: number = Date.now();
-
+  admin: boolean = false;
   componentTitle = 'Personel User Cv Education Add Form';
 
   constructor(
@@ -57,10 +57,12 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private personelUserCvService: PersonelUserCvService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.getUniversities();
     this.getUniversityDepartments();
@@ -82,7 +84,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          console.log(responseError);
         }
       );
     } else {
@@ -101,19 +103,37 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       universityId: this.getUniversityId(
         this.personelUserCvEducationModel.universityName
       ),
-      departmentId: this.getepartmentId(
+      departmentId: this.getDepartmentId(
         this.personelUserCvEducationModel.departmentName
       ),
       facultyId: this.getFacultyId(
         this.personelUserCvEducationModel.facultyName
       ),
-      abandonment: this.personelUserCvEducationModel.abandonment,
-      educationInfo: this.personelUserCvEducationModel.educationInfo,
       startDate: new Date(this.personelUserCvEducationModel.startDate).toJSON(),
-      endDate: new Date(this.personelUserCvEducationModel.endDate).toJSON(),
-      detail: this.personelUserCvEducationModel.detail,
+      endDate: new Date(
+        this.setNullDateValue(this.personelUserCvEducationModel.endDate)
+      ).toJSON(),
+      educationInfo: this.setNullValue(
+        this.personelUserCvEducationModel.educationInfo
+      ),
+      detail: this.setNullValue(this.personelUserCvEducationModel.detail),
+      abandonment: this.personelUserCvEducationModel.abandonment,
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  setNullValue(value: string) {
+    if (value == null || value == '') {
+      value = '-';
+    }
+    return value;
+  }
+
+  setNullDateValue(value: string) {
+    if (value == null || value == '') {
+      value = '01.01.1900';
+    }
+    return value;
   }
 
   getAdminValues() {
@@ -123,16 +143,23 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserCvEducationModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserCvEducationModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -142,7 +169,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -159,7 +186,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -172,16 +199,16 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUniversityDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data;
+        this.departments = response.data.filter((c) => c.isCompany === false);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -190,12 +217,18 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(email: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === email)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === email)[0]?.id;
+    } else {
+      userId = this.personelUserCvEducationModel.userId;
+    }
 
     return userId;
   }
@@ -216,7 +249,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return facultyId;
   }
 
-  getepartmentId(departmentName: string): string {
+  getDepartmentId(departmentName: string): string {
     const departmentId = this.departments.filter(
       (c) => c.departmentName === departmentName
     )[0]?.id;

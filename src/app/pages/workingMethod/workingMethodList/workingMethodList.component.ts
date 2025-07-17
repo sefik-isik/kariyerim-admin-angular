@@ -17,7 +17,7 @@ import { WorkingMethodDetailComponent } from '../workingMethodDetail/workingMeth
 })
 export class WorkingMethodListComponent implements OnInit {
   workingMethods: WorkingMethod[] = [];
-
+  admin: boolean = false;
   componentTitle = 'Working Methods';
 
   constructor(
@@ -28,6 +28,7 @@ export class WorkingMethodListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getWorkingMethods();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -41,12 +42,12 @@ export class WorkingMethodListComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(workingMethod: WorkingMethod) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -59,12 +60,12 @@ export class WorkingMethodListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -75,7 +76,7 @@ export class WorkingMethodListComponent implements OnInit {
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.delete(workingMethod).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -88,9 +89,9 @@ export class WorkingMethodListComponent implements OnInit {
     const modalRef = this.modalService.open(WorkingMethodUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -101,9 +102,9 @@ export class WorkingMethodListComponent implements OnInit {
     const modalRef = this.modalService.open(WorkingMethodDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

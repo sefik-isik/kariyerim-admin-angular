@@ -22,6 +22,8 @@ export class DepartmentDescriptionListComponent implements OnInit {
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'Deleted Department Details';
+  admin: boolean = false;
+
   constructor(
     private departmentDescriptionService: DepartmentDescriptionService,
     private toastrService: ToastrService,
@@ -30,6 +32,7 @@ export class DepartmentDescriptionListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getDepartmentDescriptions();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +46,12 @@ export class DepartmentDescriptionListComponent implements OnInit {
       (response) => {
         this.departmentDescriptionDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(departmentDescription: DepartmentDescription) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -62,12 +65,12 @@ export class DepartmentDescriptionListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -80,7 +83,8 @@ export class DepartmentDescriptionListComponent implements OnInit {
         .delete(departmentDescriptionDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -95,9 +99,9 @@ export class DepartmentDescriptionListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -112,9 +116,9 @@ export class DepartmentDescriptionListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

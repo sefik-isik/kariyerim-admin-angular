@@ -58,10 +58,10 @@ export class LanguageLevelAddComponent implements OnInit {
       id: '',
       level: this.languageLevelModel.level,
       levelTitle: this.caseService.capitalizeFirstLetter(
-        this.languageLevelModel.levelTitle
+        this.languageLevelModel.levelTitle.trim()
       ),
       levelDescription: this.caseService.capitalizeFirstLetter(
-        this.languageLevelModel.levelDescription
+        this.languageLevelModel.levelDescription.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

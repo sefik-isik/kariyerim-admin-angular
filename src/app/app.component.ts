@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { LocalStorageService } from './services/helperServices/localStorage.service';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,19 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit() {
-    if (!this.authService.isAuthenticated('token')) {
+    if (this.localStorageService.getFromLocalStorage('token')) {
+      this.router.navigate(['dashboard']);
+    } else {
       this.router.navigate(['login']);
     }
+
     if (this.authService.checkTokenExpiration('expiration')) {
       this.authService.logout();
     }

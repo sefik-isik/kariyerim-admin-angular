@@ -55,7 +55,7 @@ export class SectorAddComponent implements OnInit {
     return Object.assign({
       id: '',
       sectorName: this.caseService.capitalizeFirstLetter(
-        this.sectorModel.sectorName
+        this.sectorModel.sectorName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });

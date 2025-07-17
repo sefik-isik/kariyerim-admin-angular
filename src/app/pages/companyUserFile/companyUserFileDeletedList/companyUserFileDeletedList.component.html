@@ -1,17 +1,17 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
-      <div class="input-group mb-3">
+      <div class="input-group mb-3" *ngIf="admin">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
+          list="usersDatalistOptions"
+          id="usersData"
           placeholder="Filter Company User Files By User..."
         />
-        <datalist id="datalist1">
+        <datalist id="usersDatalistOptions">
           <option
             *ngFor="let userDTO of userDTOs"
             value="{{ userDTO.email }}"
@@ -35,7 +35,7 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
+            <th *ngIf="admin">email</th>
             <th>companyUserName</th>
             <th>file Name</th>
             <th></th>
@@ -65,7 +65,7 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ companyUserFileDTO.email }}</td>
+            <td *ngIf="admin">{{ companyUserFileDTO.email }}</td>
             <td>{{ companyUserFileDTO.companyUserName }}</td>
             <td *ngIf="companyUserFileDTO.fileName != 'noFile'">
               <a

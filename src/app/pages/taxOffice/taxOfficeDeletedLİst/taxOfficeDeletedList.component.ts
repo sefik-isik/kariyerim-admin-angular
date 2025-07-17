@@ -54,7 +54,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -63,7 +63,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.taxOfficeDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +73,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -81,7 +81,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.update(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -114,7 +114,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -127,9 +127,9 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(TaxOfficeUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -140,9 +140,9 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(TaxOfficeDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

@@ -4,7 +4,8 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
@@ -27,7 +28,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.companyUserName"
               type="text"
@@ -54,15 +55,13 @@
           </div>
         </div>
       </div>
-
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Sector Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.sectorName"
               type="text"
@@ -102,9 +101,7 @@
           <div class="input-group">
             <span class="input-group-text">Tax City Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.taxCityName"
               type="text"
@@ -112,7 +109,7 @@
               name="taxCityName"
               #taxCityName="ngModel"
               placeholder="Tax City Name"
-              (blur)="getTaxOffices(companyUserDTO.taxCityName)"
+              (change)="getTaxOffices(companyUserDTO.taxCityName)"
               list="taxCityNameDataList"
             />
             <datalist id="taxCityNameDataList">
@@ -145,9 +142,7 @@
           <div class="input-group">
             <span class="input-group-text">Tax Office Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.taxOfficeName"
               type="text"
@@ -187,11 +182,8 @@
           <div class="input-group">
             <span class="input-group-text">Tax Number</span>
             <input
-              required
-              minlength="10"
               maxlength="10"
-              pattern="[0-9\/]*"
-              inputmode="numeric"
+              pattern=""
               [(ngModel)]="companyUserDTO.taxNumber"
               type="text"
               class="form-control"
@@ -223,17 +215,22 @@
           <div class="input-group">
             <span class="input-group-text">Worker Count</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
-              [(ngModel)]="companyUserDTO.workerCount"
+              [(ngModel)]="companyUserDTO.workerCountValue"
               type="text"
               class="form-control"
               name="workerCount"
               #workerCount="ngModel"
               placeholder="Worker Count"
+              list="workerCountDataList"
             />
+            <datalist id="workerCountDataList">
+              <option
+                *ngFor="let count of counts"
+                value="{{ count.countValue }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
                 (click)="workerCountClear()"
@@ -258,9 +255,7 @@
           <div class="input-group">
             <span class="input-group-text">Web Address</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.webAddress"
               type="text"
@@ -293,9 +288,7 @@
           <div class="input-group">
             <span class="input-group-text">Year of Establishment</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               min="1950-01-01"
               max="{{ today | date : 'yyyy/MM/dd' }}"
               pattern=""
@@ -332,9 +325,7 @@
           <div class="input-group">
             <span class="input-group-text">Clarification</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="companyUserDTO.clarification"
               type="text"
@@ -366,12 +357,10 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >About <br />{{ aboutDetail }} \ 250</span
+              >About <br />{{ aboutDetail }} \ 2000</span
             >
             <textarea
-              required
-              minlength="50"
-              maxlength="1000"
+              maxlength="2000"
               pattern=""
               class="form-control"
               name="about"

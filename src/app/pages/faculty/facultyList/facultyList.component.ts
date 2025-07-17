@@ -18,9 +18,9 @@ import { FacultyDetailComponent } from '../facultyDetail/facultyDetail.component
 })
 export class FacultyListComponent implements OnInit {
   faculties: Faculty[] = [];
-
   componentTitle = 'Faculties';
   filter1: string;
+  admin: boolean = false;
 
   constructor(
     private toastrService: ToastrService,
@@ -30,6 +30,7 @@ export class FacultyListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getFaculties();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +44,12 @@ export class FacultyListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(faculty: Faculty) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +62,12 @@ export class FacultyListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +78,7 @@ export class FacultyListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.delete(faculty).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +91,9 @@ export class FacultyListComponent implements OnInit {
     const modalRef = this.modalService.open(FacultyUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +104,9 @@ export class FacultyListComponent implements OnInit {
     const modalRef = this.modalService.open(FacultyDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

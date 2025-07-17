@@ -1,0 +1,99 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="datalist1"
+          id="input"
+          placeholder="Filter WorkAreas..."
+        />
+        <datalist id="datalist1">
+          <option
+            *ngFor="let workArea of workAreas"
+            value="{{ workArea.areaName }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+
+      <div class="mt-3 table-responsive-xxl">
+        <table
+          *ngIf="workAreas.length > 0"
+          class="table table-striped table-hover table-sm"
+        >
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>workAreas Name</th>
+              <th></th>
+              <th></th>
+              <th>
+                <i
+                  (click)="unDeleteAll()"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </th>
+              <th>
+                <i
+                  (click)="terminateAll()"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let workArea of workAreas | filterWorkArea : filter1;
+                index as i
+              "
+            >
+              <td>{{ i + 1 }}</td>
+              <td>{{ workArea.areaName }}</td>
+              <td>
+                <i
+                  (click)="openDetail(workArea)"
+                  class="bi bi-journal-text"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="open(workArea)"
+                  class="bi bi-pencil-square"
+                  style="color: midnightblue"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="unDelete(workArea)"
+                  class="bi bi-arrow-up-right-square"
+                  style="color: green"
+                ></i>
+              </td>
+              <td>
+                <i
+                  (click)="terminate(workArea)"
+                  class="bi bi-x-octagon"
+                  style="color: rgb(255, 0, 0)"
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,12 +8,13 @@ import { DepartmentDetailComponent } from '../departmentDetail/departmentDetail.
 import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDepartmentPipe } from '../../../pipes/filterDepartment.pipe';
+import { IsCompanyPipe } from '../../../pipes/isCompany.pipe';
 
 @Component({
   selector: 'app-departmentDeletedList',
   templateUrl: './departmentDeletedList.component.html',
   styleUrls: ['./departmentDeletedList.component.css'],
-  imports: [CommonModule, FormsModule, FilterDepartmentPipe],
+  imports: [CommonModule, FormsModule, FilterDepartmentPipe, IsCompanyPipe],
 })
 export class DepartmentDeletedListComponent implements OnInit {
   departments: Department[] = [];
@@ -40,7 +41,7 @@ export class DepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -50,7 +51,7 @@ export class DepartmentDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -58,7 +59,7 @@ export class DepartmentDeletedListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.update(department).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -91,7 +92,7 @@ export class DepartmentDeletedListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.terminate(department).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -104,9 +105,9 @@ export class DepartmentDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(DepartmentUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -117,9 +118,9 @@ export class DepartmentDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(DepartmentDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

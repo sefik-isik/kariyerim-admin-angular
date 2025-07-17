@@ -6,8 +6,8 @@ import { ListResponseModel } from '../models/response/listResponseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
 import { ResponseModel } from '../models/response/responseModel';
 import { AdminModel } from '../models/auth/adminModel';
-import { AdvertFollowDTO } from '../models/dto/advertFollowDTO';
 import { PersonelUserAdvertFollow } from '../models/component/personelUserAdvertFollow';
+import { PersonelUserAdvertFollowDTO } from './../models/dto/personelUserAdvertFollowDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -73,24 +73,28 @@ export class PersonelUserAdvertFollowService {
 
   getAllDTO(
     adminModel: AdminModel
-  ): Observable<ListResponseModel<AdvertFollowDTO>> {
-    return this.httpClient.post<ListResponseModel<AdvertFollowDTO>>(
+  ): Observable<ListResponseModel<PersonelUserAdvertFollowDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserAdvertFollowDTO>>(
       this.newUrlPath + 'getalldto',
       adminModel
     );
   }
 
-  getAllByCompanyIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<AdvertFollowDTO>> {
-    let path = this.newUrlPath + 'getallbycompanyiddto?id=' + id;
-    return this.httpClient.get<SingleResponseModel<AdvertFollowDTO>>(path);
+  getAllByAdvertIdDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertFollowDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserAdvertFollowDTO>>(
+      this.newUrlPath + 'getallbyadvertiddto',
+      adminModel
+    );
   }
 
   getAllByPersonelIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<AdvertFollowDTO>> {
-    let path = this.newUrlPath + 'getallbypersoneliddto?id=' + id;
-    return this.httpClient.get<SingleResponseModel<AdvertFollowDTO>>(path);
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertFollowDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserAdvertFollowDTO>>(
+      this.newUrlPath + 'getallbypersoneliddto',
+      adminModel
+    );
   }
 }

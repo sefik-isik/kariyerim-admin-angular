@@ -1,21 +1,16 @@
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserService } from '../../../services/personelUser.service';
-import { Language } from '../../../models/component/language';
-import { LanguageLevel } from '../../../models/component/languageLevel';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
-import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
+import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterUpdate',
@@ -25,52 +20,23 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   @Input() personelUserCoverLetterDTO: PersonelUserCoverLetterDTO;
-  personelUserDTOs: PersonelUserDTO[] = [];
-  languages: Language[] = [];
-  languageLevels: LanguageLevel[] = [];
   descriptionCount: number;
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Cover Letter Update Form';
 
   constructor(
-    private personelUserService: PersonelUserService,
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
     private toastrService: ToastrService,
-    private adminService: AdminService,
     private userService: UserService,
     private router: Router,
-    private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.getAdminValues();
-
-    setTimeout(() => {
-      this.getUserValues(this.personelUserCoverLetterDTO.id);
-    }, 200);
-  }
-
-  getUserValues(id: string) {
-    const adminModel = {
-      id: id,
-      email: this.localStorageService.getFromLocalStorage('email'),
-      userId: this.localStorageService.getFromLocalStorage('id'),
-      status: this.localStorageService.getFromLocalStorage('status'),
-    };
-    this.getById(adminModel);
-  }
-
-  getById(adminModel: AdminModel) {
-    this.personelUserCoverLetterService.getById(adminModel).subscribe(
-      (response) => {
-        this.personelUserCoverLetterDTO.id = response.data.id;
-        this.personelUserCoverLetterDTO.personelUserId =
-          response.data.personelUserId;
-      },
-      (responseError) => console.error
-    );
+    this.admin = this.authService.isAdmin();
   }
 
   getValidationErrors(state: any) {
@@ -88,7 +54,7 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -101,8 +67,8 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
       id: this.personelUserCoverLetterDTO.id,
       userId: this.personelUserCoverLetterDTO.userId,
       personelUserId: this.personelUserCoverLetterDTO.personelUserId,
-      title: this.personelUserCoverLetterDTO.title,
-      description: this.personelUserCoverLetterDTO.description,
+      title: this.personelUserCoverLetterDTO.title.trim(),
+      description: this.personelUserCoverLetterDTO.description.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -113,46 +79,14 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     return text.length;
   }
 
-  getAdminValues() {
-    this.adminService
-      .getAdminValues(this.personelUserCoverLetterDTO.id)
-      .subscribe(
-        (response) => {
-          this.getAllPersonelUsers(response);
-          this.getPersonelUsers(response);
-        },
-        (responseError) => console.error
-      );
-  }
-
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
-
-  getPersonelUsers(adminModel: AdminModel) {
-    this.personelUserService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.personelUserDTOs = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getEmailByUserId(personelUserId: string): string {
-    return this.personelUserDTOs.find((u) => u.id == personelUserId)?.email;
-  }
-
-  getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
-
-    return userId;
-  }
-
   titleClear() {
     this.personelUserCoverLetterDTO.title = '';
   }

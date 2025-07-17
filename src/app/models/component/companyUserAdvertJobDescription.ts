@@ -1,7 +1,7 @@
-import { BaseCompanyUserAdvertModel } from '../base/baseCompanyUserAdvertModel';
+import { BaseCompanyUserModel } from '../base/baseCompanyUserModel';
 
-export interface CompanyUserAdvertJobDescription
-  extends BaseCompanyUserAdvertModel {
+export interface CompanyUserAdvertJobDescription extends BaseCompanyUserModel {
+  advertId: string;
   title: string;
   description: string;
 }

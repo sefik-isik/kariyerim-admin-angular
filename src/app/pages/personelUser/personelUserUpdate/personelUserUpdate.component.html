@@ -4,7 +4,8 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
@@ -19,17 +20,14 @@
           </div>
         </div>
       </div>
-
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">identity Number</span>
             <input
-              required
-              minlength="11"
               maxlength="11"
-              pattern="[0-9\/]*"
-              inputmode="numeric"
+              pattern=""
               [(ngModel)]="personelUserDTO.identityNumber"
               type="text"
               class="form-control"
@@ -61,9 +59,7 @@
           <div class="input-group">
             <span class="input-group-text">Licence Degree Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserDTO.licenseDegreeName"
               type="text"
@@ -103,9 +99,7 @@
           <div class="input-group">
             <span class="input-group-text">Driver Licence Name</span>
             <input
-              required
-              minlength="1"
-              maxlength="3"
+              maxlength="15"
               pattern=""
               [(ngModel)]="personelUserDTO.driverLicenceName"
               type="text"
@@ -145,9 +139,7 @@
           <div class="input-group">
             <span class="input-group-text">Birth Place Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserDTO.birthPlaceName"
               type="text"
@@ -187,9 +179,7 @@
           <div class="input-group">
             <span class="input-group-text">Date Of Birth</span>
             <input
-              required
-              minlength="3"
-              maxlength="20"
+              maxlength="50"
               min="1950-01-01"
               max="{{ today | date : 'yyyy/MM/dd' }}"
               pattern=""
@@ -219,57 +209,127 @@
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserDTO.militaryStatus"
-            name="militaryStatus"
-          />
-          <label class="form-check-label" for="checkChecked">
-            Military Status
-          </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Military Status</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserDTO.militaryStatus"
+                name="militaryStatus"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserDTO.nationalStatus"
-            name="nationalStatus"
-          />
-          <label class="form-check-label" for="checkChecked">
-            National Status
-          </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >National Status</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserDTO.nationalStatus"
+                name="nationalStatus"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserDTO.retirementStatus"
-            name="retirementStatus"
-          />
-          <label class="form-check-label" for="checkChecked">
-            Retirement Status
-          </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Retirement Status</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserDTO.retirementStatus"
+                name="retirementStatus"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserDTO.gender"
-            name="gender"
-          />
-          <label class="form-check-label" for="checkChecked"> Gender </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Gender Status</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserDTO.gender"
+                name="gender"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </form>

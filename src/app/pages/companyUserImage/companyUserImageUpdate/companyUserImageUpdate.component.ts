@@ -11,6 +11,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { CompanyUserImageDTO } from '../../../models/dto/companyUserImageDTO';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserImageUpdate',
@@ -22,6 +23,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   @Input() companyUserImageDTO: CompanyUserImageDTO;
   selectedImage: File | null = null;
   result: boolean = true;
+  admin: boolean = false;
   componentTitle = 'Company User Image Update Form';
 
   constructor(
@@ -30,10 +32,12 @@ export class CompanyUserImageUpdateComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     setTimeout(() => {
       this.getUserValues(this.companyUserImageDTO.id);
     }, 200);
@@ -61,25 +65,27 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserImageService.getById(adminModel).subscribe(
       (response) => {
-        this.companyUserImageDTO.id = response.data.id;
-        this.companyUserImageDTO.userId = response.data.userId;
-        this.companyUserImageDTO.companyUserId = response.data.companyUserId;
         this.companyUserImageDTO.imagePath = response.data.imagePath;
         this.companyUserImageDTO.imageName = response.data.imageName;
         this.checkImage();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   onImageSelected(event: any) {
     this.selectedImage = <File>event.target.files[0];
 
-    const allowedImageTypes = ['image/png', 'image/jpeg', 'image/gif'];
+    const allowedImageTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/gif',
+      'image/webp',
+    ];
 
     if (!allowedImageTypes.includes(this.selectedImage.type)) {
       this.toastrService.error(
-        'Please select a Image with .png, .jpeg, gif extension',
+        'Please select a Image with .png, .jpeg, webp or gif extension',
         'Invalid Image type'
       );
     } else if (this.selectedImage.size > 5 * 1024 * 1024) {
@@ -103,7 +109,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -148,7 +154,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
           this.toastrService.error('Error uploading image', responseError);
         }
       );

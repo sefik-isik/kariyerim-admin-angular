@@ -1,29 +1,17 @@
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { PersonelUserService } from './../../../services/personelUser.service';
-import { Component, Input, OnInit } from '@angular/core';
-
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
 import { HttpEventType } from '@angular/common/http';
-import { PersonelUserImageService } from '../../../services/personelUserImage.service';
-import { PersonelUserImage } from '../../../models/component/personelUserImage';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PersonelUserImage } from '../../../models/component/personelUserImage';
+import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserImageUpdate',
@@ -35,25 +23,21 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   @Input() personelUserImageDTO: PersonelUserImageDTO;
   selectedImage: File | null = null;
   result: boolean = true;
-  users: UserDTO[] = [];
-  personelUsers: PersonelUserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Personel User Image Update Form';
 
   constructor(
     private toastrService: ToastrService,
     private personelUserImageService: PersonelUserImageService,
     private router: Router,
-    private personelUserService: PersonelUserService,
-    private adminService: AdminService,
-    private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.getAdminValues();
-
+    this.admin = this.authService.isAdmin();
     setTimeout(() => {
       this.getUserValues(this.personelUserImageDTO.id);
     }, 200);
@@ -81,17 +65,12 @@ export class PersonelUserImageUpdateComponent implements OnInit {
     this.result = false;
     this.personelUserImageService.getById(adminModel).subscribe(
       (response) => {
-        this.personelUserImageDTO.id = response.data.id;
-        this.personelUserImageDTO.userId = response.data.userId;
-        this.personelUserImageDTO.personelUserId = response.data.personelUserId;
         this.personelUserImageDTO.imagePath = response.data.imagePath;
         this.personelUserImageDTO.imageName = response.data.imageName;
-
         this.result = true;
-
         this.checkImage();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -126,7 +105,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -171,7 +150,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
           this.toastrService.error('Error uploading image', responseError);
         }
       );
@@ -196,47 +175,13 @@ export class PersonelUserImageUpdateComponent implements OnInit {
       id: this.personelUserImageDTO.id,
       userId: this.personelUserImageDTO.userId,
       personelUserId: this.personelUserImageDTO.personelUserId,
-      imagePath: this.personelUserImageDTO.imagePath,
-      imageName: this.personelUserImageDTO.imageName,
-      imageOwnName: this.personelUserImageDTO.imageOwnName,
+      imagePath: this.personelUserImageDTO.imagePath.trim(),
+      imageName: this.personelUserImageDTO.imageName.trim(),
+      imageOwnName: this.personelUserImageDTO.imageOwnName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  getAdminValues() {
-    this.adminService.getAdminValues(this.personelUserImageDTO.id).subscribe(
-      (response) => {
-        this.getUsers(response);
-        this.getPersonelUsers(response);
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getUsers(adminModel: AdminModel) {
-    this.userService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.users = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getPersonelUsers(adminModel: AdminModel) {
-    this.personelUserService.getAllDTO(adminModel).subscribe(
-      (response) => {
-        this.personelUsers = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getUserId(userEmail: string): string {
-    const userId = this.users.filter((c) => c.email === userEmail)[0]?.id;
-
-    return userId;
   }
 
   imageOwnNameClear() {

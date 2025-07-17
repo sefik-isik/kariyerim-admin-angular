@@ -64,7 +64,7 @@ export class LoginComponent {
               ' ' +
               response.data.lastName
           );
-          this.router.navigate(['']);
+          this.router.navigate(['dashboard']);
         },
         (responseError) => console.log(responseError)
       );

@@ -1,0 +1,50 @@
+<div class="card tab-page" style="border: none">
+  <div class="card-body">
+    <div class="form-group">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter1"
+          class="form-control"
+          list="universitydatalist"
+          placeholder="Filter {{ componentTitle }} By Image Name..."
+        />
+        <datalist id="universitydatalist">
+          <option
+            *ngFor="let university of universities"
+            value="{{ university.universityName }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput1()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <carousel>
+          <slide
+            *ngFor="
+              let universityImage of universityImages
+                | filterUniversityImage : filter1
+            "
+          >
+            <img
+              src="{{ universityImage.imagePath + universityImage.imageName }}"
+              alt="first slide"
+              style="display: block; width: 100%"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <h3>{{ universityImage.imageOwnName }}</h3>
+            </div>
+          </slide>
+        </carousel>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,20 +1,21 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
-import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserCvWorkExperienceDTO } from '../../../models/dto/personelUserCvWorkExperienceDTO';
-import { PersonelUserCvWorkExperienceService } from '../../../services/personelUserCvWorkExperience.service';
-import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/filterPersonelUserCvWorkExperienceByUser.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { PersonelUserCvWorkExperienceDTO } from '../../../models/dto/personelUserCvWorkExperienceDTO';
+import { FilterPersonelUserCvWorkExperienceByUserPipe } from '../../../pipes/filterPersonelUserCvWorkExperienceByUser.pipe';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserCvWorkExperienceService } from '../../../services/personelUserCvWorkExperience.service';
 
-import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { AuthService } from '../../../services/auth.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvWorkExperienceDetailComponent } from '../personelUserCvWorkExperienceDetail/personelUserCvWorkExperienceDetail.component';
+import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceList',
@@ -28,24 +29,26 @@ import { PersonelUserCvWorkExperienceDetailComponent } from '../personelUserCvWo
   ],
 })
 export class PersonelUserCvWorkExperienceListComponent implements OnInit {
-  userDTOs: UserDTO[] = [];
   personelUserCvWorkExperienceDTOs: PersonelUserCvWorkExperienceDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
-
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Cv Work Experiences';
-  userId: string;
 
   constructor(
     private personelUserCvWorkExperienceService: PersonelUserCvWorkExperienceService,
     private toastrService: ToastrService,
     private adminService: AdminService,
-    private userService: UserService,
+    private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -58,19 +61,19 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -79,7 +82,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       (response) => {
         this.personelUserCvWorkExperienceDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -95,7 +98,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
   }
 
@@ -110,7 +113,8 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           .delete(personelUserCvWorkExperienceDTO)
           .subscribe(
             (response) => {},
-            (responseError) => console.error
+            (responseError) =>
+              this.toastrService.error(responseError.error.message)
           );
       }
     );
@@ -124,11 +128,11 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
     const modalRef = this.modalService.open(
       PersonelUserCvWorkExperienceUpdateComponent,
       {
-        size: 'lg',
+        size: 'md',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -143,9 +147,9 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

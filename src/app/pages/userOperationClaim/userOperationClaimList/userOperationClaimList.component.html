@@ -9,7 +9,7 @@
           class="form-control"
           list="datalist1"
           id="input1"
-          placeholder="Filter Cities By Users..."
+          placeholder="Filter {{ componentTitle }} By User..."
           (change)="getAdminValues()"
         />
         <datalist id="datalist1">
@@ -32,7 +32,7 @@
           class="form-control"
           list="datalist2"
           id="input2"
-          placeholder="Filter By Operation Claim..."
+          placeholder="Filter {{ componentTitle }} By Operation Claim Name..."
         />
         <datalist id="datalist2">
           <option
@@ -64,6 +64,7 @@
               <th></th>
               <th>
                 <i
+                  *ngIf="admin"
                   (click)="deleteAll()"
                   class="bi bi-trash"
                   style="color: red"
@@ -86,6 +87,7 @@
 
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="openDetail(userOperationClaimDTO)"
                   class="bi bi-journal-text"
                   style="color: midnightblue"
@@ -93,6 +95,7 @@
               </td>
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="open(userOperationClaimDTO)"
                   class="bi bi-pencil-square"
                   style="color: midnightblue"
@@ -100,6 +103,7 @@
               </td>
               <td>
                 <i
+                  *ngIf="admin"
                   (click)="delete(userOperationClaimDTO)"
                   class="bi bi-trash"
                   style="color: red"

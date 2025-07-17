@@ -1,0 +1,99 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Company User Name</span>
+            <input
+              class="form-control"
+              placeholder="Company User Name"
+              [(ngModel)]="companyUserAdvertDTO.companyUserName"
+              name="companyUserName"
+              #companyUserName="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Advert Name</span>
+            <input
+              class="form-control"
+              placeholder="Advert Name"
+              [(ngModel)]="companyUserAdvertDTO.advertName"
+              name="advertName"
+              #advertName="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Personel User Mail</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="personelUserAdvertFollowModel.personelUserMail"
+              type="text"
+              class="form-control"
+              name="personelUserMail"
+              #personelUserMail="ngModel"
+              placeholder="Personel User Mail"
+              list="personelUserMailDataList"
+            />
+            <datalist id="personelUserMailDataList">
+              <option
+                *ngFor="let userDTO of userDTOs"
+                value="{{ userDTO.email }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="personelUserMailClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!personelUserMail.valid && personelUserMail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(personelUserMail)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

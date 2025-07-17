@@ -9,18 +9,30 @@ import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDepartmentPipe } from '../../../pipes/filterDepartment.pipe';
 import { AuthService } from '../../../services/auth.service';
+import { IsCompanyPipe } from '../../../pipes/isCompany.pipe';
+import { FilterisDepartmentPipe } from '../../../pipes/filterisDepartment.pipe';
 
 @Component({
   selector: 'app-departmentList',
   templateUrl: './departmentList.component.html',
   styleUrls: ['./departmentList.component.css'],
-  imports: [CommonModule, FormsModule, FilterDepartmentPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FilterDepartmentPipe,
+    IsCompanyPipe,
+    FilterisDepartmentPipe,
+  ],
 })
 export class DepartmentListComponent implements OnInit {
   departments: Department[] = [];
   dataLoaded = false;
-  filter1 = '';
+  filter1: string = '';
+  filter2: boolean;
+  filters: boolean[] = [true, false];
+  admin: boolean = false;
   componentTitle = 'Deleted Departments';
+
   constructor(
     private departmentService: DepartmentService,
     private toastrService: ToastrService,
@@ -29,6 +41,7 @@ export class DepartmentListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getDepartments();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -42,12 +55,12 @@ export class DepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(department: Department) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -60,12 +73,12 @@ export class DepartmentListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -76,7 +89,7 @@ export class DepartmentListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.delete(department).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -89,9 +102,9 @@ export class DepartmentListComponent implements OnInit {
     const modalRef = this.modalService.open(DepartmentUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -102,9 +115,9 @@ export class DepartmentListComponent implements OnInit {
     const modalRef = this.modalService.open(DepartmentDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -113,6 +126,11 @@ export class DepartmentListComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
+    this.getDepartments();
+  }
+
+  clearInput2() {
+    this.filter2 = null;
     this.getDepartments();
   }
 }

@@ -11,7 +11,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.universityName"
               type="text"
@@ -83,15 +83,22 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
-              [(ngModel)]="universityDTO.workerCount"
+              [(ngModel)]="universityDTO.workerCountValue"
               type="text"
               class="form-control"
               name="workerCount"
               #workerCount="ngModel"
               placeholder="150-250"
+              list="workerCountDataList"
             />
+            <datalist id="workerCountDataList">
+              <option
+                *ngFor="let count of counts"
+                value="{{ count.countValue }}"
+              ></option>
+            </datalist>
             <span class="input-group-text">
               <i
                 (click)="workerCountClear()"
@@ -118,7 +125,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.sectorName"
               type="text"
@@ -160,7 +167,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.webAddress"
               type="text"
@@ -195,7 +202,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.webNewsAddress"
               type="text"
@@ -230,7 +237,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.youTubeEmbedAddress"
               type="text"
@@ -247,16 +254,6 @@
               ></i>
             </span>
           </div>
-          <div
-            *ngIf="!youTubeEmbedAddress.valid && youTubeEmbedAddress.touched"
-          >
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(youTubeEmbedAddress)"
-            >
-              {{ error }}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -267,7 +264,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.facebookAddress"
               type="text"
@@ -302,7 +299,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.instagramAddress"
               type="text"
@@ -337,7 +334,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.xAddress"
               type="text"
@@ -372,7 +369,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="universityDTO.youTubeAddress"
               type="text"
@@ -388,14 +385,6 @@
                 style="cursor: pointer"
               ></i>
             </span>
-          </div>
-          <div *ngIf="!youTubeAddress.valid && youTubeAddress.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(youTubeAddress)"
-            >
-              {{ error }}
-            </div>
           </div>
         </div>
       </div>

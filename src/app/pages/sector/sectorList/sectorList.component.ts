@@ -2,7 +2,6 @@ import { SectorService } from '../../../services/sectorService';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { Sector } from '../../../models/component/sector';
@@ -19,7 +18,7 @@ import { SectorDetailComponent } from '../sectorDetail/sectorDetail.component';
 })
 export class SectorListComponent implements OnInit {
   sectors: Sector[] = [];
-
+  admin: boolean = false;
   componentTitle = 'Sectors';
   filter1: string;
 
@@ -31,6 +30,7 @@ export class SectorListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getSectors();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -44,12 +44,12 @@ export class SectorListComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(sector: Sector) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -62,12 +62,12 @@ export class SectorListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -78,7 +78,7 @@ export class SectorListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.delete(sector).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -91,9 +91,9 @@ export class SectorListComponent implements OnInit {
     const modalRef = this.modalService.open(SectorUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -104,9 +104,9 @@ export class SectorListComponent implements OnInit {
     const modalRef = this.modalService.open(SectorDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

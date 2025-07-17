@@ -1,17 +1,16 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
+          list="emaildatalist"
           placeholder="Filter {{ componentTitle }} By User..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
             *ngFor="let userDTO of userDTOs"
             value="{{ userDTO.email }}"
@@ -27,6 +26,32 @@
       </div>
     </div>
 
+    <div class="form-group" *ngIf="admin">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-filter"></i></span>
+        <input
+          type="text"
+          [(ngModel)]="filter2"
+          class="form-control"
+          list="companyUserNamedatalist"
+          placeholder="Filter {{ componentTitle }}..."
+        />
+        <datalist id="companyUserNamedatalist">
+          <option
+            *ngFor="let companyUserDTO of companyUserDTOs"
+            value="{{ companyUserDTO.companyUserName }}"
+          ></option>
+        </datalist>
+        <span class="input-group-text">
+          <i
+            (click)="clearInput2()"
+            class="bi bi-x-circle"
+            style="cursor: pointer"
+          ></i>
+        </span>
+      </div>
+    </div>
+
     <div class="mt-3 table-responsive-xxl">
       <table
         *ngIf="companyUserDTOs.length > 0"
@@ -35,20 +60,22 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
+            <th *ngIf="admin">email</th>
             <th>company</th>
+            <th>workerCount</th>
             <th>sector</th>
             <th>taxCity</th>
             <th>taxOffice</th>
-            <th>taxNumber</th>
-
+            <th></th>
+            <th></th>
             <th></th>
             <th></th>
             <th>
               <i
+                *ngIf="isCompanyUser"
                 (click)="deleteAll()"
                 class="bi bi-trash"
-                style="color: crimson"
+                style="color: crimson; cursor: pointer"
               ></i>
             </th>
           </tr>
@@ -56,37 +83,63 @@
         <tbody>
           <tr
             *ngFor="
-              let companyUserDTO of companyUserDTOs | filterUser : filter1;
+              let companyUserDTO of companyUserDTOs
+                | filterUser : filter1
+                | filterCompanyUser : filter2;
               index as i
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ companyUserDTO.email }}</td>
-            <td>{{ companyUserDTO.companyUserName }}</td>
+            <td *ngIf="admin">{{ companyUserDTO.email }}</td>
+            <td>{{ companyUserDTO.companyUserName.substring(0, 20) }}...</td>
+            <td>{{ companyUserDTO.workerCountValue }}</td>
             <td>{{ companyUserDTO.sectorName }}</td>
             <td>{{ companyUserDTO.taxCityName }}</td>
             <td>{{ companyUserDTO.taxOfficeName }}</td>
-            <td>{{ companyUserDTO.taxNumber }}</td>
-
             <td>
               <i
+                *ngIf="admin"
+                (click)="openFollowAdd(companyUserDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(30, 20, 179); cursor: pointer"
+              ></i>
+              <i
+                *ngIf="!isCompanyUser"
+                (click)="followAdd(companyUserDTO)"
+                class="bi bi-bookmark-plus"
+                style="color: rgb(59, 128, 101); cursor: pointer"
+              ></i>
+            </td>
+            <td>
+              <i
+                *ngIf="isCompanyUser || admin"
+                (click)="openFollowList(companyUserDTO)"
+                class="bi bi-bookmark-star"
+                style="color: rgb(171, 25, 190); cursor: pointer"
+              ></i>
+            </td>
+            <td>
+              <i
+                *ngIf="isCompanyUser"
                 (click)="openDetail(companyUserDTO)"
                 class="bi bi-journal-text"
-                style="color: midnightblue"
+                style="color: rgb(21, 139, 139); cursor: pointer"
               ></i>
             </td>
             <td>
               <i
+                *ngIf="isCompanyUser"
                 (click)="open(companyUserDTO)"
                 class="bi bi-pencil-square"
-                style="color: midnightblue"
+                style="color: midnightblue; cursor: pointer"
               ></i>
             </td>
             <td>
               <i
+                *ngIf="isCompanyUser"
                 (click)="delete(companyUserDTO)"
                 class="bi bi-trash"
-                style="color: crimson"
+                style="color: crimson; cursor: pointer"
               ></i>
             </td>
           </tr>

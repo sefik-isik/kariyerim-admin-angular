@@ -52,7 +52,7 @@ export class AllUserListComponent implements OnInit {
       (response) => {
         this.getUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -94,7 +94,7 @@ export class AllUserListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.delete(userDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -107,9 +107,9 @@ export class AllUserListComponent implements OnInit {
     const modalRef = this.modalService.open(AllUserUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -120,9 +120,9 @@ export class AllUserListComponent implements OnInit {
     const modalRef = this.modalService.open(AllUserDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

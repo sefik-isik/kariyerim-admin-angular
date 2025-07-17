@@ -1,121 +1,115 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Personel User Images By User..."
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} ..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
           <i
-            (click)="clear1Input1()"
+            (click)="clearInput1()"
             class="bi bi-x-circle"
             style="cursor: pointer"
           ></i>
         </span>
       </div>
+    </div>
 
-      <div class="d-grid gap-2 mt-1" *ngIf="personelUserImagesLenght > 0">
-        <button
-          type="button"
-          class="btn btn-outline-success"
-          (click)="unDeleteAll()"
-          routerLinkActive="router-link-active"
-        >
-          Undelete All
-          <i class="bi bi-arrow-up-right-square" style="color: green"></i>
-        </button>
-        <button
-          type="button"
-          class="btn btn-outline-success"
-          (click)="terminateAll()"
-          routerLinkActive="router-link-active"
-        >
-          Terminate All
-          <i class="bi bi-x-octagon" style="color: white"></i>
-        </button>
-      </div>
+    <div class="d-grid gap-2 mt-1" *ngIf="personelUserImageDTOs.length > 0">
+      <button
+        type="button"
+        class="btn btn-outline-success"
+        (click)="unDeleteAll()"
+        routerLinkActive="router-link-active"
+      >
+        Undelete All
+        <i class="bi bi-arrow-up-right-square" style="color: green"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-success"
+        (click)="terminateAll()"
+        routerLinkActive="router-link-active"
+      >
+        Terminate All
+        <i class="bi bi-x-octagon" style="color: white"></i>
+      </button>
+    </div>
 
-      <div class="row mt-3">
-        <div
-          class="col-md-auto"
-          *ngFor="
-            let personelUserImageDTO of personelUserImageDTOs
-              | filterPersonelUserImageByUserPipe : filter1
-          "
-        >
-          <div class="card mt-3" style="width: 15rem">
-            <img
-              src="{{
-                personelUserImageDTO.imagePath +
-                  'thumbs/' +
-                  personelUserImageDTO.imageName
-              }}"
-              class="img-fluid img-thumbnail"
-              style="
-                height: 250px;
-                width: 100%;
-                text-align: center;
-                border: none;
-              "
-              alt="{{ personelUserImageDTO.imageOwnName }}"
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                {{ personelUserImageDTO.email }}
-              </h5>
-              <h6 class="card-title">
-                {{ personelUserImageDTO.imageOwnName }}
-              </h6>
-              <div class="mt-3">
-                <i
-                  (click)="openDetail(personelUserImageDTO)"
-                  class="bi bi-journal-text"
-                  style="color: midnightblue; cursor: pointer; font-size: large"
-                ></i>
-                <i
-                  (click)="open(personelUserImageDTO)"
-                  class="bi bi-pencil-square"
-                  style="
-                    color: midnightblue;
-                    cursor: pointer;
-                    margin-left: 4px;
-                    font-size: large;
-                  "
-                ></i>
-                <i
-                  style="
-                    color: green;
-                    cursor: pointer;
-                    margin-left: 4px;
-                    font-size: large;
-                  "
-                  (click)="unDelete(personelUserImageDTO)"
-                  class="bi bi-arrow-up-right-square"
-                >
-                </i>
-                <i
-                  (click)="terminate(personelUserImageDTO)"
-                  class="bi bi-x-octagon"
-                  style="
-                    cursor: pointer;
-                    margin-left: 4px;
-                    font-size: large;
-                    color: rgb(255, 0, 0);
-                  "
-                ></i>
-              </div>
+    <div class="row mt-3">
+      <div
+        class="col-md-auto"
+        *ngFor="
+          let personelUserImageDTO of personelUserImageDTOs
+            | filterPersonelUserImageByUserPipe : filter1
+        "
+      >
+        <div class="card mt-3" style="width: 15rem">
+          <img
+            src="{{
+              personelUserImageDTO.imagePath +
+                'thumbs/' +
+                personelUserImageDTO.imageName
+            }}"
+            class="img-fluid img-thumbnail"
+            style="height: 250px; width: 100%; text-align: center; border: none"
+            alt="{{ personelUserImageDTO.imageOwnName }}"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ personelUserImageDTO.email }}
+            </h5>
+            <h6 class="card-title">
+              {{ personelUserImageDTO.imageOwnName }}
+            </h6>
+            <div class="mt-3">
+              <i
+                (click)="openDetail(personelUserImageDTO)"
+                class="bi bi-journal-text"
+                style="color: midnightblue; cursor: pointer; font-size: large"
+              ></i>
+              <i
+                (click)="open(personelUserImageDTO)"
+                class="bi bi-pencil-square"
+                style="
+                  color: midnightblue;
+                  cursor: pointer;
+                  margin-left: 4px;
+                  font-size: large;
+                "
+              ></i>
+              <i
+                style="
+                  color: green;
+                  cursor: pointer;
+                  margin-left: 4px;
+                  font-size: large;
+                "
+                (click)="unDelete(personelUserImageDTO)"
+                class="bi bi-arrow-up-right-square"
+              >
+              </i>
+              <i
+                (click)="terminate(personelUserImageDTO)"
+                class="bi bi-x-octagon"
+                style="
+                  cursor: pointer;
+                  margin-left: 4px;
+                  font-size: large;
+                  color: rgb(255, 0, 0);
+                "
+              ></i>
             </div>
           </div>
         </div>

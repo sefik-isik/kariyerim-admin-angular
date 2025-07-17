@@ -24,7 +24,7 @@ export class LoginGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | boolean {
-    if (this.authService.isAuthenticated('token')) {
+    if (this.localStorageService.getFromLocalStorage('token')) {
       return true;
     } else {
       this.localStorageService.clearLocalStorage();

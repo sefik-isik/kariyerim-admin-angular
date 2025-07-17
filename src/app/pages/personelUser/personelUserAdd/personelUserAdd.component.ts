@@ -19,6 +19,7 @@ import { DriverLicence } from '../../../models/component/driverLicence';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserAdd',
@@ -33,6 +34,7 @@ export class PersonelUserAddComponent implements OnInit {
   licenseDegrees: LicenseDegree[] = [];
   driverLicences: DriverLicence[] = [];
   today: number = Date.now();
+  admin: boolean = false;
   componentTitle = 'Personel User Add Form';
 
   constructor(
@@ -46,10 +48,12 @@ export class PersonelUserAddComponent implements OnInit {
     private driverLicenceService: DriverLicenceService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.getCities();
     this.getLicenseDegrees();
@@ -69,7 +73,7 @@ export class PersonelUserAddComponent implements OnInit {
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
         },
         (responseError) => {
-          console.error;
+          console.log(responseError);
         }
       );
     } else {
@@ -81,7 +85,7 @@ export class PersonelUserAddComponent implements OnInit {
     return Object.assign({
       id: '',
       userId: this.getUserId(this.personelUserModel.email),
-      identityNumber: this.personelUserModel.identityNumber,
+      identityNumber: this.setNullValue(this.personelUserModel.identityNumber),
       licenseDegreeId: this.getLicenseDegreeId(
         this.personelUserModel.licenseDegreeName
       ),
@@ -93,9 +97,25 @@ export class PersonelUserAddComponent implements OnInit {
       retirementStatus: this.personelUserModel.retirementStatus,
       gender: this.personelUserModel.gender,
       birthPlaceId: this.getBirthPlaceId(this.personelUserModel.birthPlaceName),
-      dateOfBirth: new Date(this.personelUserModel.dateOfBirth).toJSON(),
+      dateOfBirth: new Date(
+        this.setNullDateValue(this.personelUserModel.dateOfBirth)
+      ).toJSON(),
       createDate: new Date(Date.now()).toJSON(),
     });
+  }
+
+  setNullValue(value: string) {
+    if (value == null || value == '') {
+      value = '-';
+    }
+    return value;
+  }
+
+  setNullDateValue(value: string) {
+    if (value == null || value == '') {
+      value = '01.01.1900';
+    }
+    return value;
   }
 
   getAdminValues() {
@@ -104,16 +124,23 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.getAllPersonelUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.personelUserModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.personelUserModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -122,7 +149,7 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.cities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -133,7 +160,7 @@ export class PersonelUserAddComponent implements OnInit {
           (f) => f.deletedDate == null
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -144,17 +171,26 @@ export class PersonelUserAddComponent implements OnInit {
           (f) => f.deletedDate == null
         );
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.personelUserModel.userId;
+    }
 
     return userId;
   }
 
   getLicenseDegreeId(licenseDegreeName: string): string {
+    if (licenseDegreeName == null || licenseDegreeName == '') {
+      licenseDegreeName = '-';
+    }
     const licenseDegreeId = this.licenseDegrees.filter(
       (c) => c.licenseDegreeName === licenseDegreeName
     )[0]?.id;
@@ -163,6 +199,9 @@ export class PersonelUserAddComponent implements OnInit {
   }
 
   getDriverLicenceId(driverLicenceName: string): string {
+    if (driverLicenceName == null || driverLicenceName == '') {
+      driverLicenceName = '-';
+    }
     const driverLicenceId = this.driverLicences.filter(
       (c) => c.driverLicenceName === driverLicenceName
     )[0]?.id;
@@ -171,7 +210,11 @@ export class PersonelUserAddComponent implements OnInit {
   }
 
   getBirthPlaceId(cityName: string): string {
+    if (cityName == null || cityName == '') {
+      cityName = '-';
+    }
     const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+
     return cityId;
   }
 

@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="alert alert-dark" role="alert">
+  <div class="alert alert-dark" role="alert" *ngIf="admin">
     <i
       (click)="open()"
       class="bi bi-plus-circle"
@@ -7,6 +7,10 @@
     >
       {{ componentTitle }}</i
     >
+  </div>
+
+  <div class="alert alert-dark" role="alert" *ngIf="!admin">
+    <i style="color: black; font-size: 16px"> {{ componentTitle }}</i>
   </div>
 
   <div class="nav nav-tabs d-flex mt-3" id="nav-tab" role="tablist">

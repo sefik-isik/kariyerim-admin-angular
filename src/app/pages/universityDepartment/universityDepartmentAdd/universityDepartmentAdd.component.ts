@@ -61,7 +61,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
     } else {
@@ -73,11 +73,13 @@ export class UniversityDepartmentAddComponent implements OnInit {
     return Object.assign({
       id: '',
       universityId: this.getUniversityId(
-        this.universityDepartmentModel.universityName
+        this.universityDepartmentModel.universityName.trim()
       ),
-      facultyId: this.getFacultytId(this.universityDepartmentModel.facultyName),
+      facultyId: this.getFacultytId(
+        this.universityDepartmentModel.facultyName.trim()
+      ),
       departmentId: this.getDepartmentId(
-        this.universityDepartmentModel.departmentName
+        this.universityDepartmentModel.departmentName.trim()
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -88,7 +90,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.universities = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -97,16 +99,16 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
-        this.departments = response.data;
+        this.departments = response.data.filter((c) => c.isCompany === false);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 

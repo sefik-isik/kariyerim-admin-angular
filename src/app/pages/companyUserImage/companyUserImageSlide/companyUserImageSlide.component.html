@@ -1,17 +1,17 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
     <div class="form-group">
-      <div class="input-group mb-3">
+      <div class="input-group mb-3" *ngIf="admin">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
+          list="usersDatalistOptions"
+          id="usersData"
           placeholder="Filter Company User Images By User..."
         />
-        <datalist id="datalist1">
+        <datalist id="usersDatalistOptions">
           <option
             *ngFor="let userDTO of userDTOs"
             value="{{ userDTO.email }}"
@@ -25,29 +25,29 @@
           ></i>
         </span>
       </div>
+    </div>
 
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <carousel>
-            <slide
-              *ngFor="
-                let companyUserImageDTO of companyUserImageDTOs
-                  | filterCompanyUserImageByUser : filter1
-              "
-            >
-              <img
-                src="{{
-                  companyUserImageDTO.imagePath + companyUserImageDTO.imageName
-                }}"
-                alt="first slide"
-                style="display: block; width: 100%"
-              />
-              <div class="carousel-caption d-none d-md-block">
-                <h3>{{ companyUserImageDTO.imageOwnName }}</h3>
-              </div>
-            </slide>
-          </carousel>
-        </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <carousel>
+          <slide
+            *ngFor="
+              let companyUserImageDTO of companyUserImageDTOs
+                | filterCompanyUserImageByUser : filter1
+            "
+          >
+            <img
+              src="{{
+                companyUserImageDTO.imagePath + companyUserImageDTO.imageName
+              }}"
+              alt="first slide"
+              style="display: block; width: 100%"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <h3>{{ companyUserImageDTO.imageOwnName }}</h3>
+            </div>
+          </slide>
+        </carousel>
       </div>
     </div>
   </div>

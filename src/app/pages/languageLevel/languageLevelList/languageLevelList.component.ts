@@ -18,7 +18,7 @@ import { LanguageLevelDetailComponent } from '../languageLevelDetail/languageLev
 })
 export class LanguageLevelListComponent implements OnInit {
   languageLevels: LanguageLevel[] = [];
-
+  admin: boolean = false;
   componentTitle = 'Language Levels';
   filter1: string;
 
@@ -30,6 +30,7 @@ export class LanguageLevelListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getFaculties();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -43,12 +44,12 @@ export class LanguageLevelListComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(languageLevel: LanguageLevel) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -61,12 +62,12 @@ export class LanguageLevelListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -77,7 +78,7 @@ export class LanguageLevelListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.delete(languageLevel).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -90,9 +91,9 @@ export class LanguageLevelListComponent implements OnInit {
     const modalRef = this.modalService.open(LanguageLevelUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -103,9 +104,9 @@ export class LanguageLevelListComponent implements OnInit {
     const modalRef = this.modalService.open(LanguageLevelDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

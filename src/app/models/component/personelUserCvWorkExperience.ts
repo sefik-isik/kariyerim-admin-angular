@@ -1,7 +1,6 @@
 import { BasePersonelUserCvModel } from '../base/basePersonelUserCvModel';
 
 export interface PersonelUserCvWorkExperience extends BasePersonelUserCvModel {
-  position: string;
   companyName: string;
   working: boolean;
   startDate: string;
@@ -16,4 +15,6 @@ export interface PersonelUserCvWorkExperience extends BasePersonelUserCvModel {
   cityName: string;
   regionId: string;
   detail: string;
+  positionId: string;
+  positionLevelId: string;
 }

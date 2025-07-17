@@ -4,14 +4,15 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mb-3">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Email</span>
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               email="true"
               [(ngModel)]="personelUserCvModel.email"
@@ -47,14 +48,30 @@
         </div>
       </div>
 
+      <div class="mb-3" *ngIf="!admin">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Email</span>
+            <input
+              class="form-control"
+              placeholder="email"
+              [(ngModel)]="personelUserCvModel.email"
+              name="email"
+              #email="ngModel"
+              disabled="true"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Cv Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              required="true"
+              minlength="1"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvModel.cvName"
               type="text"
@@ -82,14 +99,14 @@
         </div>
       </div>
 
+      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
+
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Language Name</span>
             <input
-              required
-              minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="personelUserCvModel.languageName"
               type="text"
@@ -129,37 +146,34 @@
           <div class="input-group">
             <span class="input-group-text">Language Level</span>
             <input
-              required
-              minlength="1"
-              maxlength="1"
-              pattern="[1-9\/]*"
-              inputmode="numeric"
-              [(ngModel)]="personelUserCvModel.level"
-              type="number"
+              maxlength="20"
+              pattern=""
+              [(ngModel)]="personelUserCvModel.levelTitle"
+              type="text"
               class="form-control"
-              name="level"
-              #level="ngModel"
+              name="levelTitle"
+              #levelTitle="ngModel"
               placeholder="Language Level"
-              list="levelDataList"
+              list="levelTitleDataList"
             />
-            <datalist id="levelDataList">
+            <datalist id="levelTitleDataList">
               <option
                 *ngFor="let languageLevel of languageLevels"
-                value="{{ languageLevel.level }}"
+                value="{{ languageLevel.levelTitle }}"
               ></option>
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="levelClear()"
+                (click)="levelTitleClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-          <div *ngIf="!level.valid && level.touched">
+          <div *ngIf="!levelTitle.valid && levelTitle.touched">
             <div
               class="error-message"
-              *ngFor="let error of getValidationErrors(level)"
+              *ngFor="let error of getValidationErrors(levelTitle)"
             >
               {{ error }}
             </div>
@@ -167,15 +181,34 @@
         </div>
       </div>
 
-      <div class="input-group mb-3">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [(ngModel)]="personelUserCvModel.isPrivate"
-            name="isPrivate"
-          />
-          <label class="form-check-label" for="checkChecked"> isPrivate </label>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >is Private?</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserCvModel.isPrivate"
+                name="isPrivate"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </form>

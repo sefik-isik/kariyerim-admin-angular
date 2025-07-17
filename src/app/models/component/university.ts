@@ -4,7 +4,7 @@ export interface University extends BaseModel {
   universityName: string;
   sectorId: string;
   yearOfEstablishment: string;
-  workerCount: string;
+  workerCountId: string;
   webAddress: string;
   webNewsAddress: string;
   youTubeEmbedAddress: string;

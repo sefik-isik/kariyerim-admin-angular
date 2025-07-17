@@ -1,0 +1,122 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mb-3">
+        <div class="input-group">
+          <span class="input-group-text"
+            >University Name : {{ universityName }}</span
+          >
+        </div>
+      </div>
+
+      <div class="input-group mb-3 justify-content-md-center">
+        <div class="card" *ngIf="result == true">
+          <img
+            *ngIf="universityImage.imageName"
+            src="{{
+              universityImage.imagePath + 'thumbs/' + universityImage.imageName
+            }}"
+            class="img-fluid img-thumbnail"
+            style="border: none"
+            alt="{{ universityImage.imageOwnName }}"
+          />
+          <i
+            type="button"
+            (click)="deleteImage()"
+            class="bi bi-x-circle-fill btn btn-outline-danger"
+          >
+            Delete Image
+          </i>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="input-group">
+          <input
+            type="file"
+            required
+            pattern=""
+            class="form-control"
+            name="imageName"
+            placeholder="Upload File"
+            (change)="onImageSelected($event)"
+            aria-label="Upload Image"
+          />
+          <span class="input-group-text" *ngIf="result == false">
+            <i
+              (click)="imageNameClear()"
+              class="bi bi-x-circle"
+              style="cursor: pointer"
+            ></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Image Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityImage.imageOwnName"
+              type="text"
+              class="form-control"
+              name="imageOwnName"
+              #imageOwnName="ngModel"
+              placeholder="Image Name"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="imageOwnNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!imageOwnName.valid && imageOwnName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(imageOwnName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        *ngIf="result == false"
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Upload
+      </button>
+
+      <button
+        *ngIf="result == true"
+        type="button"
+        class="btn btn-outline-primary"
+        disabled
+      >
+        Resim güncellemesi yapmak için mevcut resmi silmelisiniz.
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

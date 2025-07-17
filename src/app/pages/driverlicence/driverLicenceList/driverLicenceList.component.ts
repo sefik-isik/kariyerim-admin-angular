@@ -18,8 +18,8 @@ import { DriverLicenceDetailComponent } from '../driverLicenceDetail/driverLicen
 })
 export class DriverLicenceListComponent implements OnInit {
   driverLicences: DriverLicence[] = [];
-
   componentTitle = 'Driver Licences';
+  admin: boolean = false;
 
   constructor(
     private toastrService: ToastrService,
@@ -29,6 +29,7 @@ export class DriverLicenceListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getDriverLicences();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -42,12 +43,12 @@ export class DriverLicenceListComponent implements OnInit {
       (response) => {
         this.driverLicences = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   delete(driverLicence: DriverLicence) {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -60,12 +61,12 @@ export class DriverLicenceListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   deleteAll() {
-    if (!this.authService.isAdmin('status')) {
+    if (!this.authService.isAdmin()) {
       this.toastrService.info('Bu işlem için yetkiniz bulunmamaktadır');
       return;
     }
@@ -76,7 +77,7 @@ export class DriverLicenceListComponent implements OnInit {
     this.driverLicences.forEach((driverLicences) => {
       this.driverLicenceService.delete(driverLicences).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -89,9 +90,9 @@ export class DriverLicenceListComponent implements OnInit {
     const modalRef = this.modalService.open(DriverLicenceUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -102,9 +103,9 @@ export class DriverLicenceListComponent implements OnInit {
     const modalRef = this.modalService.open(DriverLicenceDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

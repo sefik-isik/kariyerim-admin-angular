@@ -1,12 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-  FormGroup,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -29,37 +22,22 @@ export class DepartmentUpdateComponent implements OnInit {
 
   constructor(
     private departmentService: DepartmentService,
-    private formBuilder: FormBuilder,
     private toastrService: ToastrService,
     private router: Router,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.department.id);
-    }, 200);
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
-  }
-
-  getById(id: string) {
-    this.departmentService.getById(id).subscribe(
-      (response) => {
-        this.department.id = response.data.id;
-      },
-      (responseError) => console.error
-    );
   }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.departmentService.update(this.getModel()).subscribe(
         (response) => {
-          console.log(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/department/departmentlisttab']);
@@ -76,7 +54,8 @@ export class DepartmentUpdateComponent implements OnInit {
   getModel(): Department {
     return Object.assign({
       id: this.department.id,
-      departmentName: this.department.departmentName,
+      departmentName: this.department.departmentName.trim(),
+      isCompany: this.department.isCompany,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

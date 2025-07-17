@@ -1,14 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Department } from '../../../models/component/department';
-import { DepartmentService } from '../../../services/department.service';
+import { ToastrService } from 'ngx-toastr';
+import { DepartmentDescription } from '../../../models/component/departmentDescription';
 import { DepartmentDescriptionDTO } from '../../../models/dto/departmentDescriptionDTO';
 import { DepartmentDescriptionService } from '../../../services/departmentDescription.service';
-import { DepartmentDescription } from '../../../models/component/departmentDescription';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -20,7 +18,6 @@ import { ValidationService } from '../../../services/validation.service';
 export class DepartmentDescriptionUpdateComponent implements OnInit {
   @Input() departmentDescriptionDTO: DepartmentDescriptionDTO;
   departmentDescriptionDTOs: DepartmentDescriptionDTO[];
-  departments: Department[];
   descriptionCount: number;
   componentTitle = 'Department Description Update Form';
 
@@ -29,25 +26,10 @@ export class DepartmentDescriptionUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     public activeModal: NgbActiveModal,
-    private departmentService: DepartmentService,
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.getDepartments();
-    setTimeout(() => {
-      this.getById(this.departmentDescriptionDTO.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.departmentDescriptionService.getById(id).subscribe(
-      (response) => {
-        this.departmentDescriptionDTO.id = response.data.id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -75,44 +57,17 @@ export class DepartmentDescriptionUpdateComponent implements OnInit {
   getModel(): DepartmentDescription {
     return Object.assign({
       id: this.departmentDescriptionDTO.id,
-      departmentId: this.getDepartmentId(
-        this.departmentDescriptionDTO.departmentName
-      ),
-      title: this.departmentDescriptionDTO.title,
-      description: this.departmentDescriptionDTO.description,
+      departmentId: this.departmentDescriptionDTO.departmentId,
+      title: this.departmentDescriptionDTO.title.trim(),
+      description: this.departmentDescriptionDTO.description.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  getDepartments() {
-    this.departmentService.getAll().subscribe(
-      (response) => {
-        this.departments = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getDepartmentById(departmentId: string): string {
-    return this.departments.find((c) => c.id == departmentId)?.departmentName;
-  }
-
-  getDepartmentId(departmentName: string): string {
-    const departmentId = this.departments.filter(
-      (c) => c.departmentName === departmentName
-    )[0]?.id;
-
-    return departmentId;
-  }
-
   countDescription() {
     this.descriptionCount = this.departmentDescriptionDTO.description.length;
-  }
-
-  departmentNameClear() {
-    this.departmentDescriptionDTO.departmentName = '';
   }
 
   titleClear() {

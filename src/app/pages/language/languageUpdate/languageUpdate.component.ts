@@ -28,20 +28,7 @@ export class LanguageUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.language.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.languageService.getById(id).subscribe(
-      (response) => {
-        this.language.id = id;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -68,7 +55,7 @@ export class LanguageUpdateComponent implements OnInit {
     return Object.assign({
       id: this.language.id,
       languageName: this.caseService.capitalizeFirstLetter(
-        this.language.languageName
+        this.language.languageName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

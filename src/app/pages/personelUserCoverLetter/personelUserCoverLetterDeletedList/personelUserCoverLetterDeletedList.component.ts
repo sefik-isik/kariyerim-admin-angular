@@ -15,6 +15,9 @@ import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCove
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCoverLetterUpdateComponent } from '../personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
 import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLetterDetail/personelUserCoverLetterDetail.component';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterDeletedList',
@@ -23,23 +26,27 @@ import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLett
   imports: [CommonModule, FormsModule, FilterPersonelUserCoverLetterByUserPipe],
 })
 export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
-  userDTOs: UserDTO[] = [];
+  personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCoverLetterDTOs: PersonelUserCoverLetterDTO[] = [];
   dataLoaded: boolean = false;
   filter1: string = '';
+  admin: boolean = false;
+  isPersonelUser: boolean = true;
   componentTitle = 'Personel User Cover Letters';
-  userId: string;
 
   constructor(
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
+    private personelUserService: PersonelUserService,
     private toastrService: ToastrService,
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
@@ -52,19 +59,19 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
-        this.getAllPersonelUsers(response);
+        this.getPersonelUsers(response);
         this.getPersonelUserCoverLetter(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
-  getAllPersonelUsers(adminModel: AdminModel) {
-    this.userService.getAllPersonelUserDTO(adminModel).subscribe(
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        this.personelUserDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -73,7 +80,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCoverLetterDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +92,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
   }
 
@@ -95,7 +102,8 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         .update(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -132,7 +140,8 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         .terminate(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (responseError) => console.error
+          (responseError) =>
+            this.toastrService.error(responseError.error.message)
         );
     });
     setTimeout(() => {
@@ -147,9 +156,9 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }
@@ -164,9 +173,9 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
       {
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         centered: true,
-        scrollable: true,
+        scrollable: false,
         windowClass: 'modal-holder',
         backdropClass: 'modal-backdrop',
       }

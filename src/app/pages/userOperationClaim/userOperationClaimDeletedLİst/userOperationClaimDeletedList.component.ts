@@ -38,7 +38,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   operationClaims: OperationClaim[];
   userId: string;
 
-  componentTitle = 'Deleted User Operation Claims';
+  componentTitle = 'User Operation Claims';
 
   constructor(
     private toastrService: ToastrService,
@@ -67,7 +67,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -76,7 +76,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -85,7 +85,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -94,7 +94,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -104,7 +104,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -112,7 +112,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaimDTO) => {
       this.userOperationClaimService.update(userOperationClaimDTO).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -125,9 +125,9 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(UserOperationClaimUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -138,9 +138,9 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(UserOperationClaimDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

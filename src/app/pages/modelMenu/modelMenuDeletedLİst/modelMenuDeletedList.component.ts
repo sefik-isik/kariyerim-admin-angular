@@ -42,7 +42,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
       (response) => {
         this.modelMenus = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -52,7 +52,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -60,7 +60,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.update(modelMenu).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -93,7 +93,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.terminate(modelMenu).subscribe(
         (response) => {},
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
     setTimeout(() => {
@@ -106,9 +106,9 @@ export class ModelMenuDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(ModelMenuUpdateComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });
@@ -119,9 +119,9 @@ export class ModelMenuDeletedListComponent implements OnInit {
     const modalRef = this.modalService.open(ModelMenuDetailComponent, {
       size: 'lg',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       centered: true,
-      scrollable: true,
+      scrollable: false,
       windowClass: 'modal-holder',
       backdropClass: 'modal-backdrop',
     });

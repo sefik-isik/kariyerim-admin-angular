@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { ResponseModel } from '../models/response/responseModel';
 import { ListResponseModel } from '../models/response/listResponseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
-import { AdminModel } from '../models/auth/adminModel';
 import { UniversityImage } from '../models/component/universityImage';
 
 @Injectable({
@@ -55,37 +54,25 @@ export class UniversityImageService {
     );
   }
 
-  deleteImage(personelUserImage: UniversityImage): Observable<ResponseModel> {
+  deleteImage(universityImage: UniversityImage): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'deleteimage',
-      personelUserImage
+      universityImage
     );
   }
 
-  getAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<UniversityImage>> {
-    return this.httpClient.post<ListResponseModel<UniversityImage>>(
-      this.newUrlPath + 'getall',
-      adminModel
-    );
+  getAll(): Observable<ListResponseModel<UniversityImage>> {
+    let path = this.newUrlPath + 'getall';
+    return this.httpClient.get<ListResponseModel<UniversityImage>>(path);
   }
 
-  getDeletedAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<UniversityImage>> {
-    return this.httpClient.post<ListResponseModel<UniversityImage>>(
-      this.newUrlPath + 'getdeletedall',
-      adminModel
-    );
+  getDeletedAll(): Observable<ListResponseModel<UniversityImage>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<UniversityImage>>(path);
   }
 
-  getById(
-    adminModel: AdminModel
-  ): Observable<SingleResponseModel<UniversityImage>> {
-    return this.httpClient.post<SingleResponseModel<UniversityImage>>(
-      this.newUrlPath + 'getbyid',
-      adminModel
-    );
+  getById(id: string): Observable<SingleResponseModel<UniversityImage>> {
+    let path = this.newUrlPath + 'getbyid?id=' + id;
+    return this.httpClient.get<SingleResponseModel<UniversityImage>>(path);
   }
 }

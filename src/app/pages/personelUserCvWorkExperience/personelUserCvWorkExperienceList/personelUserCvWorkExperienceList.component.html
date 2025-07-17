@@ -1,20 +1,19 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Personel User Cv Work Experiences By User..."
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} ..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
-            *ngFor="let userDTO of userDTOs"
-            value="{{ userDTO.email }}"
+            *ngFor="let personelUserDTO of personelUserDTOs"
+            value="{{ personelUserDTO.email }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -35,20 +34,11 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
-            <th>cvName</th>
+            <th *ngIf="admin">email</th>
             <th>companyName</th>
-            <th>companySectorName</th>
-            <th>departmentName</th>
+            <th>cvName</th>
+            <th>positionName</th>
             <th>working</th>
-            <th>workingMethodName</th>
-            <th>foundJobInHere</th>
-            <th>countryName</th>
-            <th>cityName</th>
-            <th>regionName</th>
-            <th>startDate</th>
-            <th>endDate</th>
-
             <th></th>
             <th></th>
             <th>
@@ -69,28 +59,11 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.email }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.cvName }}</td>
+            <td *ngIf="admin">{{ personelUserCvWorkExperienceDTO.email }}</td>
             <td>{{ personelUserCvWorkExperienceDTO.companyName }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.companySectorName }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.departmentName }}</td>
+            <td>{{ personelUserCvWorkExperienceDTO.cvName }}</td>
+            <td>{{ personelUserCvWorkExperienceDTO.positionName }}</td>
             <td>{{ personelUserCvWorkExperienceDTO.working }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.workingMethodName }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.foundJobInHere }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.countryName }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.cityName }}</td>
-            <td>{{ personelUserCvWorkExperienceDTO.regionName }}</td>
-            <td>
-              {{
-                personelUserCvWorkExperienceDTO.startDate | date : "dd/MM/yyyy"
-              }}
-            </td>
-            <td>
-              {{
-                personelUserCvWorkExperienceDTO.endDate | date : "dd/MM/yyyy"
-              }}
-            </td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCvWorkExperienceDTO)"

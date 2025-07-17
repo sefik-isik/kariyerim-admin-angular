@@ -1,17 +1,16 @@
 <div class="card tab-page" style="border: none">
   <div class="card-body">
-    <div class="form-group">
+    <div class="form-group" *ngIf="admin">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-filter"></i></span>
         <input
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
-          id="input1"
-          placeholder="Filter Company User Addresses By User..."
+          list="emaildatalist"
+          placeholder="Filter {{ componentTitle }} By User..."
         />
-        <datalist id="datalist1">
+        <datalist id="emaildatalist">
           <option
             *ngFor="let userDTO of userDTOs"
             value="{{ userDTO.email }}"
@@ -26,6 +25,7 @@
         </span>
       </div>
     </div>
+
     <div class="mt-3 table-responsive-xxl">
       <table
         *ngIf="companyUserAddressDTOs.length > 0"
@@ -34,8 +34,8 @@
         <thead>
           <tr>
             <th>Id</th>
-            <th>email</th>
-            <th>countryName</th>
+            <th *ngIf="admin">email</th>
+            <th>companyUserName</th>
             <th>cityName</th>
             <th>regionName</th>
             <th>addressDetail</th>
@@ -60,8 +60,8 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ companyUserAddressDTO.email }}</td>
-            <td>{{ companyUserAddressDTO.countryName }}</td>
+            <td *ngIf="admin">{{ companyUserAddressDTO.email }}</td>
+            <td>{{ companyUserAddressDTO.companyUserName }}</td>
             <td>{{ companyUserAddressDTO.cityName }}</td>
             <td>{{ companyUserAddressDTO.regionName }}</td>
             <td>

@@ -1,18 +1,14 @@
-import { TaxOfficeService } from './../../../services/taxOffice.service';
-import { City } from '../../../models/component/city';
-import { Component, Input, OnInit } from '@angular/core';
-import { CityService } from '../../../services/city.service';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Region } from '../../../models/component/region';
-import { RegionService } from '../../../services/region.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { TaxOffice } from '../../../models/component/taxOffice';
 import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
 import { CaseService } from '../../../services/helperServices/case.service';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
+import { TaxOfficeService } from './../../../services/taxOffice.service';
 
 @Component({
   selector: 'app-taxOfficeUpdate',
@@ -22,14 +18,9 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class TaxOfficeUpdateComponent implements OnInit {
   @Input() taxOfficeDTO: TaxOfficeDTO;
-  taxOfficeDTOs: TaxOfficeDTO[];
-  regions: Region[];
-  cities: City[];
   componentTitle = 'Tax Office Update Form';
 
   constructor(
-    private cityService: CityService,
-    private regionService: RegionService,
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
@@ -38,23 +29,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    this.getCities();
-
-    setTimeout(() => {
-      this.getById(this.taxOfficeDTO.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.taxOfficeService.getById(id).subscribe(
-      (response) => {
-        this.taxOfficeDTO.id = response.data.id;
-        this.taxOfficeDTO.cityId = response.data.cityId;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -68,7 +43,7 @@ export class TaxOfficeUpdateComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
-        (responseError) => console.error
+        (responseError) => this.toastrService.error(responseError.error.message)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -78,55 +53,18 @@ export class TaxOfficeUpdateComponent implements OnInit {
   getModel(): TaxOffice {
     return Object.assign({
       id: this.taxOfficeDTO.id,
-      cityId: this.getCityId(this.taxOfficeDTO.cityName),
+      cityId: this.taxOfficeDTO.cityId,
       regionName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeDTO.regionName
+        this.taxOfficeDTO.regionName.trim()
       ),
-      taxOfficeCode: this.taxOfficeDTO.taxOfficeCode,
+      taxOfficeCode: this.taxOfficeDTO.taxOfficeCode.trim(),
       taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeDTO.taxOfficeName
+        this.taxOfficeDTO.taxOfficeName.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
-  }
-
-  getCities() {
-    this.cityService.getAll().subscribe(
-      (response) => {
-        this.cities = response.data;
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getRegions(cityName: string) {
-    this.regionService.getAll().subscribe(
-      (response) => {
-        if (this.taxOfficeDTO.cityName) {
-          const cityId = this.getCityId(cityName);
-          this.regions = response.data.filter((f) => f.cityId == cityId);
-        }
-      },
-      (responseError) => console.error
-    );
-  }
-
-  getCityById(cityId: string): string {
-    return this.cities.find((c) => c.id == cityId)?.cityName;
-  }
-
-  getCityId(cityName: string): string {
-    return this.cities.find((c) => c.cityName == cityName)?.id;
-  }
-
-  cityNameClear() {
-    this.taxOfficeDTO.cityName = '';
-  }
-
-  regionNameClear() {
-    this.taxOfficeDTO.regionName = '';
   }
 
   taxOfficeCodeClear() {

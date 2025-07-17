@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -29,23 +28,7 @@ export class LanguageLevelUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getById(this.languageLevel.id);
-    }, 200);
-  }
-
-  getById(id: string) {
-    this.languageLevelService.getById(id).subscribe(
-      (response) => {
-        this.languageLevel.id = id;
-        this.languageLevel.level = response.data.level;
-        this.languageLevel.levelTitle = response.data.levelTitle;
-        this.languageLevel.levelDescription = response.data.levelDescription;
-      },
-      (responseError) => console.error
-    );
-  }
+  ngOnInit() {}
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -75,10 +58,10 @@ export class LanguageLevelUpdateComponent implements OnInit {
       id: this.languageLevel.id,
       level: this.languageLevel.level,
       levelTitle: this.caseService.capitalizeFirstLetter(
-        this.languageLevel.levelTitle
+        this.languageLevel.levelTitle.trim()
       ),
       levelDescription: this.caseService.capitalizeFirstLetter(
-        this.languageLevel.levelDescription
+        this.languageLevel.levelDescription.trim()
       ),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

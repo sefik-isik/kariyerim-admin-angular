@@ -7,6 +7,7 @@ import { SingleResponseModel } from '../models/response/singleResponseModel';
 import { ResponseModel } from '../models/response/responseModel';
 import { AdminModel } from '../models/auth/adminModel';
 import { PersonelUserAdvertApplication } from '../models/component/personelUserAdvertApplication';
+import { PersonelUserAdvertApplicationDTO } from '../models/dto/personelUserAdvertApplicationDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -71,27 +72,25 @@ export class PersonelUserAdvertApplicationService {
 
   getAllDTO(
     adminModel: AdminModel
-  ): Observable<ListResponseModel<PersonelUserAdvertApplication>> {
+  ): Observable<ListResponseModel<PersonelUserAdvertApplicationDTO>> {
     return this.httpClient.post<
-      ListResponseModel<PersonelUserAdvertApplication>
+      ListResponseModel<PersonelUserAdvertApplicationDTO>
     >(this.newUrlPath + 'getalldto', adminModel);
   }
 
-  getAllByCompanyIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<PersonelUserAdvertApplication>> {
-    let path = this.newUrlPath + 'getallbycompanyiddto?id=' + id;
-    return this.httpClient.get<
-      SingleResponseModel<PersonelUserAdvertApplication>
-    >(path);
+  getAllByAdvertIdDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertApplicationDTO>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserAdvertApplicationDTO>
+    >(this.newUrlPath + 'getallbyadvertiddto', adminModel);
   }
 
   getAllByPersonelIdDTO(
-    id: string
-  ): Observable<SingleResponseModel<PersonelUserAdvertApplication>> {
-    let path = this.newUrlPath + 'getallbypersoneliddto?id=' + id;
-    return this.httpClient.get<
-      SingleResponseModel<PersonelUserAdvertApplication>
-    >(path);
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertApplicationDTO>> {
+    return this.httpClient.post<
+      ListResponseModel<PersonelUserAdvertApplicationDTO>
+    >(this.newUrlPath + 'getallbypersoneliddto', adminModel);
   }
 }

@@ -41,7 +41,7 @@ export class RegisterCompanyUserComponent {
           firstName: this.caseService.capitalizeFirstLetter(
             form.value.firstName
           ),
-          lastName: this.caseService.capitalizeFirstLetter(form.value.lastName),
+          lastName: this.caseService.capitalizeToUpper(form.value.lastName),
           email: this.caseService.capitalizeToLower(form.value.email),
         },
         form.value

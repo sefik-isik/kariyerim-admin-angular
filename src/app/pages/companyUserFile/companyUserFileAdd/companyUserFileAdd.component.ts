@@ -16,6 +16,7 @@ import { AdminModel } from '../../../models/auth/adminModel';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserFileDTO } from '../../../models/dto/companyUserFileDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserFileAdd',
@@ -31,6 +32,7 @@ export class CompanyUserFileAddComponent {
   fileOwnName: string | null = null;
   companyUsers: CompanyUserDTO[] = [];
   userDTOs: UserDTO[] = [];
+  admin: boolean = false;
   componentTitle = 'Company User File Add Form';
 
   constructor(
@@ -42,9 +44,11 @@ export class CompanyUserFileAddComponent {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private authService: AuthService
   ) {}
   ngOnInit() {
+    this.admin = this.authService.isAdmin();
     this.getAdminValues();
   }
 
@@ -128,7 +132,7 @@ export class CompanyUserFileAddComponent {
           }
         },
         (responseError) => {
-          console.error;
+          this.toastrService.error(responseError.error.message);
         }
       );
   }
@@ -143,7 +147,7 @@ export class CompanyUserFileAddComponent {
         ]);
       },
       (responseError) => {
-        console.log(responseError);
+        this.toastrService.error(responseError.error.message);
       }
     );
   }
@@ -151,13 +155,13 @@ export class CompanyUserFileAddComponent {
   getModel(): CompanyUserFile {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.companyUserFileModel.email),
+      userId: this.getUserId(this.companyUserFileModel.email.trim()),
       companyUserId: this.getCompanyUserId(
-        this.companyUserFileModel.companyUserName
+        this.companyUserFileModel.companyUserName.trim()
       ),
-      filePath: this.filePath,
-      fileName: this.fileName,
-      fileOwnName: this.companyUserFileModel.fileOwnName,
+      filePath: this.filePath.trim(),
+      fileName: this.fileName.trim(),
+      fileOwnName: this.companyUserFileModel.fileOwnName.trim(),
 
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -170,16 +174,23 @@ export class CompanyUserFileAddComponent {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
-        this.userDTOs = response.data;
+        if (this.admin) {
+          this.userDTOs = response.data;
+        } else {
+          this.companyUserFileModel.email =
+            this.localStorageService.getFromLocalStorage('email');
+          this.companyUserFileModel.userId =
+            this.localStorageService.getFromLocalStorage('id');
+        }
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
@@ -190,12 +201,18 @@ export class CompanyUserFileAddComponent {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => console.error
+      (responseError) => this.toastrService.error(responseError.error.message)
     );
   }
 
   getUserId(userEmail: string): string {
-    const userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    let userId;
+
+    if (this.admin) {
+      userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
+    } else {
+      userId = this.companyUserFileModel.userId;
+    }
 
     return userId;
   }

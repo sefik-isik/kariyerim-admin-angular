@@ -8,4 +8,4 @@ import { CompanyUserFileDeletedListComponent } from '../companyUserFileDeletedLi
   </div> `,
   imports: [CompanyUserFileDeletedListComponent],
 })
-export class CompanyUserDeletedListTab {}
+export class CompanyUserFileDeletedListTab {}

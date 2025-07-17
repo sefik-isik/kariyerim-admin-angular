@@ -6,34 +6,20 @@
     <form #form="ngForm">
       <div class="mb-3">
         <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Department Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="20"
-              pattern=""
-              [(ngModel)]="departmentDescriptionDTO.departmentName"
-              type="text"
-              class="form-control"
-              name="departmentName"
-              #departmentName="ngModel"
-              placeholder="Department Name"
-              list="departmentNamedatalist"
-            />
-            <datalist id="departmentNamedatalist">
-              <option
-                *ngFor="let department of departments"
-                value="{{ department.departmentName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="departmentNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
+          <div class="mb-3">
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-text">Department Name</span>
+                <input
+                  class="form-control"
+                  placeholder="email"
+                  [(ngModel)]="departmentDescriptionDTO.departmentName"
+                  name="departmentName"
+                  #departmentName="ngModel"
+                  disabled="true"
+                />
+              </div>
+            </div>
           </div>
           <div *ngIf="!departmentName.valid && departmentName.touched">
             <div
@@ -53,7 +39,7 @@
             <input
               required
               minlength="3"
-              maxlength="30"
+              maxlength="50"
               pattern=""
               [(ngModel)]="departmentDescriptionDTO.title"
               type="text"
@@ -89,8 +75,8 @@
             >
             <textarea
               required
-              minlength="50"
-              maxlength="250"
+              minlength="100"
+              maxlength="4000"
               pattern=""
               class="form-control"
               [(ngModel)]="departmentDescriptionDTO.description"

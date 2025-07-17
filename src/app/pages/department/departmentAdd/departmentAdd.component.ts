@@ -27,7 +27,6 @@ export class DepartmentAddComponent implements OnInit {
   componentTitle = 'Department Add Form';
 
   constructor(
-    private formBuilder: FormBuilder,
     private departmentService: DepartmentService,
     private toastrService: ToastrService,
     private caseService: CaseService,
@@ -63,8 +62,9 @@ export class DepartmentAddComponent implements OnInit {
     return Object.assign({
       id: '',
       departmentName: this.caseService.capitalizeFirstLetter(
-        this.departmentModel.departmentName
+        this.departmentModel.departmentName.trim()
       ),
+      isCompany: this.departmentModel.isCompany,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
