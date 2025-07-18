@@ -67,6 +67,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -78,6 +79,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -87,6 +89,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data.filter((f) => f.departmentName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -96,6 +99,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   getUniversityDepartments() {
     this.universityDepartmentService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityDepartmentDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -105,6 +109,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   unDelete(UniversityDepartment: UniversityDepartmentDTO) {
     this.universityDepartmentService.update(UniversityDepartment).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -115,7 +120,9 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.universityDepartmentDTOs.forEach((universityDepartment) => {
       this.universityDepartmentService.update(universityDepartment).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -135,6 +142,7 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       .terminate(universityDepartmentDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -152,7 +160,9 @@ export class UniversityDepartmentDeletedListComponent implements OnInit {
       this.universityDepartmentService
         .terminate(universityDepartmentDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

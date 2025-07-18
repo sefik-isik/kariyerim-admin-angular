@@ -45,6 +45,7 @@ export class DepartmentDescriptionAddComponent implements OnInit {
     if (form.valid) {
       this.departmentDescriptionService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -75,6 +76,7 @@ export class DepartmentDescriptionAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((f) => f.isCompany == false)
           .filter((f) => f.departmentName != '-');

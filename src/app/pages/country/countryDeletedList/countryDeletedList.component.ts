@@ -41,6 +41,7 @@ export class CountryDeletedListComponent implements OnInit {
   getCountries() {
     this.countryService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -50,6 +51,7 @@ export class CountryDeletedListComponent implements OnInit {
   unDelete(country: Country) {
     this.countryService.update(country).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -60,7 +62,9 @@ export class CountryDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.countries.forEach((country) => {
       this.countryService.update(country).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -78,6 +82,7 @@ export class CountryDeletedListComponent implements OnInit {
 
     this.countryService.terminate(country).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -93,7 +98,9 @@ export class CountryDeletedListComponent implements OnInit {
 
     this.countries.forEach((country) => {
       this.countryService.terminate(country).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

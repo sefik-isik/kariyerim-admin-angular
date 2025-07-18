@@ -62,6 +62,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     if (form.valid) {
       this.companyUserDepartmentService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -95,6 +96,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
@@ -105,6 +107,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -121,6 +124,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAll(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -130,6 +134,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((c) => c.isCompany === true)
           .filter((f) => f.departmentName != '-');

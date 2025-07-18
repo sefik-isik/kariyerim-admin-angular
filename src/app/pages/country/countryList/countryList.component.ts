@@ -45,6 +45,7 @@ export class CountryListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -62,6 +63,7 @@ export class CountryListComponent implements OnInit {
     }
     this.countryService.delete(country).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -80,7 +82,9 @@ export class CountryListComponent implements OnInit {
     }
     this.countries.forEach((country) => {
       this.countryService.delete(country).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

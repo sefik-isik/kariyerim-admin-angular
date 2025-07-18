@@ -45,6 +45,7 @@ export class CityAddComponent implements OnInit {
     if (form.valid) {
       this.cityService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/city/citylisttab']);
@@ -73,6 +74,7 @@ export class CityAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

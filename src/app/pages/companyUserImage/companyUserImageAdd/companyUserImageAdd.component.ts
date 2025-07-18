@@ -135,6 +135,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   add() {
     this.companyUserImageService.add(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/companyuserimage/companyuserimagelisttab',
@@ -164,6 +165,7 @@ export class CompanyUserImageAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
@@ -174,6 +176,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -191,6 +194,7 @@ export class CompanyUserImageAddComponent implements OnInit {
     const userId = this.getUserId(this.companyUserImageModel.email);
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

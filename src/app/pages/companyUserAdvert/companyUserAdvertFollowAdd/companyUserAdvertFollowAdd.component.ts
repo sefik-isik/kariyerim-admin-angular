@@ -59,6 +59,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserAdvertFollowService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -90,6 +91,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getCompanyUsers(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
@@ -101,6 +103,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -110,6 +113,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -127,6 +131,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

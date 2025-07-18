@@ -47,6 +47,7 @@ export class UpdatePasswordComponent {
 
       this.autService.updatePassword(passwordModel).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.localStorageService.clearLocalStorage();
 
           this.toastrService.success(

@@ -58,6 +58,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserCoverLetterService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -95,6 +96,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -105,6 +107,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -121,6 +124,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

@@ -52,6 +52,7 @@ export class AllUserListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class AllUserListComponent implements OnInit {
   getUsers(adminModel: AdminModel) {
     this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -78,6 +80,7 @@ export class AllUserListComponent implements OnInit {
 
     this.userService.delete(userDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -95,7 +98,9 @@ export class AllUserListComponent implements OnInit {
       userDTO.passwordHash = '';
       userDTO.passwordSalt = '';
       this.userService.delete(userDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

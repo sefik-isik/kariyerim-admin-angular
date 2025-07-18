@@ -41,6 +41,7 @@ export class SectorDeletedListComponent implements OnInit {
   getSectors() {
     this.sectorService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -50,6 +51,7 @@ export class SectorDeletedListComponent implements OnInit {
   unDelete(sector: Sector) {
     this.sectorService.update(sector).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -60,7 +62,9 @@ export class SectorDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.sectors.forEach((sector) => {
       this.sectorService.update(sector).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -78,6 +82,7 @@ export class SectorDeletedListComponent implements OnInit {
 
     this.sectorService.terminate(sector).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -93,7 +98,9 @@ export class SectorDeletedListComponent implements OnInit {
 
     this.sectors.forEach((sector) => {
       this.sectorService.terminate(sector).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

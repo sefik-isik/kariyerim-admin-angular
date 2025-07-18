@@ -44,6 +44,7 @@ export class PositionListComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class PositionListComponent implements OnInit {
     }
     this.positionService.delete(position).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class PositionListComponent implements OnInit {
     }
     this.positions.forEach((position) => {
       this.positionService.delete(position).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

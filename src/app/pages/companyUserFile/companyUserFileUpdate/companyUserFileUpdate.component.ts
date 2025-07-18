@@ -64,6 +64,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserFileService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserFileDTO.filePath = response.data.filePath;
         this.companyUserFileDTO.fileName = response.data.fileName;
         this.checkFile();
@@ -110,6 +111,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   deleteFile() {
     this.companyUserFileService.deleteFile(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.result = false;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -166,6 +168,7 @@ export class CompanyUserFileUpdateComponent implements OnInit {
   update() {
     this.companyUserFileService.update(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.toastrService.success(response.message, 'Başarılı');
         this.router.navigate([

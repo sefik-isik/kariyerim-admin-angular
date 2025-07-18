@@ -65,6 +65,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
     this.result = false;
     this.personelUserImageService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserImageDTO.imagePath = response.data.imagePath;
         this.personelUserImageDTO.imageName = response.data.imageName;
         this.result = true;
@@ -103,6 +104,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   deleteImage() {
     this.personelUserImageService.deleteImage(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.result = false;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -159,6 +161,7 @@ export class PersonelUserImageUpdateComponent implements OnInit {
   update() {
     this.personelUserImageService.update(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/personeluserimage/personeluserimagelisttab',

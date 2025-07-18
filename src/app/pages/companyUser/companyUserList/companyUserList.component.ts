@@ -81,6 +81,7 @@ export class CompanyUserListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getPersonelUsers(response);
         this.getCompanyUsers(response);
@@ -92,6 +93,7 @@ export class CompanyUserListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -101,6 +103,7 @@ export class CompanyUserListComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -116,6 +119,7 @@ export class CompanyUserListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -138,6 +142,7 @@ export class CompanyUserListComponent implements OnInit {
 
     this.companyUserService.delete(companyUser).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -153,7 +158,9 @@ export class CompanyUserListComponent implements OnInit {
 
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.delete(companyUser).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -168,6 +175,7 @@ export class CompanyUserListComponent implements OnInit {
       .add(this.getModel(companyUserDTO))
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {

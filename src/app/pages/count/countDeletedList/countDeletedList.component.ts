@@ -40,6 +40,7 @@ export class CountDeletedListComponent implements OnInit {
   getLicenseDegrees() {
     this.countService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class CountDeletedListComponent implements OnInit {
   unDelete(count: Count) {
     this.countService.update(count).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class CountDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.counts.forEach((count) => {
       this.countService.update(count).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class CountDeletedListComponent implements OnInit {
 
     this.countService.terminate(count).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class CountDeletedListComponent implements OnInit {
 
     this.counts.forEach((count) => {
       this.countService.terminate(count).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

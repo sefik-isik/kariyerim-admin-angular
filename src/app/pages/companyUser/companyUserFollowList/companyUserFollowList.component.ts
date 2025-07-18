@@ -78,6 +78,7 @@ export class CompanyUserFollowListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUserFollowCompanyUsers(response);
@@ -91,6 +92,7 @@ export class CompanyUserFollowListComponent implements OnInit {
       .getAllByCompanyIdDTO(adminModel)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.personelUserFollowCompanyUserDTOs = response.data.filter(
             (f) => f.companyUserId == this.companyUserDTO.id
           );
@@ -102,6 +104,7 @@ export class CompanyUserFollowListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTOs = response.data.filter(
           (f) => f.id == this.companyUserDTO.id
         );
@@ -113,6 +116,7 @@ export class CompanyUserFollowListComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -131,6 +135,7 @@ export class CompanyUserFollowListComponent implements OnInit {
       .terminate(personelUserFollowCompanyUserDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -149,7 +154,9 @@ export class CompanyUserFollowListComponent implements OnInit {
         this.personelUserFollowCompanyUserService
           .terminate(personelUserFollowCompanyUser)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );

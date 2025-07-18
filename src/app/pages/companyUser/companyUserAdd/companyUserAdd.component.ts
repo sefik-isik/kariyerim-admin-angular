@@ -76,6 +76,7 @@ export class CompanyUserAddComponent implements OnInit {
     if (form.valid) {
       this.companyUserService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
@@ -131,6 +132,7 @@ export class CompanyUserAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -140,6 +142,7 @@ export class CompanyUserAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -156,6 +159,7 @@ export class CompanyUserAddComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -165,6 +169,7 @@ export class CompanyUserAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -174,6 +179,7 @@ export class CompanyUserAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -183,6 +189,7 @@ export class CompanyUserAddComponent implements OnInit {
   getTaxOffices(taxCityName: string) {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (taxCityName == '-') {
           this.taxOffices = response.data.filter((f) => f.taxOfficeName != '-');
         } else {

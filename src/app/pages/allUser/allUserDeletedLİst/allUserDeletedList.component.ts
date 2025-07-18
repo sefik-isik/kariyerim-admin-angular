@@ -57,6 +57,7 @@ export class AllUserDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -66,6 +67,7 @@ export class AllUserDeletedListComponent implements OnInit {
   getUsers(adminModel: AdminModel) {
     this.userService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -78,6 +80,7 @@ export class AllUserDeletedListComponent implements OnInit {
 
     this.userService.update(userDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -90,7 +93,9 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordHash = '';
       userDTO.passwordSalt = '';
       this.userService.update(userDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -111,6 +116,7 @@ export class AllUserDeletedListComponent implements OnInit {
 
     this.userService.terminate(userDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -128,7 +134,9 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordHash = '';
       userDTO.passwordSalt = '';
       this.userService.terminate(userDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

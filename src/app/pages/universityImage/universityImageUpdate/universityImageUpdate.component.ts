@@ -49,6 +49,7 @@ export class UniversityImageUpdateComponent implements OnInit {
   getById(id: string) {
     this.universityImageService.getById(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityImage.universityId = response.data.universityId;
         this.getUniversityName(this.universityImage.universityId);
         this.universityImage.imagePath = response.data.imagePath;
@@ -62,6 +63,7 @@ export class UniversityImageUpdateComponent implements OnInit {
   getUniversityName(universityId: string) {
     return this.universityService.getById(universityId).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityName = response.data.universityName;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -97,6 +99,7 @@ export class UniversityImageUpdateComponent implements OnInit {
   deleteImage() {
     this.universityImageService.deleteImage(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.result = false;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -153,6 +156,7 @@ export class UniversityImageUpdateComponent implements OnInit {
   update() {
     this.universityImageService.update(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/universityimage/universityimagelisttab',

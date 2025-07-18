@@ -47,6 +47,7 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
     if (form.valid) {
       this.personelUserCoverLetterService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -82,6 +83,7 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

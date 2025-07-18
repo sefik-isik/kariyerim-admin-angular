@@ -102,6 +102,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvWorkExperienceService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -184,6 +185,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -194,6 +196,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -210,6 +213,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
@@ -220,6 +224,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -229,6 +234,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -238,6 +244,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -247,6 +254,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positionLevels = response.data.filter(
           (f) => f.positionLevelName != '-'
         );
@@ -258,6 +266,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -267,6 +276,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((f) => f.isCompany === true)
           .filter((f) => f.departmentName != '-');
@@ -278,6 +288,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -287,6 +298,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (countryName == '-' || countryName == '') {
           this.cities = response.data;
         } else {
@@ -302,6 +314,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (cityName == '-' || cityName == '') {
           this.regions = response.data.filter((f) => f.regionName != '-');
         } else {

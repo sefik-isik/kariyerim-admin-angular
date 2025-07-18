@@ -36,6 +36,7 @@ export class ModelMenuUpdateComponent implements OnInit {
     if (form.valid) {
       this.modelMenuService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/modelmenu/modelmenulisttab']);

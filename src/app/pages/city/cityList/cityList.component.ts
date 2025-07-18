@@ -52,6 +52,7 @@ export class CityListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,8 @@ export class CityListComponent implements OnInit {
   getCities() {
     this.cityService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
+
         this.cityDTOs = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -82,6 +85,7 @@ export class CityListComponent implements OnInit {
     }
     this.cityService.delete(city).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -100,7 +104,9 @@ export class CityListComponent implements OnInit {
     }
     this.cityDTOs.forEach((city) => {
       this.cityService.delete(city).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

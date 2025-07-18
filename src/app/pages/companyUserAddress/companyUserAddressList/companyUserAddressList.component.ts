@@ -57,6 +57,7 @@ export class CompanyUserAddressListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserAddresses(response);
       },
@@ -67,6 +68,7 @@ export class CompanyUserAddressListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -76,6 +78,7 @@ export class CompanyUserAddressListComponent implements OnInit {
   getCompanyUserAddresses(adminModel: AdminModel) {
     this.companyUserAddressService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAddressDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -89,6 +92,7 @@ export class CompanyUserAddressListComponent implements OnInit {
     }
     this.companyUserAddressService.delete(companyUserAddressDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -103,7 +107,9 @@ export class CompanyUserAddressListComponent implements OnInit {
     }
     this.companyUserAddressDTOs.forEach((companyUserAddressDTO) => {
       this.companyUserAddressService.delete(companyUserAddressDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

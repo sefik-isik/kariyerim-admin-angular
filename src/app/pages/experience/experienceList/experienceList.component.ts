@@ -46,6 +46,7 @@ export class ExperienceListComponent implements OnInit {
   getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -63,6 +64,7 @@ export class ExperienceListComponent implements OnInit {
     }
     this.experienceService.delete(experience).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -81,7 +83,9 @@ export class ExperienceListComponent implements OnInit {
     }
     this.experiences.forEach((experience) => {
       this.experienceService.delete(experience).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

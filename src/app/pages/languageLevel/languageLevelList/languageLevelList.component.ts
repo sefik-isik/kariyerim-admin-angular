@@ -44,6 +44,7 @@ export class LanguageLevelListComponent implements OnInit {
   getFaculties() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class LanguageLevelListComponent implements OnInit {
     }
     this.languageLevelService.delete(languageLevel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class LanguageLevelListComponent implements OnInit {
     }
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.delete(languageLevel).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

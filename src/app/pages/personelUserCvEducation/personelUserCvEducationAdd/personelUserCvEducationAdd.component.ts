@@ -77,6 +77,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvEducationService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -140,6 +141,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -150,6 +152,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -166,6 +169,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
@@ -184,6 +188,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -197,6 +202,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -208,6 +214,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getUniversityDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((c) => c.isCompany === false)
           .filter((f) => f.departmentName != '-');
@@ -219,6 +226,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

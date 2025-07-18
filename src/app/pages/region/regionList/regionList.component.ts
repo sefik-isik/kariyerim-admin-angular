@@ -56,6 +56,7 @@ export class RegionListComponent implements OnInit {
   getRegions() {
     this.regionService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.regionDTOs = response.data.filter((f) => f.regionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -65,6 +66,7 @@ export class RegionListComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -82,6 +84,7 @@ export class RegionListComponent implements OnInit {
     }
     this.regionService.delete(regionDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -100,7 +103,9 @@ export class RegionListComponent implements OnInit {
     }
     this.regionDTOs.forEach((regionDTO) => {
       this.regionService.delete(regionDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

@@ -44,6 +44,7 @@ export class FacultyListComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class FacultyListComponent implements OnInit {
     }
     this.facultyService.delete(faculty).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class FacultyListComponent implements OnInit {
     }
     this.faculties.forEach((faculty) => {
       this.facultyService.delete(faculty).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

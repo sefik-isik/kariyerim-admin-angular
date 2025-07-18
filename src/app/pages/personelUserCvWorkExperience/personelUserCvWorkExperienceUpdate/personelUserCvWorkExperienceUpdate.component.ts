@@ -102,6 +102,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.personelUserCvWorkExperienceService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvWorkExperienceDTO.cvId = response.data.cvId;
         this.personelUserCvWorkExperienceDTO.startDate = this.formatDate(
           response.data.startDate
@@ -127,6 +128,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
         .update(this.getModel())
         .subscribe(
           (response) => {
+            this.validationService.handleSuccesses(response);
             this.activeModal.close();
             this.toastrService.success(response.message, 'Başarılı');
             this.router.navigate([
@@ -218,7 +220,9 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getAdminValues() {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
-      (response) => {},
+      (response) => {
+        this.validationService.handleSuccesses(response);
+      },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
@@ -226,6 +230,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -235,6 +240,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -244,6 +250,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -253,6 +260,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positionLevels = response.data.filter(
           (f) => f.positionLevelName != '-'
         );
@@ -264,6 +272,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -273,6 +282,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((f) => f.isCompany === true)
           .filter((f) => f.departmentName != '-');
@@ -284,6 +294,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -293,6 +304,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter(
           (c) => c.countryId === this.getCountryId(countryName)
         );
@@ -304,6 +316,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.regions = response.data
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');

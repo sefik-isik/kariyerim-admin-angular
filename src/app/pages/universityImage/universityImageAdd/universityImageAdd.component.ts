@@ -118,6 +118,7 @@ export class UniversityImageAddComponent implements OnInit {
   add() {
     this.universityImageService.add(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/universityimage/universityimagelisttab',
@@ -145,6 +146,7 @@ export class UniversityImageAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );

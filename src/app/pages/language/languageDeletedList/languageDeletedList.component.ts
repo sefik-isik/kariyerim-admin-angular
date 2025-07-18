@@ -40,6 +40,7 @@ export class LanguageDeletedListComponent implements OnInit {
   getLanguages() {
     this.languageService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languages = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class LanguageDeletedListComponent implements OnInit {
   unDelete(language: Language) {
     this.languageService.update(language).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class LanguageDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.languages.forEach((language) => {
       this.languageService.update(language).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class LanguageDeletedListComponent implements OnInit {
 
     this.languageService.terminate(language).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class LanguageDeletedListComponent implements OnInit {
 
     this.languages.forEach((language) => {
       this.languageService.terminate(language).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

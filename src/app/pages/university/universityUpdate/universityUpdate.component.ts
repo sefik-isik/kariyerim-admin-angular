@@ -55,6 +55,7 @@ export class UniversityUpdateComponent implements OnInit {
   getById(id: string) {
     this.universityService.getById(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityDTO.id = id;
         this.universityDTO.yearOfEstablishment = this.formatDate(
           this.universityDTO.yearOfEstablishment
@@ -68,6 +69,7 @@ export class UniversityUpdateComponent implements OnInit {
     if (form.valid) {
       this.universityService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/university/universitylisttab']);
@@ -138,6 +140,7 @@ export class UniversityUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -147,6 +150,7 @@ export class UniversityUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

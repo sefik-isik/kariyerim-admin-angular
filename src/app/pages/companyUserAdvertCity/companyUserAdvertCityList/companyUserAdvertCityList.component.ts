@@ -69,6 +69,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
       },
@@ -79,6 +80,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -88,6 +90,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
   getCompanyUserAdvertCities(adminModel: AdminModel) {
     this.companyUserAdvertCityService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdvertCityDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -103,6 +106,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
       .delete(companyUserAdvertCityDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
@@ -119,7 +123,9 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
       this.companyUserAdvertCityService
         .delete(companyUserAdvertCityDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

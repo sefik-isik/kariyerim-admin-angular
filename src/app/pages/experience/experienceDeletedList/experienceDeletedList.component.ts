@@ -40,6 +40,7 @@ export class ExperienceDeletedListComponent implements OnInit {
   getExperiences() {
     this.experienceService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.experiences = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class ExperienceDeletedListComponent implements OnInit {
   unDelete(experience: Experience) {
     this.experienceService.update(experience).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class ExperienceDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.experiences.forEach((experience) => {
       this.experienceService.update(experience).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class ExperienceDeletedListComponent implements OnInit {
 
     this.experienceService.terminate(experience).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class ExperienceDeletedListComponent implements OnInit {
 
     this.experiences.forEach((experience) => {
       this.experienceService.terminate(experience).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

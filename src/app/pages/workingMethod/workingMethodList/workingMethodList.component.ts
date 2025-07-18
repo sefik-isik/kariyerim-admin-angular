@@ -42,6 +42,7 @@ export class WorkingMethodListComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -59,6 +60,7 @@ export class WorkingMethodListComponent implements OnInit {
     }
     this.workingMethodService.delete(workingMethod).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -77,7 +79,9 @@ export class WorkingMethodListComponent implements OnInit {
     }
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.delete(workingMethod).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

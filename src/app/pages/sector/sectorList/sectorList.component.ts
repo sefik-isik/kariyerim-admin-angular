@@ -44,6 +44,7 @@ export class SectorListComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class SectorListComponent implements OnInit {
     }
     this.sectorService.delete(sector).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class SectorListComponent implements OnInit {
     }
     this.sectors.forEach((sector) => {
       this.sectorService.delete(sector).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

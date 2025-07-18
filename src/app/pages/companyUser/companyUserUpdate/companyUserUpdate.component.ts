@@ -78,6 +78,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTO.yearOfEstablishment = this.formatDate(
           response.data.yearOfEstablishment
         );
@@ -99,6 +100,7 @@ export class CompanyUserUpdateComponent implements OnInit {
     if (form.valid) {
       this.companyUserService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
           this.activeModal.close();
           this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
@@ -155,6 +157,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -164,6 +167,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -173,6 +177,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -182,6 +187,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   getTaxOffices(taxCityName: string) {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (taxCityName == '-') {
           this.taxOffices = response.data.filter((f) => f.taxOfficeName != '-');
         } else {

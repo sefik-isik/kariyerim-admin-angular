@@ -60,6 +60,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
       },
@@ -70,6 +71,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -79,6 +81,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
   getCompanyUserAdvertCities(adminModel: AdminModel) {
     this.companyUserAdvertJobDescriptionService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdvertJobDescriptionDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -96,6 +99,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
       .delete(companyUserAdvertJobDescriptionDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
@@ -113,7 +117,9 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
         this.companyUserAdvertJobDescriptionService
           .delete(companyUserAdvertJobDescriptionDTO)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );

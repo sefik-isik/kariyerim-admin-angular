@@ -186,6 +186,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   add() {
     this.companyUserAdvertService.add(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/companyuseradvert/companyuseradvertlisttab',
@@ -242,6 +243,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
         this.getCompanyUserDepartments(response);
@@ -252,6 +254,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -269,6 +272,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
 
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -277,6 +281,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getPositions() {
     this.positionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -285,6 +290,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
         );
@@ -295,6 +301,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positionLevels = response.data.filter(
           (f) => f.positionLevelName != '-'
         );
@@ -305,6 +312,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -313,6 +321,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -321,6 +330,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -329,6 +339,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -337,6 +348,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -345,6 +357,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getCompanyUserDepartments(adminModel: AdminModel) {
     this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDepartments = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -354,6 +367,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getLicenseDegrees() {
     this.lisenseDegreeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

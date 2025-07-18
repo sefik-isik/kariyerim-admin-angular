@@ -42,6 +42,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.modelMenus = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -51,6 +52,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
   unDelete(modelMenu: ModelMenu) {
     this.modelMenuService.update(modelMenu).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -61,7 +63,9 @@ export class ModelMenuDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.update(modelMenu).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -79,6 +83,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
 
     this.modelMenuService.terminate(modelMenu).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -94,7 +99,9 @@ export class ModelMenuDeletedListComponent implements OnInit {
 
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.terminate(modelMenu).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

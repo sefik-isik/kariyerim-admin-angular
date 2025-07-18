@@ -58,6 +58,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserCoverLetter(response);
       },
@@ -68,6 +69,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -77,6 +79,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
   getPersonelUserCoverLetter(adminModel: AdminModel) {
     this.personelUserCoverLetterService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCoverLetterDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -92,6 +95,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       .delete(personelUserCoverLetter)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
@@ -108,7 +112,9 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       this.personelUserCoverLetterService
         .delete(personelUserCoverLetterDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

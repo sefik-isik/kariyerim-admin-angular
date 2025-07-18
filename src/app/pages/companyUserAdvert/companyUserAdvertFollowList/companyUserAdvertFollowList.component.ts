@@ -46,6 +46,7 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUserAdvertFollows(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -58,6 +59,7 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
       .getAllByAdvertIdDTO(adminModel)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.personelUserAdvertFollowDTOs = response.data;
         },
         (responseError) => this.validationService.handleErrors(responseError)

@@ -139,6 +139,7 @@ export class PersonelUserFileAddComponent implements OnInit {
   add() {
     this.personelUserFileService.add(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.toastrService.success(response.message, 'Başarılı');
         this.router.navigate([
@@ -169,6 +170,7 @@ export class PersonelUserFileAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -179,6 +181,7 @@ export class PersonelUserFileAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -197,6 +200,7 @@ export class PersonelUserFileAddComponent implements OnInit {
 
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

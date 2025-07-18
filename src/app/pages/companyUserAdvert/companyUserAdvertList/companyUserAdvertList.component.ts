@@ -89,6 +89,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
         this.getCompanyUserAdverts(response);
@@ -101,6 +102,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -110,6 +112,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -119,6 +122,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -128,6 +132,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
   getCompanyUserAdverts(adminModel: AdminModel) {
     this.companyUserAdvertService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdvertDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -141,6 +146,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
     }
     this.companyUserAdvertService.delete(companyUserAdvertDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -155,7 +161,9 @@ export class CompanyUserAdvertListComponent implements OnInit {
     }
     this.companyUserAdvertDTOs.forEach((companyUserAdvertDTO) => {
       this.companyUserAdvertService.delete(companyUserAdvertDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -170,6 +178,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       .add(this.getAdvertFollowModel(companyUserAdvertDTO))
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {
@@ -199,6 +208,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       .add(this.getAdvertApplicationModel(companyUserAdvertDTO))
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {

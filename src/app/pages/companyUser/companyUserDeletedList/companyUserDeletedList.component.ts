@@ -53,6 +53,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
@@ -63,6 +64,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -72,6 +74,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -87,6 +90,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
   unDelete(companyUser: CompanyUserDTO) {
     this.companyUserService.update(companyUser).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -97,7 +101,9 @@ export class CompanyUserDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.update(companyUser).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -115,6 +121,7 @@ export class CompanyUserDeletedListComponent implements OnInit {
 
     this.companyUserService.terminate(companyUser).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -130,7 +137,9 @@ export class CompanyUserDeletedListComponent implements OnInit {
 
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.terminate(companyUser).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

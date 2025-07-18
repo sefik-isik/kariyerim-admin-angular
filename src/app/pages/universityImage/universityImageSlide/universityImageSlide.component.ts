@@ -42,6 +42,7 @@ export class UniversityImageSlideComponent implements OnInit {
   getUniversityImages() {
     this.universityImageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityImages = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -53,6 +54,7 @@ export class UniversityImageSlideComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -68,6 +70,7 @@ export class UniversityImageSlideComponent implements OnInit {
     }
     this.universityImageService.delete(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
       },
       (responseError) => {

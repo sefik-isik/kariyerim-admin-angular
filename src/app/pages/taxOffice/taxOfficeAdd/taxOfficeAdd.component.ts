@@ -49,6 +49,7 @@ export class TaxOfficeAddComponent implements OnInit {
     if (form.valid) {
       this.taxOfficeService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
@@ -78,6 +79,7 @@ export class TaxOfficeAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -87,6 +89,7 @@ export class TaxOfficeAddComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.taxOfficeModel.cityName) {
           const cityId = this.getCityId(cityName);
           this.regions = response.data

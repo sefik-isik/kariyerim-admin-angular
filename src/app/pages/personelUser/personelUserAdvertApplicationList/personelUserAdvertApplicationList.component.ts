@@ -48,6 +48,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUserAdvertFollows(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -60,6 +61,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
       .getAllByPersonelIdDTO(adminModel)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.personelUserAdvertApplicationDTOs = response.data;
         },
         (responseError) => this.validationService.handleErrors(responseError)
@@ -78,6 +80,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
       .terminate(personelUserAdvertApplicationDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -96,7 +99,9 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
         this.personelUserAdvertApplicationService
           .terminate(personelUserAdvertApplicationDTO)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );

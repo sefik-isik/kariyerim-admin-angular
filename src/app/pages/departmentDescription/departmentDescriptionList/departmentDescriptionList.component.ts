@@ -46,6 +46,7 @@ export class DepartmentDescriptionListComponent implements OnInit {
   getDepartmentDescriptions() {
     this.departmentDescriptionService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departmentDescriptionDTOs = response.data.filter(
           (f) => f.departmentName != '-'
         );
@@ -66,6 +67,7 @@ export class DepartmentDescriptionListComponent implements OnInit {
 
     this.departmentDescriptionService.delete(departmentDescription).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -86,7 +88,9 @@ export class DepartmentDescriptionListComponent implements OnInit {
       this.departmentDescriptionService
         .delete(departmentDescriptionDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

@@ -139,6 +139,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   add() {
     this.personelUserImageService.add(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/personeluserimage/personeluserimagelisttab',
@@ -168,6 +169,7 @@ export class PersonelUserImageAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -178,6 +180,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -195,6 +198,7 @@ export class PersonelUserImageAddComponent implements OnInit {
     const userId = this.getUserId(this.personelUserImageModel.email);
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

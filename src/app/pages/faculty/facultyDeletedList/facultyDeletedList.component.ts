@@ -40,6 +40,7 @@ export class FacultyDeletedListComponent implements OnInit {
   getFaculties() {
     this.facultyService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class FacultyDeletedListComponent implements OnInit {
   unDelete(faculty: Faculty) {
     this.facultyService.update(faculty).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class FacultyDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.faculties.forEach((faculty) => {
       this.facultyService.update(faculty).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class FacultyDeletedListComponent implements OnInit {
 
     this.facultyService.terminate(faculty).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class FacultyDeletedListComponent implements OnInit {
 
     this.faculties.forEach((faculty) => {
       this.facultyService.terminate(faculty).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

@@ -68,6 +68,7 @@ export class PersonelUserAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
@@ -122,6 +123,7 @@ export class PersonelUserAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -131,6 +133,7 @@ export class PersonelUserAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -147,6 +150,7 @@ export class PersonelUserAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -156,6 +160,7 @@ export class PersonelUserAddComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data.filter(
           (f) => f.licenseDegreeName != '-'
         );
@@ -167,6 +172,7 @@ export class PersonelUserAddComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
         );

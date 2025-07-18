@@ -42,6 +42,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positionLevels = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -51,6 +52,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
   unDelete(positionLevel: PositionLevel) {
     this.positionLevelService.update(positionLevel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -61,7 +63,9 @@ export class PositionLevelDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.update(positionLevel).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -79,6 +83,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
 
     this.positionLevelService.terminate(positionLevel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -94,7 +99,9 @@ export class PositionLevelDeletedListComponent implements OnInit {
 
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.terminate(positionLevel).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

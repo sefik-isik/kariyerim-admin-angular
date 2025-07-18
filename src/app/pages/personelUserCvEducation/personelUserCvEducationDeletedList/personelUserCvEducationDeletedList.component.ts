@@ -63,6 +63,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserCvEducations(response);
       },
@@ -73,6 +74,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -82,6 +84,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   getPersonelUserCvEducations(adminModel: AdminModel) {
     this.personelUserCvEducationService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvEducationDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -93,6 +96,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       .update(personelUserCvEducationDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
@@ -105,7 +109,9 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       this.personelUserCvEducationService
         .update(personelUserCvEducationDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });
@@ -125,6 +131,7 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       .terminate(personelUserCvEducationDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -142,7 +149,9 @@ export class PersonelUserCvEducationDeletedListComponent implements OnInit {
       this.personelUserCvEducationService
         .terminate(personelUserCvEducationDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

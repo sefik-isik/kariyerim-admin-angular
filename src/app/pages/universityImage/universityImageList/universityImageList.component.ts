@@ -50,6 +50,7 @@ export class UniversityImageListComponent implements OnInit {
   getUniversityImages() {
     this.universityImageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityImages = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -61,6 +62,7 @@ export class UniversityImageListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -77,6 +79,7 @@ export class UniversityImageListComponent implements OnInit {
     universityImage.isMainImage = true;
     this.universityImageService.update(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
@@ -92,6 +95,7 @@ export class UniversityImageListComponent implements OnInit {
     universityImage.isLogo = true;
     this.universityImageService.update(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
@@ -106,6 +110,7 @@ export class UniversityImageListComponent implements OnInit {
     }
     this.universityImageService.delete(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -120,7 +125,9 @@ export class UniversityImageListComponent implements OnInit {
     }
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.delete(universityImage).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

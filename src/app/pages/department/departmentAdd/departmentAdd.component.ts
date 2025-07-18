@@ -45,6 +45,7 @@ export class DepartmentAddComponent implements OnInit {
     if (form.valid) {
       this.departmentService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/department/departmentlisttab']);

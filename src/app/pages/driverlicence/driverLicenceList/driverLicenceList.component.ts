@@ -43,6 +43,7 @@ export class DriverLicenceListComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
         );
@@ -62,6 +63,7 @@ export class DriverLicenceListComponent implements OnInit {
     }
     this.driverLicenceService.delete(driverLicence).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -80,7 +82,9 @@ export class DriverLicenceListComponent implements OnInit {
     }
     this.driverLicences.forEach((driverLicences) => {
       this.driverLicenceService.delete(driverLicences).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

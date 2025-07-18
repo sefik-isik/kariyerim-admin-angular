@@ -68,6 +68,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserAddressService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getCities(this.companyUserAddressDTO.countryId);
         this.getRegions(this.companyUserAddressDTO.cityId);
       },
@@ -83,6 +84,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
     if (form.valid) {
       this.companyUserAddressService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -122,6 +124,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -131,6 +134,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter(
           (c) => c.countryId === this.getCountryId(countryName)
         );
@@ -142,6 +146,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.regions = response.data
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');

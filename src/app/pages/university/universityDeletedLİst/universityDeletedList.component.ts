@@ -40,6 +40,7 @@ export class UniversityDeletedListComponent implements OnInit {
   getUniversities() {
     this.universityService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class UniversityDeletedListComponent implements OnInit {
   unDelete(universityDTOs: UniversityDTO) {
     this.universityService.update(universityDTOs).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class UniversityDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.update(universityDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class UniversityDeletedListComponent implements OnInit {
 
     this.universityService.terminate(universityDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class UniversityDeletedListComponent implements OnInit {
 
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.terminate(universityDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

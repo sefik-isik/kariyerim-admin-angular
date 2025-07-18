@@ -55,6 +55,7 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
       },
@@ -65,6 +66,7 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -74,6 +76,7 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
   getCompanyUserAdvertCities(adminModel: AdminModel) {
     this.companyUserAdvertCityService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdvertCityDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -85,6 +88,7 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
       .update(companyUserAdvertCityDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
@@ -97,7 +101,9 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
       this.companyUserAdvertCityService
         .update(companyUserAdvertCityDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });
@@ -117,6 +123,7 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
       .terminate(companyUserAdvertCityDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -134,7 +141,9 @@ export class CompanyUserAdvertCityDeletedListComponent implements OnInit {
       this.companyUserAdvertCityService
         .terminate(companyUserAdvertCityDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

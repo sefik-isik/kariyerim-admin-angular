@@ -56,6 +56,7 @@ export class AllUserUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.userService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTO.id = response.data.id;
         this.userDTO.status = this.setStatus(response.data.status.trim());
         this.userDTO.firstName = this.caseService.capitalizeFirstLetter(
@@ -102,6 +103,7 @@ export class AllUserUpdateComponent implements OnInit {
 
       this.userService.update(userModel).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/alluser/alluserlisttab']);
           this.activeModal.close();

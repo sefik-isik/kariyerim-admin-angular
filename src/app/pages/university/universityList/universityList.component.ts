@@ -45,6 +45,7 @@ export class UniversityListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityDTOs = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -64,6 +65,7 @@ export class UniversityListComponent implements OnInit {
     }
     this.universityService.delete(universityDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -82,7 +84,9 @@ export class UniversityListComponent implements OnInit {
     }
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.delete(universityDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

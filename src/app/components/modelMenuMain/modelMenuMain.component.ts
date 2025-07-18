@@ -31,6 +31,7 @@ export class ModelMenuMainComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.modelMenus = response.data.filter((f) => f.modelName != '-');
         this.dataLoaded = true;
 

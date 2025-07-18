@@ -40,6 +40,7 @@ export class CityUpdateComponent implements OnInit {
     if (form.valid) {
       this.cityService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
 
           this.router.navigate(['dashboard/city/citylisttab']);

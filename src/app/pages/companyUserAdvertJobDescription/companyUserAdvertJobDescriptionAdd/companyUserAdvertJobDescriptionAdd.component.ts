@@ -66,6 +66,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
         .add(this.getModel())
         .subscribe(
           (response) => {
+            this.validationService.handleSuccesses(response);
             this.activeModal.close();
             this.toastrService.success(response.message, 'Başarılı');
             this.router.navigate([
@@ -103,6 +104,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
         this.getCompanyUserAdverts(response);
@@ -114,6 +116,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -134,6 +137,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
 
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -143,6 +147,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   getCompanyUserAdverts(adminModel: AdminModel) {
     this.companyUserAdvertService.getAll(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdverts = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

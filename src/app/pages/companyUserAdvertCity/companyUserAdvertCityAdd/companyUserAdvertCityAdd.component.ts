@@ -66,6 +66,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
     if (form.valid) {
       this.companyUserAdvertCityService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -102,6 +103,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
         this.getCompanyUserAdverts(response);
@@ -113,6 +115,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -131,6 +134,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
 
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -140,6 +144,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
   getCompanyUserAdverts(adminModel: AdminModel) {
     this.companyUserAdvertService.getAll(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserAdverts = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -149,6 +154,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
   getWorkCities() {
     this.workCitieService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workCities = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

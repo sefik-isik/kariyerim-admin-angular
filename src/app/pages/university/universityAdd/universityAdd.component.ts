@@ -53,6 +53,7 @@ export class UniversityAddComponent implements OnInit {
     if (form.valid) {
       this.universityService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/university/universitylisttab']);
@@ -115,6 +116,7 @@ export class UniversityAddComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -124,6 +126,7 @@ export class UniversityAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

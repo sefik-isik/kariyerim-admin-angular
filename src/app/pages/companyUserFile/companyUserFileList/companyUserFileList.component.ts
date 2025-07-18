@@ -57,6 +57,7 @@ export class CompanyUserFileComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserFiles(response);
       },
@@ -67,6 +68,7 @@ export class CompanyUserFileComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -76,6 +78,7 @@ export class CompanyUserFileComponent implements OnInit {
   getCompanyUserFiles(adminModel: AdminModel) {
     this.companyUserFileService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserFileDTOS = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -89,6 +92,7 @@ export class CompanyUserFileComponent implements OnInit {
     }
     this.companyUserFileService.delete(companyUserFile).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -103,7 +107,9 @@ export class CompanyUserFileComponent implements OnInit {
     }
     this.companyUserFileDTOS.forEach((companyUserFile) => {
       this.companyUserFileService.delete(companyUserFile).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

@@ -48,6 +48,7 @@ export class CityDeletedListComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -57,6 +58,7 @@ export class CityDeletedListComponent implements OnInit {
   getCities() {
     this.cityService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cityDTOs = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -66,6 +68,7 @@ export class CityDeletedListComponent implements OnInit {
   unDelete(city: CityDTO) {
     this.cityService.update(city).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -76,7 +79,9 @@ export class CityDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.cityDTOs.forEach((city) => {
       this.cityService.update(city).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -94,6 +99,7 @@ export class CityDeletedListComponent implements OnInit {
 
     this.cityService.terminate(city).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -109,7 +115,9 @@ export class CityDeletedListComponent implements OnInit {
 
     this.cityDTOs.forEach((city) => {
       this.cityService.terminate(city).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

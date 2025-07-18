@@ -52,6 +52,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -87,6 +88,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -96,6 +98,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

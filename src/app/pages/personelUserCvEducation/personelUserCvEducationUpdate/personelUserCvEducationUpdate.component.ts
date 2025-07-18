@@ -72,6 +72,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.personelUserCvEducationService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvEducationDTO.startDate = this.formatDate(
           response.data.startDate
         );
@@ -94,6 +95,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvEducationService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -157,6 +159,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -168,6 +171,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -177,6 +181,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   getUniversityDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((c) => c.isCompany === false)
           .filter((f) => f.departmentName != '-');

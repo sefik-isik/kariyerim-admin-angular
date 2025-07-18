@@ -36,6 +36,7 @@ export class LoginComponent {
 
       this.autService.login(loginModel).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.addToLocalStorageService.addToken(response.data.token);
           this.addToLocalStorageService.addId(response.data.id);
           this.addToLocalStorageService.addFirstName(response.data.firstName);

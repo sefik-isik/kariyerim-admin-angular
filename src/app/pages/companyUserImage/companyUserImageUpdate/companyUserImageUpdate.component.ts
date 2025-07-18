@@ -65,6 +65,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.companyUserImageService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserImageDTO.imagePath = response.data.imagePath;
         this.companyUserImageDTO.imageName = response.data.imageName;
         this.checkImage();
@@ -107,6 +108,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   deleteImage() {
     this.companyUserImageService.deleteImage(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.result = false;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -163,6 +165,7 @@ export class CompanyUserImageUpdateComponent implements OnInit {
   update() {
     this.companyUserImageService.update(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.router.navigate([
           '/dashboard/companyuserimage/companyuserimagelisttab',

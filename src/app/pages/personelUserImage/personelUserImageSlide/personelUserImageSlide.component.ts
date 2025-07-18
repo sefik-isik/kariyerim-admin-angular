@@ -56,6 +56,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
@@ -66,6 +67,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -75,6 +77,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
   getPersonelUserImages(adminModel: AdminModel) {
     this.personelUserImageService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserImageDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -88,6 +91,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
     }
     this.personelUserImageService.delete(personelUserImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.getAdminValues();
       },

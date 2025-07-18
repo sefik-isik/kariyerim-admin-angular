@@ -54,6 +54,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   getCities() {
     this.cityService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -63,6 +64,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   getTaxOffices() {
     this.taxOfficeService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.taxOfficeDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -72,6 +74,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   unDelete(taxOffice: TaxOfficeDTO) {
     this.taxOfficeService.update(taxOffice).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -82,7 +85,9 @@ export class TaxOfficeDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.update(taxOfficeDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -100,6 +105,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
 
     this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -115,7 +121,9 @@ export class TaxOfficeDeletedListComponent implements OnInit {
 
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

@@ -66,6 +66,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -76,6 +77,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -85,6 +87,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -94,6 +97,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
   unDelete(personelUser: PersonelUser) {
     this.personelUserService.update(personelUser).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -104,7 +108,9 @@ export class PersonelUserDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.update(personelUserDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -122,6 +128,7 @@ export class PersonelUserDeletedListComponent implements OnInit {
 
     this.personelUserService.terminate(personelUserDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -137,7 +144,9 @@ export class PersonelUserDeletedListComponent implements OnInit {
 
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.terminate(personelUserDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

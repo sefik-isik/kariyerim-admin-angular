@@ -40,6 +40,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workingMethods = response.data;
       },
       (responseError) => this.toastrService.error(responseError.error.message)
@@ -49,6 +50,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
   unDelete(workingMethod: WorkingMethod) {
     this.workingMethodService.update(workingMethod).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class WorkingMethodDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.update(workingMethod).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.toastrService.error(responseError.error.message)
       );
     });
@@ -77,6 +81,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
 
     this.workingMethodService.terminate(workingMethod).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class WorkingMethodDeletedListComponent implements OnInit {
 
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.terminate(workingMethod).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.toastrService.error(responseError.error.message)
       );
     });

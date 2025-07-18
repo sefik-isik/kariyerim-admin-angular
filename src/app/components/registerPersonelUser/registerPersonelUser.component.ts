@@ -48,6 +48,7 @@ export class RegisterPersonelUserComponent {
       );
       this.autService.register(registerModel).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.addToLocalStorageService.addToken(response.data.token);
           this.addToLocalStorageService.addId(response.data.id.toString());
           this.addToLocalStorageService.addFirstName(response.data.firstName);

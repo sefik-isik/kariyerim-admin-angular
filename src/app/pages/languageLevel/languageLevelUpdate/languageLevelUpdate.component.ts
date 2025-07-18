@@ -38,6 +38,7 @@ export class LanguageLevelUpdateComponent implements OnInit {
     if (form.valid) {
       this.languageLevelService.update(this.getLModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([

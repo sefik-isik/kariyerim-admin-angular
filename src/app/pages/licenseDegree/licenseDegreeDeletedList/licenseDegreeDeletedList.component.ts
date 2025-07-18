@@ -40,6 +40,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
   unDelete(licenseDegree: LicenseDegree) {
     this.licenseDegreeService.update(licenseDegree).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.update(licenseDegree).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
 
     this.licenseDegreeService.terminate(licenseDegree).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
 
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.terminate(licenseDegree).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

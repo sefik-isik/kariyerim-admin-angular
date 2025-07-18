@@ -55,6 +55,7 @@ export class TaxOfficeListComponent implements OnInit {
   getTaxOffices() {
     this.taxOfficeService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.taxOfficeDTOs = response.data.filter(
           (f) => f.taxOfficeName != '-'
         );
@@ -65,6 +66,7 @@ export class TaxOfficeListComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -78,6 +80,7 @@ export class TaxOfficeListComponent implements OnInit {
     }
     this.taxOfficeService.delete(taxOfficeDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -96,7 +99,9 @@ export class TaxOfficeListComponent implements OnInit {
     }
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.delete(taxOfficeDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

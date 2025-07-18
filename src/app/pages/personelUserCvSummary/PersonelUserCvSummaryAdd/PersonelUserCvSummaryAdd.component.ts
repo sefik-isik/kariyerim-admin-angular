@@ -63,6 +63,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvSummaryService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -99,6 +100,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -109,6 +111,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -125,6 +128,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
@@ -143,6 +147,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)

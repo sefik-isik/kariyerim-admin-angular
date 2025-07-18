@@ -41,6 +41,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
   getDepartmentDetails() {
     this.departmentDescriptionService.getDeletedAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departmentDescriptionDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -50,6 +51,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
   unDelete(departmentDetail: DepartmentDescription) {
     this.departmentDescriptionService.update(departmentDetail).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -62,7 +64,9 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
       this.departmentDescriptionService
         .update(departmentDescriptionDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });
@@ -82,6 +86,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
       .terminate(departmentDescription)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -99,7 +104,9 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
       this.departmentDescriptionService
         .terminate(departmentDescription)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

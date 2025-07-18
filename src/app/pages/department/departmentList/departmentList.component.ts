@@ -55,6 +55,7 @@ export class DepartmentListComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data.filter((f) => f.departmentName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -72,6 +73,7 @@ export class DepartmentListComponent implements OnInit {
     }
     this.departmentService.delete(department).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -90,7 +92,9 @@ export class DepartmentListComponent implements OnInit {
     }
     this.departments.forEach((department) => {
       this.departmentService.delete(department).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

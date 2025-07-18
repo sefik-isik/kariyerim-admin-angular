@@ -56,6 +56,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserFiles(response);
       },
@@ -66,6 +67,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -75,6 +77,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
   getCompanyUserFiles(adminModel: AdminModel) {
     this.companyUserFileService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserFileDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -84,6 +87,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
   unDelete(companyUserFileDTO: CompanyUserFileDTO) {
     this.companyUserFileService.update(companyUserFileDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -94,7 +98,9 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.companyUserFileDTOs.forEach((companyUserFileDTO) => {
       this.companyUserFileService.update(companyUserFileDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -112,6 +118,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
 
     this.companyUserFileService.terminate(companyUserFile).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -127,7 +134,9 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
 
     this.companyUserFileDTOs.forEach((companyUserFile) => {
       this.companyUserFileService.terminate(companyUserFile).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

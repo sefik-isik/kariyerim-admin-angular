@@ -71,6 +71,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     if (form.valid) {
       this.companyUserAddressService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -109,6 +110,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
@@ -119,6 +121,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -135,6 +138,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getCompanyUsers(adminModel: AdminModel) {
     this.companyUserService.getAll(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -148,6 +152,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -157,6 +162,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getCities(countryName: string) {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter(
           (c) => c.countryId === this.getCountryId(countryName)
         );
@@ -168,6 +174,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   getRegions(cityName: string) {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.regions = response.data
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');

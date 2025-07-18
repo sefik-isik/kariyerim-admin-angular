@@ -38,6 +38,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
   getDriverLicences() {
     this.driverLicenceService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.driverLicences = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -47,6 +48,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
   unDelete(driverLicence: DriverLicence) {
     this.driverLicenceService.update(driverLicence).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -57,7 +59,9 @@ export class DriverLicenceDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.driverLicences.forEach((driverLicence) => {
       this.driverLicenceService.update(driverLicence).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -75,6 +79,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
 
     this.driverLicenceService.terminate(driverLicence).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -90,7 +95,9 @@ export class DriverLicenceDeletedListComponent implements OnInit {
 
     this.driverLicences.forEach((driverLicence) => {
       this.driverLicenceService.terminate(driverLicence).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

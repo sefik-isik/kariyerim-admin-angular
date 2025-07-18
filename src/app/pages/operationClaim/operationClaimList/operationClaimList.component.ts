@@ -47,6 +47,7 @@ export class OperationClaimListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getOperationClaims();
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -56,6 +57,7 @@ export class OperationClaimListComponent implements OnInit {
   getOperationClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -73,6 +75,7 @@ export class OperationClaimListComponent implements OnInit {
     }
     this.operationClaimService.delete(operationClaim).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -91,7 +94,9 @@ export class OperationClaimListComponent implements OnInit {
     }
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.delete(operationClaim).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

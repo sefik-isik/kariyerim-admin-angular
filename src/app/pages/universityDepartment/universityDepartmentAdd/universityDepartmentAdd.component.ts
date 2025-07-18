@@ -54,6 +54,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
     if (form.valid) {
       this.universityDepartmentService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -88,6 +89,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -99,6 +101,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -108,6 +111,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((c) => c.isCompany === false)
           .filter((f) => f.departmentName != '-');

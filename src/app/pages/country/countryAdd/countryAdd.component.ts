@@ -38,6 +38,7 @@ export class CountryAddComponent implements OnInit {
     if (form.valid) {
       this.countryService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/country/countrylisttab']);

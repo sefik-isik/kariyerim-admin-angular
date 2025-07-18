@@ -62,6 +62,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
@@ -72,6 +73,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -81,6 +83,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
   getPersonelUserCvWorkExperiences(adminModel: AdminModel) {
     this.personelUserCvWorkExperienceService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvWorkExperienceDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -96,6 +99,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       .delete(personelUserCvWorkExperienceDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
@@ -113,7 +117,9 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
         this.personelUserCvWorkExperienceService
           .delete(personelUserCvWorkExperienceDTO)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );

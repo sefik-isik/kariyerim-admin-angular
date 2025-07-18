@@ -46,6 +46,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getOperationClaims();
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -55,6 +56,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
   getOperationClaims() {
     this.operationClaimService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.operationClaims = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -64,6 +66,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
   unDelete(operationClaim: OperationClaim) {
     this.operationClaimService.update(operationClaim).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -74,7 +77,9 @@ export class OperationClaimDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.update(operationClaim).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -92,6 +97,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
 
     this.operationClaimService.terminate(operationClaim).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -107,7 +113,9 @@ export class OperationClaimDeletedListComponent implements OnInit {
 
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.terminate(operationClaim).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

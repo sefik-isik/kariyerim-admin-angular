@@ -65,6 +65,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getUsers(response);
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
@@ -76,6 +77,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   getUsers(adminModel: AdminModel) {
     this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.users = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -85,6 +87,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   getUserOperationClaims(adminModel: AdminModel) {
     this.userOperationClaimService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userOperationClaimDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -94,6 +97,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -103,6 +107,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   unDelete(userOperationClaimDTO: UserOperationClaimDTO) {
     this.userOperationClaimService.update(userOperationClaimDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -113,7 +118,9 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.userOperationClaimDTOs.forEach((userOperationClaimDTO) => {
       this.userOperationClaimService.update(userOperationClaimDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

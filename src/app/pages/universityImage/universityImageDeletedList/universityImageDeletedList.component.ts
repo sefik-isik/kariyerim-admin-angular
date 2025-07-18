@@ -48,6 +48,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
   getUniversityImages() {
     this.universityImageService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityImages = response.data;
         this.universityName = this.getUniversityNameByUniversityId(
           response.data[0]?.universityId || ''
@@ -60,6 +61,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -76,6 +78,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
   unDelete(universityImage: UniversityImage) {
     this.universityImageService.update(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -86,7 +89,9 @@ export class UniversityImageDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.update(universityImage).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -104,6 +109,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
 
     this.universityImageService.terminate(universityImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -119,7 +125,9 @@ export class UniversityImageDeletedListComponent implements OnInit {
 
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.terminate(universityImage).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

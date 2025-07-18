@@ -52,6 +52,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
@@ -62,6 +63,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -71,6 +73,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
   getCompanyUserImages(adminModel: AdminModel) {
     this.companyUserImageService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserImageDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -84,6 +87,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
     }
     this.companyUserImageService.delete(companyUserImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.getAdminValues();
       },

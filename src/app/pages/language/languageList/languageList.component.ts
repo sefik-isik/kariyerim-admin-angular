@@ -44,6 +44,7 @@ export class LanguageListComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class LanguageListComponent implements OnInit {
     }
     this.languageService.delete(language).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class LanguageListComponent implements OnInit {
     }
     this.languages.forEach((language) => {
       this.languageService.delete(language).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

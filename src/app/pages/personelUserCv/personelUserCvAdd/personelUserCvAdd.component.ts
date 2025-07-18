@@ -66,6 +66,7 @@ export class PersonelUserCvAddComponent implements OnInit {
     if (form.valid) {
       this.personelUserCvService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -98,6 +99,7 @@ export class PersonelUserCvAddComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
@@ -108,6 +110,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   getAllPersonelUsers(adminModel: AdminModel) {
     this.userService.getAllPersonelUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
@@ -124,6 +127,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -133,6 +137,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -142,6 +147,7 @@ export class PersonelUserCvAddComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

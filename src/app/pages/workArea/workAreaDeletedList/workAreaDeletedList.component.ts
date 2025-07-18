@@ -40,6 +40,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
   getWorkAreas() {
     this.workAreaService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workAreas = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -49,6 +50,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
   unDelete(workArea: WorkArea) {
     this.workAreaService.update(workArea).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -59,7 +61,9 @@ export class WorkAreaDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.workAreas.forEach((workArea) => {
       this.workAreaService.update(workArea).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -77,6 +81,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
 
     this.workAreaService.terminate(workArea).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -92,7 +97,9 @@ export class WorkAreaDeletedListComponent implements OnInit {
 
     this.workAreas.forEach((workArea) => {
       this.workAreaService.terminate(workArea).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

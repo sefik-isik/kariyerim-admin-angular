@@ -43,6 +43,7 @@ export class CountListComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -60,6 +61,7 @@ export class CountListComponent implements OnInit {
     }
     this.countService.delete(count).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -78,7 +80,9 @@ export class CountListComponent implements OnInit {
     }
     this.counts.forEach((count) => {
       this.countService.delete(count).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

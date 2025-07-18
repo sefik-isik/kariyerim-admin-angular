@@ -95,4 +95,12 @@ export class ValidationService {
       });
     }
   }
+
+  handleSuccesses(response: any) {
+    // if (response.message) {
+    //   console.log(
+    //     'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
+    //   );
+    // }
+  }
 }

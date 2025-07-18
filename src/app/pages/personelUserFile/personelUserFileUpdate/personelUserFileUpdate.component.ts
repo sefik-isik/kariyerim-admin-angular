@@ -83,6 +83,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
   deleteFile() {
     this.personelUserFileService.deleteFile(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.result = false;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -139,6 +140,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
   update() {
     this.personelUserFileService.update(this.getModel()).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.activeModal.close();
         this.toastrService.success(response.message, 'Başarılı');
         this.router.navigate([

@@ -68,6 +68,7 @@ export class UserOperationClaimListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getUsers(response);
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
@@ -79,6 +80,7 @@ export class UserOperationClaimListComponent implements OnInit {
   getUserOperationClaims(adminModel: AdminModel) {
     this.userOperationClaimService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userOperationClaimDTOs = response.data.filter(
           (f) => f.operationClaimName != '-'
         );
@@ -90,6 +92,7 @@ export class UserOperationClaimListComponent implements OnInit {
   getUsers(adminModel: AdminModel) {
     this.userService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.users = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -99,6 +102,7 @@ export class UserOperationClaimListComponent implements OnInit {
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -116,6 +120,7 @@ export class UserOperationClaimListComponent implements OnInit {
     }
     this.userOperationClaimService.delete(userOperationClaim).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -134,7 +139,9 @@ export class UserOperationClaimListComponent implements OnInit {
     }
     this.userOperationClaimDTOs.forEach((userOperationClaim) => {
       this.userOperationClaimService.delete(userOperationClaim).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

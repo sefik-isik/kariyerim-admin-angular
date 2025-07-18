@@ -42,6 +42,7 @@ export class LicenseDegreeListComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data.filter(
           (f) => f.licenseDegreeName != '-'
         );
@@ -61,6 +62,7 @@ export class LicenseDegreeListComponent implements OnInit {
     }
     this.licenseDegreeService.delete(licenseDegree).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class LicenseDegreeListComponent implements OnInit {
     }
     this.licenseDegrees.forEach((licenseDegrees) => {
       this.licenseDegreeService.delete(licenseDegrees).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

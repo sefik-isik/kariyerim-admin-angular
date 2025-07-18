@@ -70,6 +70,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   getById(adminModel: AdminModel) {
     this.personelUserService.getById(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTO.dateOfBirth = this.formatDate(
           response.data.dateOfBirth
         );
@@ -89,6 +90,7 @@ export class PersonelUserUpdateComponent implements OnInit {
     if (form.valid) {
       this.personelUserService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
@@ -158,6 +160,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -167,6 +170,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data.filter(
           (f) => f.licenseDegreeName != '-'
         );
@@ -178,6 +182,7 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
         );

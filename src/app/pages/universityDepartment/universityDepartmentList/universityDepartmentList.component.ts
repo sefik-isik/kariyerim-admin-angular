@@ -70,6 +70,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   getUniversityDepartments() {
     this.universityDepartmentService.getAllDTO().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universityDepartmentDTOs = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -81,6 +82,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
@@ -92,6 +94,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   getFaculties() {
     this.facultyService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -101,6 +104,7 @@ export class UniversityDepartmentListComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data.filter((f) => f.departmentName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -118,6 +122,7 @@ export class UniversityDepartmentListComponent implements OnInit {
     }
     this.universityDepartmentService.delete(universityDepartment).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -138,7 +143,9 @@ export class UniversityDepartmentListComponent implements OnInit {
       this.universityDepartmentService
         .delete(universityDepartmentDTO)
         .subscribe(
-          (response) => {},
+          (response) => {
+            this.validationService.handleSuccesses(response);
+          },
           (responseError) => this.validationService.handleErrors(responseError)
         );
     });

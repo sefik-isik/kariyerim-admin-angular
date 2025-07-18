@@ -65,6 +65,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
@@ -75,6 +76,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -86,6 +88,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
       .getDeletedAllDTO(adminModel)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.personelUserCvWorkExperienceDTOs = response.data;
         },
         (responseError) => this.validationService.handleErrors(responseError)
@@ -97,6 +100,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
       .update(personelUserCvWorkExperienceDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
@@ -110,7 +114,9 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
         this.personelUserCvWorkExperienceService
           .update(personelUserCvWorkExperienceDTO)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );
@@ -132,6 +138,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
       .terminate(personelUserCvWorkExperienceDTO)
       .subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
@@ -150,7 +157,9 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
         this.personelUserCvWorkExperienceService
           .terminate(personelUserCvWorkExperienceDTO)
           .subscribe(
-            (response) => {},
+            (response) => {
+              this.validationService.handleSuccesses(response);
+            },
             (responseError) =>
               this.validationService.handleErrors(responseError)
           );

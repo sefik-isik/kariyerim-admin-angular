@@ -66,6 +66,7 @@ export class PersonelUserListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -75,6 +76,7 @@ export class PersonelUserListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -89,6 +91,7 @@ export class PersonelUserListComponent implements OnInit {
 
     this.personelUserService.delete(personelUser).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -104,7 +107,9 @@ export class PersonelUserListComponent implements OnInit {
 
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.delete(personelUserDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

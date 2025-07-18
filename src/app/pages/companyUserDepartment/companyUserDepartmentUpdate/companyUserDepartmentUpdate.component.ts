@@ -51,6 +51,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     if (form.valid) {
       this.companyUserDepartmentService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.toastrService.success(response.message, 'Başarılı');
           this.activeModal.close();
           this.router.navigate([
@@ -83,6 +84,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((c) => c.isCompany === true)
           .filter((f) => f.departmentName != '-');

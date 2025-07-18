@@ -45,6 +45,7 @@ export class PositionLevelListComponent implements OnInit {
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.positionLevels = response.data.filter(
           (f) => f.positionLevelName != '-'
         );
@@ -64,6 +65,7 @@ export class PositionLevelListComponent implements OnInit {
     }
     this.positionLevelService.delete(positionLevel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -82,7 +84,9 @@ export class PositionLevelListComponent implements OnInit {
     }
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.delete(positionLevel).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

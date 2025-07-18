@@ -41,6 +41,7 @@ export class DepartmentDeletedListComponent implements OnInit {
   getDepartments() {
     this.departmentService.getDeletedAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.departments = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -50,6 +51,7 @@ export class DepartmentDeletedListComponent implements OnInit {
   unDelete(department: Department) {
     this.departmentService.update(department).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
@@ -60,7 +62,9 @@ export class DepartmentDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.departments.forEach((department) => {
       this.departmentService.update(department).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -78,6 +82,7 @@ export class DepartmentDeletedListComponent implements OnInit {
 
     this.departmentService.terminate(department).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -93,7 +98,9 @@ export class DepartmentDeletedListComponent implements OnInit {
 
     this.departments.forEach((department) => {
       this.departmentService.terminate(department).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

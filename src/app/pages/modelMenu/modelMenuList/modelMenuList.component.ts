@@ -44,6 +44,7 @@ export class ModelMenuListComponent implements OnInit {
   getModelMenus() {
     this.modelMenuService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.modelMenus = response.data.filter((f) => f.modelName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -61,6 +62,7 @@ export class ModelMenuListComponent implements OnInit {
     }
     this.modelMenuService.delete(modelMenu).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -79,7 +81,9 @@ export class ModelMenuListComponent implements OnInit {
     }
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.delete(modelMenu).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

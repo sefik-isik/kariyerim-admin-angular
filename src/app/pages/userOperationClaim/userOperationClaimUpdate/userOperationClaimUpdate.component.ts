@@ -45,6 +45,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     if (form.valid) {
       this.userOperationClaimService.update(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -80,6 +81,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
   getOperaionClaims() {
     this.operationClaimService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)

@@ -56,6 +56,7 @@ export class PersonelUserImageListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
@@ -66,6 +67,7 @@ export class PersonelUserImageListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -75,6 +77,7 @@ export class PersonelUserImageListComponent implements OnInit {
   getPersonelUserImages(adminModel: AdminModel) {
     this.personelUserImageService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserImageDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -89,6 +92,7 @@ export class PersonelUserImageListComponent implements OnInit {
     personelUserImage.isProfilImage = true;
     this.personelUserImageService.update(personelUserImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
@@ -103,6 +107,7 @@ export class PersonelUserImageListComponent implements OnInit {
     }
     this.personelUserImageService.delete(personelUserImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -117,7 +122,9 @@ export class PersonelUserImageListComponent implements OnInit {
     }
     this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
       this.personelUserImageService.delete(personelUserImageDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

@@ -55,6 +55,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
@@ -65,6 +66,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   getAllCompanyUsers(adminModel: AdminModel) {
     this.userService.getAllCompanyUserDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -74,6 +76,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   getCompanyUserImages(adminModel: AdminModel) {
     this.companyUserImageService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.companyUserImageDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -83,6 +86,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   unDelete(companyUserImageDTO: CompanyUserImageDTO) {
     this.companyUserImageService.update(companyUserImageDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -93,7 +97,9 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.companyUserImageDTOs.forEach((companyUserImageDTO) => {
       this.companyUserImageService.update(companyUserImageDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -111,6 +117,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
 
     this.companyUserImageService.terminate(companyUserImage).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -126,7 +133,9 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
 
     this.companyUserImageDTOs.forEach((companyUserImage) => {
       this.companyUserImageService.terminate(companyUserImage).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

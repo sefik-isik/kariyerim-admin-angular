@@ -44,6 +44,7 @@ export class WorkAreaListComponent implements OnInit {
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -57,6 +58,7 @@ export class WorkAreaListComponent implements OnInit {
     }
     this.workAreaService.delete(workArea).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
@@ -71,7 +73,9 @@ export class WorkAreaListComponent implements OnInit {
     }
     this.workAreas.forEach((workArea) => {
       this.workAreaService.delete(workArea).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

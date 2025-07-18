@@ -65,6 +65,7 @@ export class PersonelUserCvListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserCvs(response);
       },
@@ -75,6 +76,7 @@ export class PersonelUserCvListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -84,6 +86,7 @@ export class PersonelUserCvListComponent implements OnInit {
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserCvDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -97,6 +100,7 @@ export class PersonelUserCvListComponent implements OnInit {
     }
     this.personelUserCvService.delete(personelUserCv).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
@@ -111,7 +115,9 @@ export class PersonelUserCvListComponent implements OnInit {
     }
     this.personelUserCvDTOs.forEach((personelUserCvDTO) => {
       this.personelUserCvService.delete(personelUserCvDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

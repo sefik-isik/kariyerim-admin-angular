@@ -56,6 +56,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.getPersonelUsers(response);
         this.getPersonelUserFiles(response);
       },
@@ -66,6 +67,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   getPersonelUsers(adminModel: AdminModel) {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -75,6 +77,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   getPersonelUserFiles(adminModel: AdminModel) {
     this.personelUserFileService.getDeletedAllDTO(adminModel).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.personelUserFileDTOs = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -84,6 +87,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   unDelete(personelUserFileDTO: PersonelUserFileDTO) {
     this.personelUserFileService.update(personelUserFileDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
@@ -94,7 +98,9 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
   unDeleteAll() {
     this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
       this.personelUserFileService.update(personelUserFileDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });
@@ -112,6 +118,7 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
 
     this.personelUserFileService.terminate(personelUserFileDTO).subscribe(
       (response) => {
+        this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
@@ -127,7 +134,9 @@ export class PersonelUserFileDeletedListComponent implements OnInit {
 
     this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
       this.personelUserFileService.terminate(personelUserFileDTO).subscribe(
-        (response) => {},
+        (response) => {
+          this.validationService.handleSuccesses(response);
+        },
         (responseError) => this.validationService.handleErrors(responseError)
       );
     });

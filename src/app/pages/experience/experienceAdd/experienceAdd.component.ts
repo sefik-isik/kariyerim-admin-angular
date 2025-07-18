@@ -40,6 +40,7 @@ export class ExperienceAddComponent implements OnInit {
     if (form.valid) {
       this.experienceService.add(this.getModel()).subscribe(
         (response) => {
+          this.validationService.handleSuccesses(response);
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/experience/experiencelisttab']);
