@@ -140,7 +140,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => console.error
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -185,7 +185,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
           this.toastrService.error('Error uploading image', responseError);
         }
       );
@@ -255,7 +255,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.getCompanyUserDepartments(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -264,7 +264,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getWorkingMethods() {
@@ -272,7 +272,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getExperiences() {
@@ -280,7 +280,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -289,7 +289,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.companyUserDepartments = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -298,7 +298,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.licenseDegrees = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -307,7 +307,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -318,7 +318,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
           (f) => f.positionLevelName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -327,7 +327,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -336,7 +336,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -347,7 +347,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
           (f) => f.driverLicenceName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

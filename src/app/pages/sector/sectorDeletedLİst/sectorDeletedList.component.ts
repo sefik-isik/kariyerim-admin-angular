@@ -8,6 +8,7 @@ import { Sector } from '../../../models/component/sector';
 import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
 import { SectorDetailComponent } from '../sectorDetail/sectorDetail.component';
 import { SectorUpdateComponent } from '../sectorUpdate/sectorUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-sectorDeletedList',
@@ -24,7 +25,8 @@ export class SectorDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private sectorService: SectorService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class SectorDeletedListComponent implements OnInit {
       (response) => {
         this.sectors = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -51,7 +53,7 @@ export class SectorDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -59,7 +61,7 @@ export class SectorDeletedListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.update(sector).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -79,7 +81,7 @@ export class SectorDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class SectorDeletedListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.terminate(sector).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

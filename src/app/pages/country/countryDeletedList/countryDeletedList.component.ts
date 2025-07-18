@@ -8,6 +8,7 @@ import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountryUpdateComponent } from '../countryUpdate/countryUpdate.component';
 import { CountryDetailComponent } from '../countryDetail/countryDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countryDeletedList',
@@ -24,7 +25,8 @@ export class CountryDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private countryService: CountryService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class CountryDeletedListComponent implements OnInit {
       (response) => {
         this.countries = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -51,7 +53,7 @@ export class CountryDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -59,7 +61,7 @@ export class CountryDeletedListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.update(country).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -79,7 +81,7 @@ export class CountryDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class CountryDeletedListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.terminate(country).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

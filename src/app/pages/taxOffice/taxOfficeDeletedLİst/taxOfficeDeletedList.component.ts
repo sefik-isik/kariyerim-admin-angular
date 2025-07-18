@@ -12,6 +12,7 @@ import { FilterTaxOfficeByCityPipe } from '../../../pipes/filterTaxOfficeByCity.
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaxOfficeUpdateComponent } from '../taxOfficeUpdate/taxOfficeUpdate.component';
 import { TaxOfficeDetailComponent } from '../taxOfficeDetail/taxOfficeDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-taxOfficeDeletedList',
@@ -36,7 +37,8 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private taxOfficeService: TaxOfficeService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -54,7 +56,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -63,7 +65,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
       (response) => {
         this.taxOfficeDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -73,7 +75,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -81,7 +83,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.update(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -101,7 +103,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -114,7 +116,7 @@ export class TaxOfficeDeletedListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.terminate(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

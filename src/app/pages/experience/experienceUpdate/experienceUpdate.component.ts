@@ -43,7 +43,7 @@ export class ExperienceUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/experience/experiencelisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

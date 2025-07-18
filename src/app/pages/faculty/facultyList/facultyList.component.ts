@@ -9,6 +9,7 @@ import { FilterFacultyPipe } from '../../../pipes/filterFaculty.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FacultyUpdateComponent } from '../facultyUpdate/facultyUpdate.component';
 import { FacultyDetailComponent } from '../facultyDetail/facultyDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-facultyList',
@@ -26,7 +27,8 @@ export class FacultyListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private facultyService: FacultyService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class FacultyListComponent implements OnInit {
       (response) => {
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class FacultyListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class FacultyListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.delete(faculty).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

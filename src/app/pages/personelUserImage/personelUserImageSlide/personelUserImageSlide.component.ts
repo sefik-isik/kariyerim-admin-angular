@@ -15,6 +15,7 @@ import { FilterPersonelUserImageByUserPipe } from '../../../pipes/FilterPersonel
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserImageSlide',
@@ -42,7 +43,8 @@ export class PersonelUserImageSlideComponent implements OnInit {
     private adminService: AdminService,
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -66,7 +68,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class PersonelUserImageSlideComponent implements OnInit {
       (response) => {
         this.personelUserImageDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,9 +92,9 @@ export class PersonelUserImageSlideComponent implements OnInit {
         this.getAdminValues();
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
         if (responseError.error) {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         } else {
           this.toastrService.error('Silme işlemi başarısız oldu');
         }

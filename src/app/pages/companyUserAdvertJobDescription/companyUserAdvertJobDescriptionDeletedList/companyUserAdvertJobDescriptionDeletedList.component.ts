@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 import { CompanyUserAdvertJobDescriptionDetailComponent } from '../companyUserAdvertJobDescriptionDetail/companyUserAdvertJobDescriptionDetail.component';
 import { CompanyUserAdvertJobDescriptionUpdateComponent } from '../companyUserAdvertJobDescriptionUpdate/companyUserAdvertJobDescriptionUpdate.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertJobDescriptionDeletedList',
@@ -43,7 +44,8 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -72,7 +74,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -83,7 +85,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
         (response) => {
           this.companyUserAdvertJobDescriptionDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -97,7 +99,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -109,7 +111,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );
@@ -134,7 +136,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -151,7 +153,7 @@ export class CompanyUserAdvertJobDescriptionDeletedListComponent
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

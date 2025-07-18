@@ -8,6 +8,7 @@ import { LicenseDegreeService } from '../../../services/licenseDegree.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LicenseDegreeUpdateComponent } from '../licenseDegreeUpdate/licenseDegreeUpdate.component';
 import { LicenseDegreeDetailComponent } from '../licenseDegreeDetail/licenceDegreeDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-licenseDegreeList',
@@ -24,7 +25,8 @@ export class LicenseDegreeListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private licenseDegreeService: LicenseDegreeService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class LicenseDegreeListComponent implements OnInit {
           (f) => f.licenseDegreeName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class LicenseDegreeListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class LicenseDegreeListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegrees) => {
       this.licenseDegreeService.delete(licenseDegrees).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

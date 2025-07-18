@@ -21,6 +21,7 @@ import { AuthService } from '../../../services/auth.service';
 import { PersonelUserFollowListComponent } from '../personelUserFollowList/personelUserFollowList.component';
 import { PersonelUserAdvertFollowListComponent } from '../personelUserAdvertFollowList/personelUserAdvertFollowList.component';
 import { PersonelUserAdvertApplicationListComponent } from '../personelUserAdvertApplicationList/personelUserAdvertApplicationList.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserList',
@@ -47,7 +48,8 @@ export class PersonelUserListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class PersonelUserListComponent implements OnInit {
       (response) => {
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class PersonelUserListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +92,7 @@ export class PersonelUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -103,7 +105,7 @@ export class PersonelUserListComponent implements OnInit {
     this.personelUserDTOs.forEach((personelUserDTO) => {
       this.personelUserService.delete(personelUserDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

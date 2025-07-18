@@ -4,19 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { FilterPersonelUserCvSummaryByUserPipe } from '../../../pipes/filterPersonelUserCvSummaryByUser.pipe';
 import { AdminService } from '../../../services/helperServices/admin.service';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { PersonelUserCvSummary } from '../../../models/component/personelUserCvSummary';
 import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserCvSummaryService } from '../../../services/personelUserCvSummary.service';
-
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { AuthService } from '../../../services/auth.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvSummaryDetailComponent } from '../personelUserCvSummaryDetail/personelUserCvSummaryDetail.component';
 import { PersonelUserCvSummaryUpdateComponent } from '../personelUserCvSummaryUpdate/personelUserCvSummaryUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvSummaryDeletedList',
@@ -40,7 +39,8 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -60,7 +60,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCvSummaries(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -69,7 +69,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +78,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCvSummaryDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -88,7 +88,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -98,8 +98,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
         .update(personelUserCvSummaryDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {
@@ -121,7 +120,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -136,8 +135,7 @@ export class PersonelUserCvSummaryDeletedListComponent implements OnInit {
         .terminate(personelUserCvSummaryDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

@@ -10,6 +10,7 @@ import { FilterApplicationCompanyUserAdvertPipe } from '../../../pipes/filterApp
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserAdvertApplicationService } from '../../../services/personelUserAdvertApplication.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserAdvertApplicationList',
@@ -29,7 +30,8 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
       (response) => {
         this.getPersonelUserAdvertFollows(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
         (response) => {
           this.personelUserAdvertApplicationDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -79,7 +81,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -96,7 +98,7 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

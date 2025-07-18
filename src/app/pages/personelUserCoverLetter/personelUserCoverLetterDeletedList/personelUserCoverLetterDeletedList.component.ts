@@ -18,6 +18,7 @@ import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLett
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterDeletedList',
@@ -42,7 +43,8 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -62,7 +64,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCoverLetter(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -71,7 +73,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -80,7 +82,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCoverLetterDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -102,8 +104,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         .update(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {
@@ -125,7 +126,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -140,8 +141,7 @@ export class PersonelUserCoverLetterDeletedListComponent implements OnInit {
         .terminate(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

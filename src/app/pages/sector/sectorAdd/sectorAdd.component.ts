@@ -43,7 +43,7 @@ export class SectorAddComponent implements OnInit {
           this.router.navigate(['/dashboard/sector/sectorlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

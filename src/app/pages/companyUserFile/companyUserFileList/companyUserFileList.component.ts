@@ -16,6 +16,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserFileUpdateComponent } from '../companyUserFileUpdate/companyUserFileUpdate.component';
 import { CompanyUserFileDetailComponent } from '../companyUserFileDetail/companyUserFileDetail.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserFileList',
@@ -38,7 +39,8 @@ export class CompanyUserFileComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class CompanyUserFileComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserFiles(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -67,7 +69,7 @@ export class CompanyUserFileComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -76,7 +78,7 @@ export class CompanyUserFileComponent implements OnInit {
       (response) => {
         this.companyUserFileDTOS = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +92,7 @@ export class CompanyUserFileComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -102,7 +104,7 @@ export class CompanyUserFileComponent implements OnInit {
     this.companyUserFileDTOS.forEach((companyUserFile) => {
       this.companyUserFileService.delete(companyUserFile).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

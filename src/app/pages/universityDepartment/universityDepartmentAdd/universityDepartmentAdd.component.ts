@@ -61,7 +61,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -92,7 +92,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -101,7 +101,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -112,7 +112,7 @@ export class UniversityDepartmentAddComponent implements OnInit {
           .filter((c) => c.isCompany === false)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

@@ -7,6 +7,7 @@ import { LicenseDegreeService } from '../../../services/licenseDegree.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LicenseDegreeUpdateComponent } from '../licenseDegreeUpdate/licenseDegreeUpdate.component';
 import { LicenseDegreeDetailComponent } from '../licenseDegreeDetail/licenceDegreeDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-licenseDegreeDeletedList',
@@ -23,7 +24,8 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private licenseDegreeService: LicenseDegreeService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
       (response) => {
         this.licenseDegrees = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.update(licenseDegree).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class LicenseDegreeDeletedListComponent implements OnInit {
     this.licenseDegrees.forEach((licenseDegree) => {
       this.licenseDegreeService.terminate(licenseDegree).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

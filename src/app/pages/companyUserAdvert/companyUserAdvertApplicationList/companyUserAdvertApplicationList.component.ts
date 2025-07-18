@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
 import { PersonelUserAdvertApplicationService } from '../../../services/personelUserAdvertApplication.service';
 import { PersonelUserAdvertApplicationDTO } from '../../../models/dto/personelUserAdvertApplicationDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertApplicationList',
@@ -29,7 +30,8 @@ export class CompanyUserAdvertApplicationListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class CompanyUserAdvertApplicationListComponent implements OnInit {
       (response) => {
         this.getPersonelUserAdvertFollows(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class CompanyUserAdvertApplicationListComponent implements OnInit {
         (response) => {
           this.personelUserAdvertApplicationDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 }

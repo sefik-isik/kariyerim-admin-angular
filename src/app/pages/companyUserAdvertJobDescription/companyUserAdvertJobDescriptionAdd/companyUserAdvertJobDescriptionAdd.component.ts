@@ -73,7 +73,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
             ]);
           },
           (responseError) => {
-            console.log(responseError);
+            this.validationService.handleErrors(responseError);
           }
         );
     } else {
@@ -107,7 +107,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
         this.getCompanyUsers(response);
         this.getCompanyUserAdverts(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -123,7 +123,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -136,7 +136,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -145,7 +145,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
       (response) => {
         this.companyUserAdverts = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

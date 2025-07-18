@@ -43,7 +43,7 @@ export class FacultyAddComponent implements OnInit {
           this.router.navigate(['/dashboard/faculty/facultylisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

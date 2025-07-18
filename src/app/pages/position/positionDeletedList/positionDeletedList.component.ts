@@ -8,6 +8,7 @@ import { PositionService } from '../../../services/position.service';
 import { PositionDetailComponent } from '../positionDetail/positionDetail.component';
 import { PositionUpdateComponent } from '../positionUpdate/positionUpdate.component';
 import { FilterPositionPipe } from '../../../pipes/filterPosition.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-positionDeletedList',
@@ -24,7 +25,8 @@ export class PositionDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private positionService: PositionService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class PositionDeletedListComponent implements OnInit {
       (response) => {
         this.positions = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -51,7 +53,7 @@ export class PositionDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -59,7 +61,7 @@ export class PositionDeletedListComponent implements OnInit {
     this.positions.forEach((position) => {
       this.positionService.update(position).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -79,7 +81,7 @@ export class PositionDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class PositionDeletedListComponent implements OnInit {
     this.positions.forEach((position) => {
       this.positionService.terminate(position).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

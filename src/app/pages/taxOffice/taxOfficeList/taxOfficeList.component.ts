@@ -13,6 +13,7 @@ import { FilterTaxOfficeByCityPipe } from '../../../pipes/filterTaxOfficeByCity.
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaxOfficeUpdateComponent } from '../taxOfficeUpdate/taxOfficeUpdate.component';
 import { TaxOfficeDetailComponent } from '../taxOfficeDetail/taxOfficeDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-taxOfficeList',
@@ -37,7 +38,8 @@ export class TaxOfficeListComponent implements OnInit {
     private toastrService: ToastrService,
     private taxOfficeService: TaxOfficeService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class TaxOfficeListComponent implements OnInit {
           (f) => f.taxOfficeName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getCities() {
@@ -65,7 +67,7 @@ export class TaxOfficeListComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class TaxOfficeListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -95,7 +97,7 @@ export class TaxOfficeListComponent implements OnInit {
     this.taxOfficeDTOs.forEach((taxOfficeDTO) => {
       this.taxOfficeService.delete(taxOfficeDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

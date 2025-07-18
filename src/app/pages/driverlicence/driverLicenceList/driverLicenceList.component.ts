@@ -9,6 +9,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DriverLicenceUpdateComponent } from '../driverLicenceUpdate/driverLicenceUpdate.component';
 import { DriverLicenceDetailComponent } from '../driverLicenceDetail/driverLicenceDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-driverLicenceList',
@@ -25,7 +26,8 @@ export class DriverLicenceListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private driverLicenceService: DriverLicenceService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class DriverLicenceListComponent implements OnInit {
           (f) => f.driverLicenceName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -63,7 +65,7 @@ export class DriverLicenceListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class DriverLicenceListComponent implements OnInit {
     this.driverLicences.forEach((driverLicences) => {
       this.driverLicenceService.delete(driverLicences).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

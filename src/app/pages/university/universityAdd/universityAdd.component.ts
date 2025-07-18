@@ -58,7 +58,7 @@ export class UniversityAddComponent implements OnInit {
           this.router.navigate(['/dashboard/university/universitylisttab']);
         },
         (responseError) => {
-          console.error;
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -117,7 +117,7 @@ export class UniversityAddComponent implements OnInit {
       (response) => {
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -126,7 +126,7 @@ export class UniversityAddComponent implements OnInit {
       (response) => {
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

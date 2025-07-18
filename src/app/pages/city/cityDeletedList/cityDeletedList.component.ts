@@ -11,6 +11,7 @@ import { CityDTO } from '../../../models/dto/cityDTO';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
 import { CityDetailComponent } from '../cityDetail/cityDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-cityDeletedList',
@@ -30,7 +31,8 @@ export class CityDeletedListComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private countryService: CountryService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -57,7 +59,7 @@ export class CityDeletedListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -67,7 +69,7 @@ export class CityDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class CityDeletedListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.update(city).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -95,7 +97,7 @@ export class CityDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -108,7 +110,7 @@ export class CityDeletedListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.terminate(city).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

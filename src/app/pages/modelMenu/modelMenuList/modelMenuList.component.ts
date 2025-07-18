@@ -9,6 +9,7 @@ import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModelMenuUpdateComponent } from '../modelMenuUpdate/modelMenuUpdate.component';
 import { ModelMenuDetailComponent } from '../modelMenuDetail/modelMenuDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-modelMenuList',
@@ -26,7 +27,8 @@ export class ModelMenuListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private modelMenuService: ModelMenuService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class ModelMenuListComponent implements OnInit {
       (response) => {
         this.modelMenus = response.data.filter((f) => f.modelName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class ModelMenuListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class ModelMenuListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.delete(modelMenu).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

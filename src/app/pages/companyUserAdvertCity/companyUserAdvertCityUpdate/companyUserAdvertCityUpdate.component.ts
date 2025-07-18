@@ -57,7 +57,7 @@ export class CompanyUserAdvertCityUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -85,7 +85,7 @@ export class CompanyUserAdvertCityUpdateComponent implements OnInit {
       (response) => {
         this.workCities = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

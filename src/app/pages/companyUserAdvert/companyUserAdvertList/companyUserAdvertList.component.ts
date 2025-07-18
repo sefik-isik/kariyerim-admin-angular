@@ -27,6 +27,7 @@ import { PersonelUserAdvertApplicationService } from '../../../services/personel
 import { CompanyUserAdvertApplicationListComponent } from '../companyUserAdvertApplicationList/companyUserAdvertApplicationList.component';
 import { CompanyUserAdvertFollowListComponent } from '../companyUserAdvertFollowList/companyUserAdvertFollowList.component';
 import { CompanyUserAdvertUpdateComponent } from '../companyUserAdvertUpdate/companyUserAdvertUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertList',
@@ -58,7 +59,8 @@ export class CompanyUserAdvertListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -92,7 +94,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
         this.getCompanyUserAdverts(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -101,7 +103,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -110,7 +112,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -119,7 +121,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -128,7 +130,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
       (response) => {
         this.companyUserAdvertDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -142,7 +144,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -154,7 +156,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
     this.companyUserAdvertDTOs.forEach((companyUserAdvertDTO) => {
       this.companyUserAdvertService.delete(companyUserAdvertDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -171,7 +173,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }
@@ -200,7 +202,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }

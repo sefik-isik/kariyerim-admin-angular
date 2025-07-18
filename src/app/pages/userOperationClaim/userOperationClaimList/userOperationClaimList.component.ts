@@ -18,6 +18,7 @@ import { FilterUserOperationClaimPipe } from '../../../pipes/filterUserOperation
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserOperationClaimUpdateComponent } from '../userOperationClaimUpdate/userOperationClaimUpdate.component';
 import { UserOperationClaimDetailComponent } from '../userOperationClaimDetail/userOperationClaimDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-userOperationClaimList',
@@ -49,7 +50,8 @@ export class UserOperationClaimListComponent implements OnInit {
     private operationClaimService: OperationClaimService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -70,7 +72,7 @@ export class UserOperationClaimListComponent implements OnInit {
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -81,7 +83,7 @@ export class UserOperationClaimListComponent implements OnInit {
           (f) => f.operationClaimName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +92,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -99,7 +101,7 @@ export class UserOperationClaimListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -117,7 +119,7 @@ export class UserOperationClaimListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -133,7 +135,7 @@ export class UserOperationClaimListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaim) => {
       this.userOperationClaimService.delete(userOperationClaim).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

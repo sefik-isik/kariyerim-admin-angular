@@ -130,7 +130,7 @@ export class PersonelUserImageAddComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
           this.toastrService.error('Error uploading file', responseError);
         }
       );
@@ -145,7 +145,7 @@ export class PersonelUserImageAddComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
       }
     );
   }
@@ -171,7 +171,7 @@ export class PersonelUserImageAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -187,7 +187,7 @@ export class PersonelUserImageAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -197,7 +197,7 @@ export class PersonelUserImageAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

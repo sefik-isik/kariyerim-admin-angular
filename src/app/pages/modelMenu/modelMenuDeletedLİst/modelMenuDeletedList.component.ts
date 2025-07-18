@@ -9,6 +9,7 @@ import { FilterModelMenuPipe } from '../../../pipes/filterModelMenu.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModelMenuUpdateComponent } from '../modelMenuUpdate/modelMenuUpdate.component';
 import { ModelMenuDetailComponent } from '../modelMenuDetail/modelMenuDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-modelMenuDeletedList',
@@ -25,7 +26,8 @@ export class ModelMenuDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private modelMenuService: ModelMenuService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
       (response) => {
         this.modelMenus = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -52,7 +54,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.update(modelMenu).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -80,7 +82,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class ModelMenuDeletedListComponent implements OnInit {
     this.modelMenus.forEach((modelMenu) => {
       this.modelMenuService.terminate(modelMenu).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

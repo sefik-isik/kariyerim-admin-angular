@@ -43,7 +43,7 @@ export class OperationClaimUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

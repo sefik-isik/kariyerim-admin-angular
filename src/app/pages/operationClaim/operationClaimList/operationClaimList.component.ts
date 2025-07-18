@@ -10,6 +10,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OperationClaimUpdateComponent } from '../operationClaimUpdate/operationClaimUpdate.component';
 import { OperationClaimDetailComponent } from '../operationClaimDetail/operationClaimDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-operationClaimList',
@@ -28,7 +29,8 @@ export class OperationClaimListComponent implements OnInit {
     private operationClaimService: OperationClaimService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class OperationClaimListComponent implements OnInit {
       (response) => {
         this.getOperationClaims();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -56,7 +58,7 @@ export class OperationClaimListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -74,7 +76,7 @@ export class OperationClaimListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +92,7 @@ export class OperationClaimListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.delete(operationClaim).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

@@ -9,6 +9,7 @@ import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageUpdateComponent } from '../languageUpdate/languageUpdate.component';
 import { LanguageDetailComponent } from '../languageDetail/languageDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageList',
@@ -26,7 +27,8 @@ export class LanguageListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private languageService: LanguageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class LanguageListComponent implements OnInit {
       (response) => {
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class LanguageListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class LanguageListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.delete(language).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

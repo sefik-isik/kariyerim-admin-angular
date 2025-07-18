@@ -53,7 +53,7 @@ export class TaxOfficeAddComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/taxoffice/taxofficelisttab']);
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -80,7 +80,7 @@ export class TaxOfficeAddComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -94,7 +94,7 @@ export class TaxOfficeAddComponent implements OnInit {
             .filter((f) => f.regionName != '-');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

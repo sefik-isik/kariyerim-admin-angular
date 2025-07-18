@@ -127,7 +127,7 @@ export class CompanyUserImageAddComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }
@@ -141,7 +141,7 @@ export class CompanyUserImageAddComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
       }
     );
   }
@@ -167,7 +167,7 @@ export class CompanyUserImageAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -183,7 +183,7 @@ export class CompanyUserImageAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -193,7 +193,7 @@ export class CompanyUserImageAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

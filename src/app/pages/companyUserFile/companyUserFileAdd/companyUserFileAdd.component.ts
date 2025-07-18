@@ -132,7 +132,7 @@ export class CompanyUserFileAddComponent {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }
@@ -147,7 +147,7 @@ export class CompanyUserFileAddComponent {
         ]);
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
       }
     );
   }
@@ -174,7 +174,7 @@ export class CompanyUserFileAddComponent {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -190,7 +190,7 @@ export class CompanyUserFileAddComponent {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -201,7 +201,7 @@ export class CompanyUserFileAddComponent {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

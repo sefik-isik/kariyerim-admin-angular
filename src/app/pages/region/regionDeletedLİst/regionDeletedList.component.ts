@@ -12,6 +12,7 @@ import { FilterRegionByCityPipe } from '../../../pipes/filterRegionByCity.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegionUpdateComponent } from '../regionUpdate/regionUpdate.component';
 import { RegionDetailComponent } from '../regionDetail/regionDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-regionDeletedList',
@@ -37,7 +38,8 @@ export class RegionDeletedListComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private regionService: RegionService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -55,7 +57,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -64,7 +66,7 @@ export class RegionDeletedListComponent implements OnInit {
       (response) => {
         this.regionDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -74,7 +76,7 @@ export class RegionDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -82,7 +84,7 @@ export class RegionDeletedListComponent implements OnInit {
     this.regionDTOs.forEach((region) => {
       this.regionService.update(region).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -102,7 +104,7 @@ export class RegionDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -115,7 +117,7 @@ export class RegionDeletedListComponent implements OnInit {
     this.regionDTOs.forEach((regionDTO) => {
       this.regionService.terminate(regionDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

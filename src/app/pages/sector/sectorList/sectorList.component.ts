@@ -9,6 +9,7 @@ import { FilterSectorPipe } from '../../../pipes/filterSector.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SectorUpdateComponent } from '../sectorUpdate/sectorUpdate.component';
 import { SectorDetailComponent } from '../sectorDetail/sectorDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-sectorList',
@@ -26,7 +27,8 @@ export class SectorListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private sectorService: SectorService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class SectorListComponent implements OnInit {
       (response) => {
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class SectorListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class SectorListComponent implements OnInit {
     this.sectors.forEach((sector) => {
       this.sectorService.delete(sector).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

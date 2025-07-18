@@ -42,7 +42,7 @@ export class CountAddComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/count/countlisttab']);
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

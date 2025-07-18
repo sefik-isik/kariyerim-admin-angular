@@ -7,6 +7,7 @@ import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkingMethodUpdateComponent } from '../workingMethodUpdate/workingMethodUpdate.component';
 import { WorkingMethodDetailComponent } from '../workingMethodDetail/workingMethodDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workingMethodDeletedList',
@@ -23,7 +24,8 @@ export class WorkingMethodDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private workingMethodService: WorkingMethodService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class WorkingMethodDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

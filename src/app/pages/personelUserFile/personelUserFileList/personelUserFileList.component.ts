@@ -16,6 +16,7 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserFileService } from '../../../services/personelUserFile.service';
 import { PersonelUserFileDetailComponent } from '../personelUserFileDetail/personelUserFileDetail.component';
 import { PersonelUserFileUpdateComponent } from '../personelUserFileUpdate/personelUserFileUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserFileList',
@@ -39,7 +40,8 @@ export class PersonelUserFileListComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class PersonelUserFileListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserFiles(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -68,7 +70,7 @@ export class PersonelUserFileListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -77,7 +79,7 @@ export class PersonelUserFileListComponent implements OnInit {
       (response) => {
         this.personelUserFileDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class PersonelUserFileListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -103,7 +105,7 @@ export class PersonelUserFileListComponent implements OnInit {
     this.personelUserFileDTOs.forEach((personelUserFileDTO) => {
       this.personelUserFileService.delete(personelUserFileDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

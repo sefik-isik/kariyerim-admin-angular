@@ -7,6 +7,7 @@ import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageLevelUpdateComponent } from '../languageLevelUpdate/languageLevelUpdate.component';
 import { LanguageLevelDetailComponent } from '../languageLevelDetail/languageLevelDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageLevelDeletedList',
@@ -23,7 +24,8 @@ export class LanguageLevelDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private languageLevelService: LanguageLevelService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.update(languageLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class LanguageLevelDeletedListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.terminate(languageLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

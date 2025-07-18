@@ -70,7 +70,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -102,7 +102,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -118,7 +118,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -128,7 +128,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -145,7 +145,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

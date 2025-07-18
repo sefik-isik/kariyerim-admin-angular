@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityDeletedList',
@@ -23,7 +24,8 @@ export class UniversityDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private universityService: UniversityService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class UniversityDeletedListComponent implements OnInit {
       (response) => {
         this.universityDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class UniversityDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class UniversityDeletedListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.update(universityDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class UniversityDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class UniversityDeletedListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.terminate(universityDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

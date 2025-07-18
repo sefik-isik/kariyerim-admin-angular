@@ -11,6 +11,7 @@ import { FilterDepartmentPipe } from '../../../pipes/filterDepartment.pipe';
 import { AuthService } from '../../../services/auth.service';
 import { IsCompanyPipe } from '../../../pipes/isCompany.pipe';
 import { FilterisDepartmentPipe } from '../../../pipes/filterisDepartment.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-departmentList',
@@ -37,7 +38,8 @@ export class DepartmentListComponent implements OnInit {
     private departmentService: DepartmentService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -55,7 +57,7 @@ export class DepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data.filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -73,7 +75,7 @@ export class DepartmentListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -89,7 +91,7 @@ export class DepartmentListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.delete(department).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

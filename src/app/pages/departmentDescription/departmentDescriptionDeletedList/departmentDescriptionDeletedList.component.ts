@@ -9,6 +9,7 @@ import { DepartmentDescriptionService } from '../../../services/departmentDescri
 import { DepartmentDescriptionDetailComponent } from '../departmentDescriptionDetail/departmentDescriptionDetail.component';
 import { FilterDepartmentDescriptionPipe } from '../../../pipes/filterDepartmentDescription.pipe';
 import { DepartmentDescriptionDTO } from '../../../models/dto/departmentDescriptionDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-departmentDescriptionDeletedList',
@@ -24,7 +25,8 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
   constructor(
     private departmentDescriptionService: DepartmentDescriptionService,
     private toastrService: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
       (response) => {
         this.departmentDescriptionDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -51,7 +53,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -61,8 +63,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
         .update(departmentDescriptionDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {
@@ -84,7 +85,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -99,8 +100,7 @@ export class DepartmentDescriptionDeletedListComponent implements OnInit {
         .terminate(departmentDescription)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

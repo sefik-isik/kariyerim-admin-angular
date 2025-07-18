@@ -17,6 +17,7 @@ import { UniversityDepartmentDetailComponent } from '../universityDepartmentDeta
 import { Department } from '../../../models/component/department';
 import { Faculty } from '../../../models/component/faculty';
 import { FilterUniversityFacultyPipe } from '../../../pipes/filterUniversityFaculty.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityDepartmentList',
@@ -48,7 +49,8 @@ export class UniversityDepartmentListComponent implements OnInit {
     private facultyService: FacultyService,
     private departmentService: DepartmentService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class UniversityDepartmentListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -83,7 +85,7 @@ export class UniversityDepartmentListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -101,7 +103,7 @@ export class UniversityDepartmentListComponent implements OnInit {
       (response) => {
         this.departments = response.data.filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -119,7 +121,7 @@ export class UniversityDepartmentListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -137,8 +139,7 @@ export class UniversityDepartmentListComponent implements OnInit {
         .delete(universityDepartmentDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

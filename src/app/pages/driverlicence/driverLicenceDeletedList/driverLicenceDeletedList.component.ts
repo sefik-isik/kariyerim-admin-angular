@@ -7,6 +7,7 @@ import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DriverLicenceUpdateComponent } from '../driverLicenceUpdate/driverLicenceUpdate.component';
 import { DriverLicenceDetailComponent } from '../driverLicenceDetail/driverLicenceDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-driverLicenceDeletedList',
@@ -21,7 +22,8 @@ export class DriverLicenceDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private driverLicenceService: DriverLicenceService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
       (response) => {
         this.driverLicences = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -48,7 +50,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -56,7 +58,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
     this.driverLicences.forEach((driverLicence) => {
       this.driverLicenceService.update(driverLicence).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -76,7 +78,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -89,7 +91,7 @@ export class DriverLicenceDeletedListComponent implements OnInit {
     this.driverLicences.forEach((driverLicence) => {
       this.driverLicenceService.terminate(driverLicence).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

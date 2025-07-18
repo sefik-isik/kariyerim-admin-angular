@@ -12,6 +12,7 @@ import { CityService } from '../../../services/city.service';
 import { CountryService } from '../../../services/country.service';
 import { CityDetailComponent } from '../cityDetail/cityDetail.component';
 import { CityUpdateComponent } from '../cityUpdate/cityUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-cityList',
@@ -32,7 +33,8 @@ export class CityListComponent implements OnInit {
     private toastrService: ToastrService,
     private countryService: CountryService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -61,7 +63,7 @@ export class CityListComponent implements OnInit {
       (response) => {
         this.cityDTOs = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -83,7 +85,7 @@ export class CityListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -99,7 +101,7 @@ export class CityListComponent implements OnInit {
     this.cityDTOs.forEach((city) => {
       this.cityService.delete(city).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

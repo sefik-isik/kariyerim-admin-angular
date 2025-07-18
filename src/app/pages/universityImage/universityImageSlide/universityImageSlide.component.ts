@@ -8,6 +8,7 @@ import { UniversityImage } from '../../../models/component/universityImage';
 import { FilterUniversityImagePipe } from '../../../pipes/filterUniversityImage.pipe';
 import { UniversityImageService } from '../../../services/universityImage.service';
 import { UniversityService } from '../../../services/university.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityImageSlide',
@@ -29,7 +30,8 @@ export class UniversityImageSlideComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private universityImageService: UniversityImageService,
-    private universityService: UniversityService
+    private universityService: UniversityService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class UniversityImageSlideComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -55,7 +57,7 @@ export class UniversityImageSlideComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -69,9 +71,9 @@ export class UniversityImageSlideComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
         if (responseError.error) {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         } else {
           this.toastrService.error('Silme işlemi başarısız oldu');
         }

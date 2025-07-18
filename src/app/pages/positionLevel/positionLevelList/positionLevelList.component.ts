@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth.service';
 import { PositionLevelService } from '../../../services/positionLevel.service';
 import { PositionLevelDetailComponent } from '../positionLevelDetail/positionLevelDetail.component';
 import { PositionLevelUpdateComponent } from '../positionLevelUpdate/positionLevelUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-positionLevelList',
@@ -27,7 +28,8 @@ export class PositionLevelListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private positionLevelService: PositionLevelService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class PositionLevelListComponent implements OnInit {
           (f) => f.positionLevelName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -65,7 +67,7 @@ export class PositionLevelListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -81,7 +83,7 @@ export class PositionLevelListComponent implements OnInit {
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.delete(positionLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

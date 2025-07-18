@@ -43,7 +43,7 @@ export class DepartmentUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/department/departmentlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

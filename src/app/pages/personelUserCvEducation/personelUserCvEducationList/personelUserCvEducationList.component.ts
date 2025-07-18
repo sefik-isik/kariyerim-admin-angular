@@ -1,3 +1,4 @@
+import { ValidationService } from './../../../services/validation.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -44,7 +45,8 @@ export class PersonelUserCvEducationListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -64,7 +66,7 @@ export class PersonelUserCvEducationListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCvEducations(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -73,7 +75,7 @@ export class PersonelUserCvEducationListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -82,7 +84,7 @@ export class PersonelUserCvEducationListComponent implements OnInit {
       (response) => {
         this.personelUserCvEducationDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -98,7 +100,7 @@ export class PersonelUserCvEducationListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -112,8 +114,7 @@ export class PersonelUserCvEducationListComponent implements OnInit {
         .delete(personelUserCvEducationDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

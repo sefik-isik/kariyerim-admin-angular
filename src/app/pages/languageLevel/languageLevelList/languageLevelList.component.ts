@@ -9,6 +9,7 @@ import { LanguageLevel } from '../../../models/component/languageLevel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageLevelUpdateComponent } from '../languageLevelUpdate/languageLevelUpdate.component';
 import { LanguageLevelDetailComponent } from '../languageLevelDetail/languageLevelDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageLevelList',
@@ -26,7 +27,8 @@ export class LanguageLevelListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private languageLevelService: LanguageLevelService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class LanguageLevelListComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class LanguageLevelListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class LanguageLevelListComponent implements OnInit {
     this.languageLevels.forEach((languageLevel) => {
       this.languageLevelService.delete(languageLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

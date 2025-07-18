@@ -4,6 +4,7 @@ import { ModelMenu } from '../../models/component/modelMenu';
 import { ModelMenuService } from '../../services/modelMenu.service';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ValidationService } from '../../services/validation.service';
 
 @Component({
   selector: 'app-modelMenuMain',
@@ -19,7 +20,8 @@ export class ModelMenuMainComponent implements OnInit {
 
   constructor(
     private modelMenuService: ModelMenuService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +36,7 @@ export class ModelMenuMainComponent implements OnInit {
 
         this.getModelMenuClass(this.modelMenuFirst);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

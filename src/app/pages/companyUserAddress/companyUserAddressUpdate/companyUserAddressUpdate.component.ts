@@ -71,7 +71,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
         this.getCities(this.companyUserAddressDTO.countryId);
         this.getRegions(this.companyUserAddressDTO.cityId);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +90,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -124,7 +124,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -135,7 +135,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -146,7 +146,7 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

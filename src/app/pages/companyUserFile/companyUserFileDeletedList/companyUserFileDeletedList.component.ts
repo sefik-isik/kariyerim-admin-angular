@@ -15,6 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserFileUpdateComponent } from '../companyUserFileUpdate/companyUserFileUpdate.component';
 import { CompanyUserFileDetailComponent } from '../companyUserFileDetail/companyUserFileDetail.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserFileDeletedList',
@@ -37,7 +38,8 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserFiles(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -66,7 +68,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserFileDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -85,7 +87,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
     this.companyUserFileDTOs.forEach((companyUserFileDTO) => {
       this.companyUserFileService.update(companyUserFileDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -113,7 +115,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -126,7 +128,7 @@ export class CompanyUserFileDeletedListComponent implements OnInit {
     this.companyUserFileDTOs.forEach((companyUserFile) => {
       this.companyUserFileService.terminate(companyUserFile).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

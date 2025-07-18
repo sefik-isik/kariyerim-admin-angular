@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ValidationService {
+  constructor(private toastrService: ToastrService) {}
+
   getValidationErrors(state: any) {
     let ctrlNamme: string = state.name;
     let message: string[] = [];
@@ -65,5 +68,31 @@ export class ValidationService {
       }
     }
     return message;
+  }
+
+  handleErrors(responseError: any) {
+    let errorNames: string[] = [];
+
+    if (responseError.error.title) {
+      console.log(`${responseError.error.title}`);
+    }
+
+    if (responseError.message) {
+      console.log(`${responseError.message}`);
+    }
+
+    if (responseError.error.message) {
+      this.toastrService.error(`${responseError.error.message}`);
+    }
+
+    if (responseError.error.errors) {
+      for (let errorName in responseError.error.errors) {
+        errorNames.push(errorName);
+      }
+
+      errorNames.forEach((e) => {
+        this.toastrService.error(`${e} alanı boş olamaz.`);
+      });
+    }
   }
 }

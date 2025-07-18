@@ -11,6 +11,7 @@ import { UniversityImageService } from '../../../services/universityImage.servic
 import { UniversityImageDetailComponent } from '../universityImageDetail/universityImageDetail.component';
 import { UniversityImageUpdateComponent } from '../universityImageUpdate/universityImageUpdate.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityImageList',
@@ -30,7 +31,8 @@ export class UniversityImageListComponent implements OnInit {
     private universityImageService: UniversityImageService,
     private universityService: UniversityService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class UniversityImageListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -63,7 +65,7 @@ export class UniversityImageListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class UniversityImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class UniversityImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -107,7 +109,7 @@ export class UniversityImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -119,7 +121,7 @@ export class UniversityImageListComponent implements OnInit {
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.delete(universityImage).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

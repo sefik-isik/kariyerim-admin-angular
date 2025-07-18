@@ -41,7 +41,7 @@ export class CountUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/count/countlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

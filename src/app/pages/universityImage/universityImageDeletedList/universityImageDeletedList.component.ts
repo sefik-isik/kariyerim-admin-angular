@@ -10,6 +10,7 @@ import { UniversityImageService } from '../../../services/universityImage.servic
 import { UniversityImageDetailComponent } from '../universityImageDetail/universityImageDetail.component';
 import { UniversityImageUpdateComponent } from '../universityImageUpdate/universityImageUpdate.component';
 import { FilterUniversityImagePipe } from '../../../pipes/filterUniversityImage.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityImageDeletedList',
@@ -29,7 +30,8 @@ export class UniversityImageDeletedListComponent implements OnInit {
     private toastrService: ToastrService,
     private universityImageService: UniversityImageService,
     private universityService: UniversityService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
           response.data[0]?.universityId || ''
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -77,7 +79,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -85,7 +87,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.update(universityImage).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -105,7 +107,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -118,7 +120,7 @@ export class UniversityImageDeletedListComponent implements OnInit {
     this.universityImages.forEach((universityImage) => {
       this.universityImageService.terminate(universityImage).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

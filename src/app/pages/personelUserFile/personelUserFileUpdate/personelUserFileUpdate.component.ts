@@ -85,7 +85,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -130,7 +130,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
           this.toastrService.error('Error uploading file', responseError);
         }
       );
@@ -146,7 +146,7 @@ export class PersonelUserFileUpdateComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
       }
     );
   }

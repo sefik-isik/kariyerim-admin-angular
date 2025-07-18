@@ -16,6 +16,7 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCoverLetterService } from '../../../services/personelUserCoverLetter.service';
 import { PersonelUserCoverLetterDetailComponent } from '../personelUserCoverLetterDetail/personelUserCoverLetterDetail.component';
 import { PersonelUserCoverLetterUpdateComponent } from '../personelUserCoverLetterUpdate/personelUserCoverLetterUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCoverLetterList',
@@ -39,7 +40,8 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCoverLetter(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -68,7 +70,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -77,7 +79,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
       (response) => {
         this.personelUserCoverLetterDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -107,8 +109,7 @@ export class PersonelUserCoverLetterListComponent implements OnInit {
         .delete(personelUserCoverLetterDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

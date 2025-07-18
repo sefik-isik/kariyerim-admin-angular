@@ -15,6 +15,7 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 import { PersonelUserCvDetailComponent } from '../personelUserCvDetail/personelUserCvDetail.component';
 import { PersonelUserCvUpdateComponent } from '../personelUserCvUpdate/personelUserCvUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvDeletedList',
@@ -39,7 +40,8 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCvs(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -68,7 +70,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -77,7 +79,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
       (response) => {
         this.personelUserCvDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -87,7 +89,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -95,7 +97,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
     this.personelUserCvDTOs.forEach((personelUserCvDTO) => {
       this.personelUserCvService.update(personelUserCvDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -115,7 +117,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -128,7 +130,7 @@ export class PersonelUserCvDeletedListComponent implements OnInit {
     this.personelUserCvDTOs.forEach((personelUserCvDTO) => {
       this.personelUserCvService.terminate(personelUserCvDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

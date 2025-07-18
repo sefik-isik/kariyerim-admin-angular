@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserImageUpdateComponent } from '../companyUserImageUpdate/companyUserImageUpdate.component';
 import { CompanyUserImageDetailComponent } from '../companyUserImageDetail/companyUserImageDetail.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserImageList',
@@ -36,7 +37,8 @@ export class CompanyUserImageListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -56,7 +58,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -65,7 +67,7 @@ export class CompanyUserImageListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -74,7 +76,7 @@ export class CompanyUserImageListComponent implements OnInit {
       (response) => {
         this.companyUserImageDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -89,7 +91,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -104,7 +106,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -118,7 +120,7 @@ export class CompanyUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -130,7 +132,7 @@ export class CompanyUserImageListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImage) => {
       this.companyUserImageService.delete(companyUserImage).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

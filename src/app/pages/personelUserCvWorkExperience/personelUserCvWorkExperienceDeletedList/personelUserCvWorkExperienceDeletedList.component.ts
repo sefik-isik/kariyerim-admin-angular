@@ -16,6 +16,7 @@ import { AuthService } from '../../../services/auth.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvWorkExperienceDetailComponent } from '../personelUserCvWorkExperienceDetail/personelUserCvWorkExperienceDetail.component';
 import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceDeletedList',
@@ -46,7 +47,8 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
         this.getPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -86,7 +88,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
         (response) => {
           this.personelUserCvWorkExperienceDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -98,7 +100,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
           this.toastrService.success('Başarı ile geri alındı');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -110,7 +112,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );
@@ -133,7 +135,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -150,7 +152,7 @@ export class PersonelUserCvWorkExperienceDeletedListComponent
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

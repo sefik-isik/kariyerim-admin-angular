@@ -9,6 +9,7 @@ import { WorkAreaService } from '../../../services/workArea.service';
 import { WorkAreaDetailComponent } from '../workAreaDetail/workAreaDetail.component';
 import { WorkAreaUpdateComponent } from '../workAreaUpdate/workAreaUpdate.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workAreaList',
@@ -26,7 +27,8 @@ export class WorkAreaListComponent implements OnInit {
     private toastrService: ToastrService,
     private workAreaService: WorkAreaService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class WorkAreaListComponent implements OnInit {
       (response) => {
         this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class WorkAreaListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -70,7 +72,7 @@ export class WorkAreaListComponent implements OnInit {
     this.workAreas.forEach((workArea) => {
       this.workAreaService.delete(workArea).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

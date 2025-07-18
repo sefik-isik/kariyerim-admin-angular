@@ -69,7 +69,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -98,7 +98,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -114,7 +114,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -123,7 +123,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -134,7 +134,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
           .filter((c) => c.isCompany === true)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

@@ -77,7 +77,7 @@ export class PersonelUserUpdateComponent implements OnInit {
           this.dateOfBirthClear();
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -94,7 +94,7 @@ export class PersonelUserUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -160,7 +160,7 @@ export class PersonelUserUpdateComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -171,7 +171,7 @@ export class PersonelUserUpdateComponent implements OnInit {
           (f) => f.licenseDegreeName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -182,7 +182,7 @@ export class PersonelUserUpdateComponent implements OnInit {
           (f) => f.driverLicenceName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

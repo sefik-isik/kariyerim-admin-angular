@@ -87,7 +87,7 @@ export class CompanyUserUpdateComponent implements OnInit {
         }
         this.getTaxOffices(this.companyUserDTO.taxCityName);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -104,7 +104,7 @@ export class CompanyUserUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -157,7 +157,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -166,7 +166,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -175,7 +175,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       (response) => {
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -190,7 +190,7 @@ export class CompanyUserUpdateComponent implements OnInit {
             .filter((f) => f.taxOfficeName != '-');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

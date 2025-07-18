@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyUserImageUpdateComponent } from '../companyUserImageUpdate/companyUserImageUpdate.component';
 import { CompanyUserImageDetailComponent } from '../companyUserImageDetail/companyUserImageDetail.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserImageDeletedList',
@@ -36,7 +37,8 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     private userService: UserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -56,7 +58,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -65,7 +67,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -74,7 +76,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserImageDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -84,7 +86,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImageDTO) => {
       this.companyUserImageService.update(companyUserImageDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -112,7 +114,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -125,7 +127,7 @@ export class CompanyUserImageDeletedListComponent implements OnInit {
     this.companyUserImageDTOs.forEach((companyUserImage) => {
       this.companyUserImageService.terminate(companyUserImage).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

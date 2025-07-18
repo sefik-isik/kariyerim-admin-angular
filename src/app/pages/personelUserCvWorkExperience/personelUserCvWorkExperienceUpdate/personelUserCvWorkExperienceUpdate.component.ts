@@ -113,7 +113,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
           this.endDateClear();
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -134,7 +134,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
             ]);
           },
           (responseError) => {
-            console.log(responseError);
+            this.validationService.handleErrors(responseError);
           }
         );
     } else {
@@ -219,7 +219,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {},
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -228,7 +228,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -237,7 +237,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
       (response) => {
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -246,7 +246,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
       (response) => {
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -257,7 +257,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
           (f) => f.positionLevelName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -266,7 +266,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -277,7 +277,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
           .filter((f) => f.isCompany === true)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -286,7 +286,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -297,7 +297,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -308,7 +308,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

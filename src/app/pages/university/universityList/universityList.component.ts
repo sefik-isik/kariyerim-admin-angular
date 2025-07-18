@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.component';
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-universityList',
@@ -27,7 +28,8 @@ export class UniversityListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private universityService: UniversityService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class UniversityListComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -65,7 +67,7 @@ export class UniversityListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -81,7 +83,7 @@ export class UniversityListComponent implements OnInit {
     this.universityDTOs.forEach((universityDTO) => {
       this.universityService.delete(universityDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

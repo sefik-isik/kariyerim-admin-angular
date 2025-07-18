@@ -17,6 +17,7 @@ import { OperationClaimService } from '../../../services/operationClaim.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserOperationClaimUpdateComponent } from '../userOperationClaimUpdate/userOperationClaimUpdate.component';
 import { UserOperationClaimDetailComponent } from '../userOperationClaimDetail/userOperationClaimDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-userOperationClaimDeletedList',
@@ -47,7 +48,8 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     private userOperationClaimService: UserOperationClaimService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -67,7 +69,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
         this.getUserOperationClaims(response);
         this.getOperaionClaims();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -76,7 +78,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.users = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -85,7 +87,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.userOperationClaimDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -94,7 +96,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -104,7 +106,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -112,7 +114,7 @@ export class UserOperationClaimDeletedListComponent implements OnInit {
     this.userOperationClaimDTOs.forEach((userOperationClaimDTO) => {
       this.userOperationClaimService.update(userOperationClaimDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

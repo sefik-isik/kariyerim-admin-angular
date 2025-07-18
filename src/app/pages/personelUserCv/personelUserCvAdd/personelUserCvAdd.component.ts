@@ -72,7 +72,7 @@ export class PersonelUserCvAddComponent implements OnInit {
             '/dashboard/personelusercv/personelusercvlisttab',
           ]);
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -101,7 +101,7 @@ export class PersonelUserCvAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -117,7 +117,7 @@ export class PersonelUserCvAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -126,7 +126,7 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -135,7 +135,7 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -144,7 +144,7 @@ export class PersonelUserCvAddComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

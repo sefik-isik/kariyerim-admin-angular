@@ -16,6 +16,7 @@ import { AllUserDetailComponent } from '../allUserDetail/allUserDetail.component
 import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { AdminModel } from '../../../models/auth/adminModel';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-allUserDeletedList',
@@ -37,7 +38,8 @@ export class AllUserDeletedListComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private authService: AuthService,
     private modalService: NgbModal,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class AllUserDeletedListComponent implements OnInit {
       (response) => {
         this.getUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -66,7 +68,7 @@ export class AllUserDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class AllUserDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -89,7 +91,7 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.update(userDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -112,7 +114,7 @@ export class AllUserDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -127,7 +129,7 @@ export class AllUserDeletedListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.terminate(userDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

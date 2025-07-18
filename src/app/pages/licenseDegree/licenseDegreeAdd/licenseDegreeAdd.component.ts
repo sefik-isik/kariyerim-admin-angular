@@ -44,7 +44,7 @@ export class LicenseDegreeAddComponent implements OnInit {
             '/dashboard/licensedegree/licensedegreelisttab',
           ]);
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

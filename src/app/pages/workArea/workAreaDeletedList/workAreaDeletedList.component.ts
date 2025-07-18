@@ -8,6 +8,7 @@ import { FilterWorkAreaPipe } from '../../../pipes/filterWorkArea.pipe';
 import { WorkAreaService } from '../../../services/workArea.service';
 import { WorkAreaDetailComponent } from '../workAreaDetail/workAreaDetail.component';
 import { WorkAreaUpdateComponent } from '../workAreaUpdate/workAreaUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workAreaDeletedList',
@@ -23,7 +24,8 @@ export class WorkAreaDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private workAreaService: WorkAreaService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
       (response) => {
         this.workAreas = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
     this.workAreas.forEach((workArea) => {
       this.workAreaService.update(workArea).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class WorkAreaDeletedListComponent implements OnInit {
     this.workAreas.forEach((workArea) => {
       this.workAreaService.terminate(workArea).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

@@ -11,6 +11,7 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserFollowCompanyUserService } from '../../../services/personelUserFollowCompanyUser.service';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserFollowList',
@@ -37,7 +38,8 @@ export class PersonelUserFollowListComponent implements OnInit {
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private authService: AuthService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class PersonelUserFollowListComponent implements OnInit {
       (response) => {
         this.getPersonelUserFollowCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -70,7 +72,7 @@ export class PersonelUserFollowListComponent implements OnInit {
             (f) => f.personelUserId == this.personelUserDTO.id
           );
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -89,7 +91,7 @@ export class PersonelUserFollowListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -106,7 +108,7 @@ export class PersonelUserFollowListComponent implements OnInit {
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

@@ -15,6 +15,7 @@ import { CompanyUserAdvertCityUpdateComponent } from '../companyUserAdvertCityUp
 import { FilterCompanyUserAdvertCityByUserPipe } from '../../../pipes/filterCompanyUserAdvertCityByUser.pipe';
 import { AuthService } from '../../../services/auth.service';
 import { CompanyUserCode } from '../../../models/concrete/userCodes';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertCityList',
@@ -38,7 +39,8 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -70,7 +72,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -88,7 +90,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
       (response) => {
         this.companyUserAdvertCityDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -104,7 +106,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -118,8 +120,7 @@ export class CompanyUserAdvertCityListComponent implements OnInit {
         .delete(companyUserAdvertCityDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

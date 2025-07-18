@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 import { CompanyUserAdvertDetailComponent } from '../companyUserAdvertDetail/companyUserAdvertDetail.component';
 import { CompanyUserAdvertUpdateComponent } from '../companyUserAdvertUpdate/companyUserAdvertUpdate.component';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertDeletedList',
@@ -37,7 +38,8 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdverts(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -66,7 +68,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
       (response) => {
         this.companyUserAdvertDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -85,7 +87,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile geri alındı');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
     this.companyUserAdvertDTOs.forEach((companyUserAdvertDTO) => {
       this.companyUserAdvertService.update(companyUserAdvertDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -113,7 +115,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -126,7 +128,7 @@ export class CompanyUserAdvertDeletedListComponent implements OnInit {
     this.companyUserAdvertDTOs.forEach((companyUserAdvertDTO) => {
       this.companyUserAdvertService.terminate(companyUserAdvertDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

@@ -8,6 +8,7 @@ import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkingMethodUpdateComponent } from '../workingMethodUpdate/workingMethodUpdate.component';
 import { WorkingMethodDetailComponent } from '../workingMethodDetail/workingMethodDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-workingMethodList',
@@ -24,7 +25,8 @@ export class WorkingMethodListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private workingMethodService: WorkingMethodService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class WorkingMethodListComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class WorkingMethodListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -76,7 +78,7 @@ export class WorkingMethodListComponent implements OnInit {
     this.workingMethods.forEach((workingMethod) => {
       this.workingMethodService.delete(workingMethod).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

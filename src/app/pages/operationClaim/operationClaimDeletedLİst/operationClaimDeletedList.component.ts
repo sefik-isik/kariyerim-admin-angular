@@ -11,6 +11,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OperationClaimUpdateComponent } from '../operationClaimUpdate/operationClaimUpdate.component';
 import { OperationClaimDetailComponent } from '../operationClaimDetail/operationClaimDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-operationClaimDeletedList',
@@ -28,7 +29,8 @@ export class OperationClaimDeletedListComponent implements OnInit {
     private operationClaimService: OperationClaimService,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.getOperationClaims();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -55,7 +57,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -65,7 +67,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -73,7 +75,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.update(operationClaim).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -93,7 +95,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -106,7 +108,7 @@ export class OperationClaimDeletedListComponent implements OnInit {
     this.operationClaims.forEach((operationClaim) => {
       this.operationClaimService.terminate(operationClaim).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

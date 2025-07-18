@@ -41,7 +41,7 @@ export class PositionUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/position/positionlisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

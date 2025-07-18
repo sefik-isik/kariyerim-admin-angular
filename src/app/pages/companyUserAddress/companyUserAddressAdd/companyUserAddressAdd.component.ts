@@ -78,7 +78,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -112,7 +112,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -128,7 +128,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -137,7 +137,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -150,7 +150,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -161,7 +161,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
           (c) => c.countryId === this.getCountryId(countryName)
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -172,7 +172,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
           .filter((r) => r.cityId === this.getCityId(cityName))
           .filter((f) => f.regionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

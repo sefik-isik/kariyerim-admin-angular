@@ -16,6 +16,7 @@ import { AuthService } from '../../../services/auth.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvWorkExperienceDetailComponent } from '../personelUserCvWorkExperienceDetail/personelUserCvWorkExperienceDetail.component';
 import { PersonelUserCvWorkExperienceUpdateComponent } from '../personelUserCvWorkExperienceUpdate/personelUserCvWorkExperienceUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceList',
@@ -43,7 +44,8 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
     private personelUserService: PersonelUserService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserCvWorkExperiences(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -72,7 +74,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -81,7 +83,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
       (response) => {
         this.personelUserCvWorkExperienceDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -97,7 +99,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           this.toastrService.success('Başarı ile silindi');
           this.ngOnInit();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -113,7 +115,7 @@ export class PersonelUserCvWorkExperienceListComponent implements OnInit {
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

@@ -84,7 +84,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -143,7 +143,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -159,7 +159,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -169,7 +169,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -186,7 +186,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -201,7 +201,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
           (f) => f.universityName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -212,7 +212,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
           .filter((c) => c.isCompany === false)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -221,7 +221,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       (response) => {
         this.faculties = response.data.filter((f) => f.facultyName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

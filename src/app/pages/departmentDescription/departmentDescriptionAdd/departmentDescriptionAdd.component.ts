@@ -52,7 +52,7 @@ export class DepartmentDescriptionAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -79,7 +79,7 @@ export class DepartmentDescriptionAddComponent implements OnInit {
           .filter((f) => f.isCompany == false)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

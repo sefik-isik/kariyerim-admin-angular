@@ -73,7 +73,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -106,7 +106,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
         this.getCompanyUsers(response);
         this.getCompanyUserAdverts(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -122,7 +122,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -133,7 +133,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -142,7 +142,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
       (response) => {
         this.companyUserAdverts = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -151,7 +151,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
       (response) => {
         this.workCities = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

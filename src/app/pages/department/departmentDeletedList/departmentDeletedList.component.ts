@@ -9,6 +9,7 @@ import { Department } from '../../../models/component/department';
 import { DepartmentService } from '../../../services/department.service';
 import { FilterDepartmentPipe } from '../../../pipes/filterDepartment.pipe';
 import { IsCompanyPipe } from '../../../pipes/isCompany.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-departmentDeletedList',
@@ -24,7 +25,8 @@ export class DepartmentDeletedListComponent implements OnInit {
   constructor(
     private departmentService: DepartmentService,
     private toastrService: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class DepartmentDeletedListComponent implements OnInit {
       (response) => {
         this.departments = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -51,7 +53,7 @@ export class DepartmentDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -59,7 +61,7 @@ export class DepartmentDeletedListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.update(department).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -79,7 +81,7 @@ export class DepartmentDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class DepartmentDeletedListComponent implements OnInit {
     this.departments.forEach((department) => {
       this.departmentService.terminate(department).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

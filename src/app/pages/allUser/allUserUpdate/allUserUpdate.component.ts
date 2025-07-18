@@ -70,7 +70,7 @@ export class AllUserUpdateComponent implements OnInit {
         this.userDTO.phoneNumber = response.data.phoneNumber.trim();
         this.userDTO.code = response.data.code.trim();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -106,7 +106,7 @@ export class AllUserUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/alluser/alluserlisttab']);
           this.activeModal.close();
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

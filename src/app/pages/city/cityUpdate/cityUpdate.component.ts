@@ -46,7 +46,7 @@ export class CityUpdateComponent implements OnInit {
           this.activeModal.close();
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

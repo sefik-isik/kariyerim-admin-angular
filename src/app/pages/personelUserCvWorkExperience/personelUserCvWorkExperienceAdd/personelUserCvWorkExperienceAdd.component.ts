@@ -109,7 +109,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -187,7 +187,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -203,7 +203,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -213,7 +213,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         this.personelUserDTOs = response.data;
         this.getPersonelUserCvs(adminModel);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -222,7 +222,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.personelUserCvs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -231,7 +231,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -240,7 +240,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -251,7 +251,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
           (f) => f.positionLevelName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -260,7 +260,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -271,7 +271,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
           .filter((f) => f.isCompany === true)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -280,7 +280,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -295,7 +295,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
           );
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -310,7 +310,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
             .filter((f) => f.regionName != '-');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

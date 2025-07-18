@@ -78,7 +78,7 @@ export class RegisterCompanyUserComponent {
           );
           this.router.navigate(['/dashboard/main']);
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

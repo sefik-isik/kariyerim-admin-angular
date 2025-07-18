@@ -43,7 +43,7 @@ export class LanguageUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/language/languagelisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

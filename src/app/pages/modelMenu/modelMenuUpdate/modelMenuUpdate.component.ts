@@ -41,7 +41,7 @@ export class ModelMenuUpdateComponent implements OnInit {
           this.router.navigate(['/dashboard/modelmenu/modelmenulisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

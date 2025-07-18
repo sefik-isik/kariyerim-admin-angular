@@ -73,7 +73,7 @@ export class PersonelUserAddComponent implements OnInit {
           this.router.navigate(['/dashboard/personeluser/personeluserlisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -124,7 +124,7 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.getAllPersonelUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -140,7 +140,7 @@ export class PersonelUserAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -149,7 +149,7 @@ export class PersonelUserAddComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -160,7 +160,7 @@ export class PersonelUserAddComponent implements OnInit {
           (f) => f.licenseDegreeName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -171,7 +171,7 @@ export class PersonelUserAddComponent implements OnInit {
           (f) => f.driverLicenceName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

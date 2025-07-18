@@ -52,7 +52,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -82,7 +82,7 @@ export class UserOperationClaimUpdateComponent implements OnInit {
       (response) => {
         this.operationClaims = response.data.filter((f) => f.name != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

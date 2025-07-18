@@ -66,7 +66,7 @@ export class LoginComponent {
           );
           this.router.navigate(['dashboard']);
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

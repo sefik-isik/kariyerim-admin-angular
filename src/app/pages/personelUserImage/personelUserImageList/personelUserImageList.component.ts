@@ -14,6 +14,7 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserImageService } from '../../../services/personelUserImage.service';
 import { PersonelUserImageDetailComponent } from '../personelUserImageDetail/personelUserImageDetail.component';
 import { PersonelUserImageUpdateComponent } from '../personelUserImageUpdate/personelUserImageUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserImageList',
@@ -37,7 +38,8 @@ export class PersonelUserImageListComponent implements OnInit {
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -57,7 +59,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getPersonelUserImages(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -66,7 +68,7 @@ export class PersonelUserImageListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -75,7 +77,7 @@ export class PersonelUserImageListComponent implements OnInit {
       (response) => {
         this.personelUserImageDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -90,7 +92,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile güncellendi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -104,7 +106,7 @@ export class PersonelUserImageListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -116,7 +118,7 @@ export class PersonelUserImageListComponent implements OnInit {
     this.personelUserImageDTOs.forEach((personelUserImageDTO) => {
       this.personelUserImageService.delete(personelUserImageDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

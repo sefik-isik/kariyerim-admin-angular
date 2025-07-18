@@ -15,6 +15,7 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserFollowCompanyUserService } from '../../../services/personelUserFollowCompanyUser.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserFollowList',
@@ -47,7 +48,8 @@ export class CompanyUserFollowListComponent implements OnInit {
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private authService: AuthService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -80,7 +82,7 @@ export class CompanyUserFollowListComponent implements OnInit {
         this.getAllPersonelUsers(response);
         this.getPersonelUserFollowCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class CompanyUserFollowListComponent implements OnInit {
             (f) => f.companyUserId == this.companyUserDTO.id
           );
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -104,7 +106,7 @@ export class CompanyUserFollowListComponent implements OnInit {
           (f) => f.id == this.companyUserDTO.id
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -113,7 +115,7 @@ export class CompanyUserFollowListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -132,7 +134,7 @@ export class CompanyUserFollowListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -149,7 +151,7 @@ export class CompanyUserFollowListComponent implements OnInit {
           .subscribe(
             (response) => {},
             (responseError) =>
-              this.toastrService.error(responseError.error.message)
+              this.validationService.handleErrors(responseError)
           );
       }
     );

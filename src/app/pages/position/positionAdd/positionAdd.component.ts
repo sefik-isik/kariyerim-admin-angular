@@ -43,7 +43,7 @@ export class PositionAddComponent implements OnInit {
           this.router.navigate(['/dashboard/position/positionlisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

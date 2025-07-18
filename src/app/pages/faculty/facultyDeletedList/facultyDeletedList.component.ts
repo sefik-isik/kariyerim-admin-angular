@@ -8,6 +8,7 @@ import { FacultyService } from '../../../services/faculty.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FacultyUpdateComponent } from '../facultyUpdate/facultyUpdate.component';
 import { FacultyDetailComponent } from '../facultyDetail/facultyDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-facultyDeletedList',
@@ -23,7 +24,8 @@ export class FacultyDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private facultyService: FacultyService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class FacultyDeletedListComponent implements OnInit {
       (response) => {
         this.faculties = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class FacultyDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class FacultyDeletedListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.update(faculty).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class FacultyDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class FacultyDeletedListComponent implements OnInit {
     this.faculties.forEach((faculty) => {
       this.facultyService.terminate(faculty).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

@@ -9,6 +9,7 @@ import { FilterCountryPipe } from '../../../pipes/filterCountry.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountryUpdateComponent } from '../countryUpdate/countryUpdate.component';
 import { CountryDetailComponent } from '../countryDetail/countryDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countryList',
@@ -26,7 +27,8 @@ export class CountryListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private countryService: CountryService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class CountryListComponent implements OnInit {
       (response) => {
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -63,7 +65,7 @@ export class CountryListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class CountryListComponent implements OnInit {
     this.countries.forEach((country) => {
       this.countryService.delete(country).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

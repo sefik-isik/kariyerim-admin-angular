@@ -13,6 +13,7 @@ import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component
 import { AdminModel } from '../../../models/auth/adminModel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { ToastrService } from 'ngx-toastr';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-allUserList',
@@ -34,7 +35,8 @@ export class AllUserListComponent implements OnInit {
     private modalService: NgbModal,
     private adminService: AdminService,
     private localStorageService: LocalStorageService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class AllUserListComponent implements OnInit {
       (response) => {
         this.getUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -61,7 +63,7 @@ export class AllUserListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -79,7 +81,7 @@ export class AllUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -94,7 +96,7 @@ export class AllUserListComponent implements OnInit {
       userDTO.passwordSalt = '';
       this.userService.delete(userDTO).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

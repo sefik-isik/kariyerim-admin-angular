@@ -55,7 +55,7 @@ export class UniversityImageUpdateComponent implements OnInit {
         this.universityImage.imageName = response.data.imageName;
         this.checkImage();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -64,7 +64,7 @@ export class UniversityImageUpdateComponent implements OnInit {
       (response) => {
         this.universityName = response.data.universityName;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -99,7 +99,7 @@ export class UniversityImageUpdateComponent implements OnInit {
       (response) => {
         this.result = false;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -144,7 +144,7 @@ export class UniversityImageUpdateComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
           this.toastrService.error('Error uploading image', responseError);
         }
       );
@@ -159,7 +159,7 @@ export class UniversityImageUpdateComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
       }
     );
   }

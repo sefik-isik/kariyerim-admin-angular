@@ -178,7 +178,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
           }
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }
@@ -192,7 +192,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         ]);
       },
       (responseError) => {
-        console.log(responseError);
+        this.validationService.handleErrors(responseError);
       }
     );
   }
@@ -246,7 +246,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         this.getCompanyUsers(response);
         this.getCompanyUserDepartments(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getAllCompanyUsers(adminModel: AdminModel) {
@@ -261,7 +261,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getCompanyUsers(adminModel: AdminModel) {
@@ -271,7 +271,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.companyUsers = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getPositions() {
@@ -279,7 +279,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getDriverLicences() {
@@ -289,7 +289,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
           (f) => f.driverLicenceName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getPositionLevels() {
@@ -299,7 +299,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
           (f) => f.positionLevelName != '-'
         );
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getLanguages() {
@@ -307,7 +307,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getLanguageLevels() {
@@ -315,7 +315,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getWorkAreas() {
@@ -323,7 +323,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.workAreas = response.data.filter((f) => f.areaName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getWorkingMethods() {
@@ -331,7 +331,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getExperiences() {
@@ -339,7 +339,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getCompanyUserDepartments(adminModel: AdminModel) {
@@ -347,7 +347,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.companyUserDepartments = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -356,7 +356,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (response) => {
         this.licenseDegrees = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

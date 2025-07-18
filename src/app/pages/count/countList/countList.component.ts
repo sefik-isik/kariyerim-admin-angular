@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 import { CountService } from '../../../services/count.service';
 import { CountDetailComponent } from '../countDetail/countDetail.component';
 import { CountUpdateComponent } from '../countUpdate/countUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countList',
@@ -24,7 +25,8 @@ export class CountListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private countService: CountService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -43,7 +45,7 @@ export class CountListComponent implements OnInit {
       (response) => {
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -61,7 +63,7 @@ export class CountListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -77,7 +79,7 @@ export class CountListComponent implements OnInit {
     this.counts.forEach((count) => {
       this.countService.delete(count).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

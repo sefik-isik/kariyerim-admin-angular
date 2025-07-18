@@ -9,6 +9,7 @@ import { PositionLevelService } from '../../../services/positionLevel.service';
 import { PositionLevelDetailComponent } from '../positionLevelDetail/positionLevelDetail.component';
 import { PositionLevelUpdateComponent } from '../positionLevelUpdate/positionLevelUpdate.component';
 import { FilterPositionLevelPipe } from '../../../pipes/filterPositionLevel.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-positionLevelDeletedList',
@@ -25,7 +26,8 @@ export class PositionLevelDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private positionLevelService: PositionLevelService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
       (response) => {
         this.positionLevels = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -52,7 +54,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.update(positionLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -80,7 +82,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -93,7 +95,7 @@ export class PositionLevelDeletedListComponent implements OnInit {
     this.positionLevels.forEach((positionLevel) => {
       this.positionLevelService.terminate(positionLevel).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

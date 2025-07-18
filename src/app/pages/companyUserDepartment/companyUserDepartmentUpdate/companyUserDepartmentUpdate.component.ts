@@ -58,7 +58,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -87,7 +87,7 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
           .filter((c) => c.isCompany === true)
           .filter((f) => f.departmentName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

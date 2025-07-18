@@ -11,6 +11,7 @@ import { ExperienceService } from '../../../services/experience.service';
 import { FilterExperiencePipe } from '../../../pipes/filterExperience.pipe';
 import { ExperienceUpdateComponent } from '../experienceUpdate/experienceUpdate.component';
 import { ExperienceDetailComponent } from '../experienceDetail/experienceDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-experienceList',
@@ -28,7 +29,8 @@ export class ExperienceListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private experienceService: ExperienceService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class ExperienceListComponent implements OnInit {
       (response) => {
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -64,7 +66,7 @@ export class ExperienceListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -80,7 +82,7 @@ export class ExperienceListComponent implements OnInit {
     this.experiences.forEach((experience) => {
       this.experienceService.delete(experience).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

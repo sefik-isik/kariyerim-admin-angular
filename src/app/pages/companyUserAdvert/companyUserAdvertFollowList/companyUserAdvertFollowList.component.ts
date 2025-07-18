@@ -9,6 +9,7 @@ import { LocalStorageService } from '../../../services/helperServices/localStora
 import { PersonelUserAdvertFollowService } from '../../../services/personelUserAdvertFollow.service';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserAdvertFollowList',
@@ -27,7 +28,8 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -46,7 +48,7 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
       (response) => {
         this.getPersonelUserAdvertFollows(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
         (response) => {
           this.personelUserAdvertFollowDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 }

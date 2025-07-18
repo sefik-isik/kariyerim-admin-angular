@@ -45,7 +45,7 @@ export class WorkAreaAddComponent implements OnInit {
           this.router.navigate(['/dashboard/workarea/workarealisttab']);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {

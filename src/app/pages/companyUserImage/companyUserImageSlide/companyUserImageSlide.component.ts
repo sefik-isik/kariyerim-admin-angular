@@ -12,6 +12,7 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserImageSlide',
@@ -38,7 +39,8 @@ export class CompanyUserImageSlideComponent implements OnInit {
     private adminService: AdminService,
     private userService: UserService,
     private localStorageService: LocalStorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
         this.getAllCompanyUsers(response);
         this.getCompanyUserImages(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -71,7 +73,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
       (response) => {
         this.companyUserImageDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -86,9 +88,9 @@ export class CompanyUserImageSlideComponent implements OnInit {
         this.getAdminValues();
       },
       (responseError) => {
-        this.toastrService.error(responseError.error.message);
+        this.validationService.handleErrors(responseError);
         if (responseError.error) {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         } else {
           this.toastrService.error('Silme işlemi başarısız oldu');
         }

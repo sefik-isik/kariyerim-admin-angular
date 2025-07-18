@@ -10,6 +10,7 @@ import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserAdvertFollowService } from '../../../services/personelUserAdvertFollow.service';
 import { FilterFollowCompanyUserAdvertPipe } from '../../../pipes/filterFollowCompanyUserAdvert.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserAdvertFollowList',
@@ -29,7 +30,8 @@ export class PersonelUserAdvertFollowListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class PersonelUserAdvertFollowListComponent implements OnInit {
       (response) => {
         this.getPersonelUserAdvertFollows(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -60,7 +62,7 @@ export class PersonelUserAdvertFollowListComponent implements OnInit {
         (response) => {
           this.personelUserAdvertFollowDTOs = response.data;
         },
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -77,7 +79,7 @@ export class PersonelUserAdvertFollowListComponent implements OnInit {
           this.toastrService.success('Başarı ile kalıcı olarak silindi');
           this.ngOnInit();
         },
-        (responseError) => console.log(responseError)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
@@ -92,8 +94,7 @@ export class PersonelUserAdvertFollowListComponent implements OnInit {
         .terminate(personelUserAdvertFollowDTO)
         .subscribe(
           (response) => {},
-          (responseError) =>
-            this.toastrService.error(responseError.error.message)
+          (responseError) => this.validationService.handleErrors(responseError)
         );
     });
     setTimeout(() => {

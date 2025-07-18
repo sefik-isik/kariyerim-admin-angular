@@ -8,6 +8,7 @@ import { FilterLanguagePipe } from '../../../pipes/filterLanguage.pipe';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageUpdateComponent } from '../languageUpdate/languageUpdate.component';
 import { LanguageDetailComponent } from '../languageDetail/languageDetail.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-languageDeletedList',
@@ -23,7 +24,8 @@ export class LanguageDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private languageService: LanguageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class LanguageDeletedListComponent implements OnInit {
       (response) => {
         this.languages = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class LanguageDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class LanguageDeletedListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.update(language).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class LanguageDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class LanguageDeletedListComponent implements OnInit {
     this.languages.forEach((language) => {
       this.languageService.terminate(language).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

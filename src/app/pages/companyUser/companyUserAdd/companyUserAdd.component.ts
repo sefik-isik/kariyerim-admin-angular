@@ -81,7 +81,7 @@ export class CompanyUserAddComponent implements OnInit {
           this.router.navigate(['/dashboard/companyuser/companyuserlisttab']);
         },
         (responseError) => {
-          console.log(responseError);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -133,7 +133,7 @@ export class CompanyUserAddComponent implements OnInit {
       (response) => {
         this.getAllCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -149,7 +149,7 @@ export class CompanyUserAddComponent implements OnInit {
             this.localStorageService.getFromLocalStorage('id');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -158,7 +158,7 @@ export class CompanyUserAddComponent implements OnInit {
       (response) => {
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -167,7 +167,7 @@ export class CompanyUserAddComponent implements OnInit {
       (response) => {
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -176,7 +176,7 @@ export class CompanyUserAddComponent implements OnInit {
       (response) => {
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -191,7 +191,7 @@ export class CompanyUserAddComponent implements OnInit {
             .filter((f) => f.taxOfficeName != '-');
         }
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

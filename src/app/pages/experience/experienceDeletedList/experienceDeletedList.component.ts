@@ -8,6 +8,7 @@ import { ExperienceService } from '../../../services/experience.service';
 import { ExperienceDetailComponent } from '../experienceDetail/experienceDetail.component';
 import { ExperienceUpdateComponent } from '../experienceUpdate/experienceUpdate.component';
 import { FilterExperiencePipe } from '../../../pipes/filterExperience.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-experienceDeletedList',
@@ -23,7 +24,8 @@ export class ExperienceDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private experienceService: ExperienceService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class ExperienceDeletedListComponent implements OnInit {
       (response) => {
         this.experiences = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class ExperienceDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class ExperienceDeletedListComponent implements OnInit {
     this.experiences.forEach((experience) => {
       this.experienceService.update(experience).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class ExperienceDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class ExperienceDeletedListComponent implements OnInit {
     this.experiences.forEach((experience) => {
       this.experienceService.terminate(experience).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

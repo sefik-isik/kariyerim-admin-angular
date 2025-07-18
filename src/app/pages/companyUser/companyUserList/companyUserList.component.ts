@@ -23,6 +23,7 @@ import { PersonelUserFollowCompanyUser } from '../../../models/component/persone
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { FilterCompanyUserPipe } from '../../../pipes/filterCompanyUser.pipe';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-companyUserList',
@@ -50,7 +51,8 @@ export class CompanyUserListComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private modalService: NgbModal,
     private authService: AuthService,
-    private personelUserFollowCompanyUserService: PersonelUserFollowCompanyUserService
+    private personelUserFollowCompanyUserService: PersonelUserFollowCompanyUserService,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -83,7 +85,7 @@ export class CompanyUserListComponent implements OnInit {
         this.getPersonelUsers(response);
         this.getCompanyUsers(response);
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -92,7 +94,7 @@ export class CompanyUserListComponent implements OnInit {
       (response) => {
         this.userDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -101,7 +103,7 @@ export class CompanyUserListComponent implements OnInit {
       (response) => {
         this.companyUserDTOs = response.data;
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -116,7 +118,7 @@ export class CompanyUserListComponent implements OnInit {
       (response) => {
         this.personelUserDTOs = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -139,7 +141,7 @@ export class CompanyUserListComponent implements OnInit {
         this.toastrService.success('Başarı ile silindi');
         this.ngOnInit();
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -152,7 +154,7 @@ export class CompanyUserListComponent implements OnInit {
     this.companyUserDTOs.forEach((companyUser) => {
       this.companyUserService.delete(companyUser).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -169,7 +171,7 @@ export class CompanyUserListComponent implements OnInit {
           this.toastrService.success(response.message, 'Başarılı');
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
   }

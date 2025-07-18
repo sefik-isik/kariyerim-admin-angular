@@ -59,7 +59,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
           ]);
         },
         (responseError) => {
-          this.toastrService.error(responseError.error.message);
+          this.validationService.handleErrors(responseError);
         }
       );
     } else {
@@ -89,7 +89,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -98,7 +98,7 @@ export class PersonelUserCvUpdateComponent implements OnInit {
       (response) => {
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 

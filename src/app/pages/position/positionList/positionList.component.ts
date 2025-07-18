@@ -9,6 +9,7 @@ import { AuthService } from '../../../services/auth.service';
 import { PositionService } from '../../../services/position.service';
 import { PositionDetailComponent } from '../positionDetail/positionDetail.component';
 import { PositionUpdateComponent } from '../positionUpdate/positionUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-positionList',
@@ -26,7 +27,8 @@ export class PositionListComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private positionService: PositionService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class PositionListComponent implements OnInit {
       (response) => {
         this.positions = response.data.filter((f) => f.positionName != '-');
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -62,7 +64,7 @@ export class PositionListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile silindi');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -78,7 +80,7 @@ export class PositionListComponent implements OnInit {
     this.positions.forEach((position) => {
       this.positionService.delete(position).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {

@@ -7,6 +7,7 @@ import { Count } from '../../../models/component/count';
 import { CountService } from '../../../services/count.service';
 import { CountDetailComponent } from '../countDetail/countDetail.component';
 import { CountUpdateComponent } from '../countUpdate/countUpdate.component';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countDeletedList',
@@ -23,7 +24,8 @@ export class CountDeletedListComponent implements OnInit {
   constructor(
     private toastrService: ToastrService,
     private countService: CountService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class CountDeletedListComponent implements OnInit {
       (response) => {
         this.counts = response.data;
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -50,7 +52,7 @@ export class CountDeletedListComponent implements OnInit {
         this.ngOnInit();
         this.toastrService.success('Başarı ile geri alındı');
       },
-      (responseError) => this.toastrService.error(responseError.error.message)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -58,7 +60,7 @@ export class CountDeletedListComponent implements OnInit {
     this.counts.forEach((count) => {
       this.countService.update(count).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
@@ -78,7 +80,7 @@ export class CountDeletedListComponent implements OnInit {
         this.toastrService.success('Başarı ile kalıcı olarak silindi');
         this.ngOnInit();
       },
-      (responseError) => console.log(responseError)
+      (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
@@ -91,7 +93,7 @@ export class CountDeletedListComponent implements OnInit {
     this.counts.forEach((count) => {
       this.countService.terminate(count).subscribe(
         (response) => {},
-        (responseError) => this.toastrService.error(responseError.error.message)
+        (responseError) => this.validationService.handleErrors(responseError)
       );
     });
     setTimeout(() => {
