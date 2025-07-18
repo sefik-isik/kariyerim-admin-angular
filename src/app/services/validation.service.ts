@@ -73,13 +73,13 @@ export class ValidationService {
   handleErrors(responseError: any) {
     let errorNames: string[] = [];
 
-    if (responseError.error.title) {
-      console.log(`${responseError.error.title}`);
-    }
+    // if (responseError.error.title) {
+    //   console.log(`${responseError.error.title}`);
+    // }
 
-    if (responseError.message) {
-      console.log(`${responseError.message}`);
-    }
+    // if (responseError.message) {
+    //   console.log(`${responseError.message}`);
+    // }
 
     if (responseError.error.message) {
       this.toastrService.error(`${responseError.error.message}`);
@@ -92,6 +92,20 @@ export class ValidationService {
 
       errorNames.forEach((e) => {
         this.toastrService.error(`${e} alanı boş olamaz.`);
+      });
+    }
+
+    if (responseError.error.ValidationErrors) {
+      this.toastrService.error(
+        responseError.error.StatusText,
+        responseError.error.Message
+      );
+
+      responseError.error.ValidationErrors.forEach((e: any) => {
+        console.log(
+          `Alan Adı: ${e.PropertyName} | Girilen Değer: ${e.AttemptedValue} | Hata Mesajı : ${e.ErrorMessage}`
+        );
+        this.toastrService.error(`${e.ErrorMessage}`);
       });
     }
   }
