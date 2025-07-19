@@ -23,6 +23,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setPersonelUserMail(personelUserModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -81,6 +82,7 @@
               name="identityNumber"
               #identityNumber="ngModel"
               placeholder="identity Number"
+              [disabled]="!personelUserModel.email"
             />
             <span class="input-group-text">
               <i
@@ -116,6 +118,7 @@
               #licenseDegreeName="ngModel"
               placeholder="Licence Degree Name"
               list="licenseDegreeNameDataList"
+              [disabled]="!personelUserModel.identityNumber"
             />
             <datalist id="licenseDegreeNameDataList">
               <option
@@ -157,6 +160,7 @@
               #driverLicenceName="ngModel"
               placeholder="Driver Licence Name"
               list="driverLicenceNameDataList"
+              [disabled]="!personelUserModel.licenseDegreeName"
             />
             <datalist id="driverLicenceNameDataList">
               <option
@@ -198,6 +202,7 @@
               #birthPlaceName="ngModel"
               placeholder="Birth Place Name"
               list="birthPlaceNameDataList"
+              [disabled]="!personelUserModel.driverLicenceName"
             />
             <datalist id="birthPlaceNameDataList">
               <option
@@ -238,6 +243,7 @@
               class="form-control"
               name="dateOfBirth"
               #dateOfBirth="ngModel"
+              [disabled]="!personelUserModel.birthPlaceName"
             />
 
             <span class="input-group-text">
@@ -284,6 +290,7 @@
                 [(ngModel)]="personelUserModel.militaryStatus"
                 name="militaryStatus"
                 style="width: 40px; height: 20px; top: 45% !important"
+                [disabled]="!personelUserModel.dateOfBirth"
               />
             </div>
           </div>

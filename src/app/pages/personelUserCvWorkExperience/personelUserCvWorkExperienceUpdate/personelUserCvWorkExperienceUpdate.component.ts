@@ -77,8 +77,8 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     this.getAdminValues();
     this.getSectors();
     this.getCountries();
-    this.getCities('');
-    this.getRegions('');
+    this.getCities();
+    this.getRegions();
     this.getWorkingMethods();
     this.getDepartments();
     this.getPositions();
@@ -231,15 +231,26 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserCvs = response.data;
+        this.personelUserCvs = response.data.filter(
+          (f) => f.email == this.personelUserCvWorkExperienceDTO.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
+  setPersonelUserCv(email: string) {
+    this.personelUserCvWorkExperienceDTO.email = email;
+
+    this.getAdminValues();
+  }
+
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceDTO.companySectorId =
+          response.data.filter((f) => f.sectorName == '-')[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
@@ -294,6 +305,10 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceDTO.countryId = response.data.filter(
+          (f) => f.countryName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
@@ -301,24 +316,50 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     );
   }
 
-  getCities(countryName: string) {
+  setCountryName(countryName: string) {
+    this.personelUserCvWorkExperienceDTO.countryName = countryName;
+
+    this.getCities();
+  }
+
+  getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceDTO.cityId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.cities = response.data.filter(
-          (c) => c.countryId === this.getCountryId(countryName)
+          (c) =>
+            c.countryId ===
+            this.getCountryId(this.personelUserCvWorkExperienceDTO.countryName)
         );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getRegions(cityName: string) {
+  setCityName(cityName: string) {
+    this.personelUserCvWorkExperienceDTO.cityName = cityName;
+
+    this.getRegions();
+  }
+
+  getRegions() {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceDTO.regionId = response.data.filter(
+          (f) => f.regionName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.regions = response.data
-          .filter((r) => r.cityId === this.getCityId(cityName))
+          .filter(
+            (r) =>
+              r.cityId ===
+              this.getCityId(this.personelUserCvWorkExperienceDTO.cityName)
+          )
           .filter((f) => f.regionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -331,69 +372,40 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
     return sectorName;
   }
 
-  getCompanySectorId(companySectorName: string) {
-    if (companySectorName == null || companySectorName == '') {
-      companySectorName = '-';
-    }
-    const companySectorId = this.companySectors.filter(
-      (c) => c.sectorName === companySectorName
-    )[0]?.id;
-
-    return companySectorId;
-  }
-
-  getCountryId(countryName: string): string {
-    if (countryName == null || countryName == '') {
-      countryName = '-';
-    }
-    const countryId = this.countries.filter(
-      (c) => c.countryName === countryName
-    )[0]?.id;
-
-    return countryId;
-  }
-
-  getCityId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
-
-    return cityId;
-  }
-
-  getRegionId(regionName: string): string {
-    if (regionName == null || regionName == '') {
-      regionName = '-';
-    }
-    const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
-      ?.id;
-
-    return regionId;
-  }
-
   getDepartmentId(departmentName: string): string {
-    if (departmentName == null || departmentName == '') {
-      departmentName = '-';
-    }
-    const departmentId = this.departments.filter(
-      (c) => c.departmentName === departmentName
-    )[0]?.id;
+    let departmentId: string;
+
+    departmentName == null || departmentName == '' || departmentName == '-'
+      ? (departmentId = this.personelUserCvWorkExperienceDTO.departmentId)
+      : (departmentId = this.departments.filter(
+          (c) => c.departmentName === departmentName
+        )[0]?.id);
 
     return departmentId;
   }
 
   getWorkingMethodId(workingMethodName: string): string {
-    if (workingMethodName == null || workingMethodName == '') {
-      workingMethodName = '-';
-    }
-    const departmentId = this.workingMethods.filter(
-      (c) => c.methodName === workingMethodName
-    )[0]?.id;
+    let workingMethodtId: string;
 
-    return departmentId;
+    workingMethodName == null ||
+    workingMethodName == '' ||
+    workingMethodName == '-'
+      ? (workingMethodtId =
+          this.personelUserCvWorkExperienceDTO.workingMethodId)
+      : (workingMethodtId = this.workingMethods.filter(
+          (c) => c.methodName === workingMethodName
+        )[0]?.id);
+
+    return workingMethodtId;
   }
 
+  getPersonelUserCvId(cvName: string): string {
+    const personelUserId = this.personelUserCvs.filter(
+      (c) => c.cvName === cvName
+    )[0]?.id;
+
+    return personelUserId;
+  }
   getPositionId(positionName: string): string {
     const positionId = this.positions.filter(
       (c) => c.positionName === positionName
@@ -401,13 +413,59 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
 
     return positionId;
   }
-
   getPositionLevelId(positionLevelName: string): string {
     const positionLevelId = this.positionLevels.filter(
       (c) => c.positionLevelName === positionLevelName
     )[0]?.id;
 
     return positionLevelId;
+  }
+
+  getCompanySectorId(companySectorName: string) {
+    let companySectorId: string;
+
+    companySectorName == null ||
+    companySectorName == '' ||
+    companySectorName == '-'
+      ? (companySectorId = this.personelUserCvWorkExperienceDTO.companySectorId)
+      : (companySectorId = this.companySectors.filter(
+          (c) => c.sectorName === companySectorName
+        )[0]?.id);
+
+    return companySectorId;
+  }
+
+  getCountryId(countryName: string): string {
+    let countryId: string;
+
+    countryName == null || countryName == '' || countryName == '-'
+      ? (countryId = this.personelUserCvWorkExperienceDTO.countryId)
+      : (countryId = this.countries.filter(
+          (c) => c.countryName === countryName
+        )[0]?.id);
+
+    return countryId;
+  }
+
+  getCityId(cityName: string): string {
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.personelUserCvWorkExperienceDTO.cityId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
+
+    return cityId;
+  }
+
+  getRegionId(regionName: string): string {
+    let regionId: string;
+
+    regionName == null || regionName == '' || regionName == '-'
+      ? (regionId = this.personelUserCvWorkExperienceDTO.regionId)
+      : (regionId = this.regions.filter((c) => c.regionName === regionName)[0]
+          ?.id);
+
+    return regionId;
   }
 
   companyNameClear() {

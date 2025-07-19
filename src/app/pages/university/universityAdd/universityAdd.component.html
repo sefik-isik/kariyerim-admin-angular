@@ -44,12 +44,12 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Address <br />{{ addressDetail }} \ 50-500</span
+              >Address <br />{{ addressDetail }} \ 20-100</span
             >
             <textarea
               required
-              minlength="50"
-              maxlength="500"
+              minlength="20"
+              maxlength="100"
               pattern=""
               class="form-control"
               [(ngModel)]="universityModel.address"
@@ -57,6 +57,7 @@
               #address="ngModel"
               style="height: 80px"
               (input)="countAddress()"
+              [disabled]="!universityModel.universityName"
             ></textarea>
             <span class="input-group-text">
               <i
@@ -94,6 +95,7 @@
               #description="ngModel"
               style="height: 100px"
               (input)="countDescription()"
+              [disabled]="!universityModel.address"
             ></textarea>
             <span class="input-group-text">
               <i
@@ -131,6 +133,7 @@
               #subDescription="ngModel"
               style="height: 100px"
               (input)="countSubDescription()"
+              [disabled]="!universityModel.description"
             ></textarea>
             <span class="input-group-text">
               <i
@@ -166,6 +169,7 @@
               name="yearOfEstablishment"
               #yearOfEstablishment="ngModel"
               placeholder="Year Of Establishment"
+              [disabled]="!universityModel.subDescription"
             />
             <span class="input-group-text">
               <i
@@ -198,12 +202,13 @@
               [(ngModel)]="universityModel.workerCountValue"
               type="text"
               class="form-control"
-              name="workerCount"
-              #workerCount="ngModel"
+              name="workerCountValue"
+              #workerCountValue="ngModel"
               placeholder="Worker Count"
-              list="workerCountDataList"
+              list="workerCountValueDataList"
+              [disabled]="!universityModel.yearOfEstablishment"
             />
-            <datalist id="workerCountDataList">
+            <datalist id="workerCountValueDataList">
               <option
                 *ngFor="let count of counts"
                 value="{{ count.countValue }}"
@@ -211,16 +216,16 @@
             </datalist>
             <span class="input-group-text">
               <i
-                (click)="workerCountClear()"
+                (click)="workerCountValueClear()"
                 class="bi bi-x-circle"
                 style="cursor: pointer"
               ></i>
             </span>
           </div>
-          <div *ngIf="!workerCount.valid && workerCount.touched">
+          <div *ngIf="!workerCountValue.valid && workerCountValue.touched">
             <div
               class="error-message"
-              *ngFor="let error of getValidationErrors(workerCount)"
+              *ngFor="let error of getValidationErrors(workerCountValue)"
             >
               {{ error }}
             </div>
@@ -242,6 +247,7 @@
               #sectorName="ngModel"
               placeholder="Sector Name"
               list="sectorNameDataList"
+              [disabled]="!universityModel.workerCountValue"
             />
             <datalist id="sectorNameDataList">
               <option
@@ -281,6 +287,7 @@
               name="webAddress"
               #webAddress="ngModel"
               placeholder="Web Address"
+              [disabled]="!universityModel.sectorName"
             />
             <span class="input-group-text">
               <i
@@ -314,6 +321,7 @@
               name="webNewsAddress"
               #webNewsAddress="ngModel"
               placeholder="Web News Address"
+              [disabled]="!universityModel.webAddress"
             />
             <span class="input-group-text">
               <i
@@ -347,6 +355,7 @@
               name="youTubeEmbedAddress"
               #youTubeEmbedAddress="ngModel"
               placeholder="YouTube Embed Address"
+              [disabled]="!universityModel.webNewsAddress"
             />
             <span class="input-group-text">
               <i
@@ -382,6 +391,7 @@
               name="facebookAddress"
               #facebookAddress="ngModel"
               placeholder="Facebook Address"
+              [disabled]="!universityModel.youTubeEmbedAddress"
             />
             <span class="input-group-text">
               <i
@@ -415,6 +425,7 @@
               name="instagramAddress"
               #instagramAddress="ngModel"
               placeholder="Instagram Address"
+              [disabled]="!universityModel.facebookAddress"
             />
             <span class="input-group-text">
               <i
@@ -448,6 +459,7 @@
               name="xAddress"
               #xAddress="ngModel"
               placeholder="X Address"
+              [disabled]="!universityModel.instagramAddress"
             />
             <span class="input-group-text">
               <i
@@ -481,6 +493,7 @@
               name="youTubeAddress"
               #youTubeAddress="ngModel"
               placeholder="YouTube Address"
+              [disabled]="!universityModel.xAddress"
             />
             <span class="input-group-text">
               <i

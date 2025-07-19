@@ -111,10 +111,8 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.companyUserDepartmentModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.companyUserDepartmentModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.companyUserDepartmentModel.email = adminModel.email;
+          this.companyUserDepartmentModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -122,13 +120,22 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAll(adminModel).subscribe(
+    this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserDepartmentModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setCompanyUserMail(email: string) {
+    this.companyUserDepartmentModel.email = email;
+
+    this.getAdminValues();
   }
 
   getDepartments() {

@@ -81,6 +81,7 @@
               placeholder="Country Name"
               (change)="getCities(personelUserAddressModel.countryName)"
               list="countryNameDataList"
+              [disabled]="!personelUserAddressModel.email"
             />
             <datalist id="countryNameDataList">
               <option
@@ -124,6 +125,7 @@
               placeholder="City Name"
               (change)="getRegions(personelUserAddressModel.cityName)"
               list="cityNameDataList"
+              [disabled]="!personelUserAddressModel.countryName"
             />
             <datalist id="cityNameDataList">
               <option
@@ -166,6 +168,7 @@
               #regionName="ngModel"
               placeholder="Region Name"
               list="regionNameDataList"
+              [disabled]="!personelUserAddressModel.cityName"
             />
             <datalist id="regionNameDataList">
               <option
@@ -196,7 +199,7 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Address <br />{{ addressDetailCount }} \ 250</span
+              >Address <br />{{ addressDetailCount }} \ 50-250</span
             >
             <textarea
               required
@@ -209,6 +212,7 @@
               #addressDetail="ngModel"
               style="height: 100px"
               (input)="count()"
+              [disabled]="!personelUserAddressModel.regionName"
             ></textarea>
             <span class="input-group-text">
               <i

@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserFileModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #companyUserName="ngModel"
               placeholder="Company User Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserFileModel.email"
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -119,6 +121,7 @@
             placeholder="Upload File"
             (change)="onFileSelected($event)"
             aria-label="Upload File"
+            [disabled]="!companyUserFileModel.companyUserName"
           />
           <span class="input-group-text">
             <i
@@ -153,6 +156,7 @@
               name="fileOwnName"
               #fileOwnName="ngModel"
               placeholder="File Name"
+              [disabled]="!companyUserFileModel.fileName"
             />
             <span class="input-group-text">
               <i

@@ -73,19 +73,21 @@ export class ValidationService {
   handleErrors(responseError: any) {
     let errorNames: string[] = [];
 
-    // if (responseError.error.title) {
-    //   console.log(`${responseError.error.title}`);
-    // }
+    console.clear();
+    console.error(responseError);
 
-    // if (responseError.message) {
-    //   console.log(`${responseError.message}`);
-    // }
+    if (responseError.error.StatusCode == 500) {
+      this.toastrService.error(
+        `${responseError.error.StatusText}`,
+        'Sistem Hatası'
+      );
+    }
 
-    if (responseError.error.message) {
+    if (responseError.error.message && responseError.status == 400) {
       this.toastrService.error(`${responseError.error.message}`);
     }
 
-    if (responseError.error.errors) {
+    if (responseError.error.errors && responseError.error.status == 400) {
       for (let errorName in responseError.error.errors) {
         errorNames.push(errorName);
       }
@@ -95,14 +97,17 @@ export class ValidationService {
       });
     }
 
-    if (responseError.error.ValidationErrors) {
+    if (
+      responseError.error.ValidationErrors &&
+      responseError.error.StatusCode == 400
+    ) {
       this.toastrService.error(
         responseError.error.StatusText,
         responseError.error.Message
       );
 
       responseError.error.ValidationErrors.forEach((e: any) => {
-        console.log(
+        console.error(
           `Alan Adı: ${e.PropertyName} | Girilen Değer: ${e.AttemptedValue} | Hata Mesajı : ${e.ErrorMessage}`
         );
         this.toastrService.error(`${e.ErrorMessage}`);
@@ -111,10 +116,11 @@ export class ValidationService {
   }
 
   handleSuccesses(response: any) {
-    // if (response.message) {
-    //   console.log(
-    //     'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
-    //   );
-    // }
+    if (response.message) {
+      console.clear();
+      console.info(
+        'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
+      );
+    }
   }
 }

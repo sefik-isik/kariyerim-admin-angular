@@ -88,10 +88,21 @@ export class RegionAddComponent implements OnInit {
     this.cityService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.cities = response.data.filter((f) => f.cityName != '-');
+        this.cities = response.data
+          .filter((f) => f.cityName != '-')
+          .filter(
+            (f) =>
+              f.countryId == this.getCountryId(this.regionModel.countryName)
+          );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setCountryName(countryName: string) {
+    this.regionModel.countryName = countryName;
+
+    this.getCities();
   }
 
   getCountryId(countryName: string): string {

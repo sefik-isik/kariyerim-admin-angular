@@ -23,6 +23,7 @@ import { DepartmentService } from '../../../services/department.service';
 import { Department } from '../../../models/component/department';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { PersonelUser } from '../../../models/component/personelUser';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -34,7 +35,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   personelUserCvEducationModel: PersonelUserCvEducationDTO =
     {} as PersonelUserCvEducationDTO;
   userDTOs: UserDTO[] = [];
-  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUsers: PersonelUser[] = [];
   universities: University[] = [];
   faculties: Faculty[] = [];
   departments: Department[] = [];
@@ -144,6 +145,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
+        this.getPersonelUserCvs(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -156,10 +158,8 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserCvEducationModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserCvEducationModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserCvEducationModel.email = adminModel.email;
+          this.personelUserCvEducationModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -170,29 +170,37 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserDTOs = response.data;
-        this.getPersonelUserCvs(adminModel);
+        this.personelUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
-  }
-
-  getPersonelUserId(email: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
-      (c) => c.email === email
-    )[0]?.id;
-
-    return personelUserId;
   }
 
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserCvs = response.data;
+        this.personelUserCvs = response.data.filter(
+          (f) => f.email == this.personelUserCvEducationModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setPersonelUserCv(email: string) {
+    this.personelUserCvEducationModel.email = email;
+
+    this.getAdminValues();
+  }
+
+  getPersonelUserId(email: string): string {
+    console.log(email);
+    const personelUserId = this.personelUsers.filter(
+      (c) => c.email === email
+    )[0]?.id;
+
+    return personelUserId;
   }
 
   count() {

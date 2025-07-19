@@ -116,6 +116,10 @@ export class UniversityAddComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.universityModel.workerCountId = response.data.filter(
+          (f) => f.countValue == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
@@ -126,6 +130,10 @@ export class UniversityAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.universityModel.sectorId = response.data.filter(
+          (f) => f.sectorName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
@@ -134,22 +142,23 @@ export class UniversityAddComponent implements OnInit {
   }
 
   getSectorId(sectorName: string): string {
-    if (sectorName == null || sectorName == '') {
-      sectorName = '-';
-    }
-    const companyUserSectorId = this.sectors.filter(
-      (c) => c.sectorName === sectorName
-    )[0]?.id;
+    let sectorId: string;
 
-    return companyUserSectorId;
+    sectorName == null || sectorName == '' || sectorName == '-'
+      ? (sectorId = this.universityModel.sectorId)
+      : (sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+          ?.id);
+
+    return sectorId;
   }
 
   getCountId(countValue: string): string {
-    if (countValue == null || countValue == '') {
-      countValue = '-';
-    }
-    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
-      ?.id;
+    let countId: string;
+
+    countValue == null || countValue == '' || countValue == '-'
+      ? (countId = this.universityModel.workerCountId)
+      : (countId = this.counts.filter((c) => c.countValue === countValue)[0]
+          ?.id);
 
     return countId;
   }
@@ -174,7 +183,7 @@ export class UniversityAddComponent implements OnInit {
     this.universityModel.yearOfEstablishment = '';
   }
 
-  workerCountClear() {
+  workerCountValueClear() {
     this.universityModel.workerCountValue = '';
   }
 

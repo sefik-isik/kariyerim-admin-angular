@@ -128,7 +128,9 @@ export class CompanyUserUpdateComponent implements OnInit {
       yearOfEstablishment: new Date(
         this.setNullDateValue(this.companyUserDTO.yearOfEstablishment)
       ).toJSON(),
-      workerCountId: this.getCountId(this.companyUserDTO.workerCountValue),
+      workerCountId: this.getWorkerCountId(
+        this.companyUserDTO.workerCountValue
+      ),
       webAddress: this.setNullValue(this.companyUserDTO.webAddress),
       clarification: this.setNullValue(this.companyUserDTO.clarification),
       about: this.setNullValue(this.companyUserDTO.about),
@@ -157,18 +159,12 @@ export class CompanyUserUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.companyUserDTO.workerCountId = response.data.filter(
+          (f) => f.countValue == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-
-  getCities() {
-    this.cityService.getAll().subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -177,8 +173,26 @@ export class CompanyUserUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.companyUserDTO.sectorId = response.data.filter(
+          (f) => f.sectorName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCities() {
+    this.cityService.getAll().subscribe(
+      (response) => {
+        this.companyUserDTO.taxCityId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
+        this.validationService.handleSuccesses(response);
+        this.cities = response.data.filter((f) => f.cityName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -187,6 +201,10 @@ export class CompanyUserUpdateComponent implements OnInit {
   getTaxOffices(taxCityName: string) {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
+        this.companyUserDTO.taxOfficeId = response.data.filter(
+          (f) => f.taxOfficeName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         if (taxCityName == '-') {
           this.taxOffices = response.data.filter((f) => f.taxOfficeName != '-');
@@ -201,43 +219,48 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   getSectorId(sectorName: string): string {
-    if (sectorName == null || sectorName == '') {
-      sectorName = '-';
-    }
-    const companyUserSectorId = this.sectors.filter(
-      (c) => c.sectorName === sectorName
-    )[0]?.id;
+    let sectorId: string;
 
-    return companyUserSectorId;
+    sectorName == null || sectorName == '' || sectorName == '-'
+      ? (sectorId = this.companyUserDTO.sectorId)
+      : (sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+          ?.id);
+
+    return sectorId;
   }
 
   getCityId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.companyUserDTO.taxCityId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
+
     return cityId;
   }
 
   getTaxOfficeId(taxOfficeName: string): string {
-    if (taxOfficeName == null || taxOfficeName == '') {
-      taxOfficeName = '-';
-    }
-    const taxOfficeId = this.taxOffices.filter(
-      (c) => c.taxOfficeName === taxOfficeName
-    )[0]?.id;
+    let taxOfficeId: string;
+
+    taxOfficeName == null || taxOfficeName == '' || taxOfficeName == '-'
+      ? (taxOfficeId = this.companyUserDTO.taxOfficeId)
+      : (taxOfficeId = this.taxOffices.filter(
+          (c) => c.taxOfficeName === taxOfficeName
+        )[0]?.id);
 
     return taxOfficeId;
   }
 
-  getCountId(countValue: string): string {
-    if (countValue == null || countValue == '') {
-      countValue = '-';
-    }
-    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
-      ?.id;
+  getWorkerCountId(countValue: string): string {
+    let workerCountId: string;
 
-    return countId;
+    countValue == null || countValue == '' || countValue == '-'
+      ? (workerCountId = this.companyUserDTO.workerCountId)
+      : (workerCountId = this.counts.filter(
+          (c) => c.countValue === countValue
+        )[0]?.id);
+
+    return workerCountId;
   }
 
   formatDate(dateString: string): string {

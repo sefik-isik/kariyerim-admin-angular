@@ -20,7 +20,7 @@
               name="cityName"
               #cityName="ngModel"
               placeholder="City Name"
-              (change)="getRegions(taxOfficeModel.cityName)"
+              (change)="setRegionName(taxOfficeModel.cityName)"
               list="cityNameDataList"
             />
             <datalist id="cityNameDataList">
@@ -64,6 +64,7 @@
               #regionName="ngModel"
               placeholder="City Name"
               list="regionNameDataList"
+              [disabled]="!taxOfficeModel.cityName"
             />
             <datalist id="regionNameDataList">
               <option
@@ -93,42 +94,6 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Tax Office Code</span>
-            <input
-              required
-              minlength="4"
-              maxlength="5"
-              pattern="[0-9\/]*"
-              inputmode="numeric"
-              [(ngModel)]="taxOfficeModel.taxOfficeCode"
-              type="text"
-              class="form-control"
-              name="taxOfficeCode"
-              #taxOfficeCode="ngModel"
-              placeholder="Tax Office Code"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="taxOfficeCodeClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!taxOfficeCode.valid && taxOfficeCode.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(taxOfficeCode)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
             <span class="input-group-text">Tax Office Name</span>
             <input
               required
@@ -141,6 +106,7 @@
               name="taxOfficeName"
               #taxOfficeName="ngModel"
               placeholder="Tax Office Name"
+              [disabled]="!taxOfficeModel.regionName"
             />
             <span class="input-group-text">
               <i
@@ -154,6 +120,43 @@
             <div
               class="error-message"
               *ngFor="let error of getValidationErrors(taxOfficeName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Tax Office Code</span>
+            <input
+              required
+              minlength="4"
+              maxlength="5"
+              pattern="[0-9\/]*"
+              inputmode="numeric"
+              [(ngModel)]="taxOfficeModel.taxOfficeCode"
+              type="text"
+              class="form-control"
+              name="taxOfficeCode"
+              #taxOfficeCode="ngModel"
+              placeholder="Tax Office Code"
+              [disabled]="!taxOfficeModel.taxOfficeName"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="taxOfficeCodeClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!taxOfficeCode.valid && taxOfficeCode.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(taxOfficeCode)"
             >
               {{ error }}
             </div>

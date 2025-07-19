@@ -138,17 +138,37 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserAdvertJobDescriptionModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setCompanyUserMail(email: string) {
+    this.companyUserAdvertJobDescriptionModel.email = email;
+
+    this.getAdminValues();
+  }
+
+  setCompanyUserName(name: string) {
+    this.companyUserAdvertJobDescriptionModel.companyUserName = name;
+
+    this.getAdminValues();
   }
 
   getCompanyUserAdverts(adminModel: AdminModel) {
     this.companyUserAdvertService.getAll(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUserAdverts = response.data;
+        this.companyUserAdverts = response.data.filter(
+          (f) =>
+            f.companyUserId ==
+            this.getCompanyUserId(
+              this.companyUserAdvertJobDescriptionModel.companyUserName
+            )
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

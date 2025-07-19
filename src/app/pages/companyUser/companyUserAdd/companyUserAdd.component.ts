@@ -104,7 +104,9 @@ export class CompanyUserAddComponent implements OnInit {
       yearOfEstablishment: new Date(
         this.setNullDateValue(this.companyUserModel.yearOfEstablishment)
       ).toJSON(),
-      workerCountId: this.getCountId(this.companyUserModel.workerCountValue),
+      workerCountId: this.getWorkerCountId(
+        this.companyUserModel.workerCountValue
+      ),
       webAddress: this.setNullValue(this.companyUserModel.webAddress),
       clarification: this.setNullValue(this.companyUserModel.clarification),
       about: this.setNullValue(this.companyUserModel.about),
@@ -159,6 +161,10 @@ export class CompanyUserAddComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.companyUserModel.workerCountId = response.data.filter(
+          (f) => f.countValue == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
@@ -169,6 +175,10 @@ export class CompanyUserAddComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.companyUserModel.sectorId = response.data.filter(
+          (f) => f.sectorName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
@@ -179,6 +189,10 @@ export class CompanyUserAddComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.companyUserModel.taxCityId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
@@ -189,6 +203,10 @@ export class CompanyUserAddComponent implements OnInit {
   getTaxOffices(taxCityName: string) {
     this.taxOfficeService.getAll().subscribe(
       (response) => {
+        this.companyUserModel.taxOfficeId = response.data.filter(
+          (f) => f.taxOfficeName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         if (taxCityName == '-') {
           this.taxOffices = response.data.filter((f) => f.taxOfficeName != '-');
@@ -215,43 +233,48 @@ export class CompanyUserAddComponent implements OnInit {
   }
 
   getSectorId(sectorName: string): string {
-    if (sectorName == null || sectorName == '') {
-      sectorName = '-';
-    }
-    const companyUserSectorId = this.sectors.filter(
-      (c) => c.sectorName === sectorName
-    )[0]?.id;
+    let sectorId: string;
 
-    return companyUserSectorId;
+    sectorName == null || sectorName == '' || sectorName == '-'
+      ? (sectorId = this.companyUserModel.sectorId)
+      : (sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+          ?.id);
+
+    return sectorId;
   }
 
   getCityId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.companyUserModel.taxCityId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
+
     return cityId;
   }
 
   getTaxOfficeId(taxOfficeName: string): string {
-    if (taxOfficeName == null || taxOfficeName == '') {
-      taxOfficeName = '-';
-    }
-    const taxOfficeId = this.taxOffices.filter(
-      (c) => c.taxOfficeName === taxOfficeName
-    )[0]?.id;
+    let taxOfficeId: string;
+
+    taxOfficeName == null || taxOfficeName == '' || taxOfficeName == '-'
+      ? (taxOfficeId = this.companyUserModel.taxOfficeId)
+      : (taxOfficeId = this.taxOffices.filter(
+          (c) => c.taxOfficeName === taxOfficeName
+        )[0]?.id);
 
     return taxOfficeId;
   }
 
-  getCountId(countValue: string): string {
-    if (countValue == null || countValue == '') {
-      countValue = '-';
-    }
-    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
-      ?.id;
+  getWorkerCountId(countValue: string): string {
+    let workerCountId: string;
 
-    return countId;
+    countValue == null || countValue == '' || countValue == '-'
+      ? (workerCountId = this.companyUserModel.workerCountId)
+      : (workerCountId = this.counts.filter(
+          (c) => c.countValue === countValue
+        )[0]?.id);
+
+    return workerCountId;
   }
 
   count() {
@@ -282,7 +305,7 @@ export class CompanyUserAddComponent implements OnInit {
     this.companyUserModel.taxNumber = '';
   }
 
-  workerCountClear() {
+  workerCountValueClear() {
     this.companyUserModel.workerCountValue = '';
   }
 

@@ -29,6 +29,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class PersonelUserAddComponent implements OnInit {
   personelUserModel: PersonelUserDTO = {} as PersonelUserDTO;
+  personelUsers: PersonelUserDTO[] = [];
   userDTOs: UserDTO[] = [];
   cities: City[] = [];
   licenseDegrees: LicenseDegree[] = [];
@@ -137,19 +138,40 @@ export class PersonelUserAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserModel.email = adminModel.email;
+          this.personelUserModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
+  getPersonelUsers(adminModel: AdminModel) {
+    this.personelUserService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+
+        this.personelUsers = response.data.filter(
+          (f) => f.email == this.personelUserModel.email
+        );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  setPersonelUserMail(email: string) {
+    this.personelUserModel.email = email;
+
+    this.getAdminValues();
+  }
+
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.personelUserModel.birthPlaceId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
@@ -160,6 +182,10 @@ export class PersonelUserAddComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
+        this.personelUserModel.licenseDegreeId = response.data.filter(
+          (f) => f.licenseDegreeName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data.filter(
           (f) => f.licenseDegreeName != '-'
@@ -172,6 +198,10 @@ export class PersonelUserAddComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.personelUserModel.driverLicenceId = response.data.filter(
+          (f) => f.driverLicenceName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
@@ -194,43 +224,50 @@ export class PersonelUserAddComponent implements OnInit {
   }
 
   getLicenseDegreeId(licenseDegreeName: string): string {
-    if (licenseDegreeName == null || licenseDegreeName == '') {
-      licenseDegreeName = '-';
-    }
-    const licenseDegreeId = this.licenseDegrees.filter(
-      (c) => c.licenseDegreeName === licenseDegreeName
-    )[0]?.id;
+    let licenseDegreeId: string;
+
+    licenseDegreeName == null ||
+    licenseDegreeName == '' ||
+    licenseDegreeName == '-'
+      ? (licenseDegreeId = this.personelUserModel.licenseDegreeId)
+      : (licenseDegreeId = this.licenseDegrees.filter(
+          (c) => c.licenseDegreeName === licenseDegreeName
+        )[0]?.id);
 
     return licenseDegreeId;
   }
 
   getDriverLicenceId(driverLicenceName: string): string {
-    if (driverLicenceName == null || driverLicenceName == '') {
-      driverLicenceName = '-';
-    }
-    const driverLicenceId = this.driverLicences.filter(
-      (c) => c.driverLicenceName === driverLicenceName
-    )[0]?.id;
+    let driverLicenceId: string;
+
+    driverLicenceName == null ||
+    driverLicenceName == '' ||
+    driverLicenceName == '-'
+      ? (driverLicenceId = this.personelUserModel.driverLicenceId)
+      : (driverLicenceId = this.driverLicences.filter(
+          (c) => c.driverLicenceName === driverLicenceName
+        )[0]?.id);
 
     return driverLicenceId;
   }
 
   getBirthPlaceId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.personelUserModel.birthPlaceId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
 
     return cityId;
   }
 
-  onlyNumberKey($event: KeyboardEvent) {
-    const pattern = /[0-9\ ]/;
-    const inputChar = String.fromCharCode($event.charCode);
-    if (!pattern.test(inputChar)) {
-      $event.preventDefault();
-    }
-  }
+  // onlyNumberKey($event: KeyboardEvent) {
+  //   const pattern = /[0-9\ ]/;
+  //   const inputChar = String.fromCharCode($event.charCode);
+  //   if (!pattern.test(inputChar)) {
+  //     $event.preventDefault();
+  //   }
+  // }
 
   emailClear() {
     this.personelUserModel.email = '';

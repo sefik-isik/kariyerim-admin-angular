@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserDepartmentModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #companyUserName="ngModel"
               placeholder="Company User Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserDepartmentModel.email"
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -122,6 +124,7 @@
               #departmentName="ngModel"
               placeholder="Department Name"
               list="departmentNameDataList"
+              [disabled]="!companyUserDepartmentModel.companyUserName"
             />
             <datalist id="departmentNameDataList">
               <option

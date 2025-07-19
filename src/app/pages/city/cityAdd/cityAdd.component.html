@@ -63,6 +63,7 @@
               name="cityName"
               #cityName="ngModel"
               placeholder="City Name"
+              [disabled]="!cityModel.countryName"
             />
             <span class="input-group-text">
               <i
@@ -99,6 +100,8 @@
               name="cityCode"
               #cityCode="ngModel"
               placeholder="City Code"
+              placeholder="City Name"
+              [disabled]="!cityModel.cityName"
             />
             <span class="input-group-text">
               <i

@@ -22,6 +22,9 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="
+                setPersonelUserCv(personelUserCvWorkExperienceModel.email)
+              "
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +83,7 @@
               #cvName="ngModel"
               placeholder="Cv Name"
               list="cvNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.email"
             />
             <datalist id="cvNameDataList">
               <option
@@ -121,6 +125,7 @@
               name="companyName"
               #companyName="ngModel"
               placeholder="Company Name"
+              [disabled]="!personelUserCvWorkExperienceModel.cvName"
             />
             <span class="input-group-text">
               <i
@@ -157,6 +162,7 @@
               #positionName="ngModel"
               placeholder="Position"
               list="positionNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.companyName"
             />
             <datalist id="positionNameDataList">
               <option
@@ -199,6 +205,7 @@
               #positionLevelName="ngModel"
               placeholder="Position Level"
               list="positionLevelNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.positionName"
             />
             <datalist id="positionLevelNameDataList">
               <option
@@ -218,6 +225,85 @@
             <div
               class="error-message"
               *ngFor="let error of getValidationErrors(positionLevelName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Start Date</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.startDate"
+              type="date"
+              class="form-control"
+              name="startDate"
+              #startDate="ngModel"
+              [disabled]="!personelUserCvWorkExperienceModel.positionLevelName"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="startDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!startDate.valid && startDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(startDate)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">End Date</span>
+            <input
+              [required]="personelUserCvWorkExperienceModel.working == false"
+              minlength="3"
+              maxlength="50"
+              min="1950-01-01"
+              max="{{ today | date : 'yyyy/MM/dd' }}"
+              pattern=""
+              [(ngModel)]="personelUserCvWorkExperienceModel.endDate"
+              type="date"
+              class="form-control"
+              name="endDate"
+              #endDate="ngModel"
+              [disabled]="
+                this.personelUserCvWorkExperienceModel.working == true ||
+                !personelUserCvWorkExperienceModel.startDate
+              "
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="endDateClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!endDate.valid && endDate.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(endDate)"
             >
               {{ error }}
             </div>
@@ -257,83 +343,6 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Start Date</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              min="1950-01-01"
-              max="{{ today | date : 'yyyy/MM/dd' }}"
-              pattern=""
-              [(ngModel)]="personelUserCvWorkExperienceModel.startDate"
-              type="date"
-              class="form-control"
-              name="startDate"
-              #startDate="ngModel"
-            />
-
-            <span class="input-group-text">
-              <i
-                (click)="startDateClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!startDate.valid && startDate.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(startDate)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">End Date</span>
-            <input
-              [required]="personelUserCvWorkExperienceModel.working == false"
-              minlength="3"
-              maxlength="50"
-              min="1950-01-01"
-              max="{{ today | date : 'yyyy/MM/dd' }}"
-              pattern=""
-              [(ngModel)]="personelUserCvWorkExperienceModel.endDate"
-              type="date"
-              class="form-control"
-              name="endDate"
-              #endDate="ngModel"
-              [disabled]="
-                this.personelUserCvWorkExperienceModel.working == true
-              "
-            />
-
-            <span class="input-group-text">
-              <i
-                (click)="endDateClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!endDate.valid && endDate.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(endDate)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
 
       <div class="mb-3">
@@ -350,6 +359,7 @@
               #companySectorName="ngModel"
               placeholder="Sector Name"
               list="companySectorNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.startDate"
             />
             <datalist id="companySectorNameDataList">
               <option
@@ -390,6 +400,7 @@
               #departmentName="ngModel"
               placeholder="Department Name"
               list="departmentNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.companySectorName"
             />
             <datalist id="departmentNameDataList">
               <option
@@ -461,6 +472,7 @@
               #workingMethodName="ngModel"
               placeholder="Working Method Name"
               list="workingMethodNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.departmentName"
             />
             <datalist id="workingMethodNameDataList">
               <option
@@ -500,10 +512,11 @@
               name="countryName"
               #countryName="ngModel"
               placeholder="Country Name"
-              (change)="
-                getCities(personelUserCvWorkExperienceModel.countryName)
-              "
               list="countryNameDataList"
+              (change)="
+                setCountryName(personelUserCvWorkExperienceModel.countryName)
+              "
+              [disabled]="!personelUserCvWorkExperienceModel.workingMethodName"
             />
             <datalist id="countryNameDataList">
               <option
@@ -543,8 +556,9 @@
               name="cityName"
               #cityName="ngModel"
               placeholder="City Name"
-              (change)="getRegions(personelUserCvWorkExperienceModel.cityName)"
               list="cityNameDataList"
+              (change)="setCityName(personelUserCvWorkExperienceModel.cityName)"
+              [disabled]="!personelUserCvWorkExperienceModel.countryName"
             />
             <datalist id="cityNameDataList">
               <option
@@ -585,6 +599,7 @@
               #regionName="ngModel"
               placeholder="Region Name"
               list="regionNameDataList"
+              [disabled]="!personelUserCvWorkExperienceModel.cityName"
             />
             <datalist id="regionNameDataList">
               <option
@@ -615,7 +630,7 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Detail <br />{{ detailCount }} \ 2000</span
+              >Detail <br />{{ detailCount }} \ 0-2000</span
             >
             <textarea
               maxlength="2000"
@@ -626,6 +641,7 @@
               #detail="ngModel"
               style="height: 100px"
               (input)="count()"
+              [disabled]="!personelUserCvWorkExperienceModel.regionName"
             ></textarea>
             <span class="input-group-text">
               <i

@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserAdvertModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #companyUserName="ngModel"
               placeholder="Company Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserAdvertModel.email"
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -121,6 +123,7 @@
               name="advertName"
               #advertName="ngModel"
               placeholder="Advert Name"
+              [disabled]="!companyUserAdvertModel.companyUserName"
             />
             <span class="input-group-text">
               <i
@@ -154,6 +157,7 @@
             placeholder="Upload Image"
             (change)="onImageSelected($event)"
             aria-label="Upload File"
+            [disabled]="!companyUserAdvertModel.advertName"
           />
           <span class="input-group-text">
             <i
@@ -188,6 +192,7 @@
               name="advertImageOwnName"
               #advertImageOwnName="ngModel"
               placeholder="Image Name"
+              [disabled]="!companyUserAdvertModel.advertImageName"
             />
             <span class="input-group-text">
               <i
@@ -224,6 +229,7 @@
               #workAreaName="ngModel"
               placeholder="Work Area"
               list="workAreaNameDataList"
+              [disabled]="!companyUserAdvertModel.advertImageOwnName"
             />
             <datalist id="workAreaNameDataList">
               <option
@@ -266,6 +272,7 @@
               #workingMethodName="ngModel"
               placeholder="Working Method"
               list="workingMethodNameDataList"
+              [disabled]="!companyUserAdvertModel.workAreaName"
             />
             <datalist id="workingMethodNameDataList">
               <option
@@ -304,12 +311,13 @@
               [(ngModel)]="companyUserAdvertModel.departmentName"
               type="text"
               class="form-control"
-              name="companyUserDepartmentName"
-              #companyUserDepartmentName="ngModel"
+              name="departmentName"
+              #departmentName="ngModel"
               placeholder="Department"
-              list="companyUserDepartmentNameDataList"
+              list="departmentNameDataList"
+              [disabled]="!companyUserAdvertModel.workingMethodName"
             />
-            <datalist id="companyUserDepartmentNameDataList">
+            <datalist id="departmentNameDataList">
               <option
                 *ngFor="let companyUserDepartment of companyUserDepartments"
                 value="{{ companyUserDepartment.departmentName }}"
@@ -323,17 +331,10 @@
               ></i>
             </span>
           </div>
-          <div
-            *ngIf="
-              !companyUserDepartmentName.valid &&
-              companyUserDepartmentName.touched
-            "
-          >
+          <div *ngIf="!departmentName.valid && departmentName.touched">
             <div
               class="error-message"
-              *ngFor="
-                let error of getValidationErrors(companyUserDepartmentName)
-              "
+              *ngFor="let error of getValidationErrors(departmentName)"
             >
               {{ error }}
             </div>
@@ -357,6 +358,7 @@
               #positionName="ngModel"
               placeholder="Position"
               list="positionNameDataList"
+              [disabled]="!companyUserAdvertModel.departmentName"
             />
             <datalist id="positionNameDataList">
               <option
@@ -399,6 +401,7 @@
               #positionLevelName="ngModel"
               placeholder="Position Level"
               list="positionLevelNameDataList"
+              [disabled]="!companyUserAdvertModel.positionName"
             />
             <datalist id="positionLevelNameDataList">
               <option
@@ -441,6 +444,7 @@
               #experienceName="ngModel"
               placeholder="Experience"
               list="experienceNameDataList"
+              [disabled]="!companyUserAdvertModel.positionLevelName"
             />
             <datalist id="experienceNameDataList">
               <option
@@ -481,6 +485,7 @@
               #licenseDegreeName="ngModel"
               placeholder="License Degree"
               list="licenseDegreeNameDataList"
+              [disabled]="!companyUserAdvertModel.experienceName"
             />
             <datalist id="licenseDegreeNameDataList">
               <option
@@ -521,6 +526,7 @@
               #driverLicenceName="ngModel"
               placeholder="Driver Licence"
               list="driverLicenceNameDataList"
+              [disabled]="!companyUserAdvertModel.licenseDegreeName"
             />
             <datalist id="driverLicenceNameDataList">
               <option
@@ -561,6 +567,7 @@
               #languageName="ngModel"
               placeholder="Language"
               list="languageNameDataList"
+              [disabled]="!companyUserAdvertModel.driverLicenceName"
             />
             <datalist id="languageNameDataList">
               <option
@@ -601,6 +608,7 @@
               #languageLevelName="ngModel"
               placeholder="Language Level"
               list="languageLevelNameDataList"
+              [disabled]="!companyUserAdvertModel.languageName"
             />
             <datalist id="languageLevelNameDataList">
               <option

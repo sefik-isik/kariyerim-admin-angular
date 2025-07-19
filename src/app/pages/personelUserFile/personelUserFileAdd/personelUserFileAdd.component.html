@@ -4,7 +4,6 @@
   </div>
   <div class="card-body">
     <form #form="ngForm">
-      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
       <div class="mb-3" *ngIf="admin">
         <div class="form-group">
           <div class="input-group">
@@ -77,10 +76,11 @@
             placeholder="Upload File"
             (change)="onFileSelected($event)"
             aria-label="Upload File"
+            [disabled]="!personelUserFileModel.email"
           />
           <span class="input-group-text">
             <i
-              (click)="fileClear()"
+              (click)="fileNameClear()"
               class="bi bi-x-circle"
               style="cursor: pointer"
             ></i>
@@ -111,6 +111,7 @@
               name="fileOwnName"
               #fileOwnName="ngModel"
               placeholder="File Name"
+              [disabled]="!personelUserFileModel.fileName"
             />
             <span class="input-group-text">
               <i

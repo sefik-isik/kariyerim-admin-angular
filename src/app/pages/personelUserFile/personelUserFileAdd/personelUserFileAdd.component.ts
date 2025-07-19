@@ -54,8 +54,22 @@ export class PersonelUserFileAddComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = <File>event.target.files[0];
+  }
 
-    //const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!this.selectedFile) {
+      this.toastrService.error(
+        'Please select a file to upload',
+        'No file selected'
+      );
+      this.fileNameClear();
+      return;
+    }
+
     const allowedFileTypes = [
       'document/txt',
       'document/doc',
@@ -72,34 +86,32 @@ export class PersonelUserFileAddComponent implements OnInit {
         'Please select a file with .doc, .docx, rar, zip or .pdf extension',
         'Invalid file type'
       );
-    } else if (this.selectedFile.size > 5 * 1024 * 1024) {
+
+      this.fileNameClear();
+      return;
+    }
+
+    if (this.selectedFile.size > 5 * 1024 * 1024) {
       this.toastrService.error(
         'File size exceeds 5 MB. Please select a smaller file',
         'File too large'
       );
-    } else if (this.selectedFile.size < 1024) {
+      this.fileNameClear();
+      return;
+    }
+
+    if (this.selectedFile.size < 1024) {
       this.toastrService.error(
         'File size is too small. Please select a larger file',
         'File too small'
       );
-    } else {
-      this.toastrService.success('File selected successfully', 'Success');
-      this.fileName = this.selectedFile.name;
-    }
-  }
-
-  getValidationErrors(state: any) {
-    return this.validationService.getValidationErrors(state);
-  }
-
-  onSubmit(form: NgForm) {
-    if (!this.selectedFile) {
-      this.toastrService.error(
-        'Please select a file to upload',
-        'No file selected'
-      );
+      this.fileNameClear();
       return;
     }
+
+    this.toastrService.success('File selected successfully', 'Success');
+    this.fileName = this.selectedFile.name;
+
     if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
@@ -185,10 +197,8 @@ export class PersonelUserFileAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserFileModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserFileModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserFileModel.email = adminModel.email;
+          this.personelUserFileModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -239,7 +249,7 @@ export class PersonelUserFileAddComponent implements OnInit {
     this.personelUserFileModel.fileOwnName = '';
   }
 
-  fileClear() {
+  fileNameClear() {
     this.personelUserFileModel.fileName = '';
   }
 }

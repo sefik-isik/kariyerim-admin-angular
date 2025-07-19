@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserAddressModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #companyUserName="ngModel"
               placeholder="Company Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserAddressModel.email"
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -123,6 +125,7 @@
               placeholder="Country Name"
               (change)="getCities(companyUserAddressModel.countryName)"
               list="countryNameDataList"
+              [disabled]="!companyUserAddressModel.companyUserName"
             />
             <datalist id="countryNameDataList">
               <option
@@ -166,6 +169,7 @@
               placeholder="City Name"
               (change)="getRegions(companyUserAddressModel.cityName)"
               list="cityNameDataList"
+              [disabled]="!companyUserAddressModel.countryName"
             />
             <datalist id="cityNameDataList">
               <option
@@ -208,6 +212,7 @@
               #regionName="ngModel"
               placeholder="Region Name"
               list="regionNameDataList"
+              [disabled]="!companyUserAddressModel.cityName"
             />
             <datalist id="regionNameDataList">
               <option
@@ -251,6 +256,7 @@
               #addressDetail="ngModel"
               style="height: 100px"
               (input)="count()"
+              [disabled]="!companyUserAddressModel.regionName"
             ></textarea>
             <span class="input-group-text">
               <i

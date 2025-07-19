@@ -60,6 +60,9 @@ export class UniversityUpdateComponent implements OnInit {
         this.universityDTO.yearOfEstablishment = this.formatDate(
           this.universityDTO.yearOfEstablishment
         );
+        if (this.universityDTO.yearOfEstablishment == '1899-12-31') {
+          this.yearOfEstablishmentClear();
+        }
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -140,6 +143,10 @@ export class UniversityUpdateComponent implements OnInit {
   getCounts() {
     this.countService.getAll().subscribe(
       (response) => {
+        this.universityDTO.workerCountId = response.data.filter(
+          (f) => f.countValue == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.counts = response.data.filter((f) => f.countValue != '-');
       },
@@ -150,36 +157,39 @@ export class UniversityUpdateComponent implements OnInit {
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.universityDTO.sectorId = response.data.filter(
+          (f) => f.sectorName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-
-  getCountId(countValue: string): string {
-    if (countValue == null || countValue == '') {
-      countValue = '-';
-    }
-    const countId = this.counts.filter((c) => c.countValue === countValue)[0]
-      ?.id;
-
-    return countId;
-  }
-
   getSectorNameById(sectorId: string): string {
     return this.sectors.find((c) => c.id == sectorId)?.sectorName;
   }
-
   getSectorId(sectorName: string): string {
-    if (sectorName == null || sectorName == '') {
-      sectorName = '-';
-    }
-    const companyUserSectorId = this.sectors.filter(
-      (c) => c.sectorName === sectorName
-    )[0]?.id;
+    let sectorId: string;
 
-    return companyUserSectorId;
+    sectorName == null || sectorName == '' || sectorName == '-'
+      ? (sectorId = this.universityDTO.sectorId)
+      : (sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+          ?.id);
+
+    return sectorId;
+  }
+
+  getCountId(countValue: string): string {
+    let countId: string;
+
+    countValue == null || countValue == '' || countValue == '-'
+      ? (countId = this.universityDTO.workerCountId)
+      : (countId = this.counts.filter((c) => c.countValue === countValue)[0]
+          ?.id);
+
+    return countId;
   }
 
   countAddress() {

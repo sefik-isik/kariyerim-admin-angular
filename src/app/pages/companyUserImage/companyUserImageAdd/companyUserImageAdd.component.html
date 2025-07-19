@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserImageModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #companyUserName="ngModel"
               placeholder="Company User Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserImageModel.email"
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -119,6 +121,7 @@
             placeholder="Upload Image"
             (change)="onImageSelected($event)"
             aria-label="Upload File"
+            [disabled]="!companyUserImageModel.companyUserName"
           />
           <span class="input-group-text">
             <i
@@ -153,6 +156,7 @@
               name="imageOwnName"
               #imageOwnName="ngModel"
               placeholder="Image Name"
+              [disabled]="!companyUserImageModel.imageName"
             />
             <span class="input-group-text">
               <i

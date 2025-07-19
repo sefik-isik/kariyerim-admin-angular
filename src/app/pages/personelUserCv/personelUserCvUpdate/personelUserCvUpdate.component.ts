@@ -88,6 +88,10 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguages() {
     this.languageService.getAll().subscribe(
       (response) => {
+        this.personelUserCvDTO.languageId = response.data.filter(
+          (f) => f.languageName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.languages = response.data.filter((f) => f.languageName != '-');
       },
@@ -98,6 +102,10 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   getLanguageLevels() {
     this.languageLevelService.getAll().subscribe(
       (response) => {
+        this.personelUserCvDTO.languageLevelId = response.data.filter(
+          (f) => f.levelTitle == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
@@ -110,27 +118,27 @@ export class PersonelUserCvUpdateComponent implements OnInit {
   }
 
   getLanguageId(languageName: string): string {
-    if (languageName == null || languageName == '') {
-      languageName = '-';
-    }
+    let languageId: string;
 
-    const languageId = this.languages.filter(
-      (c) => c.languageName === languageName
-    )[0]?.id;
+    languageName == null || languageName == '' || languageName == '-'
+      ? (languageId = this.personelUserCvDTO.languageId)
+      : (languageId = this.languages.filter(
+          (c) => c.languageName === languageName
+        )[0]?.id);
 
     return languageId;
   }
 
   getLanguageLevelId(levelTitle: string): string {
-    if (levelTitle == null || levelTitle == '') {
-      levelTitle = '-';
-    }
+    let languageLevelId: string;
 
-    const cityId = this.languageLevels.filter(
-      (c) => c.levelTitle === levelTitle
-    )[0]?.id;
+    levelTitle == null || levelTitle == '' || levelTitle == '-'
+      ? (languageLevelId = this.personelUserCvDTO.languageLevelId)
+      : (languageLevelId = this.languageLevels.filter(
+          (c) => c.levelTitle === levelTitle
+        )[0]?.id);
 
-    return cityId;
+    return languageLevelId;
   }
 
   cvNameClear() {

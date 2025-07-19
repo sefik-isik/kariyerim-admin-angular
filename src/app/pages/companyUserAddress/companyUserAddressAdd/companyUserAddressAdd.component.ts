@@ -1,28 +1,27 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { City } from '../../../models/component/city';
+import { CompanyUser } from '../../../models/component/companyUser';
+import { CompanyUserAddress } from '../../../models/component/companyUserAddress';
+import { Country } from '../../../models/component/country';
+import { Region } from '../../../models/component/region';
+import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AuthService } from '../../../services/auth.service';
+import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
+import { CountryService } from '../../../services/country.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
+import { CityService } from './../../../services/city.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { RegionService } from './../../../services/region.service';
-import { CityService } from './../../../services/city.service';
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/component/country';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { City } from '../../../models/component/city';
-import { CompanyUserAddressService } from '../../../services/companyUserAddress.service';
-import { CompanyUserAddress } from '../../../models/component/companyUserAddress';
-import { Region } from '../../../models/component/region';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUserAddressDTO } from '../../../models/dto/companyUserAddressDTO';
-import { ValidationService } from '../../../services/validation.service';
-import { CompanyUser } from '../../../models/component/companyUser';
-import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-companyUserAddressAdd',
@@ -125,10 +124,8 @@ export class CompanyUserAddressAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.companyUserAddressModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.companyUserAddressModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.companyUserAddressModel.email = adminModel.email;
+          this.companyUserAddressModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -136,13 +133,22 @@ export class CompanyUserAddressAddComponent implements OnInit {
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    this.companyUserService.getAll(adminModel).subscribe(
+    this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserAddressModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setCompanyUserMail(email: string) {
+    this.companyUserAddressModel.email = email;
+
+    this.getAdminValues();
   }
 
   count() {

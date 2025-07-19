@@ -8,7 +8,7 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">Country</span>
+            <span class="input-group-text">Country Name</span>
             <input
               required
               minlength="3"
@@ -21,6 +21,7 @@
               #countryName="ngModel"
               placeholder="countryName"
               list="countryNameDataList"
+              (change)="setCountryName(regionModel.countryName)"
             />
             <datalist id="countryNameDataList">
               <option
@@ -49,7 +50,7 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
-            <span class="input-group-text">City</span>
+            <span class="input-group-text">City Name</span>
             <input
               required
               minlength="3"
@@ -62,6 +63,7 @@
               #cityName="ngModel"
               placeholder="City"
               list="cityNameDataList"
+              [disabled]="!regionModel.countryName"
             />
             <datalist id="cityNameDataList">
               <option
@@ -103,6 +105,7 @@
               name="regionName"
               #regionName="ngModel"
               placeholder="Region Name"
+              [disabled]="!regionModel.cityName"
             />
             <span class="input-group-text">
               <i

@@ -1,43 +1,42 @@
-import { DriverLicence } from './../../../models/component/driverLicence';
-import { Department } from './../../../models/component/department';
-import { Experience } from './../../../models/component/experience';
-import { WorkingMethod } from './../../../models/component/workingMethod';
-import { WorkArea } from './../../../models/component/workArea';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { CompanyUserService } from './../../../services/companyUser.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ValidationService } from '../../../services/validation.service';
-import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
-import { CompanyUserAdvertService } from '../../../services/companyUserAdvert.service';
-import { CompanyUserAdvert } from '../../../models/component/companyUserAdvert';
-import { WorkAreaService } from '../../../services/workArea.service';
-import { WorkingMethodService } from '../../../services/workingMethod.service';
-import { ExperienceService } from '../../../services/experience.service';
-import { LicenseDegreeService } from '../../../services/licenseDegree.service';
-import { LicenseDegree } from '../../../models/component/licenseDegree';
 import { HttpEventType } from '@angular/common/http';
-import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
-import { Position } from '../../../models/component/position';
-import { PositionLevel } from '../../../models/component/positionLevel';
-import { PositionService } from '../../../services/position.service';
-import { PositionLevelService } from '../../../services/positionLevel.service';
-import { LanguageService } from '../../../services/language.service';
-import { LanguageLevelService } from '../../../services/languageLevel.service';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { CompanyUserAdvert } from '../../../models/component/companyUserAdvert';
 import { Language } from '../../../models/component/language';
 import { LanguageLevel } from '../../../models/component/languageLevel';
-import { DriverLicenceService } from '../../../services/driverLicense.service';
+import { LicenseDegree } from '../../../models/component/licenseDegree';
+import { Position } from '../../../models/component/position';
+import { PositionLevel } from '../../../models/component/positionLevel';
+import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
+import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { AuthService } from '../../../services/auth.service';
+import { CompanyUserAdvertService } from '../../../services/companyUserAdvert.service';
+import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
+import { DriverLicenceService } from '../../../services/driverLicense.service';
+import { ExperienceService } from '../../../services/experience.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { LanguageService } from '../../../services/language.service';
+import { LanguageLevelService } from '../../../services/languageLevel.service';
+import { LicenseDegreeService } from '../../../services/licenseDegree.service';
+import { PositionService } from '../../../services/position.service';
+import { PositionLevelService } from '../../../services/positionLevel.service';
+import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
+import { WorkAreaService } from '../../../services/workArea.service';
+import { WorkingMethodService } from '../../../services/workingMethod.service';
+import { DriverLicence } from './../../../models/component/driverLicence';
+import { Experience } from './../../../models/component/experience';
+import { WorkArea } from './../../../models/component/workArea';
+import { WorkingMethod } from './../../../models/component/workingMethod';
+import { CompanyUserService } from './../../../services/companyUser.service';
 
 @Component({
   selector: 'app-companyUserAdvertAdd',
@@ -258,25 +257,29 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.companyUserAdvertModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.companyUserAdvertModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.companyUserAdvertModel.email = adminModel.email;
+          this.companyUserAdvertModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.companyUserAdvertModel.email);
-
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserAdvertModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+  setCompanyUserMail(email: string) {
+    this.companyUserAdvertModel.email = email;
+
+    this.getAdminValues();
   }
   getPositions() {
     this.positionService.getAll().subscribe(
@@ -287,17 +290,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-  getDriverLicences() {
-    this.driverLicenceService.getAll().subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.driverLicences = response.data.filter(
-          (f) => f.driverLicenceName != '-'
-        );
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
+
   getPositionLevels() {
     this.positionLevelService.getAll().subscribe(
       (response) => {
@@ -309,29 +302,21 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-  getLanguages() {
-    this.languageService.getAll().subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.languages = response.data.filter((f) => f.languageName != '-');
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-  getLanguageLevels() {
-    this.languageLevelService.getAll().subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
+
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.workAreas = response.data.filter((f) => f.areaName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+  getCompanyUserDepartments(adminModel: AdminModel) {
+    this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.companyUserDepartments = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -348,27 +333,68 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   getExperiences() {
     this.experienceService.getAll().subscribe(
       (response) => {
+        this.companyUserAdvertModel.experienceId = response.data.filter(
+          (f) => f.experienceName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.experiences = response.data.filter((f) => f.experienceName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-  getCompanyUserDepartments(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
+  getLicenseDegrees() {
+    this.lisenseDegreeService.getAll().subscribe(
       (response) => {
+        this.companyUserAdvertModel.licenseDegreeId = response.data.filter(
+          (f) => f.licenseDegreeName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
-        this.companyUserDepartments = response.data;
+        this.licenseDegrees = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getLicenseDegrees() {
-    this.lisenseDegreeService.getAll().subscribe(
+  getDriverLicences() {
+    this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.companyUserAdvertModel.driverLicenceId = response.data.filter(
+          (f) => f.driverLicenceName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
-        this.licenseDegrees = response.data;
+        this.driverLicences = response.data.filter(
+          (f) => f.driverLicenceName != '-'
+        );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getLanguages() {
+    this.languageService.getAll().subscribe(
+      (response) => {
+        this.companyUserAdvertModel.languageId = response.data.filter(
+          (f) => f.languageName == '-'
+        )[0]?.id;
+
+        this.validationService.handleSuccesses(response);
+        this.languages = response.data.filter((f) => f.languageName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+  getLanguageLevels() {
+    this.languageLevelService.getAll().subscribe(
+      (response) => {
+        this.companyUserAdvertModel.languageLevelId = response.data.filter(
+          (f) => f.levelTitle == '-'
+        )[0]?.id;
+
+        this.validationService.handleSuccesses(response);
+        this.languageLevels = response.data.filter((f) => f.levelTitle != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -428,55 +454,66 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   }
 
   getExperienceId(experienceName: string): string {
-    if (experienceName == null || experienceName == '') {
-      experienceName = '-';
-    }
-    const experienceId = this.experiences.filter(
-      (e) => e.experienceName === experienceName
-    )[0]?.id;
+    let experienceId: string;
+
+    experienceName == null || experienceName == '' || experienceName == '-'
+      ? (experienceId = this.companyUserAdvertModel.experienceId)
+      : (experienceId = this.experiences.filter(
+          (c) => c.experienceName === experienceName
+        )[0]?.id);
     return experienceId;
   }
 
   getLicenseDegreeId(licenseDegreeName: string): string {
-    if (licenseDegreeName == null || licenseDegreeName == '') {
-      licenseDegreeName = '-';
-    }
-    const licenceDegreeId = this.licenseDegrees.filter(
-      (l) => l.licenseDegreeName === licenseDegreeName
-    )[0]?.id;
+    let licenseDegreeId: string;
 
-    return licenceDegreeId;
+    licenseDegreeName == null ||
+    licenseDegreeName == '' ||
+    licenseDegreeName == '-'
+      ? (licenseDegreeId = this.companyUserAdvertModel.licenseDegreeId)
+      : (licenseDegreeId = this.licenseDegrees.filter(
+          (c) => c.licenseDegreeName === licenseDegreeName
+        )[0]?.id);
+
+    return licenseDegreeId;
   }
 
   getDriverLicenceId(driverLicenceName: string): string {
-    if (driverLicenceName == null || driverLicenceName == '') {
-      driverLicenceName = '-';
-    }
-    const languageLevelId = this.driverLicences.filter(
-      (l) => l.driverLicenceName === driverLicenceName
-    )[0]?.id;
+    let driverLicenceId: string;
 
-    return languageLevelId;
+    driverLicenceName == null ||
+    driverLicenceName == '' ||
+    driverLicenceName == '-'
+      ? (driverLicenceId = this.companyUserAdvertModel.driverLicenceId)
+      : (driverLicenceId = this.driverLicences.filter(
+          (c) => c.driverLicenceName === driverLicenceName
+        )[0]?.id);
+
+    return driverLicenceId;
   }
 
   getLanguageId(languageName: string): string {
-    if (languageName == null || languageName == '') {
-      languageName = '-';
-    }
-    const languageId = this.languages.filter(
-      (l) => l.languageName === languageName
-    )[0]?.id;
+    let languageId: string;
+
+    languageName == null || languageName == '' || languageName == '-'
+      ? (languageId = this.companyUserAdvertModel.languageId)
+      : (languageId = this.languages.filter(
+          (c) => c.languageName === languageName
+        )[0]?.id);
 
     return languageId;
   }
 
-  getLanguageLevelId(languageLevelName: string): string {
-    if (languageLevelName == null || languageLevelName == '') {
-      languageLevelName = '-';
-    }
-    const languageLevelId = this.languageLevels.filter(
-      (l) => l.levelTitle === languageLevelName
-    )[0]?.id;
+  getLanguageLevelId(languageLevelitle: string): string {
+    let languageLevelId: string;
+
+    languageLevelitle == null ||
+    languageLevelitle == '' ||
+    languageLevelitle == '-'
+      ? (languageLevelId = this.companyUserAdvertModel.languageLevelId)
+      : (languageLevelId = this.languageLevels.filter(
+          (c) => c.levelTitle === languageLevelitle
+        )[0]?.id);
 
     return languageLevelId;
   }

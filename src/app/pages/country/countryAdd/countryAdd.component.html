@@ -55,6 +55,7 @@
               name="countryIso"
               #countryIso="ngModel"
               placeholder="Country ISO"
+              [disabled]="!countryModel.countryName"
             />
             <span class="input-group-text">
               <i

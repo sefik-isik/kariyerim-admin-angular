@@ -55,6 +55,7 @@
               name="levelTitle"
               #levelTitle="ngModel"
               placeholder="Level Title"
+              [disabled]="!languageLevelModel.level"
             />
             <span class="input-group-text">
               <i
@@ -90,6 +91,7 @@
               name="levelDescription"
               #levelDescription="ngModel"
               placeholder="Level Description"
+              [disabled]="!languageLevelModel.levelTitle"
             />
             <span class="input-group-text">
               <i

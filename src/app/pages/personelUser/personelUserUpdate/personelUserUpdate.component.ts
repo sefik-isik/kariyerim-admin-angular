@@ -160,6 +160,10 @@ export class PersonelUserUpdateComponent implements OnInit {
   getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.personelUserDTO.birthPlaceId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.cities = response.data.filter((f) => f.cityName != '-');
       },
@@ -170,6 +174,10 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLicenseDegrees() {
     this.licenseDegreeService.getAll().subscribe(
       (response) => {
+        this.personelUserDTO.licenseDegreeId = response.data.filter(
+          (f) => f.licenseDegreeName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.licenseDegrees = response.data.filter(
           (f) => f.licenseDegreeName != '-'
@@ -182,6 +190,10 @@ export class PersonelUserUpdateComponent implements OnInit {
   getLDriverLicences() {
     this.driverLicenceService.getAll().subscribe(
       (response) => {
+        this.personelUserDTO.driverLicenceId = response.data.filter(
+          (f) => f.driverLicenceName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.driverLicences = response.data.filter(
           (f) => f.driverLicenceName != '-'
@@ -192,32 +204,39 @@ export class PersonelUserUpdateComponent implements OnInit {
   }
 
   getLicenseDegreeId(licenseDegreeName: string): string {
-    if (licenseDegreeName == null || licenseDegreeName == '') {
-      licenseDegreeName = '-';
-    }
-    const licenseDegreeId = this.licenseDegrees.filter(
-      (c) => c.licenseDegreeName === licenseDegreeName
-    )[0]?.id;
+    let licenseDegreeId: string;
+
+    licenseDegreeName == null ||
+    licenseDegreeName == '' ||
+    licenseDegreeName == '-'
+      ? (licenseDegreeId = this.personelUserDTO.licenseDegreeId)
+      : (licenseDegreeId = this.licenseDegrees.filter(
+          (c) => c.licenseDegreeName === licenseDegreeName
+        )[0]?.id);
 
     return licenseDegreeId;
   }
 
   getDriverLicenceId(driverLicenceName: string): string {
-    if (driverLicenceName == null || driverLicenceName == '') {
-      driverLicenceName = '-';
-    }
-    const driverLicenceId = this.driverLicences.filter(
-      (c) => c.driverLicenceName === driverLicenceName
-    )[0]?.id;
+    let driverLicenceId: string;
+
+    driverLicenceName == null ||
+    driverLicenceName == '' ||
+    driverLicenceName == '-'
+      ? (driverLicenceId = this.personelUserDTO.driverLicenceId)
+      : (driverLicenceId = this.driverLicences.filter(
+          (c) => c.driverLicenceName === driverLicenceName
+        )[0]?.id);
 
     return driverLicenceId;
   }
 
   getBirthPlaceId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.personelUserDTO.birthPlaceId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
 
     return cityId;
   }
@@ -230,13 +249,13 @@ export class PersonelUserUpdateComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  onlyNumberKey($event: KeyboardEvent) {
-    const pattern = /[0-9\ ]/;
-    const inputChar = String.fromCharCode($event.charCode);
-    if (!pattern.test(inputChar)) {
-      $event.preventDefault();
-    }
-  }
+  // onlyNumberKey($event: KeyboardEvent) {
+  //   const pattern = /[0-9\ ]/;
+  //   const inputChar = String.fromCharCode($event.charCode);
+  //   if (!pattern.test(inputChar)) {
+  //     $event.preventDefault();
+  //   }
+  // }
 
   emailClear() {
     this.personelUserDTO.email = '';

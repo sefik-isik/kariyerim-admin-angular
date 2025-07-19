@@ -33,6 +33,7 @@ import { PersonelUserCvService } from './../../../services/personelUserCv.servic
 import { SectorService } from './../../../services/sectorService';
 import { WorkingMethodService } from './../../../services/workingMethod.service';
 import { AuthService } from '../../../services/auth.service';
+import { PersonelUser } from '../../../models/component/personelUser';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceAdd',
@@ -44,7 +45,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   personelUserCvWorkExperienceModel: PersonelUserCvWorkExperienceDTO =
     {} as PersonelUserCvWorkExperienceDTO;
   userDTOs: UserDTO[] = [];
-  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUsers: PersonelUser[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   departments: Department[] = [];
   companySectors: Sector[] = [];
@@ -88,8 +89,8 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     this.getPositions();
     this.getPositionLevels();
     this.getCountries();
-    this.getCities('');
-    this.getRegions('');
+    this.getCities();
+    this.getRegions();
     this.getWorkingMethods();
     this.getDepartments();
   }
@@ -188,6 +189,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
+        this.getPersonelUserCvs(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -200,10 +202,8 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserCvWorkExperienceModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserCvWorkExperienceModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserCvWorkExperienceModel.email = adminModel.email;
+          this.personelUserCvWorkExperienceModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -214,7 +214,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserDTOs = response.data;
+        this.personelUsers = response.data;
         this.getPersonelUserCvs(adminModel);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -225,15 +225,26 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserCvs = response.data;
+        this.personelUserCvs = response.data.filter(
+          (f) => f.email == this.personelUserCvWorkExperienceModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
+  setPersonelUserCv(email: string) {
+    this.personelUserCvWorkExperienceModel.email = email;
+
+    this.getAdminValues();
+  }
+
   getSectors() {
     this.sectorService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.companySectorId =
+          response.data.filter((f) => f.sectorName == '-')[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.companySectors = response.data.filter((f) => f.sectorName != '-');
       },
@@ -266,6 +277,9 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getWorkingMethods() {
     this.workingMethodService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.workingMethodId =
+          response.data.filter((f) => f.methodName == '-')[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.workingMethods = response.data.filter((f) => f.methodName != '-');
       },
@@ -276,6 +290,9 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getDepartments() {
     this.departmentService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.departmentId =
+          response.data.filter((f) => f.departmentName == '-')[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.departments = response.data
           .filter((f) => f.isCompany === true)
@@ -288,6 +305,10 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   getCountries() {
     this.countryService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.countryId = response.data.filter(
+          (f) => f.countryName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
         this.countries = response.data.filter((f) => f.countryName != '-');
       },
@@ -295,97 +316,64 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     );
   }
 
-  getCities(countryName: string) {
+  setCountryName(countryName: string) {
+    this.personelUserCvWorkExperienceModel.countryName = countryName;
+
+    this.getCities();
+  }
+
+  getCities() {
     this.cityService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.cityId = response.data.filter(
+          (f) => f.cityName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
-        if (countryName == '-' || countryName == '') {
-          this.cities = response.data;
-        } else {
-          this.cities = response.data.filter(
-            (c) => c.countryId === this.getCountryId(countryName)
-          );
-        }
+        this.cities = response.data.filter(
+          (c) =>
+            c.countryId ===
+            this.getCountryId(
+              this.personelUserCvWorkExperienceModel.countryName
+            )
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getRegions(cityName: string) {
+  setCityName(cityName: string) {
+    this.personelUserCvWorkExperienceModel.cityName = cityName;
+
+    this.getRegions();
+  }
+
+  getRegions() {
     this.regionService.getAll().subscribe(
       (response) => {
+        this.personelUserCvWorkExperienceModel.regionId = response.data.filter(
+          (f) => f.regionName == '-'
+        )[0]?.id;
+
         this.validationService.handleSuccesses(response);
-        if (cityName == '-' || cityName == '') {
-          this.regions = response.data.filter((f) => f.regionName != '-');
-        } else {
-          this.regions = response.data
-            .filter((r) => r.cityId === this.getCityId(cityName))
-            .filter((f) => f.regionName != '-');
-        }
+        this.regions = response.data
+          .filter(
+            (r) =>
+              r.cityId ===
+              this.getCityId(this.personelUserCvWorkExperienceModel.cityName)
+          )
+          .filter((f) => f.regionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
   getPersonelUserId(email: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
+    const personelUserId = this.personelUsers.filter(
       (c) => c.email === email
     )[0]?.id;
 
     return personelUserId;
-  }
-
-  getCompanySectorId(companySectorName: string) {
-    if (companySectorName == null || companySectorName == '') {
-      companySectorName = '-';
-    }
-    const companySectorId = this.companySectors.filter(
-      (c) => c.sectorName === companySectorName
-    )[0]?.id;
-
-    return companySectorId;
-  }
-
-  getCountryId(countryName: string): string {
-    if (countryName == null || countryName == '') {
-      countryName = '-';
-    }
-    const countryId = this.countries.filter(
-      (c) => c.countryName === countryName
-    )[0]?.id;
-
-    return countryId;
-  }
-
-  getCityId(cityName: string): string {
-    if (cityName == null || cityName == '') {
-      cityName = '-';
-    }
-    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
-
-    return cityId;
-  }
-
-  getRegionId(regionName: string): string {
-    if (regionName == null || regionName == '') {
-      regionName = '-';
-    }
-    const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
-      ?.id;
-
-    return regionId;
-  }
-
-  getPositionId(positionName: string): string {
-    const positionId = this.positions.filter(
-      (c) => c.positionName === positionName
-    )[0]?.id;
-
-    return positionId;
-  }
-
-  count() {
-    this.detailCount = this.personelUserCvWorkExperienceModel.detail.length;
   }
 
   getUserId(userEmail: string): string {
@@ -395,25 +383,30 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   }
 
   getDepartmentId(departmentName: string): string {
-    if (departmentName == null || departmentName == '') {
-      departmentName = '-';
-    }
-    const departmentId = this.departments.filter(
-      (c) => c.departmentName === departmentName
-    )[0]?.id;
+    let departmentId: string;
+
+    departmentName == null || departmentName == '' || departmentName == '-'
+      ? (departmentId = this.personelUserCvWorkExperienceModel.departmentId)
+      : (departmentId = this.departments.filter(
+          (c) => c.departmentName === departmentName
+        )[0]?.id);
 
     return departmentId;
   }
 
   getWorkingMethodId(workingMethodName: string): string {
-    if (workingMethodName == null || workingMethodName == '') {
-      workingMethodName = '-';
-    }
-    const departmentId = this.workingMethods.filter(
-      (c) => c.methodName === workingMethodName
-    )[0]?.id;
+    let workingMethodtId: string;
 
-    return departmentId;
+    workingMethodName == null ||
+    workingMethodName == '' ||
+    workingMethodName == '-'
+      ? (workingMethodtId =
+          this.personelUserCvWorkExperienceModel.workingMethodId)
+      : (workingMethodtId = this.workingMethods.filter(
+          (c) => c.methodName === workingMethodName
+        )[0]?.id);
+
+    return workingMethodtId;
   }
 
   getPersonelUserCvId(cvName: string): string {
@@ -423,13 +416,71 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
 
     return personelUserId;
   }
+  getPositionId(positionName: string): string {
+    const positionId = this.positions.filter(
+      (c) => c.positionName === positionName
+    )[0]?.id;
 
+    return positionId;
+  }
   getPositionLevelId(positionLevelName: string): string {
     const positionLevelId = this.positionLevels.filter(
       (c) => c.positionLevelName === positionLevelName
     )[0]?.id;
 
     return positionLevelId;
+  }
+
+  getCompanySectorId(companySectorName: string) {
+    let companySectorId: string;
+
+    companySectorName == null ||
+    companySectorName == '' ||
+    companySectorName == '-'
+      ? (companySectorId =
+          this.personelUserCvWorkExperienceModel.companySectorId)
+      : (companySectorId = this.companySectors.filter(
+          (c) => c.sectorName === companySectorName
+        )[0]?.id);
+
+    return companySectorId;
+  }
+
+  getCountryId(countryName: string): string {
+    let countryId: string;
+
+    countryName == null || countryName == '' || countryName == '-'
+      ? (countryId = this.personelUserCvWorkExperienceModel.countryId)
+      : (countryId = this.countries.filter(
+          (c) => c.countryName === countryName
+        )[0]?.id);
+
+    return countryId;
+  }
+
+  getCityId(cityName: string): string {
+    let cityId: string;
+
+    cityName == null || cityName == '' || cityName == '-'
+      ? (cityId = this.personelUserCvWorkExperienceModel.cityId)
+      : (cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id);
+
+    return cityId;
+  }
+
+  getRegionId(regionName: string): string {
+    let regionId: string;
+
+    regionName == null || regionName == '' || regionName == '-'
+      ? (regionId = this.personelUserCvWorkExperienceModel.regionId)
+      : (regionId = this.regions.filter((c) => c.regionName === regionName)[0]
+          ?.id);
+
+    return regionId;
+  }
+
+  count() {
+    this.detailCount = this.personelUserCvWorkExperienceModel.detail.length;
   }
 
   emailClear() {

@@ -22,6 +22,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { PersonelUser } from '../../../models/component/personelUser';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
@@ -32,7 +33,7 @@ import { AuthService } from '../../../services/auth.service';
 export class PersonelUserAddressAddComponent implements OnInit {
   personelUserAddressModel: PersonelUserAddressDTO =
     {} as PersonelUserAddressDTO;
-  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUsers: PersonelUser[] = [];
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
@@ -128,8 +129,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserAddressModel.email = response.data[0].email;
-          this.personelUserAddressModel.userId = response.data[0].id;
+          this.personelUserAddressModel.email = adminModel.email;
+          this.personelUserAddressModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -140,7 +141,8 @@ export class PersonelUserAddressAddComponent implements OnInit {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserDTOs = response.data;
+
+        this.personelUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -219,7 +221,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   getPersonelUserId(userId: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
+    const personelUserId = this.personelUsers.filter(
       (c) => c.userId === userId
     )[0]?.id;
 

@@ -63,6 +63,7 @@
               #facultyName="ngModel"
               placeholder="Faculty Name"
               list="facultyNameDataList"
+              [disabled]="!universityDepartmentModel.universityName"
             />
             <datalist id="facultyNameDataList">
               <option
@@ -105,6 +106,7 @@
               #departmentName="ngModel"
               placeholder="Department Name"
               list="departmentNameDataList"
+              [disabled]="!universityDepartmentModel.facultyName"
             />
             <datalist id="departmentNameDataList">
               <option

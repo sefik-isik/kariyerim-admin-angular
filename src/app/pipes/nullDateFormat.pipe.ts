@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NullDateFormatPipe implements PipeTransform {
   transform(value: string): string {
     let result: string = '';
-    if (value == '31/12/1899') {
+    if (value.includes('1899')) {
       result = '-';
     } else {
       result = value;

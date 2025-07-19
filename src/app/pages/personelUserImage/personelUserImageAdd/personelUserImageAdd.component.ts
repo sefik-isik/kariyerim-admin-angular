@@ -1,29 +1,22 @@
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormGroup,
-  Validators,
-  FormBuilder,
-  NgForm,
-} from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { PersonelUserImageService } from '../../../services/personelUserImage.service';
-import { PersonelUserImage } from '../../../models/component/personelUserImage';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { PersonelUser } from '../../../models/component/personelUser';
+import { PersonelUserImage } from '../../../models/component/personelUserImage';
 import { PersonelUserImageDTO } from '../../../models/dto/personelUserImageDTO';
-import { ValidationService } from '../../../services/validation.service';
+import { UserDTO } from '../../../models/dto/userDTO';
 import { AuthService } from '../../../services/auth.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserImageService } from '../../../services/personelUserImage.service';
+import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserImageAdd',
@@ -37,7 +30,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   imagePath: string | null = null;
   imageName: string | null = null;
   imageOwnName: string | null = null;
-  personelUserDTOs: PersonelUserDTO[] = [];
+  personelUsers: PersonelUser[] = [];
   userDTOs: UserDTO[] = [];
   admin: boolean = false;
   componentTitle = 'Personel User Image Add Form';
@@ -62,28 +55,6 @@ export class PersonelUserImageAddComponent implements OnInit {
 
   onImageSelected(event: any) {
     this.selectedImage = <File>event.target.files[0];
-
-    const allowedImageTypes = ['image/png', 'image/jpeg', 'image/gif'];
-
-    if (!allowedImageTypes.includes(this.selectedImage.type)) {
-      this.toastrService.error(
-        'Please select a image with .png, .jpeg, or .gif extension',
-        'Invalid image type'
-      );
-    } else if (this.selectedImage.size > 5 * 1024 * 1024) {
-      this.toastrService.error(
-        'Image size exceeds 5 MB. Please select a smaller image',
-        'Image too large'
-      );
-    } else if (this.selectedImage.size < 1024) {
-      this.toastrService.error(
-        'Image size is too small. Please select a larger image',
-        'Image too small'
-      );
-    } else {
-      this.toastrService.success('File selected successfully', 'Success');
-      this.imageName = this.selectedImage.name;
-    }
   }
 
   getValidationErrors(state: any) {
@@ -91,16 +62,56 @@ export class PersonelUserImageAddComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!form.valid) {
-      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
-      return;
-    }
-
     if (!this.selectedImage) {
       this.toastrService.error(
         'Please select a image to upload',
         'No image selected'
       );
+      this.imageNameClear();
+      return;
+    }
+
+    const allowedImageTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/gif',
+      'image/webp',
+    ];
+
+    if (!allowedImageTypes.includes(this.selectedImage.type)) {
+      this.toastrService.error(
+        'Please select a image with .png, .jpeg, webp or .gif extension',
+        'Invalid image type'
+      );
+
+      this.imageNameClear();
+      return;
+    }
+
+    if (this.selectedImage.size > 5 * 1024 * 1024) {
+      this.toastrService.error(
+        'Image size exceeds 5 MB. Please select a smaller image',
+        'Image too large'
+      );
+
+      this.imageNameClear();
+      return;
+    }
+    if (this.selectedImage.size < 1024) {
+      this.toastrService.error(
+        'Image size is too small. Please select a larger image',
+        'Image too small'
+      );
+
+      this.imageNameClear();
+      return;
+    }
+
+    this.toastrService.success('File selected successfully', 'Success');
+    this.imageName = this.selectedImage.name;
+
+    if (!form.valid) {
+      this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
     }
 
@@ -184,10 +195,8 @@ export class PersonelUserImageAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserImageModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserImageModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserImageModel.email = adminModel.email;
+          this.personelUserImageModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -199,7 +208,7 @@ export class PersonelUserImageAddComponent implements OnInit {
     this.personelUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserDTOs = response.data;
+        this.personelUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -218,7 +227,7 @@ export class PersonelUserImageAddComponent implements OnInit {
   }
 
   getPersonelUserId(userEmail: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
+    const personelUserId = this.personelUsers.filter(
       (c) => c.email === userEmail
     )[0]?.id;
 

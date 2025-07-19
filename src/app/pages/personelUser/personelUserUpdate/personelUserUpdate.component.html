@@ -34,6 +34,7 @@
               name="identityNumber"
               #identityNumber="ngModel"
               placeholder="identity Number"
+              [disabled]="!personelUserDTO.email"
             />
             <span class="input-group-text">
               <i
@@ -68,6 +69,7 @@
               #licenseDegreeName="ngModel"
               placeholder="Licence Degree Name"
               list="licenseDegreeNameDataList"
+              [disabled]="!personelUserDTO.identityNumber"
             />
             <datalist id="licenseDegreeNameDataList">
               <option
@@ -108,6 +110,7 @@
               #driverLicenceName="ngModel"
               placeholder="Driver Licence Name"
               list="driverLicenceNameDataList"
+              [disabled]="!personelUserDTO.licenseDegreeName"
             />
             <datalist id="driverLicenceNameDataList">
               <option
@@ -148,6 +151,7 @@
               #birthPlaceName="ngModel"
               placeholder="Birth Place Name"
               list="birthPlaceNameDataList"
+              [disabled]="!personelUserDTO.driverLicenceName"
             />
             <datalist id="birthPlaceNameDataList">
               <option
@@ -188,6 +192,7 @@
               class="form-control"
               name="dateOfBirth"
               #dateOfBirth="ngModel"
+              [disabled]="!personelUserDTO.birthPlaceName"
             />
 
             <span class="input-group-text">

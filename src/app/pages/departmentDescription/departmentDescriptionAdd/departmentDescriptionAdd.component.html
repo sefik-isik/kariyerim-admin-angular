@@ -62,6 +62,7 @@
               name="title"
               #title="ngModel"
               placeholder="Title"
+              [disabled]="!departmentDescriptionModel.departmentName"
             />
             <span class="input-group-text">
               <i
@@ -99,6 +100,7 @@
               #description="ngModel"
               style="height: 100px"
               (input)="countDescription()"
+              [disabled]="!departmentDescriptionModel.title"
             ></textarea>
             <span class="input-group-text">
               <i

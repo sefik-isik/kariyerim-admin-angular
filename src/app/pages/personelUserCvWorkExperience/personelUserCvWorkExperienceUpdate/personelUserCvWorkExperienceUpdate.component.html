@@ -421,7 +421,9 @@
               name="countryName"
               #countryName="ngModel"
               placeholder="Country Name"
-              (change)="getCities(personelUserCvWorkExperienceDTO.countryName)"
+              (change)="
+                setCountryName(personelUserCvWorkExperienceDTO.countryName)
+              "
               list="countryNameDataList"
             />
             <datalist id="countryNameDataList">
@@ -462,7 +464,7 @@
               name="cityName"
               #cityName="ngModel"
               placeholder="City Name"
-              (change)="getRegions(personelUserCvWorkExperienceDTO.cityName)"
+              (change)="setCityName(personelUserCvWorkExperienceDTO.cityName)"
               list="cityNameDataList"
             />
             <datalist id="cityNameDataList">

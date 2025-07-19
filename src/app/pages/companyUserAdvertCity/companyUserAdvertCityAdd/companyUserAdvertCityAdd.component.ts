@@ -119,10 +119,8 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.companyUserAdvertCityModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.companyUserAdvertCityModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.companyUserAdvertCityModel.email = adminModel.email;
+          this.companyUserAdvertCityModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -130,22 +128,40 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.companyUserAdvertCityModel.email);
-
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserAdvertCityModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+  setCompanyUserMail(email: string) {
+    this.companyUserAdvertCityModel.email = email;
+
+    this.getAdminValues();
+  }
+
+  setCompanyUserName(name: string) {
+    this.companyUserAdvertCityModel.companyUserName = name;
+
+    this.getAdminValues();
   }
 
   getCompanyUserAdverts(adminModel: AdminModel) {
     this.companyUserAdvertService.getAll(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUserAdverts = response.data;
+        this.companyUserAdverts = response.data.filter(
+          (f) =>
+            f.companyUserId ==
+            this.getCompanyUserId(
+              this.companyUserAdvertCityModel.companyUserName
+            )
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

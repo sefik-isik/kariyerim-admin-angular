@@ -22,6 +22,9 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="
+                setCompanyUserMail(companyUserAdvertJobDescriptionModel.email)
+              "
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +83,10 @@
               #companyUserName="ngModel"
               placeholder="Company Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserAdvertJobDescriptionModel.email"
+              (change)="
+                setCompanyUserMail(companyUserAdvertJobDescriptionModel.email)
+              "
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -122,6 +129,7 @@
               #advertName="ngModel"
               placeholder="Company User Advert Name"
               list="advertNameDataList"
+              [disabled]="!companyUserAdvertJobDescriptionModel.companyUserName"
             />
             <datalist id="advertNameDataList">
               <option
@@ -163,6 +171,7 @@
               name="title"
               #title="ngModel"
               placeholder="Title"
+              [disabled]="!companyUserAdvertJobDescriptionModel.advertName"
             />
             <span class="input-group-text">
               <i
@@ -200,6 +209,7 @@
               #description="ngModel"
               style="height: 100px"
               (input)="count()"
+              [disabled]="!companyUserAdvertJobDescriptionModel.title"
             ></textarea>
             <span class="input-group-text">
               <i

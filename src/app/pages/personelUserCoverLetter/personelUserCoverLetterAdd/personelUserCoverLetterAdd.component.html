@@ -79,6 +79,7 @@
               name="title"
               #title="ngModel"
               placeholder="Title"
+              [disabled]="!personelUserCoverLetterMOdel.email"
             />
             <span class="input-group-text">
               <i
@@ -101,7 +102,7 @@
 
       <div class="input-group mb-3">
         <span class="input-group-text"
-          >Description <br />{{ descriptionCount }} \ 2000</span
+          >Description <br />{{ descriptionCount }} \ 100-2000</span
         >
 
         <textarea
@@ -115,6 +116,7 @@
           #description="ngModel"
           style="height: 100px"
           (input)="count()"
+          [disabled]="!personelUserCoverLetterMOdel.title"
         ></textarea>
         <span class="input-group-text">
           <i

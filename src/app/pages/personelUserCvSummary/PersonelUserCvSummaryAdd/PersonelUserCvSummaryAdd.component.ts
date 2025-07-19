@@ -103,6 +103,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
+        this.getPersonelUserCvs(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -115,10 +116,8 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserCvSummaryModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.personelUserCvSummaryModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.personelUserCvSummaryModel.email = adminModel.email;
+          this.personelUserCvSummaryModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -130,28 +129,27 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.personelUserDTOs = response.data;
-        this.getPersonelUserCvs(adminModel);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
-  }
-
-  getPersonelUserId(email: string): string {
-    const personelUserId = this.personelUserDTOs.filter(
-      (c) => c.email === email
-    )[0]?.id;
-
-    return personelUserId;
   }
 
   getPersonelUserCvs(adminModel: AdminModel) {
     this.personelUserCvService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.personelUserCvs = response.data;
+        this.personelUserCvs = response.data.filter(
+          (f) => f.email == this.personelUserCvSummaryModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setPersonelUserCv(email: string) {
+    this.personelUserCvSummaryModel.email = email;
+
+    this.getAdminValues();
   }
 
   count() {
@@ -169,6 +167,14 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
     }
 
     return userId;
+  }
+
+  getPersonelUserId(email: string): string {
+    const personelUserId = this.personelUserDTOs.filter(
+      (c) => c.email === email
+    )[0]?.id;
+
+    return personelUserId;
   }
 
   getPersonelUserCvId(cvName: string): string {

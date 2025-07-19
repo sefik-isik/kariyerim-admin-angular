@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setPersonelUserCv(personelUserCvSummaryModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,7 @@
               #cvName="ngModel"
               placeholder="Cv Name"
               list="cvNameDataList"
+              [disabled]="!personelUserCvSummaryModel.email"
             />
             <datalist id="cvNameDataList">
               <option
@@ -121,6 +123,7 @@
               name="cvSummaryTitle"
               #cvSummaryTitle="ngModel"
               placeholder="Cv Summary Title"
+              [disabled]="!personelUserCvSummaryModel.cvName"
             />
             <span class="input-group-text">
               <i
@@ -145,7 +148,7 @@
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Detail <br />{{ detailCount }} \ 2000</span
+              >Detail <br />{{ detailCount }} \ 100-2000</span
             >
             <textarea
               required
@@ -158,6 +161,7 @@
               #detail="ngModel"
               style="height: 100px"
               (input)="count()"
+              [disabled]="!personelUserCvSummaryModel.cvSummaryTitle"
             ></textarea>
             <span class="input-group-text">
               <i

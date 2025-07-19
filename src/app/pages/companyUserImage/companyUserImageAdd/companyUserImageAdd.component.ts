@@ -54,6 +54,21 @@ export class CompanyUserImageAddComponent implements OnInit {
 
   onImageSelected(event: any) {
     this.selectedImage = <File>event.target.files[0];
+  }
+
+  getValidationErrors(state: any) {
+    return this.validationService.getValidationErrors(state);
+  }
+
+  onSubmit(form: NgForm) {
+    if (!this.selectedImage) {
+      this.toastrService.error(
+        'Please select a image to upload',
+        'No image selected'
+      );
+      this.imageNameClear();
+      return;
+    }
 
     const allowedImageTypes = [
       'image/png',
@@ -67,34 +82,32 @@ export class CompanyUserImageAddComponent implements OnInit {
         'Please select a image with .png, .jpeg, webp or .gif extension',
         'Invalid image type'
       );
-    } else if (this.selectedImage.size > 5 * 1024 * 1024) {
+
+      this.imageNameClear();
+      return;
+    }
+
+    if (this.selectedImage.size > 5 * 1024 * 1024) {
       this.toastrService.error(
         'Image size exceeds 5 MB. Please select a smaller image',
         'Image too large'
       );
-    } else if (this.selectedImage.size < 1024) {
+
+      this.imageNameClear();
+      return;
+    }
+    if (this.selectedImage.size < 1024) {
       this.toastrService.error(
         'Image size is too small. Please select a larger image',
         'Image too small'
       );
-    } else {
-      this.toastrService.success('File selected successfully', 'Success');
-      this.imageName = this.selectedImage.name;
-    }
-  }
 
-  getValidationErrors(state: any) {
-    return this.validationService.getValidationErrors(state);
-  }
-
-  onSubmit(form: NgForm) {
-    if (!this.selectedImage) {
-      this.toastrService.error(
-        'Please select a image to upload',
-        'No image selected'
-      );
+      this.imageNameClear();
       return;
     }
+
+    this.toastrService.success('File selected successfully', 'Success');
+    this.imageName = this.selectedImage.name;
 
     if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
@@ -180,10 +193,8 @@ export class CompanyUserImageAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.companyUserImageModel.email =
-            this.localStorageService.getFromLocalStorage('email');
-          this.companyUserImageModel.userId =
-            this.localStorageService.getFromLocalStorage('id');
+          this.companyUserImageModel.email = adminModel.email;
+          this.companyUserImageModel.userId = adminModel.id;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -191,14 +202,22 @@ export class CompanyUserImageAddComponent implements OnInit {
   }
 
   getCompanyUsers(adminModel: AdminModel) {
-    const userId = this.getUserId(this.companyUserImageModel.email);
     this.companyUserService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUsers = response.data;
+
+        this.companyUsers = response.data.filter(
+          (f) => f.email == this.companyUserImageModel.email
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setCompanyUserMail(email: string) {
+    this.companyUserImageModel.email = email;
+
+    this.getAdminValues();
   }
 
   getUserId(userEmail: string): string {

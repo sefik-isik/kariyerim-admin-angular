@@ -86,12 +86,12 @@ export class TaxOfficeAddComponent implements OnInit {
     );
   }
 
-  getRegions(cityName: string) {
+  getRegions() {
     this.regionService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         if (this.taxOfficeModel.cityName) {
-          const cityId = this.getCityId(cityName);
+          const cityId = this.getCityId(this.taxOfficeModel.cityName);
           this.regions = response.data
             .filter((f) => f.cityId == cityId)
             .filter((f) => f.regionName != '-');
@@ -99,6 +99,12 @@ export class TaxOfficeAddComponent implements OnInit {
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
+  }
+
+  setRegionName(cityName: string) {
+    this.taxOfficeModel.cityName = cityName;
+
+    this.getRegions();
   }
 
   getCityId(cityName: string): string {

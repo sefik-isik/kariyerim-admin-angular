@@ -60,6 +60,7 @@
             placeholder="Upload Image"
             (change)="onImageSelected($event)"
             aria-label="Upload File"
+            [disabled]="!universityImageModel.universityName"
           />
           <span class="input-group-text">
             <i
@@ -94,6 +95,7 @@
               name="imageOwnName"
               #imageOwnName="ngModel"
               placeholder="Image Name"
+              [disabled]="!universityImageModel.imageName"
             />
             <span class="input-group-text">
               <i

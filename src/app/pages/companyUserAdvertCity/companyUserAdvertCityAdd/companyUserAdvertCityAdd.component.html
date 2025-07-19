@@ -22,6 +22,7 @@
               #email="ngModel"
               placeholder="email"
               list="emailDataList"
+              (change)="setCompanyUserMail(companyUserAdvertCityModel.email)"
             />
             <datalist id="emailDataList">
               <option
@@ -80,6 +81,10 @@
               #companyUserName="ngModel"
               placeholder="Company Name"
               list="companyUserNameDataList"
+              [disabled]="!companyUserAdvertCityModel.email"
+              (change)="
+                setCompanyUserName(companyUserAdvertCityModel.companyUserName)
+              "
             />
             <datalist id="companyUserNameDataList">
               <option
@@ -122,6 +127,7 @@
               #advertName="ngModel"
               placeholder="Company User Advert Name"
               list="advertNameDataList"
+              [disabled]="!companyUserAdvertCityModel.companyUserName"
             />
             <datalist id="advertNameDataList">
               <option
@@ -164,6 +170,7 @@
               #workCityName="ngModel"
               placeholder="Work City Name"
               list="workCityNameDataList"
+              [disabled]="!companyUserAdvertCityModel.advertName"
             />
             <datalist id="workCityNameDataList">
               <option
