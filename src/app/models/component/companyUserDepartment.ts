@@ -1,5 +1,5 @@
-import { BaseCompanyUserModel } from '../base/baseCompanyUserModel';
+import { BaseModel } from '../base/baseModel';
 
-export interface CompanyUserDepartment extends BaseCompanyUserModel {
-  departmentId: string;
+export interface CompanyUserDepartment extends BaseModel {
+  departmentName: string;
 }

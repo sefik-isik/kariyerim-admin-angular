@@ -1,10 +1,8 @@
-import { FacultyService } from '../../../services/faculty.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { Faculty } from '../../../models/component/faculty';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Experience } from '../../../models/component/experience';
 import { ExperienceService } from '../../../services/experience.service';

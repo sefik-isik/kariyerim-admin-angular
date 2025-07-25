@@ -15,6 +15,4 @@ export interface UniversityDTO extends BaseModel {
   instagramAddress: string;
   xAddress: string;
   youTubeAddress: string;
-  description: string;
-  subDescription: string;
 }

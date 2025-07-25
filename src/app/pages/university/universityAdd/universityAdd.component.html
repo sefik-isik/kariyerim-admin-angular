@@ -40,120 +40,6 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Address <br />{{ addressDetail }} \ 20-100</span
-            >
-            <textarea
-              required
-              minlength="20"
-              maxlength="100"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.address"
-              name="address"
-              #address="ngModel"
-              style="height: 80px"
-              (input)="countAddress()"
-              [disabled]="!universityModel.universityName"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="addressClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!address.valid && address.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(address)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Description <br />{{ descriptionDetail }} \ 100-3000</span
-            >
-            <textarea
-              required
-              minlength="100"
-              maxlength="3000"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.description"
-              name="description"
-              #description="ngModel"
-              style="height: 100px"
-              (input)="countDescription()"
-              [disabled]="!universityModel.address"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="descriptionClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!description.valid && description.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(description)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text"
-              >Sub Description <br />{{ subDescriptionDetail }} \ 100-3000</span
-            >
-            <textarea
-              required
-              minlength="100"
-              maxlength="3000"
-              pattern=""
-              class="form-control"
-              [(ngModel)]="universityModel.subDescription"
-              name="subDescription"
-              #subDescription="ngModel"
-              style="height: 100px"
-              (input)="countSubDescription()"
-              [disabled]="!universityModel.description"
-            ></textarea>
-            <span class="input-group-text">
-              <i
-                (click)="subDescriptionClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!subDescription.valid && subDescription.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(subDescription)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
 
       <div class="mb-3">
@@ -169,7 +55,6 @@
               name="yearOfEstablishment"
               #yearOfEstablishment="ngModel"
               placeholder="Year Of Establishment"
-              [disabled]="!universityModel.subDescription"
             />
             <span class="input-group-text">
               <i

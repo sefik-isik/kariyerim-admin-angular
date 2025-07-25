@@ -39,7 +39,8 @@ export class PositionAddComponent implements OnInit {
       this.positionService.add(this.getModel()).subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
-          this.activeModal.close();
+          //this.activeModal.close();
+          this.positionNameClear();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate(['/dashboard/position/positionlisttab']);
         },

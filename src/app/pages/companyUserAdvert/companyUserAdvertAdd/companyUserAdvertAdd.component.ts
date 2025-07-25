@@ -13,7 +13,6 @@ import { LicenseDegree } from '../../../models/component/licenseDegree';
 import { Position } from '../../../models/component/position';
 import { PositionLevel } from '../../../models/component/positionLevel';
 import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { UserDTO } from '../../../models/dto/userDTO';
 import { AuthService } from '../../../services/auth.service';
@@ -37,6 +36,7 @@ import { Experience } from './../../../models/component/experience';
 import { WorkArea } from './../../../models/component/workArea';
 import { WorkingMethod } from './../../../models/component/workingMethod';
 import { CompanyUserService } from './../../../services/companyUser.service';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
 
 @Component({
   selector: 'app-companyUserAdvertAdd',
@@ -51,7 +51,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   workAreas: WorkArea[] = [];
   workingMethods: WorkingMethod[] = [];
   experiences: Experience[] = [];
-  companyUserDepartments: CompanyUserDepartmentDTO[] = [];
+  companyUserDepartments: CompanyUserDepartment[] = [];
   licenseDegrees: LicenseDegree[] = [];
   driverLicences: DriverLicence[] = [];
   selectedImage: File | null = null;
@@ -245,7 +245,7 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
-        this.getCompanyUserDepartments(response);
+        this.getCompanyUserDepartments();
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -312,8 +312,8 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-  getCompanyUserDepartments(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
+  getCompanyUserDepartments() {
+    this.companyUserDepartmentService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserDepartments = response.data;

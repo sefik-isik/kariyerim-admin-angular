@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
 
 @Component({
   selector: 'app-companyUserDepartmentDetail',
@@ -10,7 +10,7 @@ import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartm
   imports: [CommonModule],
 })
 export class CompanyUserDepartmentDetailComponent implements OnInit {
-  @Input() companyUserDepartmentDTO: CompanyUserDepartmentDTO;
+  @Input() companyUserDepartment: CompanyUserDepartment;
   componentTitle: string = 'Company User Department Detail';
 
   constructor(public activeModal: NgbActiveModal) {}

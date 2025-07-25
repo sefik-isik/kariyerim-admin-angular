@@ -1,0 +1,55 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <b>Id: </b>{{ universityDepartmentDescriptionDTO.id }}
+    </p>
+    <p class="card-text">
+      <b>description: </b
+      >{{ universityDepartmentDescriptionDTO.universityDepartmentId }}
+    </p>
+    <p class="card-text">
+      <b>departmentName: </b
+      >{{ universityDepartmentDescriptionDTO.universityDepartmentName }}
+    </p>
+    <p class="card-text">
+      <b>title: </b>{{ universityDepartmentDescriptionDTO.title }}
+    </p>
+    <p class="card-text">
+      <b>description: </b>{{ universityDepartmentDescriptionDTO.description }}
+    </p>
+
+    <p class="card-text">
+      <b>createdDate: </b
+      >{{
+        universityDepartmentDescriptionDTO.createdDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>updatedDate: </b
+      >{{
+        universityDepartmentDescriptionDTO.updatedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+    <p class="card-text">
+      <b>deletedDate: </b
+      >{{
+        universityDepartmentDescriptionDTO.deletedDate
+          | date : "dd/MM/yyyy hh:mm:ss"
+      }}
+    </p>
+  </div>
+</div>
+<div class="d-grid gap-2">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.close('Close click')"
+  >
+    Close
+  </button>
+</div>

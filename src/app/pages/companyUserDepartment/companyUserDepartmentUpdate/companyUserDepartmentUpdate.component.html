@@ -5,41 +5,6 @@
   <div class="card-body">
     <form #form="ngForm">
       <div class="mandatoryInformation">Zorunlu Bilgiler</div>
-      <div class="mb-3" *ngIf="admin">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Email</span>
-            <input
-              [(ngModel)]="companyUserDepartmentDTO.email"
-              type="email"
-              class="form-control"
-              name="email"
-              #email="ngModel"
-              disabled="true"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Company User Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              [(ngModel)]="companyUserDepartmentDTO.companyUserName"
-              type="text"
-              class="form-control"
-              name="companyUserName"
-              #companyUserName="ngModel"
-              disabled="true"
-            />
-          </div>
-        </div>
-      </div>
 
       <div class="mb-3">
         <div class="form-group">
@@ -50,7 +15,7 @@
               minlength="3"
               maxlength="50"
               pattern=""
-              [(ngModel)]="companyUserDepartmentDTO.departmentName"
+              [(ngModel)]="companyUserDepartment.departmentName"
               type="text"
               class="form-control"
               name="departmentName"
@@ -60,8 +25,8 @@
             />
             <datalist id="departmentNameDataList">
               <option
-                *ngFor="let department of departments"
-                value="{{ department.departmentName }}"
+                *ngFor="let companyUserDepartmen of companyUserDepartments"
+                value="{{ companyUserDepartmen.departmentName }}"
               ></option>
             </datalist>
             <span class="input-group-text">

@@ -1,0 +1,142 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="60"
+              pattern=""
+              [(ngModel)]="sectorDescriptionModel.sectorName"
+              type="text"
+              class="form-control"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNamedatalist"
+            />
+            <datalist id="sectorNamedatalist">
+              <option
+                *ngFor="let sector of sectors"
+                value="{{ sector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="sectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Title</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="sectorDescriptionModel.title"
+              type="text"
+              class="form-control"
+              name="title"
+              #title="ngModel"
+              placeholder="Title"
+              [disabled]="!sectorDescriptionModel.sectorName"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="titleClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!title.valid && title.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(title)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Description <br />{{ descriptionCount }} \ 10-500</span
+            >
+            <textarea
+              required
+              minlength="10"
+              maxlength="500"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="sectorDescriptionModel.description"
+              name="description"
+              #description="ngModel"
+              style="height: 100px"
+              (input)="countDescription()"
+              [disabled]="!sectorDescriptionModel.title"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

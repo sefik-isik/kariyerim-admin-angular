@@ -3,40 +3,21 @@
     {{ componentTitle }}
   </div>
   <div class="card-body">
-    <p class="card-text"><b>Id: </b>{{ companyUserDepartmentDTO.id }}</p>
+    <p class="card-text"><b>Id: </b>{{ companyUserDepartment.id }}</p>
     <p class="card-text">
-      <b>userId: </b>{{ companyUserDepartmentDTO.userId }}
-    </p>
-    <p class="card-text"><b>email: </b>{{ companyUserDepartmentDTO.email }}</p>
-    <p class="card-text">
-      <b>firstName: </b>{{ companyUserDepartmentDTO.firstName }}
-    </p>
-    <p class="card-text">
-      <b>lastName: </b>{{ companyUserDepartmentDTO.lastName }}
-    </p>
-    <p class="card-text">
-      <b>phoneNumber: </b>{{ companyUserDepartmentDTO.phoneNumber }}
-    </p>
-    <p class="card-text">
-      <b>companyUserId: </b>{{ companyUserDepartmentDTO.companyUserId }}
-    </p>
-    <p class="card-text">
-      <b>companyUserName: </b>{{ companyUserDepartmentDTO.companyUserName }}
-    </p>
-    <p class="card-text">
-      <b>departmentName: </b>{{ companyUserDepartmentDTO.departmentName }}
+      <b>departmentName: </b>{{ companyUserDepartment.departmentName }}
     </p>
     <p class="card-text">
       <b>createdDate: </b
-      >{{ companyUserDepartmentDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ companyUserDepartment.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>updatedDate: </b
-      >{{ companyUserDepartmentDTO.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ companyUserDepartment.updatedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
     <p class="card-text">
       <b>deletedDate: </b
-      >{{ companyUserDepartmentDTO.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
+      >{{ companyUserDepartment.deletedDate | date : "dd/MM/yyyy hh:mm:ss" }}
     </p>
   </div>
 </div>

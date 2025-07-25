@@ -29,8 +29,7 @@ import { CountryComponent } from './pages/country/country/country.component';
 import { CountryListTab } from './pages/country/country/countryListTab';
 import { DriverLicenceComponent } from './pages/driverlicence/driverLicence/driverLicence.component';
 import { DriverLicenceListTab } from './pages/driverlicence/driverLicence/driverLicenceListTab';
-import { FacultyComponent } from './pages/faculty/faculty/faculty.component';
-import { FacultyListTab } from './pages/faculty/faculty/facultyListTab';
+
 import { LanguageComponent } from './pages/language/language/language.component';
 import { LanguageListTab } from './pages/language/language/languageListTab';
 import { LanguageLevelComponent } from './pages/languageLevel/languageLevel/languageLevel.component';
@@ -55,17 +54,16 @@ import { CompanyUserImageDeletedListTab } from './pages/companyUserImage/company
 import { CountComponent } from './pages/count/count/count.component';
 import { CountListTab } from './pages/count/count/countListTab';
 import { CountryDeletedListTab } from './pages/country/country/countryDeletedListTab';
-import { DepartmentComponent } from './pages/department/department/department.component';
-import { DepartmentDeletedListTab } from './pages/department/department/departmentDeletedListTab';
-import { DepartmentListTab } from './pages/department/department/departmentListTab';
-import { DepartmentDescriptionComponent } from './pages/departmentDescription/departmentDescription/departmentDescription.component';
-import { DepartmentDescriptionDeletedListTab } from './pages/departmentDescription/departmentDescription/departmentDescriptionDeletedListTab';
-import { DepartmentDescriptionListTab } from './pages/departmentDescription/departmentDescription/departmentDescriptionListTab';
+import { UniversityDepartmentComponent } from './pages/universityDepartment/universityDepartment/universityDepartment.component';
+import { UniversityDepartmentDeletedListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentDeletedListTab';
+import { UniversityDepartmentListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentListTab';
+import { UniversityDepartmentDescriptionDeletedListTab } from './pages/universityDepartmentDescription/universityDepartmentDescription/universityDepartmentDescriptionDeletedListTab';
+import { UniversityDepartmentDescriptionListTab } from './pages/universityDepartmentDescription/universityDepartmentDescription/universityDepartmentDescriptionListTab';
 import { DriverLicenceDeletedListTab } from './pages/driverlicence/driverLicence/driverLicenceDeletedListTab';
 import { ExperienceComponent } from './pages/experience/experience/experience.component';
 import { ExperienceDeletedListTab } from './pages/experience/experience/experienceDeletedListTab';
 import { ExperienceListTab } from './pages/experience/experience/experienceListTab';
-import { FacultyDeletedListTab } from './pages/faculty/faculty/facultyDeletedListTab';
+
 import { LanguageDeletedListTab } from './pages/language/language/languageDeletedListTab';
 import { LanguageLevelDeletedListTab } from './pages/languageLevel/languageLevel/languageLevelDeletedListTab';
 import { LicenseDegreeComponent } from './pages/licenseDegree/licenseDegree/licenseDegree.component';
@@ -120,9 +118,6 @@ import { TaxOfficeListTab } from './pages/taxOffice/taxOffice/taxOfficeListTab';
 import { UniversityComponent } from './pages/university/university/university.component';
 import { UniversityDeletedListTab } from './pages/university/university/universityDeletedListTab';
 import { UniversityListTab } from './pages/university/university/universityListTab';
-import { UniversityDepartmentComponent } from './pages/universityDepartment/universityDepartment/universityDepartment.component';
-import { UniversityDepartmentDeletedListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentDeletedListTab';
-import { UniversityDepartmentListTab } from './pages/universityDepartment/universityDepartment/universityDepartmentListTab';
 import { UniversityImageComponent } from './pages/universityImage/universityImage/universityImage.component';
 import { UniversityImageDeletedListTab } from './pages/universityImage/universityImage/UniversityImageDeletedListTab';
 import { UniversityImageListTab } from './pages/universityImage/universityImage/universityImageListTab';
@@ -144,6 +139,16 @@ import { PositionLevelDeletedListTab } from './pages/positionLevel/positionLevel
 import { PositionLevelListTab } from './pages/positionLevel/positionLevel/positionLevelListTab';
 import { WorkAreaDeletedListTab } from './pages/workArea/workArea/workAreaDeletedListTab';
 import { WorkAreaListTab } from './pages/workArea/workArea/workAreaListTab';
+import { PositionDescriptionComponent } from './pages/positionDescription/positionDescription/positionDescription.component';
+import { PositionDescriptionListTab } from './pages/positionDescription/positionDescription/positionDescriptionListTab';
+import { PositionDescriptionDeletedListTab } from './pages/positionDescription/positionDescription/positionDescriptionDeletedListTab';
+import { UniversityDepartmentDescriptionComponent } from './pages/universityDepartmentDescription/universityDepartmentDescription/universityDepartmentDescription.component';
+import { SectorDescriptionComponent } from './pages/sectorDescription/sectorDescription/sectorDescription.component';
+import { SectorDescriptionListTab } from './pages/sectorDescription/sectorDescription/sectorDescription.ListTab';
+import { SectorDescriptionDeletedListTab } from './pages/sectorDescription/sectorDescription/sectorDescription.DeletedListTab';
+import { UniversityDescriptionComponent } from './pages/universityDescription/universityDescription/universityDescription.component';
+import { UniversityDescriptionListTab } from './pages/universityDescription/universityDescription/universityDescriptionListTab';
+import { UniversityDescriptionDeletedListTab } from './pages/universityDescription/universityDescription/universityDescriptionDeletedListTab';
 
 //-----------------
 
@@ -379,6 +384,24 @@ export const routes: Routes = [
       },
 
       {
+        path: 'sectordescription',
+        component: SectorDescriptionComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'sectordescriptionlisttab',
+            component: SectorDescriptionListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'sectordescriptiondeletedlisttab',
+            component: SectorDescriptionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+
+      {
         path: 'country',
         component: CountryComponent,
         canActivate: [LoginGuard, ExpirationGuard],
@@ -397,36 +420,36 @@ export const routes: Routes = [
       },
 
       {
-        path: 'department',
-        component: DepartmentComponent,
+        path: 'universitydepartment',
+        component: UniversityDepartmentComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'departmentlisttab',
-            component: DepartmentListTab,
+            path: 'universitydepartmentlisttab',
+            component: UniversityDepartmentListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'departmentdeletedlisttab',
-            component: DepartmentDeletedListTab,
+            path: 'universitydepartmentdeletedlisttab',
+            component: UniversityDepartmentDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
       },
 
       {
-        path: 'departmentdescription',
-        component: DepartmentDescriptionComponent,
+        path: 'universitydepartmentdescription',
+        component: UniversityDepartmentDescriptionComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'departmentdescriptionlisttab',
-            component: DepartmentDescriptionListTab,
+            path: 'universitydepartmentdescriptionlisttab',
+            component: UniversityDepartmentDescriptionListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'departmentdescriptiondeletedlisttab',
-            component: DepartmentDescriptionDeletedListTab,
+            path: 'universitydepartmentdescriptiondeletedlisttab',
+            component: UniversityDepartmentDescriptionDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
@@ -499,23 +522,6 @@ export const routes: Routes = [
           {
             path: 'experiencedeletedlisttab',
             component: ExperienceDeletedListTab,
-            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
-          },
-        ],
-      },
-      {
-        path: 'faculty',
-        component: FacultyComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
-        children: [
-          {
-            path: 'facultylisttab',
-            component: FacultyListTab,
-            canActivate: [LoginGuard, ExpirationGuard],
-          },
-          {
-            path: 'facultydeletedlisttab',
-            component: FacultyDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
@@ -664,20 +670,19 @@ export const routes: Routes = [
           },
         ],
       },
-
       {
-        path: 'universitydepartment',
-        component: UniversityDepartmentComponent,
+        path: 'universitydescription',
+        component: UniversityDescriptionComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
-            path: 'universitydepartmentlisttab',
-            component: UniversityDepartmentListTab,
+            path: 'universitydescriptionlisttab',
+            component: UniversityDescriptionListTab,
             canActivate: [LoginGuard, ExpirationGuard],
           },
           {
-            path: 'universitydepartmentdeletedlisttab',
-            component: UniversityDepartmentDeletedListTab,
+            path: 'universitydescriptiondeletedlisttab',
+            component: UniversityDescriptionDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],
@@ -723,7 +728,23 @@ export const routes: Routes = [
           },
         ],
       },
-
+      {
+        path: 'positiondescription',
+        component: PositionDescriptionComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'positiondescriptionlisttab',
+            component: PositionDescriptionListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'positiondescriptiondeletedlisttab',
+            component: PositionDescriptionDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
       {
         path: 'positionlevel',
         component: PositionLevelComponent,

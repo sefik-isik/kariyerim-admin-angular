@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UniversityDepartment } from '../models/component/universityDepartment';
 import { ResponseModel } from '../models/response/responseModel';
 import { ListResponseModel } from '../models/response/listResponseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
-import { UniversityDepartmentDTO } from '../models/dto/universityDepartmentDTO';
+import { UniversityDepartment } from '../models/component/universitydepartment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,31 +15,37 @@ export class UniversityDepartmentService {
 
   constructor(private httpClient: HttpClient) {}
 
-  add(university: UniversityDepartment): Observable<ResponseModel> {
+  add(universityDepartment: UniversityDepartment): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'add',
-      university
+      universityDepartment
     );
   }
 
-  update(university: UniversityDepartment): Observable<ResponseModel> {
+  update(
+    universityDepartment: UniversityDepartment
+  ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'update',
-      university
+      universityDepartment
     );
   }
 
-  delete(university: UniversityDepartment): Observable<ResponseModel> {
+  delete(
+    universityDepartment: UniversityDepartment
+  ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'delete',
-      university
+      universityDepartment
     );
   }
 
-  terminate(university: UniversityDepartment): Observable<ResponseModel> {
+  terminate(
+    universityDepartment: UniversityDepartment
+  ): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'terminate',
-      university
+      universityDepartment
     );
   }
 
@@ -57,19 +62,5 @@ export class UniversityDepartmentService {
   getById(id: string): Observable<SingleResponseModel<UniversityDepartment>> {
     let path = this.newUrlPath + 'getbyid?id=' + id;
     return this.httpClient.get<SingleResponseModel<UniversityDepartment>>(path);
-  }
-
-  getAllDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
-    let path = this.newUrlPath + 'getalldto';
-    return this.httpClient.get<ListResponseModel<UniversityDepartmentDTO>>(
-      path
-    );
-  }
-
-  getDeletedAllDTO(): Observable<ListResponseModel<UniversityDepartmentDTO>> {
-    let path = this.newUrlPath + 'getdeletedalldto';
-    return this.httpClient.get<ListResponseModel<UniversityDepartmentDTO>>(
-      path
-    );
   }
 }

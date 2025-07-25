@@ -7,7 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-universityDepartment',
+  selector: 'app-department',
   templateUrl: './universityDepartment.component.html',
   styleUrls: ['./universityDepartment.component.css'],
   imports: [RouterOutlet, RouterLink, CommonModule],

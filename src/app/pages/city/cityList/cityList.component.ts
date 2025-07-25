@@ -1,4 +1,3 @@
-import { UtulityService } from './../../../services/utulity.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -36,8 +35,7 @@ export class CityListComponent implements OnInit {
     private authService: AuthService,
     private modalService: NgbModal,
     private validationService: ValidationService
-  ) // private utulityService: UtulityService<CityService, CountryService, CityDTO>
-  {}
+  ) {}
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();

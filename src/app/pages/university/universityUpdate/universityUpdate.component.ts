@@ -93,9 +93,6 @@ export class UniversityUpdateComponent implements OnInit {
         this.universityDTO.universityName
       ),
       address: this.universityDTO.address,
-      description: this.universityDTO.description,
-      subDescription: this.universityDTO.subDescription,
-
       sectorId: this.getSectorId(this.universityDTO.sectorName),
       yearOfEstablishment: new Date(
         this.setNullDateValue(this.universityDTO.yearOfEstablishment)
@@ -196,14 +193,6 @@ export class UniversityUpdateComponent implements OnInit {
     this.addressDetail = this.universityDTO.address.length;
   }
 
-  countDescription() {
-    this.descriptionDetail = this.universityDTO.description.length;
-  }
-
-  countSubDescription() {
-    this.subDescriptionDetail = this.universityDTO.subDescription.length;
-  }
-
   universityNameClear() {
     this.universityDTO.universityName = '';
   }
@@ -250,13 +239,5 @@ export class UniversityUpdateComponent implements OnInit {
 
   addressClear() {
     this.universityDTO.address = '';
-  }
-
-  descriptionClear() {
-    this.universityDTO.description = '';
-  }
-
-  subDescriptionClear() {
-    this.universityDTO.subDescription = '';
   }
 }

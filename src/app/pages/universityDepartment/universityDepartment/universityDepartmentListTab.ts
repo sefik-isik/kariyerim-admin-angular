@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { UniversityDepartmentListComponent } from '../universityDepartmentList/universityDepartmentList.component';
+import { UniversityDepartmentListComponent } from '../universityDepartmenttList/universityDepartmentList.component';
 
 @Component({
-  selector: 'app-universityDepartment-list-tab',
+  selector: 'app-university-department-list-tab',
   template: `
     <div class="card-body">
       <app-universityDepartmentList></app-universityDepartmentList>

@@ -1,19 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { UniversityDepartmentDTO } from '../models/dto/universityDepartmentDTO';
+import { UniversityFaculty } from '../models/component/universityFaculty';
 
 @Pipe({
   name: 'filterUniversityFaculty',
 })
 export class FilterUniversityFacultyPipe implements PipeTransform {
   transform(
-    value: UniversityDepartmentDTO[],
+    value: UniversityFaculty[],
     filterText: string
-  ): UniversityDepartmentDTO[] {
+  ): UniversityFaculty[] {
     filterText = filterText ? filterText.toLocaleLowerCase() : null;
 
     return filterText
       ? value.filter(
-          (c: UniversityDepartmentDTO) =>
+          (c: UniversityFaculty) =>
             c.facultyName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
       : value;

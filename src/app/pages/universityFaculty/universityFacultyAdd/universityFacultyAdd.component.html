@@ -1,0 +1,62 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">University Faculty Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="100"
+              pattern=""
+              [(ngModel)]="universityFacultyModel.facultyName"
+              type="text"
+              class="form-control"
+              name="facultyName"
+              #facultyName="ngModel"
+              placeholder="University Faculty Name"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="facultyNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!facultyName.valid && facultyName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(facultyName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

@@ -71,12 +71,9 @@ export class UniversityAddComponent implements OnInit {
     return Object.assign({
       id: '',
       universityName: this.caseService.capitalizeFirstLetter(
-        this.universityModel.universityName
+        this.universityModel.universityName.trim()
       ),
       address: this.universityModel.address,
-      description: this.universityModel.description,
-      subDescription: this.universityModel.subDescription,
-
       sectorId: this.getSectorId(this.universityModel.sectorName),
       yearOfEstablishment: new Date(
         this.setNullDateValue(this.universityModel.yearOfEstablishment)
@@ -167,14 +164,6 @@ export class UniversityAddComponent implements OnInit {
     this.addressDetail = this.universityModel.address.length;
   }
 
-  countDescription() {
-    this.descriptionDetail = this.universityModel.description.length;
-  }
-
-  countSubDescription() {
-    this.subDescriptionDetail = this.universityModel.subDescription.length;
-  }
-
   universityNameClear() {
     this.universityModel.universityName = '';
   }
@@ -221,13 +210,5 @@ export class UniversityAddComponent implements OnInit {
 
   addressClear() {
     this.universityModel.address = '';
-  }
-
-  descriptionClear() {
-    this.universityModel.description = '';
-  }
-
-  subDescriptionClear() {
-    this.universityModel.subDescription = '';
   }
 }

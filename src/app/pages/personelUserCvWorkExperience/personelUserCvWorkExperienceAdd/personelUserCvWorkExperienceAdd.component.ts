@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { City } from '../../../models/component/city';
 import { Country } from '../../../models/component/country';
-import { Department } from '../../../models/component/department';
 import { PersonelUserCv } from '../../../models/component/personelUserCv';
 import { Position } from '../../../models/component/position';
 import { PositionLevel } from '../../../models/component/positionLevel';
@@ -15,11 +14,9 @@ import { Region } from '../../../models/component/region';
 import { Sector } from '../../../models/component/sector';
 import { WorkingMethod } from '../../../models/component/workingMethod';
 import { PersonelUserCvWorkExperienceDTO } from '../../../models/dto/personelUserCvWorkExperienceDTO';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { UserDTO } from '../../../models/dto/userDTO';
 import { CityService } from '../../../services/city.service';
 import { CountryService } from '../../../services/country.service';
-import { DepartmentService } from '../../../services/department.service';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
@@ -34,6 +31,8 @@ import { SectorService } from './../../../services/sectorService';
 import { WorkingMethodService } from './../../../services/workingMethod.service';
 import { AuthService } from '../../../services/auth.service';
 import { PersonelUser } from '../../../models/component/personelUser';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceAdd',
@@ -47,7 +46,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   personelUsers: PersonelUser[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  departments: Department[] = [];
+  companyUserDepartments: CompanyUserDepartment[] = [];
   companySectors: Sector[] = [];
   workingMethods: WorkingMethod[] = [];
   detailCount: number;
@@ -74,7 +73,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
     private regionService: RegionService,
     private positionService: PositionService,
     private positionLevelService: PositionLevelService,
-    private departmentService: DepartmentService,
+    private companyUserDepartmentService: CompanyUserDepartmentService,
     private sectorService: SectorService,
     private workingMethodService: WorkingMethodService,
     public activeModal: NgbActiveModal,
@@ -288,15 +287,15 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   }
 
   getDepartments() {
-    this.departmentService.getAll().subscribe(
+    this.companyUserDepartmentService.getAll().subscribe(
       (response) => {
         this.personelUserCvWorkExperienceModel.departmentId =
           response.data.filter((f) => f.departmentName == '-')[0]?.id;
 
         this.validationService.handleSuccesses(response);
-        this.departments = response.data
-          .filter((f) => f.isCompany === true)
-          .filter((f) => f.departmentName != '-');
+        this.companyUserDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -387,7 +386,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
 
     departmentName == null || departmentName == '' || departmentName == '-'
       ? (departmentId = this.personelUserCvWorkExperienceModel.departmentId)
-      : (departmentId = this.departments.filter(
+      : (departmentId = this.companyUserDepartments.filter(
           (c) => c.departmentName === departmentName
         )[0]?.id);
 

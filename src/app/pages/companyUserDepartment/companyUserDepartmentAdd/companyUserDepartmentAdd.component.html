@@ -5,108 +5,6 @@
   <div class="card-body">
     <form #form="ngForm">
       <div class="mandatoryInformation">Zorunlu Bilgiler</div>
-      <div class="mb-3" *ngIf="admin">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Email</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              email="true"
-              [(ngModel)]="companyUserDepartmentModel.email"
-              type="email"
-              class="form-control"
-              name="email"
-              #email="ngModel"
-              placeholder="email"
-              list="emailDataList"
-              (change)="setCompanyUserMail(companyUserDepartmentModel.email)"
-            />
-            <datalist id="emailDataList">
-              <option
-                *ngFor="let userDTO of userDTOs"
-                value="{{ userDTO.email }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="emailClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!email.valid && email.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(email)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3" *ngIf="!admin">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Email</span>
-            <input
-              class="form-control"
-              placeholder="email"
-              [(ngModel)]="companyUserDepartmentModel.email"
-              name="email"
-              #email="ngModel"
-              disabled="true"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Company User Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              [(ngModel)]="companyUserDepartmentModel.companyUserName"
-              type="text"
-              class="form-control"
-              name="companyUserName"
-              #companyUserName="ngModel"
-              placeholder="Company User Name"
-              list="companyUserNameDataList"
-              [disabled]="!companyUserDepartmentModel.email"
-            />
-            <datalist id="companyUserNameDataList">
-              <option
-                *ngFor="let companyUser of companyUsers"
-                value="{{ companyUser.companyUserName }}"
-              ></option>
-            </datalist>
-            <span class="input-group-text">
-              <i
-                (click)="companyUserNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!companyUserName.valid && companyUserName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(companyUserName)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="mb-3">
         <div class="form-group">
@@ -124,12 +22,11 @@
               #departmentName="ngModel"
               placeholder="Department Name"
               list="departmentNameDataList"
-              [disabled]="!companyUserDepartmentModel.companyUserName"
             />
             <datalist id="departmentNameDataList">
               <option
-                *ngFor="let department of departments"
-                value="{{ department.departmentName }}"
+                *ngFor="let companyUserDepartment of companyUserDepartments"
+                value="{{ companyUserDepartment.departmentName }}"
               ></option>
             </datalist>
             <span class="input-group-text">

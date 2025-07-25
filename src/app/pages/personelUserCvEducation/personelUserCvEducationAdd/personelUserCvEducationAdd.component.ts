@@ -14,16 +14,16 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
 import { UniversityService } from '../../../services/university.service';
-import { FacultyService } from '../../../services/faculty.service';
 import { University } from '../../../models/component/university';
-import { Faculty } from '../../../models/component/faculty';
 import { PersonelUserCv } from '../../../models/component/personelUserCv';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DepartmentService } from '../../../services/department.service';
-import { Department } from '../../../models/component/department';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
 import { PersonelUser } from '../../../models/component/personelUser';
+import { UniversityFaculty } from '../../../models/component/universityFaculty';
+import { UniversityDepartment } from '../../../models/component/universitydepartment';
+import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
+import { UniversityFacultyService } from '../../../services/universityFaculty.service';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -37,8 +37,8 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   userDTOs: UserDTO[] = [];
   personelUsers: PersonelUser[] = [];
   universities: University[] = [];
-  faculties: Faculty[] = [];
-  departments: Department[] = [];
+  universityFaculties: UniversityFaculty[] = [];
+  universityDepartments: UniversityDepartment[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   detailCount: number;
   today: number = Date.now();
@@ -47,8 +47,8 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
 
   constructor(
     private universityService: UniversityService,
-    private departmentService: DepartmentService,
-    private facultyService: FacultyService,
+    private universityDepartmentService: UniversityDepartmentService,
+    private universityFacultyService: UniversityFacultyService,
     private personelUserCvEducationService: PersonelUserCvEducationService,
     private toastrService: ToastrService,
     private router: Router,
@@ -67,7 +67,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     this.getAdminValues();
     this.getUniversities();
     this.getUniversityDepartments();
-    this.getFaculties();
+    this.getUniversityFaculties();
   }
 
   getValidationErrors(state: any) {
@@ -105,10 +105,10 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       universityId: this.getUniversityId(
         this.personelUserCvEducationModel.universityName
       ),
-      departmentId: this.getDepartmentId(
+      departmentId: this.getUniversityDepartmentId(
         this.personelUserCvEducationModel.departmentName
       ),
-      facultyId: this.getFacultyId(
+      facultyId: this.getUniversityFacultyId(
         this.personelUserCvEducationModel.facultyName
       ),
       startDate: new Date(this.personelUserCvEducationModel.startDate).toJSON(),
@@ -220,22 +220,24 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   }
 
   getUniversityDepartments() {
-    this.departmentService.getAll().subscribe(
+    this.universityDepartmentService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.departments = response.data
-          .filter((c) => c.isCompany === false)
-          .filter((f) => f.departmentName != '-');
+        this.universityDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getFaculties() {
-    this.facultyService.getAll().subscribe(
+  getUniversityFaculties() {
+    this.universityFacultyService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.faculties = response.data.filter((f) => f.facultyName != '-');
+        this.universityFaculties = response.data.filter(
+          (f) => f.facultyName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -261,17 +263,17 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
     return universityId;
   }
 
-  getFacultyId(facultyName: string): string {
-    const facultyId = this.faculties.filter(
-      (c) => c.facultyName === facultyName
+  getUniversityFacultyId(universityFacultyName: string): string {
+    const facultyId = this.universityFaculties.filter(
+      (c) => c.facultyName === universityFacultyName
     )[0]?.id;
 
     return facultyId;
   }
 
-  getDepartmentId(departmentName: string): string {
-    const departmentId = this.departments.filter(
-      (c) => c.departmentName === departmentName
+  getUniversityDepartmentId(universityDepartmentName: string): string {
+    const departmentId = this.universityDepartments.filter(
+      (c) => c.departmentName === universityDepartmentName
     )[0]?.id;
 
     return departmentId;

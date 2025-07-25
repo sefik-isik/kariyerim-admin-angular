@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { UniversityDepartmentDeletedListComponent } from '../universityDepartmentDeletedLİst/universityDepartmentDeletedList.component';
+import { UniversityDepartmentDeletedListComponent } from '../universityDepartmentDeletedList/universityDepartmentDeletedList.component';
 
 @Component({
-  selector: 'app-universityDepartment-deleted-list-tab',
+  selector: 'app-university-department-deleted-list-tab',
   template: `<div class="card-body">
     <app-universityDepartmentDeletedList></app-universityDepartmentDeletedList>
   </div> `,

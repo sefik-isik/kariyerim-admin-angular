@@ -5,36 +5,35 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { AdminModel } from '../../../models/auth/adminModel';
 import { CompanyUserAdvert } from '../../../models/component/companyUserAdvert';
+import { DriverLicence } from '../../../models/component/driverLicence';
+import { Language } from '../../../models/component/language';
+import { LanguageLevel } from '../../../models/component/languageLevel';
 import { LicenseDegree } from '../../../models/component/licenseDegree';
+import { Position } from '../../../models/component/position';
+import { PositionLevel } from '../../../models/component/positionLevel';
 import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
+import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AuthService } from '../../../services/auth.service';
 import { CompanyUserAdvertService } from '../../../services/companyUserAdvert.service';
 import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
+import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { ExperienceService } from '../../../services/experience.service';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { LanguageService } from '../../../services/language.service';
+import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { LicenseDegreeService } from '../../../services/licenseDegree.service';
+import { PositionService } from '../../../services/position.service';
+import { PositionLevelService } from '../../../services/positionLevel.service';
 import { ValidationService } from '../../../services/validation.service';
 import { WorkAreaService } from '../../../services/workArea.service';
 import { WorkingMethodService } from '../../../services/workingMethod.service';
 import { Experience } from './../../../models/component/experience';
 import { WorkArea } from './../../../models/component/workArea';
 import { WorkingMethod } from './../../../models/component/workingMethod';
-import { Position } from '../../../models/component/position';
-import { PositionLevel } from '../../../models/component/positionLevel';
-import { PositionService } from '../../../services/position.service';
-import { PositionLevelService } from '../../../services/positionLevel.service';
-import { LanguageService } from '../../../services/language.service';
-import { LanguageLevelService } from '../../../services/languageLevel.service';
-import { Language } from '../../../models/component/language';
-import { LanguageLevel } from '../../../models/component/languageLevel';
-import { DriverLicence } from '../../../models/component/driverLicence';
-import { DriverLicenceService } from '../../../services/driverLicense.service';
-import { AuthService } from '../../../services/auth.service';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
 
 @Component({
   selector: 'app-companyUserAdvertUpdate',
@@ -49,7 +48,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   workAreas: WorkArea[] = [];
   workingMethods: WorkingMethod[] = [];
   experiences: Experience[] = [];
-  companyUserDepartments: CompanyUserDepartmentDTO[] = [];
+  companyUserDepartments: CompanyUserDepartment[] = [];
   licenseDegrees: LicenseDegree[] = [];
   driverLicences: DriverLicence[] = [];
   selectedImage: File | null = null;
@@ -84,7 +83,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getAdminValues();
+    this.getCompanyUserDepartments();
     this.getWorkingMethods();
     this.getWorkAreas();
     this.getExperiences();
@@ -245,17 +244,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     });
   }
 
-  getAdminValues() {
-    const id = this.localStorageService.getFromLocalStorage('id');
-    this.adminService.getAdminValues(id).subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.getCompanyUserDepartments(response);
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-
   getWorkAreas() {
     this.workAreaService.getAll().subscribe(
       (response) => {
@@ -265,8 +253,8 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
-  getCompanyUserDepartments(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getAllDTO(adminModel).subscribe(
+  getCompanyUserDepartments() {
+    this.companyUserDepartmentService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserDepartments = response.data;

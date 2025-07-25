@@ -1,13 +1,11 @@
-import { Injectable } from '@angular/core';
-import { ApiUrl } from '../models/concrete/apiUrl';
 import { HttpClient } from '@angular/common/http';
-import { CompanyUserDepartment } from '../models/component/companyUserDepartment';
-import { ResponseModel } from '../models/response/responseModel';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CompanyUserDepartment } from '../models/component/companyUserDepartment';
+import { ApiUrl } from '../models/concrete/apiUrl';
 import { ListResponseModel } from '../models/response/listResponseModel';
+import { ResponseModel } from '../models/response/responseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
-import { CompanyUserDepartmentDTO } from '../models/dto/companyUserDepartmentDTO';
-import { AdminModel } from '../models/auth/adminModel';
 
 @Injectable({
   providedIn: 'root',
@@ -51,48 +49,20 @@ export class CompanyUserDepartmentService {
     );
   }
 
-  getAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserDepartment>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserDepartment>>(
-      this.newUrlPath + 'getall',
-      adminModel
-    );
+  getAll(): Observable<ListResponseModel<CompanyUserDepartment>> {
+    let path = this.newUrlPath + 'getall';
+    return this.httpClient.get<ListResponseModel<CompanyUserDepartment>>(path);
   }
 
-  getDeletedAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserDepartment>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserDepartment>>(
-      this.newUrlPath + 'getdeletedall',
-      adminModel
-    );
+  getDeletedAll(): Observable<ListResponseModel<CompanyUserDepartment>> {
+    let path = this.newUrlPath + 'getdeletedall';
+    return this.httpClient.get<ListResponseModel<CompanyUserDepartment>>(path);
   }
 
-  getById(
-    adminModel: AdminModel
-  ): Observable<SingleResponseModel<CompanyUserDepartment>> {
-    return this.httpClient.post<SingleResponseModel<CompanyUserDepartment>>(
-      this.newUrlPath + 'getbyid',
-      adminModel
-    );
-  }
-
-  getAllDTO(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserDepartmentDTO>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserDepartmentDTO>>(
-      this.newUrlPath + 'getalldto',
-      adminModel
-    );
-  }
-
-  getDeletedAllDTO(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserDepartmentDTO>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserDepartmentDTO>>(
-      this.newUrlPath + 'getdeletedalldto',
-      adminModel
+  getById(id: string): Observable<SingleResponseModel<CompanyUserDepartment>> {
+    let path = this.newUrlPath + 'getbyid?id=' + id;
+    return this.httpClient.get<SingleResponseModel<CompanyUserDepartment>>(
+      path
     );
   }
 }

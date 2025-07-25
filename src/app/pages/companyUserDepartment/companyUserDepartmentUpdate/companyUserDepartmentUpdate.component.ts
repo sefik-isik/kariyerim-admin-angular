@@ -1,18 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
-import { Department } from '../../../models/component/department';
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
-import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { DepartmentService } from '../../../services/department.service';
-import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { ValidationService } from '../../../services/validation.service';
+import { CompanyUserDepartmentService } from './../../../services/companyUserDepartment.service';
 
 @Component({
   selector: 'app-companyUserDepartmentUpdate',
@@ -21,10 +16,8 @@ import { AuthService } from '../../../services/auth.service';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserDepartmentUpdateComponent implements OnInit {
-  @Input() companyUserDepartmentDTO: CompanyUserDepartmentDTO;
-  companyUsers: CompanyUserDTO[] = [];
-  users: UserDTO[] = [];
-  departments: Department[] = [];
+  @Input() companyUserDepartment: CompanyUserDepartment;
+  companyUserDepartments: CompanyUserDepartment[] = [];
   admin: boolean = false;
   componentTitle = 'Company User Department Update Form';
 
@@ -32,7 +25,6 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private toastrService: ToastrService,
     private router: Router,
-    private departmentService: DepartmentService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService,
     private authService: AuthService
@@ -69,12 +61,8 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
 
   getModel(): CompanyUserDepartment {
     return Object.assign({
-      id: this.companyUserDepartmentDTO.id,
-      userId: this.companyUserDepartmentDTO.userId,
-      companyUserId: this.companyUserDepartmentDTO.companyUserId,
-      departmentId: this.getDepartmentId(
-        this.companyUserDepartmentDTO.departmentName.trim()
-      ),
+      id: this.companyUserDepartment.id,
+      departmentName: this.companyUserDepartment.departmentName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -82,26 +70,18 @@ export class CompanyUserDepartmentUpdateComponent implements OnInit {
   }
 
   getDepartments() {
-    this.departmentService.getAll().subscribe(
+    this.companyUserDepartmentService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.departments = response.data
-          .filter((c) => c.isCompany === true)
-          .filter((f) => f.departmentName != '-');
+        this.companyUserDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getDepartmentId(departmentName: string): string {
-    const departmentId = this.departments.filter(
-      (c) => c.departmentName === departmentName
-    )[0]?.id;
-
-    return departmentId;
-  }
-
   departmentNameClear() {
-    this.companyUserDepartmentDTO.departmentName = '';
+    this.companyUserDepartment.departmentName = '';
   }
 }

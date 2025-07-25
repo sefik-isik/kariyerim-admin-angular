@@ -1,21 +1,16 @@
-import { CompanyUserDepartmentDTO } from '../../../models/dto/companyUserDepartmentDTO';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { ToastrService } from 'ngx-toastr';
-import { FilterCompanyUserDepartmentByUserPipe } from '../../../pipes/filterCompanyUserDepartmentByUser.pipe';
-import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CompanyUserDepartmentUpdateComponent } from '../companyUserDepartmentUpdate/companyUserDepartmentUpdate.component';
-import { CompanyUserDepartmentDetailComponent } from '../companyUserDepartmentDetail/companyUserDepartmentDetail.component';
+import { ToastrService } from 'ngx-toastr';
+import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { FilterCompanyUserDepartmentByUserPipe } from '../../../pipes/filterCompanyUserDepartmentByUser.pipe';
 import { AuthService } from '../../../services/auth.service';
+import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
 import { ValidationService } from '../../../services/validation.service';
+import { CompanyUserDepartmentDetailComponent } from '../companyUserDepartmentDetail/companyUserDepartmentDetail.component';
+import { CompanyUserDepartmentUpdateComponent } from '../companyUserDepartmentUpdate/companyUserDepartmentUpdate.component';
 
 @Component({
   selector: 'app-companyUserDepartmentDeletedList',
@@ -24,8 +19,8 @@ import { ValidationService } from '../../../services/validation.service';
   imports: [CommonModule, FormsModule, FilterCompanyUserDepartmentByUserPipe],
 })
 export class CompanyUserDepartmentDeletedListComponent implements OnInit {
-  companyUserDepartmentDTOs: CompanyUserDepartmentDTO[] = [];
-  companyUserDepartmentDTO: CompanyUserDepartmentDTO;
+  companyUserDepartments: CompanyUserDepartment[] = [];
+  companyUserDepartment: CompanyUserDepartment;
   dataLoaded = false;
   userDTOs: UserDTO[] = [];
   filter1: string = '';
@@ -35,9 +30,6 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
   constructor(
     private companyUserDepartmentService: CompanyUserDepartmentService,
     private toastrService: ToastrService,
-    private adminService: AdminService,
-    private userService: UserService,
-    private localStorageService: LocalStorageService,
     private modalService: NgbModal,
     private authService: AuthService,
     private validationService: ValidationService
@@ -45,41 +37,19 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getAdminValues();
+    this.getCompanyUserDepartments();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getAdminValues();
+        this.getCompanyUserDepartments();
       }
     });
   }
 
-  getAdminValues() {
-    const id = this.localStorageService.getFromLocalStorage('id');
-    this.adminService.getAdminValues(id).subscribe(
+  getCompanyUserDepartments() {
+    this.companyUserDepartmentService.getDeletedAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.getAllCompanyUsers(response);
-        this.getCompanyUserDepartments(response);
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-
-  getAllCompanyUsers(adminModel: AdminModel) {
-    this.userService.getAllCompanyUserDTO(adminModel).subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.userDTOs = response.data;
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-
-  getCompanyUserDepartments(adminModel: AdminModel) {
-    this.companyUserDepartmentService.getDeletedAllDTO(adminModel).subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.companyUserDepartmentDTOs = response.data;
+        this.companyUserDepartments = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -97,7 +67,7 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
   }
 
   unDeleteAll() {
-    this.companyUserDepartmentDTOs.forEach((companyUserDepartment) => {
+    this.companyUserDepartments.forEach((companyUserDepartment) => {
       this.companyUserDepartmentService.update(companyUserDepartment).subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
@@ -111,7 +81,7 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  terminate(companyUserDepartment: CompanyUserDepartmentDTO) {
+  terminate(companyUserDepartment: CompanyUserDepartment) {
     if (!confirm('Kalıcı Olarak Silmek istediğinize emin misiniz?')) {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
@@ -135,7 +105,7 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
       return;
     }
 
-    this.companyUserDepartmentDTOs.forEach((companyUserDepartment) => {
+    this.companyUserDepartments.forEach((companyUserDepartment) => {
       this.companyUserDepartmentService
         .terminate(companyUserDepartment)
         .subscribe(
@@ -151,7 +121,7 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
     }, 500);
   }
 
-  open(companyUserDepartmentDTO: CompanyUserDepartmentDTO) {
+  open(companyUserDepartment: CompanyUserDepartment) {
     const modalRef = this.modalService.open(
       CompanyUserDepartmentUpdateComponent,
       {
@@ -164,11 +134,10 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
         backdropClass: 'modal-backdrop',
       }
     );
-    modalRef.componentInstance.companyUserDepartmentDTO =
-      companyUserDepartmentDTO;
+    modalRef.componentInstance.companyUserDepartment = companyUserDepartment;
   }
 
-  openDetail(companyUserDepartmentDTO: CompanyUserDepartmentDTO) {
+  openDetail(companyUserDepartment: CompanyUserDepartment) {
     const modalRef = this.modalService.open(
       CompanyUserDepartmentDetailComponent,
       {
@@ -181,12 +150,11 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
         backdropClass: 'modal-backdrop',
       }
     );
-    modalRef.componentInstance.companyUserDepartmentDTO =
-      companyUserDepartmentDTO;
+    modalRef.componentInstance.companyUserDepartment = companyUserDepartment;
   }
 
   clearInput1() {
     this.filter1 = null;
-    this.getAdminValues();
+    this.getCompanyUserDepartments();
   }
 }

@@ -1,0 +1,153 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">University Department Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="60"
+              pattern=""
+              [(ngModel)]="
+                universityDepartmentDescriptionModel.universityDepartmentName
+              "
+              type="text"
+              class="form-control"
+              name="universityDepartmentName"
+              #universityDepartmentName="ngModel"
+              placeholder="Department Name"
+              list="universityDepartmentNamedatalist"
+            />
+            <datalist id="universityDepartmentNamedatalist">
+              <option
+                *ngFor="let universityDepartment of universityDepartments"
+                value="{{ universityDepartment.departmentName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="universityDepartmentNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              !universityDepartmentName.valid &&
+              universityDepartmentName.touched
+            "
+          >
+            <div
+              class="error-message"
+              *ngFor="
+                let error of getValidationErrors(universityDepartmentName)
+              "
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Title</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityDepartmentDescriptionModel.title"
+              type="text"
+              class="form-control"
+              name="title"
+              #title="ngModel"
+              placeholder="Title"
+              [disabled]="
+                !universityDepartmentDescriptionModel.universityDepartmentName
+              "
+            />
+            <span class="input-group-text">
+              <i
+                (click)="titleClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!title.valid && title.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(title)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Address <br />{{ descriptionCount }} \ 100-4000</span
+            >
+            <textarea
+              required
+              minlength="100"
+              maxlength="4000"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="universityDepartmentDescriptionModel.description"
+              name="description"
+              #description="ngModel"
+              style="height: 100px"
+              (input)="countDescription()"
+              [disabled]="!universityDepartmentDescriptionModel.title"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

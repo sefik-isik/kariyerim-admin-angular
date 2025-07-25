@@ -1,0 +1,126 @@
+<div class="card" style="width: 50rem">
+  <div class="alert alert-dark" role="alert">
+    {{ componentTitle }}
+  </div>
+  <div class="card-body">
+    <form #form="ngForm">
+      <div class="mandatoryInformation">Zorunlu Bilgiler</div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="mb-3">
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-text">Position Name</span>
+                <input
+                  class="form-control"
+                  placeholder="Position Name"
+                  [(ngModel)]="positionDescriptionDTO.positionName"
+                  name="positionName"
+                  #positionName="ngModel"
+                  disabled="true"
+                />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!positionName.valid && positionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(positionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Title</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="positionDescriptionDTO.title"
+              type="text"
+              class="form-control"
+              name="title"
+              #title="ngModel"
+              placeholder="Title"
+            />
+            <span class="input-group-text">
+              <i
+                (click)="titleClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!title.valid && title.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(title)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Description <br />{{ descriptionCount }} \ 10-500</span
+            >
+            <textarea
+              required
+              minlength="10"
+              maxlength="500"
+              pattern=""
+              class="form-control"
+              [(ngModel)]="positionDescriptionDTO.description"
+              name="description"
+              #description="ngModel"
+              style="height: 100px"
+              (input)="countDescription()"
+            ></textarea>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="d-grid gap-2">
+      <button
+        [disabled]="!form.valid"
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="onSubmit(form)"
+      >
+        Update
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('Close click')"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

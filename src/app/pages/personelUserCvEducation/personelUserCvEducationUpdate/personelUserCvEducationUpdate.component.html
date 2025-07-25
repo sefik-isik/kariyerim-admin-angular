@@ -98,8 +98,8 @@
             />
             <datalist id="facultyNameDataList">
               <option
-                *ngFor="let faculty of faculties"
-                value="{{ faculty.facultyName }}"
+                *ngFor="let universityFaculty of universityFaculties"
+                value="{{ universityFaculty.facultyName }}"
               ></option>
             </datalist>
             <span class="input-group-text">
@@ -140,8 +140,8 @@
             />
             <datalist id="departmentNameDataList">
               <option
-                *ngFor="let department of departments"
-                value="{{ department.departmentName }}"
+                *ngFor="let universityDepartment of universityDepartments"
+                value="{{ universityDepartment.departmentName }}"
               ></option>
             </datalist>
             <span class="input-group-text">

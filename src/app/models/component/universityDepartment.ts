@@ -1,6 +1,5 @@
-import { BaseUniversityModel } from '../base/baseUniversityModel';
+import { BaseModel } from '../base/baseModel';
 
-export interface UniversityDepartment extends BaseUniversityModel {
-  facultyId: string;
-  departmentId: string;
+export interface UniversityDepartment extends BaseModel {
+  departmentName: string;
 }
