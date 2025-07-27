@@ -192,25 +192,24 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="companyUserAdvertJobDescriptionModel.title">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Description <br />{{ descriptionCount }} \ 2000</span
+              >Description <br />{{ editorCount }} \ 50-5000</span
             >
-            <textarea
-              required
+            <angular-editor
               minlength="50"
-              maxlength="2000"
+              maxlength="5000"
+              [(ngModel)]="htmlContent"
+              [config]="config"
+              [ngModelOptions]="{ standalone: true }"
               pattern=""
               class="form-control"
-              [(ngModel)]="companyUserAdvertJobDescriptionModel.description"
               name="description"
               #description="ngModel"
-              style="height: 100px"
               (input)="count()"
-              [disabled]="!companyUserAdvertJobDescriptionModel.title"
-            ></textarea>
+            ></angular-editor>
             <span class="input-group-text">
               <i
                 (click)="descriptionClear()"

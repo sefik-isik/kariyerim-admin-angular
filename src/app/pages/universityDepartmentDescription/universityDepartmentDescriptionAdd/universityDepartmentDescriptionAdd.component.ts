@@ -10,19 +10,30 @@ import { UniversityDepartmentDescriptionService } from '../../../services/univer
 import { UniversityDepartmentDescription } from '../../../models/component/universityDepartmentDescription';
 import { UniversityDepartmentDescriptionDTO } from '../../../models/dto/universityDepartmentDescriptionDTO';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-universityDepartmentDescriptionAdd',
   templateUrl: './universityDepartmentDescriptionAdd.component.html',
   styleUrls: ['./universityDepartmentDescriptionAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class UniversityDepartmentDescriptionAddComponent implements OnInit {
   universityDepartmentDescriptionModel: UniversityDepartmentDescriptionDTO =
     {} as UniversityDepartmentDescriptionDTO;
-  descriptionCount: number;
+  editorCount: number = 0;
   universityDepartments: UniversityDepartment[];
   componentTitle = 'Department Description Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private universityDepartmentDescriptionService: UniversityDepartmentDescriptionService,
@@ -70,7 +81,7 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
         this.universityDepartmentDescriptionModel.universityDepartmentName.trim()
       ),
       title: this.universityDepartmentDescriptionModel.title.trim(),
-      description: this.universityDepartmentDescriptionModel.description.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -95,9 +106,8 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
     return universityDepartmentId;
   }
 
-  countDescription() {
-    this.descriptionCount =
-      this.universityDepartmentDescriptionModel.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   universityDepartmentNameClear() {

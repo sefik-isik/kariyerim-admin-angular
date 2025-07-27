@@ -44,7 +44,10 @@
     <p class="card-text">
       <b>clarification: </b>{{ companyUserDTO.clarification }}
     </p>
-    <p class="card-text"><b>about: </b>{{ companyUserDTO.about }}</p>
+    <div class="card-text">
+      <b>about: </b>
+      <p [innerHTML]="companyUserDTO.about"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

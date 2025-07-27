@@ -7,6 +7,10 @@
     <p class="card-text">
       <b>sectorName: </b>{{ sectorDescriptionDTO.sectorName }}
     </p>
+    <div class="card-text">
+      <b>description: </b>
+      <p [innerHTML]="sectorDescriptionDTO.description"></p>
+    </div>
     <p class="card-text">
       <b>createdDate: </b
       >{{ sectorDescriptionDTO.createdDate | date : "dd/MM/yyyy hh:mm:ss" }}

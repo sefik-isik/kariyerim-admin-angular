@@ -27,10 +27,10 @@
     <p class="card-text">
       <b>cvSummaryTitle: </b>{{ personelUserCvSummaryDTO.cvSummaryTitle }}
     </p>
-    <p class="card-text">
-      <b>cvSummaryDescription: </b
-      >{{ personelUserCvSummaryDTO.cvSummaryDescription }}
-    </p>
+    <div class="card-text">
+      <b>cvSummaryDescription: </b>
+      <p [innerHTML]="personelUserCvSummaryDTO.cvSummaryDescription"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

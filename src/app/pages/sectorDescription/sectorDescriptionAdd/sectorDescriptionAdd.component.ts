@@ -10,18 +10,29 @@ import { SectorDescriptionDTO } from '../../../models/dto/sectorDescriptionDTO';
 import { SectorDescriptionService } from '../../../services/sectorDescription.service';
 import { SectorService } from '../../../services/sectorService';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-sectorDescriptionAdd',
   templateUrl: './sectorDescriptionAdd.component.html',
   styleUrls: ['./sectorDescriptionAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class SectorDescriptionAddComponent implements OnInit {
   sectorDescriptionModel: SectorDescriptionDTO = {} as SectorDescriptionDTO;
-  descriptionCount: number;
+  editorCount: number = 0;
   sectors: Sector[];
   componentTitle = 'Sector Description Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private sectorDescriptionService: SectorDescriptionService,
@@ -67,7 +78,7 @@ export class SectorDescriptionAddComponent implements OnInit {
         this.sectorDescriptionModel.sectorName.trim()
       ),
       title: this.sectorDescriptionModel.title.trim(),
-      description: this.sectorDescriptionModel.description.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -89,8 +100,8 @@ export class SectorDescriptionAddComponent implements OnInit {
     return sectorId;
   }
 
-  countDescription() {
-    this.descriptionCount = this.sectorDescriptionModel.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   sectorNameClear() {

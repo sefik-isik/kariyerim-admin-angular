@@ -23,12 +23,20 @@ import { UserDTO } from '../../../models/dto/userDTO';
 import { Count } from '../../../models/component/count';
 import { CountService } from '../../../services/count.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-companyUserAdd',
   templateUrl: './companyUserAdd.component.html',
   styleUrls: ['./companyUserAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class CompanyUserAddComponent implements OnInit {
   companyUserModel: CompanyUserDTO = {} as CompanyUserDTO;
@@ -37,10 +45,13 @@ export class CompanyUserAddComponent implements OnInit {
   taxOffices: TaxOffice[] = [];
   userDTOs: UserDTO[] = [];
   counts: Count[] = [];
-  aboutDetail: number;
+  aboutDetail: number = 0;
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Company User Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private sectorService: SectorService,
@@ -109,7 +120,7 @@ export class CompanyUserAddComponent implements OnInit {
       ),
       webAddress: this.setNullValue(this.companyUserModel.webAddress),
       clarification: this.setNullValue(this.companyUserModel.clarification),
-      about: this.setNullValue(this.companyUserModel.about),
+      about: this.setNullValue(this.htmlContent),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -128,6 +139,10 @@ export class CompanyUserAddComponent implements OnInit {
       value = '01.01.1900';
     }
     return value;
+  }
+
+  count() {
+    this.aboutDetail = this.htmlContent.length;
   }
 
   getAdminValues() {
@@ -275,10 +290,6 @@ export class CompanyUserAddComponent implements OnInit {
         )[0]?.id);
 
     return workerCountId;
-  }
-
-  count() {
-    this.aboutDetail = this.companyUserModel.about.length;
   }
 
   emailClear() {

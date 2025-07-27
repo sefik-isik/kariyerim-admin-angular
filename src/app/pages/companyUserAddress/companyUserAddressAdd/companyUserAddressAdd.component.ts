@@ -22,12 +22,20 @@ import { ValidationService } from '../../../services/validation.service';
 import { CityService } from './../../../services/city.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { RegionService } from './../../../services/region.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-companyUserAddressAdd',
   templateUrl: './companyUserAddressAdd.component.html',
   styleUrls: ['./companyUserAddressAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class CompanyUserAddressAddComponent implements OnInit {
   companyUserAddressModel: CompanyUserAddressDTO = {} as CompanyUserAddressDTO;
@@ -36,9 +44,12 @@ export class CompanyUserAddressAddComponent implements OnInit {
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
-  addressDetailCount: number;
+  editorCount: number = 0;
   admin: boolean = false;
   componentTitle = 'Company Address Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private countryService: CountryService,
@@ -100,7 +111,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
       regionId: this.getRegionId(
         this.companyUserAddressModel.regionName.trim()
       ),
-      addressDetail: this.companyUserAddressModel.addressDetail.trim(),
+      addressDetail: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -152,7 +163,7 @@ export class CompanyUserAddressAddComponent implements OnInit {
   }
 
   count() {
-    this.addressDetailCount = this.companyUserAddressModel.addressDetail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getCountries() {

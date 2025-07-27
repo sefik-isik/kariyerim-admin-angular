@@ -17,12 +17,20 @@ import { UniversityFaculty } from '../../../models/component/universityFaculty';
 import { UniversityDepartment } from '../../../models/component/universitydepartment';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityFacultyService } from '../../../services/universityFaculty.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCvEducationUpdate',
   templateUrl: './personelUserCvEducationUpdate.component.html',
   styleUrls: ['./personelUserCvEducationUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCvEducationUpdateComponent implements OnInit {
   @Input() personelUserCvEducationDTO: PersonelUserCvEducationDTO;
@@ -30,10 +38,13 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   universityFaculties: UniversityFaculty[] = [];
   personelUserCvs: PersonelUserCv[] = [];
   universityDepartments: UniversityDepartment[] = [];
-  detailCount: number;
+  editorCount: number = 0;
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Personel User Cv Education Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserCvEducationService: PersonelUserCvEducationService,
@@ -81,6 +92,9 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
         );
         if (this.personelUserCvEducationDTO.endDate == '1899-12-31') {
           this.endDateClear();
+
+          this.htmlContent = response.data.detail;
+          this.editorCount = this.htmlContent.length;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -131,7 +145,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
       endDate: new Date(
         this.setNullDateValue(this.personelUserCvEducationDTO.endDate)
       ).toJSON(),
-      detail: this.personelUserCvEducationDTO.detail,
+      detail: this.htmlContent,
       abandonment: this.personelUserCvEducationDTO.abandonment,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
@@ -147,7 +161,7 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   }
 
   count() {
-    this.detailCount = this.personelUserCvEducationDTO.detail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   formatDate(dateString: string): string {

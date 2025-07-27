@@ -19,12 +19,20 @@ import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-companyUserAdvertJobDescriptionAdd',
   templateUrl: './companyUserAdvertJobDescriptionAdd.component.html',
   styleUrls: ['./companyUserAdvertJobDescriptionAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   companyUserAdvertJobDescriptionModel: CompanyUserAdvertJobDescriptionDTO =
@@ -33,9 +41,12 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   companyUsers: CompanyUserDTO[] = [];
   companyUserAdverts: CompanyUserAdvert[] = [];
   workCities: City[] = [];
-  descriptionCount: number;
+  editorCount: number = 0;
   admin: boolean = false;
   componentTitle = 'Company User Advert Job Description Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private companyUserAdvertJobDescriptionService: CompanyUserAdvertJobDescriptionService,
@@ -95,7 +106,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
         this.companyUserAdvertJobDescriptionModel.advertName.trim()
       ),
       title: this.companyUserAdvertJobDescriptionModel.title.trim(),
-      description: this.companyUserAdvertJobDescriptionModel.description.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -175,8 +186,7 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   }
 
   count() {
-    this.descriptionCount =
-      this.companyUserAdvertJobDescriptionModel.description.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getUserId(email: string): string {

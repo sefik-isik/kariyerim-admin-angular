@@ -17,21 +17,32 @@ import { CountryService } from './../../../services/country.service';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-companyUserAddressUpdate',
   templateUrl: './companyUserAddressUpdate.component.html',
   styleUrls: ['./companyUserAddressUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class CompanyUserAddressUpdateComponent implements OnInit {
   @Input() companyUserAddressDTO: CompanyUserAddressDTO;
   cities: City[] = [];
   countries: Country[] = [];
   regions: Region[] = [];
-  addressDetailCount: number;
+  editorCount: number = 0;
   admin: boolean = false;
   componentTitle = 'Company User Address Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private companyUserAddressService: CompanyUserAddressService,
@@ -71,6 +82,9 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getCities(this.companyUserAddressDTO.countryId);
         this.getRegions(this.companyUserAddressDTO.cityId);
+
+        this.htmlContent = response.data.addressDetail;
+        this.editorCount = this.htmlContent.length;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -110,15 +124,15 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
       ),
       cityId: this.getCityId(this.companyUserAddressDTO.cityName.trim()),
       regionId: this.getRegionId(this.companyUserAddressDTO.regionName.trim()),
-      addressDetail: this.companyUserAddressDTO.addressDetail.trim(),
+      addressDetail: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  count(text: string) {
-    return text.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   getCountries() {

@@ -10,19 +10,30 @@ import { PositionDescriptionDTO } from '../../../models/dto/positionDescriptionD
 import { PositionService } from '../../../services/position.service';
 import { PositionDescriptionService } from '../../../services/positionDescription.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-positionDescriptionAdd',
   templateUrl: './positionDescriptionAdd.component.html',
   styleUrls: ['./positionDescriptionAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PositionDescriptionAddComponent implements OnInit {
   positionDescriptionModel: PositionDescriptionDTO =
     {} as PositionDescriptionDTO;
-  descriptionCount: number;
+  editorCount: number = 0;
   positions: Position[];
   componentTitle = 'Position Description Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private positionDescriptionService: PositionDescriptionService,
@@ -68,7 +79,7 @@ export class PositionDescriptionAddComponent implements OnInit {
         this.positionDescriptionModel.positionName.trim()
       ),
       title: this.positionDescriptionModel.title.trim(),
-      description: this.positionDescriptionModel.description.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -91,8 +102,8 @@ export class PositionDescriptionAddComponent implements OnInit {
     return departmentId;
   }
 
-  countDescription() {
-    this.descriptionCount = this.positionDescriptionModel.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   positionNameClear() {

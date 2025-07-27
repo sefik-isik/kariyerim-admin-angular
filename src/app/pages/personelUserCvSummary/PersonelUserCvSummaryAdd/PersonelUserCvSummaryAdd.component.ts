@@ -19,22 +19,33 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCvSummaryDTO } from '../../../models/dto/personelUserCvSummaryDTO';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCvSummaryAdd',
   templateUrl: './personelUserCvSummaryAdd.component.html',
   styleUrls: ['./personelUserCvSummaryAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCvSummaryAddComponent implements OnInit {
   personelUserCvSummaryModel: PersonelUserCvSummaryDTO =
     {} as PersonelUserCvSummaryDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  detailCount: number;
+  editorCount: number = 0;
   userDTOs: UserDTO[] = [];
   admin: boolean = false;
   componentTitle = 'Personel User Cv Summary Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserCvSummaryService: PersonelUserCvSummaryService,
@@ -90,8 +101,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
         this.personelUserCvSummaryModel.cvName.trim()
       ),
       cvSummaryTitle: this.personelUserCvSummaryModel.cvSummaryTitle.trim(),
-      cvSummaryDescription:
-        this.personelUserCvSummaryModel.cvSummaryDescription.trim(),
+      cvSummaryDescription: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -153,8 +163,7 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   }
 
   count() {
-    this.detailCount =
-      this.personelUserCvSummaryModel.cvSummaryDescription.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getUserId(userEmail: string): string {

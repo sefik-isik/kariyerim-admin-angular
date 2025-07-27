@@ -1,34 +1,43 @@
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { RegionService } from './../../../services/region.service';
-import { CityService } from './../../../services/city.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { CountryService } from '../../../services/country.service';
-import { Country } from '../../../models/component/country';
-import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { City } from '../../../models/component/city';
-import { Region } from '../../../models/component/region';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
-import { PersonelUserAddress } from '../../../models/component/personelUserAddress';
-import { PersonelUserService } from '../../../services/personelUser.service';
+import {
+  AngularEditorConfig,
+  AngularEditorModule,
+} from '@kolkov/angular-editor';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
-import { ValidationService } from '../../../services/validation.service';
-import { AuthService } from '../../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
+import { City } from '../../../models/component/city';
+import { Country } from '../../../models/component/country';
 import { PersonelUser } from '../../../models/component/personelUser';
+import { PersonelUserAddress } from '../../../models/component/personelUserAddress';
+import { Region } from '../../../models/component/region';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
+import { PersonelUserAddressDTO } from '../../../models/dto/personelUserAddressDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AuthService } from '../../../services/auth.service';
+import { CountryService } from '../../../services/country.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserAddressService } from '../../../services/personelUserAddress.service';
+import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
+import { CityService } from './../../../services/city.service';
+import { RegionService } from './../../../services/region.service';
 
 @Component({
   selector: 'app-personelUserAddressAdd',
   templateUrl: './personelUserAddressAdd.component.html',
   styleUrls: ['./personelUserAddressAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserAddressAddComponent implements OnInit {
   personelUserAddressModel: PersonelUserAddressDTO =
@@ -37,10 +46,13 @@ export class PersonelUserAddressAddComponent implements OnInit {
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
-  addressDetailCount: number;
+  editorCount: number = 0;
   userDTOs: UserDTO[] = [];
   admin: boolean = false;
   componentTitle = 'Personel Address Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private countryService: CountryService,
@@ -105,7 +117,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
       regionId: this.getRegionId(
         this.personelUserAddressModel.regionName.trim()
       ),
-      addressDetail: this.personelUserAddressModel.addressDetail.trim(),
+      addressDetail: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -149,8 +161,7 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   count() {
-    this.addressDetailCount =
-      this.personelUserAddressModel.addressDetail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getCountries() {

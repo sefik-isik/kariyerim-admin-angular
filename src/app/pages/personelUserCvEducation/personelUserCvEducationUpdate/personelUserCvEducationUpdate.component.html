@@ -296,22 +296,24 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="personelUserCvEducationDTO.educationInfo">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Detail <br />{{ detailCount }} \ 2000</span
+              >Detail <br />{{ editorCount }} \ 50-5000</span
             >
-            <textarea
-              maxlength="2000"
+            <angular-editor
+              minlength="50"
+              maxlength="5000"
+              [(ngModel)]="htmlContent"
+              [config]="config"
+              [ngModelOptions]="{ standalone: true }"
               pattern=""
               class="form-control"
-              [(ngModel)]="personelUserCvEducationDTO.detail"
               name="detail"
               #detail="ngModel"
-              style="height: 100px"
               (input)="count()"
-            ></textarea>
+            ></angular-editor>
             <span class="input-group-text">
               <i
                 (click)="detailClear()"

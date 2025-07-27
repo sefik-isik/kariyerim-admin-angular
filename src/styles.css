@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+
 .form-control.ng-touched.ng-invalid {
   border-bottom: 3px solid rgba(185, 50, 50, 0.781);
 }

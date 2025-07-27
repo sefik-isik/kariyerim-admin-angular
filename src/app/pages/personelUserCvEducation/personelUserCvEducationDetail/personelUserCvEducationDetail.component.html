@@ -54,9 +54,10 @@
     <p class="card-text">
       <b>educationInfo: </b>{{ personelUserCvEducationDTO.educationInfo }}
     </p>
-    <p class="card-text">
-      <b>detail: </b>{{ personelUserCvEducationDTO.detail }}
-    </p>
+    <div class="card-text">
+      <b>detail: </b>
+      <p [innerHTML]="personelUserCvEducationDTO.detail"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

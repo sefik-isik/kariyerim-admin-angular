@@ -16,21 +16,32 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonelUserCoverLetterDTO } from '../../../models/dto/personelUserCoverLetterDTO';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCoverLetterAdd',
   templateUrl: './personelUserCoverLetterAdd.component.html',
   styleUrls: ['./personelUserCoverLetterAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCoverLetterAddComponent implements OnInit {
-  personelUserCoverLetterMOdel: PersonelUserCoverLetterDTO =
+  personelUserCoverLetterModel: PersonelUserCoverLetterDTO =
     {} as PersonelUserCoverLetterDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
-  descriptionCount: number;
+  editorCount: number = 0;
   userDTOs: UserDTO[] = [];
   admin: boolean = false;
   componentTitle = 'Personel User Cover Letter Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserCoverLetterService: PersonelUserCoverLetterService,
@@ -77,19 +88,18 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   getModel(): PersonelUserCoverLetter {
     return Object.assign({
       id: '',
-      userId: this.getUserId(this.personelUserCoverLetterMOdel.email.trim()),
+      userId: this.getUserId(this.personelUserCoverLetterModel.email.trim()),
       personelUserId: this.getPersonelUserId(
-        this.getUserId(this.personelUserCoverLetterMOdel.email.trim())
+        this.getUserId(this.personelUserCoverLetterModel.email.trim())
       ),
-      title: this.personelUserCoverLetterMOdel.title.trim(),
-      description: this.personelUserCoverLetterMOdel.description.trim(),
+      title: this.personelUserCoverLetterModel.title.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
 
   count() {
-    this.descriptionCount =
-      this.personelUserCoverLetterMOdel.description.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getAdminValues() {
@@ -111,9 +121,9 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
         if (this.admin) {
           this.userDTOs = response.data;
         } else {
-          this.personelUserCoverLetterMOdel.email =
+          this.personelUserCoverLetterModel.email =
             this.localStorageService.getFromLocalStorage('email');
-          this.personelUserCoverLetterMOdel.userId =
+          this.personelUserCoverLetterModel.userId =
             this.localStorageService.getFromLocalStorage('id');
         }
       },
@@ -137,7 +147,7 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
     if (this.admin) {
       userId = this.userDTOs.filter((c) => c.email === userEmail)[0]?.id;
     } else {
-      userId = this.personelUserCoverLetterMOdel.userId;
+      userId = this.personelUserCoverLetterModel.userId;
     }
 
     return userId;
@@ -152,14 +162,14 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   }
 
   emailClear() {
-    this.personelUserCoverLetterMOdel.email = '';
+    this.personelUserCoverLetterModel.email = '';
   }
 
   titleClear() {
-    this.personelUserCoverLetterMOdel.title = '';
+    this.personelUserCoverLetterModel.title = '';
   }
 
   descriptionClear() {
-    this.personelUserCoverLetterMOdel.description = '';
+    this.personelUserCoverLetterModel.description = '';
   }
 }

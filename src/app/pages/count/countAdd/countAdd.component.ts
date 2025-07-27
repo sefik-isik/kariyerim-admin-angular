@@ -6,13 +6,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Count } from '../../../models/component/count';
 import { CountService } from '../../../services/count.service';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-countAdd',
   templateUrl: './countAdd.component.html',
   styleUrls: ['./countAdd.component.css'],
+  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CountAddComponent implements OnInit {
@@ -23,7 +23,6 @@ export class CountAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private countService: CountService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}

@@ -25,9 +25,10 @@
     <p class="card-text">
       <b>title: </b>{{ personelUserCoverLetterDTO.title }}
     </p>
-    <p class="card-text">
-      <b>description: </b>{{ personelUserCoverLetterDTO.description }}
-    </p>
+    <div class="card-text">
+      <b>description: </b>
+      <p [innerHTML]="personelUserCoverLetterDTO.description"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

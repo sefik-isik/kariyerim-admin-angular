@@ -37,9 +37,10 @@
     <p class="card-text">
       <b>regionName: </b>{{ companyUserAddressDTO.regionName }}
     </p>
-    <p class="card-text">
-      <b>addressDetail: </b>{{ companyUserAddressDTO.addressDetail }}
-    </p>
+    <div class="card-text">
+      <b>addressDetail: </b>
+      <p [innerHTML]="companyUserAddressDTO.addressDetail"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

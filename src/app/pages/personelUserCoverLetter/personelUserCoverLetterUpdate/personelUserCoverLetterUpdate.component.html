@@ -56,23 +56,23 @@
         </div>
       </div>
 
-      <div class="input-group mb-3">
+      <div class="mb-3">
         <span class="input-group-text"
-          >Description <br />{{ descriptionCount }} \ 100-2000</span
+          >Description <br />{{ editorCount }} \ 50-5000</span
         >
 
-        <textarea
-          required
-          minlength="100"
-          maxlength="2000"
+        <angular-editor
+          minlength="50"
+          maxlength="5000"
+          [(ngModel)]="htmlContent"
+          [config]="config"
+          [ngModelOptions]="{ standalone: true }"
           pattern=""
           class="form-control"
-          [(ngModel)]="personelUserCoverLetterDTO.description"
           name="description"
           #description="ngModel"
-          style="height: 100px"
-          (input)="count(personelUserCoverLetterDTO.description)"
-        ></textarea>
+          (input)="count()"
+        ></angular-editor>
         <span class="input-group-text">
           <i
             (click)="descriptionClear()"

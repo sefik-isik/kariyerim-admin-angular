@@ -8,18 +8,29 @@ import { SectorDescription } from '../../../models/component/sectorDescription';
 import { SectorDescriptionDTO } from '../../../models/dto/sectorDescriptionDTO';
 import { SectorDescriptionService } from '../../../services/sectorDescription.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-sectorDescriptionUpdate',
   templateUrl: './sectorDescriptionUpdate.component.html',
   styleUrls: ['./sectorDescriptionUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class SectorDescriptionUpdateComponent implements OnInit {
   @Input() sectorDescriptionDTO: SectorDescriptionDTO;
   sectorDescriptionDTOs: SectorDescriptionDTO[];
-  descriptionCount: number;
+  editorCount: number = 0;
   componentTitle = 'Department Description Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private sectorDescriptionService: SectorDescriptionService,
@@ -29,7 +40,10 @@ export class SectorDescriptionUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.htmlContent = this.sectorDescriptionDTO.description;
+    this.editorCount = this.htmlContent.length;
+  }
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -60,15 +74,15 @@ export class SectorDescriptionUpdateComponent implements OnInit {
       id: this.sectorDescriptionDTO.id,
       sectorId: this.sectorDescriptionDTO.sectorId,
       title: this.sectorDescriptionDTO.title.trim(),
-      description: this.sectorDescriptionDTO.description.trim(),
+      description: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  countDescription() {
-    this.descriptionCount = this.sectorDescriptionDTO.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   titleClear() {

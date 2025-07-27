@@ -8,19 +8,30 @@ import { UniversityDepartmentDescription } from '../../../models/component/unive
 import { UniversityDepartmentDescriptionDTO } from '../../../models/dto/universityDepartmentDescriptionDTO';
 import { UniversityDepartmentDescriptionService } from '../../../services/universityDepartmentDescription.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-universityDepartmentDescriptionUpdate',
   templateUrl: './universityDepartmentDescriptionUpdate.component.html',
   styleUrls: ['./universityDepartmentDescriptionUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class UniversityDepartmentDescriptionUpdateComponent implements OnInit {
   @Input()
   universityDepartmentDescriptionDTO: UniversityDepartmentDescriptionDTO;
   universityDepartmentDescriptionDTOs: UniversityDepartmentDescriptionDTO[];
-  descriptionCount: number;
+  editorCount: number = 0;
   componentTitle = 'Department Description Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private universityDepartmentDescriptionService: UniversityDepartmentDescriptionService,
@@ -30,7 +41,10 @@ export class UniversityDepartmentDescriptionUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.htmlContent = this.universityDepartmentDescriptionDTO.description;
+    this.editorCount = this.htmlContent.length;
+  }
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -64,16 +78,15 @@ export class UniversityDepartmentDescriptionUpdateComponent implements OnInit {
       departmentId:
         this.universityDepartmentDescriptionDTO.universityDepartmentId,
       title: this.universityDepartmentDescriptionDTO.title.trim(),
-      description: this.universityDepartmentDescriptionDTO.description.trim(),
+      description: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  countDescription() {
-    this.descriptionCount =
-      this.universityDepartmentDescriptionDTO.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   titleClear() {

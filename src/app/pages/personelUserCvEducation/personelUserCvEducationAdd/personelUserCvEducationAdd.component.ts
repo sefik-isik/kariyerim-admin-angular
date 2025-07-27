@@ -24,12 +24,20 @@ import { UniversityFaculty } from '../../../models/component/universityFaculty';
 import { UniversityDepartment } from '../../../models/component/universitydepartment';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityFacultyService } from '../../../services/universityFaculty.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
   templateUrl: './personelUserCvEducationAdd.component.html',
   styleUrls: ['./personelUserCvEducationAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCvEducationAddComponent implements OnInit {
   personelUserCvEducationModel: PersonelUserCvEducationDTO =
@@ -40,10 +48,13 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   universityFaculties: UniversityFaculty[] = [];
   universityDepartments: UniversityDepartment[] = [];
   personelUserCvs: PersonelUserCv[] = [];
-  detailCount: number;
+  editorCount: number = 0;
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Personel User Cv Education Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private universityService: UniversityService,
@@ -118,7 +129,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
       educationInfo: this.setNullValue(
         this.personelUserCvEducationModel.educationInfo
       ),
-      detail: this.setNullValue(this.personelUserCvEducationModel.detail),
+      detail: this.setNullValue(this.htmlContent),
       abandonment: this.personelUserCvEducationModel.abandonment,
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -204,7 +215,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
   }
 
   count() {
-    this.detailCount = this.personelUserCvEducationModel.detail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   getUniversities() {

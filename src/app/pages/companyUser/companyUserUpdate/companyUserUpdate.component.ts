@@ -20,12 +20,20 @@ import { AdminModel } from '../../../models/auth/adminModel';
 import { Count } from '../../../models/component/count';
 import { CountService } from '../../../services/count.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-companyUserUpdate',
   templateUrl: './companyUserUpdate.component.html',
   styleUrls: ['./companyUserUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class CompanyUserUpdateComponent implements OnInit {
   @Input() companyUserDTO: CompanyUserDTO;
@@ -33,10 +41,13 @@ export class CompanyUserUpdateComponent implements OnInit {
   cities: City[];
   taxOffices: TaxOffice[];
   counts: Count[] = [];
-  aboutDetail: number;
+  editorCount: number = 0;
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Company User Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private companyUserService: CompanyUserService,
@@ -87,6 +98,9 @@ export class CompanyUserUpdateComponent implements OnInit {
           this.yearOfEstablishmentClear();
         }
         this.getTaxOffices(this.companyUserDTO.taxCityName);
+
+        this.htmlContent = response.data.about;
+        this.editorCount = this.htmlContent.length;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -133,7 +147,7 @@ export class CompanyUserUpdateComponent implements OnInit {
       ),
       webAddress: this.setNullValue(this.companyUserDTO.webAddress),
       clarification: this.setNullValue(this.companyUserDTO.clarification),
-      about: this.setNullValue(this.companyUserDTO.about),
+      about: this.setNullValue(this.htmlContent),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -272,7 +286,7 @@ export class CompanyUserUpdateComponent implements OnInit {
   }
 
   count() {
-    this.aboutDetail = this.companyUserDTO.about.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   companyUserNameClear() {

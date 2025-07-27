@@ -10,19 +10,31 @@ import { UniversityDescriptionDTO } from '../../../models/dto/universityDescript
 import { UniversityService } from '../../../services/university.service';
 import { UniversityDescriptionService } from '../../../services/universityDescription.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-universityDescriptionAdd',
   templateUrl: './universityDescriptionAdd.component.html',
   styleUrls: ['./universityDescriptionAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class UniversityDescriptionAddComponent implements OnInit {
   universityDescriptionModel: UniversityDescriptionDTO =
     {} as UniversityDescriptionDTO;
-  descriptionCount: number;
+  editorCount: number = 0;
   universities: University[];
   componentTitle = 'University Description Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private universityDescriptionService: UniversityDescriptionService,
@@ -68,7 +80,7 @@ export class UniversityDescriptionAddComponent implements OnInit {
         this.universityDescriptionModel.universityName.trim()
       ),
       title: this.universityDescriptionModel.title.trim(),
-      description: this.universityDescriptionModel.description.trim(),
+      description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -93,8 +105,8 @@ export class UniversityDescriptionAddComponent implements OnInit {
     return universityId;
   }
 
-  countDescription() {
-    this.descriptionCount = this.universityDescriptionModel.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   universityNameClear() {

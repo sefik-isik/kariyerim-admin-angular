@@ -15,22 +15,34 @@ import { PersonelUserAddressService } from '../../../services/personelUserAddres
 import { RegionService } from '../../../services/region.service';
 import { ValidationService } from '../../../services/validation.service';
 import { AuthService } from '../../../services/auth.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { AdminModel } from '../../../models/auth/adminModel';
 
 @Component({
   selector: 'app-personelUserAddressUpdate',
   templateUrl: './personelUserAddressUpdate.component.html',
   styleUrls: ['./personelUserAddressUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserAddressUpdateComponent implements OnInit {
   @Input() personelUserAddressDTO: PersonelUserAddressDTO;
   cities: City[] = [];
   countries: Country[] = [];
   regions: Region[] = [];
-  addressDetail: string;
-  addressDetailCount: number;
+  editorCount: number = 0;
   admin: boolean = false;
   componentTitle = 'Personel User Address Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserAddressService: PersonelUserAddressService,
@@ -41,12 +53,39 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
     private router: Router,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getCountries();
+
+    setTimeout(() => {
+      this.getUserValues(this.personelUserAddressDTO.id);
+    }, 200);
+  }
+
+  getUserValues(id: string) {
+    const adminModel = {
+      id: id,
+      email: this.localStorageService.getFromLocalStorage('email'),
+      userId: this.localStorageService.getFromLocalStorage('id'),
+      status: this.localStorageService.getFromLocalStorage('status'),
+    };
+    this.getById(adminModel);
+  }
+
+  getById(adminModel: AdminModel) {
+    this.personelUserAddressService.getById(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+
+        this.htmlContent = response.data.addressDetail;
+        this.editorCount = this.htmlContent.length;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
   }
 
   getValidationErrors(state: any) {
@@ -83,15 +122,15 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
       ),
       cityId: this.getCityId(this.personelUserAddressDTO.cityName.trim()),
       regionId: this.getRegionId(this.personelUserAddressDTO.regionName.trim()),
-      addressDetail: this.personelUserAddressDTO.addressDetail.trim(),
+      addressDetail: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  count(text: string) {
-    return text.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   getCountries() {

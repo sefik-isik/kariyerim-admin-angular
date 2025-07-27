@@ -90,24 +90,24 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="companyUserAdvertJobDescriptionDTO.title">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text"
-              >Description <br />{{ descriptionCount }} \ 50</span
+              >Description <br />{{ editorCount }} \ 50-5000</span
             >
-            <textarea
-              required
+            <angular-editor
               minlength="50"
-              maxlength="3000"
+              maxlength="5000"
+              [(ngModel)]="htmlContent"
+              [config]="config"
+              [ngModelOptions]="{ standalone: true }"
               pattern=""
               class="form-control"
-              [(ngModel)]="companyUserAdvertJobDescriptionDTO.description"
               name="description"
               #description="ngModel"
-              style="height: 100px"
               (input)="count()"
-            ></textarea>
+            ></angular-editor>
             <span class="input-group-text">
               <i
                 (click)="descriptionClear()"

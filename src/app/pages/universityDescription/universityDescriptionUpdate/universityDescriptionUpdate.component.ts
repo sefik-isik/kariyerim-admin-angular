@@ -8,18 +8,29 @@ import { UniversityDescription } from '../../../models/component/universityDescr
 import { UniversityDescriptionDTO } from '../../../models/dto/universityDescriptionDTO';
 import { UniversityDescriptionService } from '../../../services/universityDescription.service';
 import { ValidationService } from '../../../services/validation.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-universityDescriptionUpdate',
   templateUrl: './universityDescriptionUpdate.component.html',
   styleUrls: ['./universityDescriptionUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class UniversityDescriptionUpdateComponent implements OnInit {
   @Input() universityDescriptionDTO: UniversityDescriptionDTO;
   universityDescriptionDTOs: UniversityDescriptionDTO[];
-  descriptionCount: number;
+  editorCount: number = 0;
   componentTitle = 'University Description Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private universityDescriptionService: UniversityDescriptionService,
@@ -29,7 +40,10 @@ export class UniversityDescriptionUpdateComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.htmlContent = this.universityDescriptionDTO.description;
+    this.editorCount = this.htmlContent.length;
+  }
 
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
@@ -60,15 +74,15 @@ export class UniversityDescriptionUpdateComponent implements OnInit {
       id: this.universityDescriptionDTO.id,
       universityId: this.universityDescriptionDTO.universityId,
       title: this.universityDescriptionDTO.title.trim(),
-      description: this.universityDescriptionDTO.description.trim(),
+      description: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
     });
   }
 
-  countDescription() {
-    this.descriptionCount = this.universityDescriptionDTO.description.length;
+  count() {
+    this.editorCount = this.htmlContent.length;
   }
 
   titleClear() {

@@ -29,12 +29,20 @@ import { PersonelUserCvService } from '../../../services/personelUserCv.service'
 import { PersonelUserCv } from '../../../models/component/personelUserCv';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
 import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceUpdate',
   templateUrl: './personelUserCvWorkExperienceUpdate.component.html',
   styleUrls: ['./personelUserCvWorkExperienceUpdate.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   @Input() personelUserCvWorkExperienceDTO: PersonelUserCvWorkExperienceDTO;
@@ -47,10 +55,13 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   regions: Region[] = [];
   positions: Position[] = [];
   positionLevels: PositionLevel[] = [];
-  detailCount: number;
+  editorCount: number = 0;
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Personel User Cv Work Experience Update Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserCvWorkExperienceService: PersonelUserCvWorkExperienceService,
@@ -112,6 +123,9 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
         );
         if (this.personelUserCvWorkExperienceDTO.endDate == '1899-12-31') {
           this.endDateClear();
+
+          this.htmlContent = response.data.detail;
+          this.editorCount = this.htmlContent.length;
         }
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -184,7 +198,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
         this.personelUserCvWorkExperienceDTO.regionName
       ),
 
-      detail: this.setNullValue(this.personelUserCvWorkExperienceDTO.detail),
+      detail: this.setNullValue(this.htmlContent),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -206,7 +220,7 @@ export class PersonelUserCvWorkExperienceUpdateComponent implements OnInit {
   }
 
   count() {
-    this.detailCount = this.personelUserCvWorkExperienceDTO.detail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   formatDate(dateString: string): string {

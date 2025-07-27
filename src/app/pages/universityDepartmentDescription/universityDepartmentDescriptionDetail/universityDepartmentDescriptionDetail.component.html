@@ -17,9 +17,10 @@
     <p class="card-text">
       <b>title: </b>{{ universityDepartmentDescriptionDTO.title }}
     </p>
-    <p class="card-text">
-      <b>description: </b>{{ universityDepartmentDescriptionDTO.description }}
-    </p>
+    <div class="card-text">
+      <b>description: </b>
+      <p [innerHTML]="universityDepartmentDescriptionDTO.description"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

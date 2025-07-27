@@ -87,9 +87,10 @@
     <p class="card-text">
       <b>working: </b>{{ personelUserCvWorkExperienceDTO.working }}
     </p>
-    <p class="card-text">
-      <b>detail: </b>{{ personelUserCvWorkExperienceDTO.detail }}
-    </p>
+    <div class="card-text">
+      <b>detail: </b>
+      <p [innerHTML]="personelUserCvWorkExperienceDTO.detail"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b

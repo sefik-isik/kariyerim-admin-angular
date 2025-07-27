@@ -33,12 +33,20 @@ import { AuthService } from '../../../services/auth.service';
 import { PersonelUser } from '../../../models/component/personelUser';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
 import { CompanyUserDepartmentService } from '../../../services/companyUserDepartment.service';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-personelUserCvWorkExperienceAdd',
   templateUrl: './personelUserCvWorkExperienceAdd.component.html',
   styleUrls: ['./personelUserCvWorkExperienceAdd.component.css'],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    AngularEditorModule,
+  ],
 })
 export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   personelUserCvWorkExperienceModel: PersonelUserCvWorkExperienceDTO =
@@ -49,7 +57,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   companyUserDepartments: CompanyUserDepartment[] = [];
   companySectors: Sector[] = [];
   workingMethods: WorkingMethod[] = [];
-  detailCount: number;
+  editorCount: number = 0;
   countries: Country[] = [];
   cities: City[] = [];
   regions: Region[] = [];
@@ -58,6 +66,9 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   today: number = Date.now();
   admin: boolean = false;
   componentTitle = 'Personel User Cv Work Experience Add Form';
+
+  htmlContent = '';
+  config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private personelUserCvWorkExperienceService: PersonelUserCvWorkExperienceService,
@@ -162,7 +173,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
         this.personelUserCvWorkExperienceModel.regionName
       ),
 
-      detail: this.setNullValue(this.personelUserCvWorkExperienceModel.detail),
+      detail: this.setNullValue(this.htmlContent),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -479,7 +490,7 @@ export class PersonelUserCvWorkExperienceAddComponent implements OnInit {
   }
 
   count() {
-    this.detailCount = this.personelUserCvWorkExperienceModel.detail.length;
+    this.editorCount = this.htmlContent.length;
   }
 
   emailClear() {

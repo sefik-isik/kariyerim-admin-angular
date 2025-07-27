@@ -11,9 +11,10 @@
       <b>departmentName: </b>{{ universityDescriptionDTO.universityName }}
     </p>
     <p class="card-text"><b>title: </b>{{ universityDescriptionDTO.title }}</p>
-    <p class="card-text">
-      <b>description: </b>{{ universityDescriptionDTO.description }}
-    </p>
+    <div class="card-text">
+      <b>description: </b>
+      <p [innerHTML]="universityDescriptionDTO.description"></p>
+    </div>
 
     <p class="card-text">
       <b>createdDate: </b
