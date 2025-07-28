@@ -49,7 +49,9 @@ export class CompanyUserDepartmentDeletedListComponent implements OnInit {
     this.companyUserDepartmentService.getDeletedAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUserDepartments = response.data;
+        this.companyUserDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

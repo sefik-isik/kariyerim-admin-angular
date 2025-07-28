@@ -33,6 +33,7 @@ export class RegionListComponent implements OnInit {
   filter2 = '';
   admin: boolean = false;
   componentTitle = 'Regions';
+
   constructor(
     private cityService: CityService,
     private toastrService: ToastrService,

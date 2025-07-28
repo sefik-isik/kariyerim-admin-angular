@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { UniversityFaculty } from '../../../models/component/universityFaculty';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { UniversityFacultyService } from '../../../services/universityFaculty.service';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class UniversityFacultyAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private universityFacultyService: UniversityFacultyService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -57,9 +55,7 @@ export class UniversityFacultyAddComponent implements OnInit {
   getModel(): UniversityFaculty {
     return Object.assign({
       id: '',
-      universityFacultyName: this.caseService.capitalizeFirstLetter(
-        this.universityFacultyModel.facultyName.trim()
-      ),
+      universityFacultyName: this.universityFacultyModel.facultyName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

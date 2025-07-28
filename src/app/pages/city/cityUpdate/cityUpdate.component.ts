@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { City } from '../../../models/component/city';
 import { CityDTO } from '../../../models/dto/cityDTO';
 import { CityService } from '../../../services/city.service';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -25,7 +24,6 @@ export class CityUpdateComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -59,9 +57,7 @@ export class CityUpdateComponent implements OnInit {
     return Object.assign({
       id: this.cityDTO.id,
       countryId: this.cityDTO.countryId,
-      cityName: this.caseService.capitalizeFirstLetter(
-        this.cityDTO.cityName.trim()
-      ),
+      cityName: this.cityDTO.cityName.trim(),
       cityCode: this.cityDTO.cityCode.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),

@@ -14,6 +14,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaxOfficeUpdateComponent } from '../taxOfficeUpdate/taxOfficeUpdate.component';
 import { TaxOfficeDetailComponent } from '../taxOfficeDetail/taxOfficeDetail.component';
 import { ValidationService } from '../../../services/validation.service';
+import { TaxOffice } from '../../../models/component/taxOffice';
+import { TaxOfficeJsonData } from '../../../models/taxOfficeJsonData';
 
 @Component({
   selector: 'app-taxOfficeList',
@@ -52,6 +54,33 @@ export class TaxOfficeListComponent implements OnInit {
       }
     });
   }
+
+  updateAll() {
+    if (!confirm('Tüm Dataları Resetlemek istediğinize emin misiniz?')) {
+      this.toastrService.info('Resetleme İşlemi İptal Edildi');
+      return;
+    }
+    TaxOfficeJsonData.data.forEach((taxOffice: TaxOffice) => {
+      this.taxOfficeService
+        .update(
+          Object.assign({
+            id: taxOffice.id,
+            cityId: taxOffice.cityId,
+            regionName: taxOffice.regionName.trim(),
+            taxOfficeCode: taxOffice.taxOfficeCode.trim(),
+            taxOfficeName: taxOffice.taxOfficeName.trim(),
+            createdDate: new Date(Date.now()).toJSON(),
+            updatedDate: new Date(Date.now()).toJSON(),
+            deletedDate: new Date(Date.now()).toJSON(),
+          })
+        )
+        .subscribe(
+          (response) => {},
+          (responseError) => this.validationService.handleErrors(responseError)
+        );
+    });
+  }
+
   getTaxOffices() {
     this.taxOfficeService.getAllDTO().subscribe(
       (response) => {

@@ -6,7 +6,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Experience } from '../../../models/component/experience';
 import { ExperienceService } from '../../../services/experience.service';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -23,7 +22,6 @@ export class ExperienceUpdateComponent implements OnInit {
     private experienceService: ExperienceService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,9 +53,7 @@ export class ExperienceUpdateComponent implements OnInit {
   getModel(): Experience {
     return Object.assign({
       id: this.experience.id,
-      experienceName: this.caseService.capitalizeFirstLetter(
-        this.experience.experienceName.trim()
-      ),
+      experienceName: this.experience.experienceName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

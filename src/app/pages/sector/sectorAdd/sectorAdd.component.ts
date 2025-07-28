@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { Sector } from '../../../models/component/sector';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class SectorAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private sectorService: SectorService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,9 +53,7 @@ export class SectorAddComponent implements OnInit {
   getModel(): Sector {
     return Object.assign({
       id: '',
-      sectorName: this.caseService.capitalizeFirstLetter(
-        this.sectorModel.sectorName.trim()
-      ),
+      sectorName: this.sectorModel.sectorName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

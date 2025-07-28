@@ -11,7 +11,6 @@ import { TaxOffice } from '../../../models/component/taxOffice';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { CityService } from '../../../services/city.service';
 import { CompanyUserService } from '../../../services/companyUser.service';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { SectorService } from '../../../services/sectorService';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
 import { ValidationService } from '../../../services/validation.service';
@@ -59,7 +58,6 @@ export class CompanyUserUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private localStorageService: LocalStorageService,
     private router: Router,
-    private caseService: CaseService,
     private validationService: ValidationService,
     private authService: AuthService
   ) {}
@@ -132,9 +130,7 @@ export class CompanyUserUpdateComponent implements OnInit {
     return Object.assign({
       id: this.companyUserDTO.id,
       userId: this.companyUserDTO.userId,
-      companyUserName: this.caseService.capitalizeFirstLetter(
-        this.companyUserDTO.companyUserName.trim()
-      ),
+      companyUserName: this.companyUserDTO.companyUserName.trim(),
       sectorId: this.getSectorId(this.companyUserDTO.sectorName),
       taxCityId: this.getCityId(this.companyUserDTO.taxCityName),
       taxOfficeId: this.getTaxOfficeId(this.companyUserDTO.taxOfficeName),
@@ -158,7 +154,7 @@ export class CompanyUserUpdateComponent implements OnInit {
     if (value == '' || value == null) {
       value = '-';
     } else {
-      this.caseService.capitalizeFirstLetter(value);
+      value;
     }
     return value;
   }

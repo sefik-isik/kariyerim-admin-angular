@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LanguageLevelService } from '../../../services/languageLevel.service';
 import { LanguageLevel } from '../../../models/component/languageLevel';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class LanguageLevelAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private languageLevelService: LanguageLevelService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -58,12 +56,8 @@ export class LanguageLevelAddComponent implements OnInit {
     return Object.assign({
       id: '',
       level: this.languageLevelModel.level,
-      levelTitle: this.caseService.capitalizeFirstLetter(
-        this.languageLevelModel.levelTitle.trim()
-      ),
-      levelDescription: this.caseService.capitalizeFirstLetter(
-        this.languageLevelModel.levelDescription.trim()
-      ),
+      levelTitle: this.languageLevelModel.levelTitle.trim(),
+      levelDescription: this.languageLevelModel.levelDescription.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

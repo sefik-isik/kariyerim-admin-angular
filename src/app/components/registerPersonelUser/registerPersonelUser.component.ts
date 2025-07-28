@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { RegisterModel } from '../../models/auth/registerModel';
 import { AddToLocalStorageService } from '../../services/helperServices/addToLocalStorage.service';
 import { ValidationService } from '../../services/validation.service';
-import { CaseService } from '../../services/helperServices/case.service';
 
 @Component({
   selector: 'app-registerPersonelUser',
@@ -24,8 +23,7 @@ export class RegisterPersonelUserComponent {
     private toastrService: ToastrService,
     private router: Router,
     private addToLocalStorageService: AddToLocalStorageService,
-    private validationService: ValidationService,
-    private caseService: CaseService
+    private validationService: ValidationService
   ) {}
 
   getValidationErrors(state: any) {
@@ -38,11 +36,9 @@ export class RegisterPersonelUserComponent {
         {
           id: '',
           code: 'personel',
-          firstName: this.caseService.capitalizeFirstLetter(
-            form.value.firstName
-          ),
-          lastName: this.caseService.capitalizeToUpper(form.value.lastName),
-          email: this.caseService.capitalizeToLower(form.value.email),
+          firstName: form.value.firstName,
+          lastName: form.value.lastName,
+          email: form.value.email,
         },
         form.value
       );

@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { LanguageService } from '../../../services/language.service';
 import { Language } from '../../../models/component/language';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class LanguageUpdateComponent implements OnInit {
     private languageService: LanguageService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,9 +53,7 @@ export class LanguageUpdateComponent implements OnInit {
   getModel(): Language {
     return Object.assign({
       id: this.language.id,
-      languageName: this.caseService.capitalizeFirstLetter(
-        this.language.languageName.trim()
-      ),
+      languageName: this.language.languageName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

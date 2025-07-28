@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { UniversityService } from '../../../services/university.service';
 import { University } from '../../../models/component/university';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Sector } from '../../../models/component/sector';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
@@ -35,7 +34,6 @@ export class UniversityAddComponent implements OnInit {
     private universityService: UniversityService,
     private sectorService: SectorService,
     private countService: CountService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -70,9 +68,7 @@ export class UniversityAddComponent implements OnInit {
   getModel(): University {
     return Object.assign({
       id: '',
-      universityName: this.caseService.capitalizeFirstLetter(
-        this.universityModel.universityName.trim()
-      ),
+      universityName: this.universityModel.universityName.trim(),
       address: this.universityModel.address,
       sectorId: this.getSectorId(this.universityModel.sectorName),
       yearOfEstablishment: new Date(
@@ -98,7 +94,7 @@ export class UniversityAddComponent implements OnInit {
     if (value == null || value == '') {
       value = '-';
     } else {
-      this.caseService.capitalizeFirstLetter(value);
+      value;
     }
     return value;
   }

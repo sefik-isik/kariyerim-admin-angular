@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { City } from '../../../models/component/city';
 import { Region } from '../../../models/component/region';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 import { RegionDTO } from '../../../models/dto/regionDTO';
@@ -32,7 +31,6 @@ export class RegionAddComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -65,9 +63,7 @@ export class RegionAddComponent implements OnInit {
   getModel(): Region {
     return Object.assign({
       id: '',
-      regionName: this.caseService.capitalizeFirstLetter(
-        this.regionModel.regionName.trim()
-      ),
+      regionName: this.regionModel.regionName.trim(),
       countryId: this.getCountryId(this.regionModel.countryName.trim()),
       cityId: this.getCityId(this.regionModel.cityName.trim()),
       createDate: new Date(Date.now()).toJSON(),

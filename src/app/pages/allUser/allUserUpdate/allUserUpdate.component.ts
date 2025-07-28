@@ -1,4 +1,3 @@
-import { CaseService } from './../../../services/helperServices/case.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
@@ -29,8 +28,7 @@ export class AllUserUpdateComponent implements OnInit {
     private router: Router,
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
-    private validationService: ValidationService,
-    private caseService: CaseService
+    private validationService: ValidationService
   ) {}
 
   ngOnInit() {
@@ -59,15 +57,9 @@ export class AllUserUpdateComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.userDTO.id = response.data.id;
         this.userDTO.status = this.setStatus(response.data.status.trim());
-        this.userDTO.firstName = this.caseService.capitalizeFirstLetter(
-          response.data.firstName.trim()
-        );
-        this.userDTO.lastName = this.caseService.capitalizeToUpper(
-          response.data.lastName.trim()
-        );
-        this.userDTO.email = this.caseService.capitalizeToLower(
-          response.data.email.trim()
-        );
+        this.userDTO.firstName = response.data.firstName.trim();
+        this.userDTO.lastName = response.data.lastName.trim();
+        this.userDTO.email = response.data.email.trim();
         this.userDTO.phoneNumber = response.data.phoneNumber.trim();
         this.userDTO.code = response.data.code.trim();
       },

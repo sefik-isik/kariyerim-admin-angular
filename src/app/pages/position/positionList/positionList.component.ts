@@ -10,6 +10,7 @@ import { PositionService } from '../../../services/position.service';
 import { PositionDetailComponent } from '../positionDetail/positionDetail.component';
 import { PositionUpdateComponent } from '../positionUpdate/positionUpdate.component';
 import { ValidationService } from '../../../services/validation.service';
+//import { PositionData } from '../../../models/positionArray';
 
 @Component({
   selector: 'app-positionList',
@@ -40,6 +41,35 @@ export class PositionListComponent implements OnInit {
       }
     });
   }
+
+  // addAllData() {
+  //   if (!confirm('Tüm Dataları Eklemek istediğinize emin misiniz?')) {
+  //     this.toastrService.info('Ekleme İşlemi İptal Edildi');
+  //     return;
+  //   }
+  //   PositionData.forEach((position: any) => {
+  //     this.positionService
+  //       .add(
+  //         Object.assign({
+  //           id: '',
+  //           positionName: position,
+  //           createdDate: new Date(Date.now()).toJSON(),
+  //           updatedDate: new Date(Date.now()).toJSON(),
+  //           deletedDate: new Date(Date.now()).toJSON(),
+  //         })
+  //       )
+  //       .subscribe(
+  //         (response) => {
+  //           this.validationService.handleSuccesses(response);
+  //         },
+  //         (responseError) => this.validationService.handleErrors(responseError)
+  //       );
+  //   });
+  //   setTimeout(() => {
+  //     this.ngOnInit();
+  //     this.toastrService.success('Tüm Datalar Başarı ile Eklendi');
+  //   }, 500);
+  // }
 
   getPositions() {
     this.positionService.getAll().subscribe(

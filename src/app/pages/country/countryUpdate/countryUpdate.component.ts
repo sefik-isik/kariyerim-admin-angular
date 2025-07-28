@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CountryService } from '../../../services/country.service';
 import { Country } from '../../../models/component/country';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class CountryUpdateComponent implements OnInit {
     private countryService: CountryService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,12 +53,8 @@ export class CountryUpdateComponent implements OnInit {
   getModel(): Country {
     return Object.assign({
       id: this.country.id,
-      countryName: this.caseService.capitalizeFirstLetter(
-        this.country.countryName.trim()
-      ),
-      countryIso: this.caseService.capitalizeToUpper(
-        this.country.countryIso.trim()
-      ),
+      countryName: this.country.countryName.trim(),
+      countryIso: this.country.countryIso.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

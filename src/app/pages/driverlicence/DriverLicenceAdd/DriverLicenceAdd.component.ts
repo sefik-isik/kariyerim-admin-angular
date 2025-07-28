@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { DriverLicence } from '../../../models/component/driverLicence';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { DriverLicenceService } from '../../../services/driverLicense.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
@@ -23,7 +22,6 @@ export class DriverLicenceAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private driverLicenceService: DriverLicenceService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -57,9 +55,7 @@ export class DriverLicenceAddComponent implements OnInit {
   getModel(): DriverLicence {
     return Object.assign({
       id: '',
-      driverLicenceName: this.caseService.capitalizeToUpper(
-        this.driverLicence.driverLicenceName.trim()
-      ),
+      driverLicenceName: this.driverLicence.driverLicenceName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

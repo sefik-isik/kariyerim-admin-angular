@@ -7,17 +7,28 @@ import { ToastrService } from 'ngx-toastr';
 import { Count } from '../../../models/component/count';
 import { CountService } from '../../../services/count.service';
 import { ValidationService } from '../../../services/validation.service';
+// import { AngularEditorModule } from '@kolkov/angular-editor';
+// import { AngularEditorConfig } from '@kolkov/angular-editor';
+// import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
 
 @Component({
   selector: 'app-countAdd',
   templateUrl: './countAdd.component.html',
   styleUrls: ['./countAdd.component.css'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    // AngularEditorModule,
+  ],
 })
 export class CountAddComponent implements OnInit {
   countModel: Count = {} as Count;
   componentTitle = 'Count Add Form';
+
+  // htmlContent = '';
+  // config: AngularEditorConfig = angularEditorConfig;
 
   constructor(
     private toastrService: ToastrService,

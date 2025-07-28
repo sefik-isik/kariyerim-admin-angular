@@ -1,4 +1,3 @@
-import { CaseService } from './../../services/helperServices/case.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './../../services/auth.service';
 import { Component } from '@angular/core';
@@ -24,8 +23,7 @@ export class RegisterCompanyUserComponent {
     private toastrService: ToastrService,
     private router: Router,
     private addToLocalStorageService: AddToLocalStorageService,
-    private validationService: ValidationService,
-    private caseService: CaseService
+    private validationService: ValidationService
   ) {}
 
   getValidationErrors(state: any) {
@@ -38,11 +36,9 @@ export class RegisterCompanyUserComponent {
         {
           id: '',
           code: 'company',
-          firstName: this.caseService.capitalizeFirstLetter(
-            form.value.firstName
-          ),
-          lastName: this.caseService.capitalizeToUpper(form.value.lastName),
-          email: this.caseService.capitalizeToLower(form.value.email),
+          firstName: form.value.firstName,
+          lastName: form.value.lastName,
+          email: form.value.email,
         },
         form.value
       );

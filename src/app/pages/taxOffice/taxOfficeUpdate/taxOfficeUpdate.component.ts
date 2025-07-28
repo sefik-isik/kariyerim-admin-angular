@@ -6,7 +6,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { TaxOffice } from '../../../models/component/taxOffice';
 import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { ValidationService } from '../../../services/validation.service';
 import { TaxOfficeService } from './../../../services/taxOffice.service';
 
@@ -24,7 +23,6 @@ export class TaxOfficeUpdateComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,13 +53,9 @@ export class TaxOfficeUpdateComponent implements OnInit {
     return Object.assign({
       id: this.taxOfficeDTO.id,
       cityId: this.taxOfficeDTO.cityId,
-      regionName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeDTO.regionName.trim()
-      ),
+      regionName: this.taxOfficeDTO.regionName.trim(),
       taxOfficeCode: this.taxOfficeDTO.taxOfficeCode.trim(),
-      taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeDTO.taxOfficeName.trim()
-      ),
+      taxOfficeName: this.taxOfficeDTO.taxOfficeName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

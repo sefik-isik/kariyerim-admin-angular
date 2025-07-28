@@ -67,7 +67,14 @@
               <th>Tax Office Name</th>
 
               <th></th>
-              <th></th>
+              <th>
+                <i
+                  *ngIf="admin"
+                  (click)="updateAll()"
+                  class="bi bi-pencil-square"
+                  style="color: rgb(67, 138, 26)"
+                ></i>
+              </th>
               <th>
                 <i
                   *ngIf="admin"

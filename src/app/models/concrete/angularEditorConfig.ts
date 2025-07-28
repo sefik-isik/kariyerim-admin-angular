@@ -6,9 +6,10 @@ export const angularEditorConfig: AngularEditorConfig = {
   height: '15rem',
   minHeight: '5rem',
   placeholder: 'Enter text here...',
-  translate: 'no',
+  translate: 'yes',
   defaultParagraphSeparator: 'p',
   defaultFontName: 'Arial',
+  sanitize: false,
   customClasses: [
     {
       name: 'quote',

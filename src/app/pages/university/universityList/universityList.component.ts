@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
 import { UniversityService } from '../../../services/university.service';
@@ -11,6 +10,7 @@ import { UniversityUpdateComponent } from '../universityUpdate/universityUpdate.
 import { UniversityDetailComponent } from '../universityDetail/universityDetail.component';
 import { UniversityDTO } from '../../../models/dto/universityDTO';
 import { ValidationService } from '../../../services/validation.service';
+//import { UniversityData } from './../../../models/universityArray';
 
 @Component({
   selector: 'app-universityList',
@@ -32,6 +32,44 @@ export class UniversityListComponent implements OnInit {
     private validationService: ValidationService
   ) {}
 
+  // addAllData() {
+  //   if (!confirm('Tüm Dataları Eklemek istediğinize emin misiniz?')) {
+  //     this.toastrService.info('Ekleme İşlemi İptal Edildi');
+  //     return;
+  //   }
+  //   UniversityData.forEach((university: any) => {
+  //     this.universityService
+  //       .add(
+  //         Object.assign({
+  //           id: '',
+  //           universityName: university,
+  //           address: '-',
+  //           sectorId: '025294ca-96e7-42cf-88bd-9c1864a7238d',
+  //           yearOfEstablishment: new Date('01.01.1900').toJSON(),
+  //           webAddress: '-',
+  //           workerCountId: '9c595fbb-c350-4389-9892-4fd8332acae9',
+  //           webNewsAddress: '-',
+  //           youTubeEmbedAddress: '-',
+  //           facebookAddress: '-',
+  //           instagramAddress: '-',
+  //           xAddress: '-',
+  //           youTubeAddress: '-',
+  //           createDate: new Date(Date.now()).toJSON(),
+  //         })
+  //       )
+  //       .subscribe(
+  //         (response) => {
+  //           this.validationService.handleSuccesses(response);
+  //         },
+  //         (responseError) => this.validationService.handleErrors(responseError)
+  //       );
+  //   });
+  //   setTimeout(() => {
+  //     this.ngOnInit();
+  //     this.toastrService.success('Tüm Datalar Başarı ile Eklendi');
+  //   }, 500);
+  // }
+
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getUniversities();
@@ -45,7 +83,8 @@ export class UniversityListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAllDTO().subscribe(
       (response) => {
-        this.validationService.handleSuccesses(response);
+        console.log(response.data);
+        //this.validationService.handleSuccesses(response);
         this.universityDTOs = response.data.filter(
           (f) => f.universityName != '-'
         );

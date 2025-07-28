@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { LicenseDegreeService } from '../../../services/licenseDegree.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
@@ -23,7 +22,6 @@ export class LicenseDegreeAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private licenseDegreeService: LicenseDegreeService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,9 +53,7 @@ export class LicenseDegreeAddComponent implements OnInit {
   getModel(): LicenseDegree {
     return Object.assign({
       id: '',
-      licenseDegreeName: this.caseService.capitalizeFirstLetter(
-        this.licenseDegreeModel.licenseDegreeName.trim()
-      ),
+      licenseDegreeName: this.licenseDegreeModel.licenseDegreeName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

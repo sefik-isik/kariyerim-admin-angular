@@ -6,7 +6,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Region } from '../../../models/component/region';
 import { RegionDTO } from '../../../models/dto/regionDTO';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { RegionService } from '../../../services/region.service';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -24,7 +23,6 @@ export class RegionUpdateComponent implements OnInit {
     private regionService: RegionService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -56,9 +54,7 @@ export class RegionUpdateComponent implements OnInit {
       id: this.regionDTO.id,
       countryId: this.regionDTO.countryId,
       cityId: this.regionDTO.cityId,
-      regionName: this.caseService.capitalizeFirstLetter(
-        this.regionDTO.regionName.trim()
-      ),
+      regionName: this.regionDTO.regionName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

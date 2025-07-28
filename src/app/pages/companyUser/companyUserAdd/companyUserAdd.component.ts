@@ -12,7 +12,6 @@ import { TaxOffice } from '../../../models/component/taxOffice';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { CityService } from '../../../services/city.service';
 import { AdminService } from '../../../services/helperServices/admin.service';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { SectorService } from '../../../services/sectorService';
 import { TaxOfficeService } from '../../../services/taxOffice.service';
@@ -63,7 +62,6 @@ export class CompanyUserAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private countService: CountService,
     private adminService: AdminService,
-    private caseService: CaseService,
     private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService,
@@ -104,9 +102,7 @@ export class CompanyUserAddComponent implements OnInit {
   getModel(): CompanyUser {
     return Object.assign({
       id: '',
-      companyUserName: this.caseService.capitalizeFirstLetter(
-        this.companyUserModel.companyUserName
-      ),
+      companyUserName: this.companyUserModel.companyUserName,
       userId: this.getUserId(this.companyUserModel.email),
       sectorId: this.getSectorId(this.companyUserModel.sectorName),
       taxCityId: this.getCityId(this.companyUserModel.taxCityName),
@@ -129,7 +125,7 @@ export class CompanyUserAddComponent implements OnInit {
     if (value == null || value == '') {
       value = '-';
     } else {
-      this.caseService.capitalizeFirstLetter(value);
+      value;
     }
     return value;
   }

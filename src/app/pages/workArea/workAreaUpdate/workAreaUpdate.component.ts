@@ -4,9 +4,7 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Sector } from '../../../models/component/sector';
 import { WorkArea } from '../../../models/component/workArea';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { ValidationService } from '../../../services/validation.service';
 import { WorkAreaService } from '../../../services/workArea.service';
 
@@ -24,7 +22,6 @@ export class WorkAreaUpdateComponent implements OnInit {
     private workAreaService: WorkAreaService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -56,9 +53,7 @@ export class WorkAreaUpdateComponent implements OnInit {
   getModel(): WorkArea {
     return Object.assign({
       id: this.workArea.id,
-      areaName: this.caseService.capitalizeFirstLetter(
-        this.workArea.areaName.trim()
-      ),
+      areaName: this.workArea.areaName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

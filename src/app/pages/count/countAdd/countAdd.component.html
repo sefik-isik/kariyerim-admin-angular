@@ -39,6 +39,32 @@
           </div>
         </div>
       </div>
+      <!-- <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <angular-editor
+              minlength="50"
+              maxlength="5000"
+              [(ngModel)]="htmlContent"
+              [config]="config"
+              [ngModelOptions]="{ standalone: true }"
+              pattern=""
+              class="form-control"
+              name="description"
+              #description="ngModel"
+            ></angular-editor>
+          </div>
+          <div>{{ htmlContent }}</div>
+          <div *ngIf="!description.valid && description.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(description)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div> -->
     </form>
     <div class="d-grid gap-2">
       <button

@@ -46,6 +46,13 @@
                 style="color: green"
               ></i>
             </th>
+            <th>
+              <i
+                (click)="terminateAll()"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
+              ></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -89,6 +96,13 @@
                 (click)="unDelete(personelUserFileDTO)"
                 class="bi bi-arrow-up-right-square"
                 style="color: green"
+              ></i>
+            </td>
+            <td>
+              <i
+                (click)="terminate(personelUserFileDTO)"
+                class="bi bi-x-octagon"
+                style="color: rgb(255, 0, 0)"
               ></i>
             </td>
           </tr>

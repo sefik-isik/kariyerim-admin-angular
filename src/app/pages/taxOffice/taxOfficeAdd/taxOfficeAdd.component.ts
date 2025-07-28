@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 import { City } from '../../../models/component/city';
 import { Region } from '../../../models/component/region';
 import { TaxOffice } from '../../../models/component/taxOffice';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 import { TaxOfficeDTO } from '../../../models/dto/taxOfficeDTO';
@@ -32,7 +31,6 @@ export class TaxOfficeAddComponent implements OnInit {
     private taxOfficeService: TaxOfficeService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -64,14 +62,10 @@ export class TaxOfficeAddComponent implements OnInit {
   getModel(): TaxOffice {
     return Object.assign({
       id: '',
-      regionName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeModel.regionName.trim()
-      ),
+      regionName: this.taxOfficeModel.regionName.trim(),
       cityId: this.getCityId(this.taxOfficeModel.cityName.trim()),
       taxOfficeCode: this.taxOfficeModel.taxOfficeCode.trim(),
-      taxOfficeName: this.caseService.capitalizeFirstLetter(
-        this.taxOfficeModel.taxOfficeName.trim()
-      ),
+      taxOfficeName: this.taxOfficeModel.taxOfficeName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

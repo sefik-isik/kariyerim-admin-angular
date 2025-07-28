@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Position } from '../../../models/component/position';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { PositionService } from '../../../services/position.service';
 import { ValidationService } from '../../../services/validation.service';
 
@@ -23,7 +22,6 @@ export class PositionAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private positionService: PositionService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -56,9 +54,7 @@ export class PositionAddComponent implements OnInit {
   getModel(): Position {
     return Object.assign({
       id: '',
-      positionName: this.caseService.capitalizeFirstLetter(
-        this.positionModel.positionName.trim()
-      ),
+      positionName: this.positionModel.positionName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

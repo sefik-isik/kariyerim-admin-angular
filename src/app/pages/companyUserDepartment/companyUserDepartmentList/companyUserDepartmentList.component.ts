@@ -49,7 +49,9 @@ export class CompanyUserDepartmentListComponent implements OnInit {
     this.companyUserDepartmentService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.companyUserDepartments = response.data;
+        this.companyUserDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

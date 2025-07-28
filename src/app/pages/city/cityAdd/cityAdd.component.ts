@@ -1,4 +1,3 @@
-import { CaseService } from '../../../services/helperServices/case.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
@@ -28,7 +27,6 @@ export class CityAddComponent implements OnInit {
     private cityService: CityService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -62,9 +60,7 @@ export class CityAddComponent implements OnInit {
   getModel(): City {
     return Object.assign({
       id: '',
-      cityName: this.caseService.capitalizeFirstLetter(
-        this.cityModel.cityName.trim()
-      ),
+      cityName: this.cityModel.cityName.trim(),
       cityCode: this.cityModel.cityCode.trim(),
       countryId: this.getCountryId(this.cityModel.countryName.trim()),
       createDate: new Date(Date.now()).toJSON(),

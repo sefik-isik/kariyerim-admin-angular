@@ -37,7 +37,6 @@
             <th>Id</th>
             <th>positionName</th>
             <th>title</th>
-            <th>description</th>
             <th></th>
             <th></th>
             <th>
@@ -61,9 +60,6 @@
             <td>{{ i + 1 }}</td>
             <td>{{ positionDescriptionDTO.positionName }}</td>
             <td>{{ positionDescriptionDTO.title }}</td>
-            <td>
-              {{ positionDescriptionDTO.description.substring(0, 20) }}...
-            </td>
             <td>
               <i
                 *ngIf="admin"

@@ -1,4 +1,3 @@
-import { CaseService } from './../../services/helperServices/case.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,16 +13,13 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   componentTitle = 'Please Register';
 
-  constructor(private router: Router, private caseService: CaseService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   selectUser(userType: string) {
     if (
-      confirm(
-        this.caseService.capitalizeFirstLetter(userType) +
-          ' Kullanıcı Kaydı Yapmak İstediğinize Emin Misiniz?'
-      )
+      confirm(userType + ' Kullanıcı Kaydı Yapmak İstediğinize Emin Misiniz?')
     ) {
       if (userType === 'personel') {
         this.router.navigate(['registerPersonelUser']);

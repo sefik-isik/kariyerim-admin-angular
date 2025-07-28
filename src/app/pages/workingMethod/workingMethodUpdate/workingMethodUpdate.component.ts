@@ -1,13 +1,12 @@
-import { CaseService } from '../../../services/helperServices/case.service';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { WorkingMethodService } from '../../../services/workingMethod.service';
-import { WorkingMethod } from '../../../models/component/workingMethod';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { WorkingMethod } from '../../../models/component/workingMethod';
 import { ValidationService } from '../../../services/validation.service';
+import { WorkingMethodService } from '../../../services/workingMethod.service';
 
 @Component({
   selector: 'app-workingMethodUpdate',
@@ -23,7 +22,6 @@ export class WorkingMethodUpdateComponent implements OnInit {
     private workingMethodService: WorkingMethodService,
     private toastrService: ToastrService,
     private router: Router,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -57,9 +55,7 @@ export class WorkingMethodUpdateComponent implements OnInit {
   getModel(): WorkingMethod {
     return Object.assign({
       id: this.workingMethod.id,
-      methodName: this.caseService.capitalizeFirstLetter(
-        this.workingMethod.methodName.trim()
-      ),
+      methodName: this.workingMethod.methodName.trim(),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),

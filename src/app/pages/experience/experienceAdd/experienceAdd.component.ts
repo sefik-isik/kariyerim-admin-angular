@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { CaseService } from '../../../services/helperServices/case.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidationService } from '../../../services/validation.service';
 import { Experience } from '../../../models/component/experience';
@@ -23,7 +22,6 @@ export class ExperienceAddComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private experienceService: ExperienceService,
-    private caseService: CaseService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService
   ) {}
@@ -55,9 +53,7 @@ export class ExperienceAddComponent implements OnInit {
   getModel(): Experience {
     return Object.assign({
       id: '',
-      experienceName: this.caseService.capitalizeFirstLetter(
-        this.experienceModel.experienceName.trim()
-      ),
+      experienceName: this.experienceModel.experienceName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
