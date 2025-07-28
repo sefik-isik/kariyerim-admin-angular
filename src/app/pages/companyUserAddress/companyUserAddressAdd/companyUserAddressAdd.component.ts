@@ -255,6 +255,6 @@ export class CompanyUserAddressAddComponent implements OnInit {
   }
 
   addressClear() {
-    this.companyUserAddressModel.addressDetail = '';
+    this.htmlContent = '';
   }
 }

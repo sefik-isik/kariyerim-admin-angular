@@ -257,6 +257,6 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
   }
 
   educationInfoClear() {
-    this.personelUserCvEducationDTO.educationInfo = '';
+    this.htmlContent = '';
   }
 }

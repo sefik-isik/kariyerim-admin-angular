@@ -207,6 +207,6 @@ export class PersonelUserCvSummaryAddComponent implements OnInit {
   }
 
   cvSummaryDescriptionClear() {
-    this.personelUserCvSummaryModel.cvSummaryDescription = '';
+    this.htmlContent = '';
   }
 }

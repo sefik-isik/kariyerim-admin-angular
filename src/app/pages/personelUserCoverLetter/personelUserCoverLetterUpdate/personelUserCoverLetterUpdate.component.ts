@@ -132,6 +132,6 @@ export class PersonelUserCoverLetterUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.personelUserCoverLetterDTO.description = '';
+    this.htmlContent = '';
   }
 }

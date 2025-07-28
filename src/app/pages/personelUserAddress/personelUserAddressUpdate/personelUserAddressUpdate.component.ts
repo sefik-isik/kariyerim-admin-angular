@@ -202,6 +202,6 @@ export class PersonelUserAddressUpdateComponent implements OnInit {
   }
 
   addressClear() {
-    this.personelUserAddressDTO.addressDetail = '';
+    this.htmlContent = '';
   }
 }

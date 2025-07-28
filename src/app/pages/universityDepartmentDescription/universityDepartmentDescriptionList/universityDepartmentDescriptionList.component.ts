@@ -53,7 +53,7 @@ export class UniversityDepartmentDescriptionListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.universityDepartmentDescriptionDTOs = response.data.filter(
-          (f) => f.universityDepartmentName != '-'
+          (f) => f.departmentName != '-'
         );
       },
       (responseError) => this.validationService.handleErrors(responseError)

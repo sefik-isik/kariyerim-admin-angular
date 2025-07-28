@@ -16,9 +16,7 @@
             *ngFor="
               let universityDepartmentDescriptionDTO of universityDepartmentDescriptionDTOs
             "
-            value="{{
-              universityDepartmentDescriptionDTO.universityDepartmentName
-            }}"
+            value="{{ universityDepartmentDescriptionDTO.departmentName }}"
           ></option>
         </datalist>
         <span class="input-group-text">
@@ -41,7 +39,6 @@
             <th>Id</th>
             <th>departmentName</th>
             <th>title</th>
-            <th>description</th>
             <th></th>
             <th></th>
             <th>
@@ -69,11 +66,8 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td>{{ departmentDescriptionDTO.universityDepartmentName }}</td>
+            <td>{{ departmentDescriptionDTO.departmentName }}</td>
             <td>{{ departmentDescriptionDTO.title }}</td>
-            <td>
-              {{ departmentDescriptionDTO.description.substring(0, 20) }}...
-            </td>
             <td>
               <i
                 (click)="openDetail(departmentDescriptionDTO)"

@@ -37,7 +37,6 @@
             <th>Id</th>
             <th>universityName</th>
             <th>title</th>
-            <th>description</th>
             <th></th>
             <th></th>
             <th>
@@ -67,9 +66,7 @@
             <td>{{ i + 1 }}</td>
             <td>{{ universityDescriptionDTO.universityName }}</td>
             <td>{{ universityDescriptionDTO.title }}</td>
-            <td>
-              {{ universityDescriptionDTO.description.substring(0, 20) }}...
-            </td>
+
             <td>
               <i
                 (click)="openDetail(universityDescriptionDTO)"

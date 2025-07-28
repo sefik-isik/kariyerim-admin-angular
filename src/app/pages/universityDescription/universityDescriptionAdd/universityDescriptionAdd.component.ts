@@ -58,7 +58,9 @@ export class UniversityDescriptionAddComponent implements OnInit {
       this.universityDescriptionService.add(this.getModel()).subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
-          this.activeModal.close();
+          //this.activeModal.close();
+          this.htmlContent = '';
+          this.titleClear();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
             '/dashboard/universitydescription/universitydescriptionlisttab',
@@ -118,6 +120,6 @@ export class UniversityDescriptionAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.universityDescriptionModel.description = '';
+    this.htmlContent = '';
   }
 }

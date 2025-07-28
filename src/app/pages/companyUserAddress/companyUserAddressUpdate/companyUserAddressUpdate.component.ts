@@ -212,6 +212,6 @@ export class CompanyUserAddressUpdateComponent implements OnInit {
   }
 
   addressClear() {
-    this.companyUserAddressDTO.addressDetail = '';
+    this.htmlContent = '';
   }
 }

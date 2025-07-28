@@ -115,6 +115,6 @@ export class PositionDescriptionAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.positionDescriptionModel.description = '';
+    this.htmlContent = '';
   }
 }

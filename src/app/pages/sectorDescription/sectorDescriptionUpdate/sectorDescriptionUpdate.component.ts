@@ -90,6 +90,6 @@ export class SectorDescriptionUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.sectorDescriptionDTO.description = '';
+    this.htmlContent = '';
   }
 }

@@ -16,9 +16,7 @@ export class FilterUniversityDepartmentDescriptiontPipe
     return filterText
       ? value.filter(
           (c: UniversityDepartmentDescriptionDTO) =>
-            c.universityDepartmentName
-              .toLocaleLowerCase()
-              .indexOf(filterText) !== -1
+            c.departmentName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
       : value;
   }

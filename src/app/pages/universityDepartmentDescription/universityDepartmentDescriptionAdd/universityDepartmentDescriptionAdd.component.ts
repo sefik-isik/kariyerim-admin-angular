@@ -62,7 +62,7 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
             this.activeModal.close();
             this.toastrService.success(response.message, 'Başarılı');
             this.router.navigate([
-              '/dashboard/departmentdescription/departmentdescriptionlisttab',
+              '/dashboard/universitydepartmentdescription/universitydepartmentdescriptionlisttab',
             ]);
           },
           (responseError) => {
@@ -78,7 +78,7 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
     return Object.assign({
       id: '',
       departmentId: this.getUniversityDepartmentId(
-        this.universityDepartmentDescriptionModel.universityDepartmentName.trim()
+        this.universityDepartmentDescriptionModel.departmentName.trim()
       ),
       title: this.universityDepartmentDescriptionModel.title.trim(),
       description: this.htmlContent,
@@ -111,7 +111,7 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
   }
 
   universityDepartmentNameClear() {
-    this.universityDepartmentDescriptionModel.universityDepartmentName = '';
+    this.universityDepartmentDescriptionModel.departmentName = '';
   }
 
   titleClear() {
@@ -119,6 +119,6 @@ export class UniversityDepartmentDescriptionAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.universityDepartmentDescriptionModel.description = '';
+    this.htmlContent = '';
   }
 }

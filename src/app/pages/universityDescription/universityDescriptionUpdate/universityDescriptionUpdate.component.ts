@@ -90,6 +90,6 @@ export class UniversityDescriptionUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.universityDescriptionDTO.description = '';
+    this.htmlContent = '';
   }
 }

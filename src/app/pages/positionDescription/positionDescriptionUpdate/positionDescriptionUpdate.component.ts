@@ -90,6 +90,6 @@ export class PositionDescriptionUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.positionDescriptionDTO.description = '';
+    this.htmlContent = '';
   }
 }

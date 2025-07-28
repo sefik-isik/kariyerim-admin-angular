@@ -256,6 +256,6 @@ export class PersonelUserAddressAddComponent implements OnInit {
   }
 
   addressClear() {
-    this.personelUserAddressModel.addressDetail = '';
+    this.htmlContent = '';
   }
 }

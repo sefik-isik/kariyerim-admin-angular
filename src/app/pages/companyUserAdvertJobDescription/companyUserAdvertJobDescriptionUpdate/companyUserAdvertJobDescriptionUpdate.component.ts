@@ -135,6 +135,6 @@ export class CompanyUserAdvertJobDescriptionUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.companyUserAdvertJobDescriptionDTO.description = '';
+    this.htmlContent = '';
   }
 }

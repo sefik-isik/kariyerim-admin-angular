@@ -113,6 +113,6 @@ export class SectorDescriptionAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.sectorDescriptionModel.description = '';
+    this.htmlContent = '';
   }
 }

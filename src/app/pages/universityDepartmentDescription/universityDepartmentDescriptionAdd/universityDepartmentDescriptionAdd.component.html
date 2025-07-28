@@ -14,9 +14,7 @@
               minlength="3"
               maxlength="60"
               pattern=""
-              [(ngModel)]="
-                universityDepartmentDescriptionModel.universityDepartmentName
-              "
+              [(ngModel)]="universityDepartmentDescriptionModel.departmentName"
               type="text"
               class="form-control"
               name="universityDepartmentName"
@@ -71,9 +69,7 @@
               name="title"
               #title="ngModel"
               placeholder="Title"
-              [disabled]="
-                !universityDepartmentDescriptionModel.universityDepartmentName
-              "
+              [disabled]="!universityDepartmentDescriptionModel.departmentName"
             />
             <span class="input-group-text">
               <i

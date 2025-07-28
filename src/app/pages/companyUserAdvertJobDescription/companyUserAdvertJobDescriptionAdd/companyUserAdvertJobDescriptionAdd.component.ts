@@ -242,6 +242,6 @@ export class CompanyUserAdvertJobDescriptionAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.companyUserAdvertJobDescriptionModel.description = '';
+    this.htmlContent = '';
   }
 }

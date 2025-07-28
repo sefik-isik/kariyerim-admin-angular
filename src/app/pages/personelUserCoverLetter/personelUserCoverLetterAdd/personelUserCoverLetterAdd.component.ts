@@ -170,6 +170,6 @@ export class PersonelUserCoverLetterAddComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.personelUserCoverLetterModel.description = '';
+    this.htmlContent = '';
   }
 }

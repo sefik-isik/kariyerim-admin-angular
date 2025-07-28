@@ -9,7 +9,7 @@ export const angularEditorConfig: AngularEditorConfig = {
   translate: 'yes',
   defaultParagraphSeparator: 'p',
   defaultFontName: 'Arial',
-  sanitize: false,
+  //sanitize: false,
   customClasses: [
     {
       name: 'quote',

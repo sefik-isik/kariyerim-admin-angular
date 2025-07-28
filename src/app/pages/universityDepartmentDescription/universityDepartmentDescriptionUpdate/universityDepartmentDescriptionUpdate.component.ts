@@ -75,8 +75,7 @@ export class UniversityDepartmentDescriptionUpdateComponent implements OnInit {
   getModel(): UniversityDepartmentDescription {
     return Object.assign({
       id: this.universityDepartmentDescriptionDTO.id,
-      departmentId:
-        this.universityDepartmentDescriptionDTO.universityDepartmentId,
+      departmentId: this.universityDepartmentDescriptionDTO.departmentId,
       title: this.universityDepartmentDescriptionDTO.title.trim(),
       description: this.htmlContent,
       createdDate: new Date(Date.now()).toJSON(),
@@ -94,6 +93,6 @@ export class UniversityDepartmentDescriptionUpdateComponent implements OnInit {
   }
 
   descriptionClear() {
-    this.universityDepartmentDescriptionDTO.description = '';
+    this.htmlContent = '';
   }
 }
