@@ -59,7 +59,8 @@ export class PositionService {
         .set('pageIndex', pageModel.pageIndex.toString())
         .set('pageSize', pageModel.pageSize.toString())
         .set('sortColumn', pageModel.sortColumn)
-        .set('sortOrder', pageModel.sortOrder),
+        .set('sortOrder', pageModel.sortOrder)
+        .set('filter', pageModel.filter),
     });
   }
 

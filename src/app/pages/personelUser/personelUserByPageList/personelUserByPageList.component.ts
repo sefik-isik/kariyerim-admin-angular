@@ -40,6 +40,7 @@ export class PersonelUserByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'PersonelUserName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -52,16 +53,16 @@ export class PersonelUserByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getPersonelUsersByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getPersonelUsersByPage() {
+  getDatasByPage() {
     this.personelUserService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.personelUserByPageDTO = response.data;
@@ -73,6 +74,17 @@ export class PersonelUserByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sortByFirstName(sortValue: string) {
     this.pageModel.sortColumn = 'FirstName';
     if (sortValue === 'desc') {
@@ -80,7 +92,7 @@ export class PersonelUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
   }
 
   sortByLastName(sortValue: string) {
@@ -90,7 +102,7 @@ export class PersonelUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
   }
 
   sortByEmail(sortValue: string) {
@@ -100,13 +112,13 @@ export class PersonelUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
   }
 
   delete(personelUser: PersonelUser) {
@@ -178,7 +190,8 @@ export class PersonelUserByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getPersonelUsersByPage();
+    this.getDatasByPage();
   }
 }

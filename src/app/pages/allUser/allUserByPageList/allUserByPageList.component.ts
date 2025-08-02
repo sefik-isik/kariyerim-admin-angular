@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
 import { AllUserDetailComponent } from '../allUserDetail/allUserDetail.component';
 import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component';
+import e from 'express';
 
 @Component({
   selector: 'app-allUserByPageList',
@@ -26,13 +27,14 @@ export class AllUserByPageListComponent implements OnInit {
   allUserByPageDTO: AllUserByPageDTO;
   admin: boolean = false;
   componentTitle = 'All User By Page List';
-  filter1: string;
+  filter1: string = '';
 
   pageModel: PageModel = {
     pageIndex: 0,
     pageSize: 5,
     sortColumn: 'FirstName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -45,16 +47,16 @@ export class AllUserByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getUsersByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getUsersByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getUsersByPage() {
+  getDatasByPage() {
     this.userService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.allUserByPageDTO = response.data;
@@ -66,6 +68,17 @@ export class AllUserByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sortByFirstName(sortValue: string) {
     this.pageModel.sortColumn = 'FirstName';
     if (sortValue === 'desc') {
@@ -73,7 +86,7 @@ export class AllUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getUsersByPage();
+    this.getDatasByPage();
   }
 
   sortByLastName(sortValue: string) {
@@ -83,7 +96,7 @@ export class AllUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getUsersByPage();
+    this.getDatasByPage();
   }
 
   sortByEmail(sortValue: string) {
@@ -93,13 +106,13 @@ export class AllUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getUsersByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getUsersByPage();
+    this.getDatasByPage();
   }
 
   delete(userDTO: UserDTO) {
@@ -171,7 +184,8 @@ export class AllUserByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getUsersByPage();
+    this.getDatasByPage();
   }
 }

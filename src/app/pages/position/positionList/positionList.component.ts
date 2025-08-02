@@ -31,6 +31,7 @@ export class PositionListComponent implements OnInit {
     pageSize: 10,
     sortColumn: 'positionName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(

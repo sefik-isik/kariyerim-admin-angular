@@ -3,4 +3,5 @@ export interface PageModel {
   pageSize: number;
   sortColumn: string;
   sortOrder: string;
+  filter: string;
 }

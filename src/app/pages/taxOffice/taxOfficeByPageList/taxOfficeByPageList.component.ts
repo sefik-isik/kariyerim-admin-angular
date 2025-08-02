@@ -31,6 +31,7 @@ export class TaxOfficeByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'TaxOfficeName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -43,16 +44,16 @@ export class TaxOfficeByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getTaxOfficesByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getTaxOfficesByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getTaxOfficesByPage() {
+  getDatasByPage() {
     this.taxOfficeService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.taxOfficeByPageDTO = response.data;
@@ -66,6 +67,17 @@ export class TaxOfficeByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sort(sortValue: string) {
     this.pageModel.sortColumn = 'TaxOfficeName';
     if (sortValue === 'desc') {
@@ -73,13 +85,13 @@ export class TaxOfficeByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getTaxOfficesByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getTaxOfficesByPage();
+    this.getDatasByPage();
   }
 
   delete(taxOffice: TaxOffice) {
@@ -151,7 +163,8 @@ export class TaxOfficeByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getTaxOfficesByPage();
+    this.getDatasByPage();
   }
 }

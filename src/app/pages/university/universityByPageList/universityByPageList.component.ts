@@ -32,6 +32,7 @@ export class UniversityByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'UniversityName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -44,16 +45,16 @@ export class UniversityByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getUniversitysByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getUniversitysByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getUniversitysByPage() {
+  getDatasByPage() {
     this.universityService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.universityByPageDTO = response.data;
@@ -67,6 +68,17 @@ export class UniversityByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sort(sortValue: string) {
     this.pageModel.sortColumn = 'UniversityName';
     if (sortValue === 'desc') {
@@ -74,13 +86,13 @@ export class UniversityByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getUniversitysByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getUniversitysByPage();
+    this.getDatasByPage();
   }
 
   delete(university: University) {
@@ -152,7 +164,8 @@ export class UniversityByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getUniversitysByPage();
+    this.getDatasByPage();
   }
 }

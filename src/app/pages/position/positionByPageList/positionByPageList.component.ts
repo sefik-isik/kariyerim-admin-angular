@@ -31,6 +31,7 @@ export class PositionByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'PositionName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -43,16 +44,16 @@ export class PositionByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getPositionsByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getPositionsByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getPositionsByPage() {
+  getDatasByPage() {
     this.positionService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.positionByPageDTO = response.data;
@@ -66,6 +67,17 @@ export class PositionByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sort(sortValue: string) {
     this.pageModel.sortColumn = 'PositionName';
     if (sortValue === 'desc') {
@@ -73,13 +85,13 @@ export class PositionByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getPositionsByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getPositionsByPage();
+    this.getDatasByPage();
   }
 
   delete(position: Position) {
@@ -151,7 +163,8 @@ export class PositionByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getPositionsByPage();
+    this.getDatasByPage();
   }
 }

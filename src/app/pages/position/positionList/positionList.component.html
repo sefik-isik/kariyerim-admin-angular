@@ -7,16 +7,9 @@
           type="text"
           [(ngModel)]="filter1"
           class="form-control"
-          list="datalist1"
           id="input"
           placeholder="Filter Positions..."
         />
-        <datalist id="datalist1">
-          <option
-            *ngFor="let position of positions | filterPosition : filter1"
-            value="{{ position.positionName }}"
-          ></option>
-        </datalist>
         <span class="input-group-text">
           <i
             (click)="clearInput1()"

@@ -31,6 +31,7 @@ export class UniversityDepartmentByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'DepartmentName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -43,16 +44,16 @@ export class UniversityDepartmentByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getUniversityDepartmentsByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getUniversityDepartmentsByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getUniversityDepartmentsByPage() {
+  getDatasByPage() {
     this.universityDepartmentService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.universityDepartmentByPageDTO = response.data;
@@ -67,6 +68,17 @@ export class UniversityDepartmentByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sort(sortValue: string) {
     this.pageModel.sortColumn = 'DepartmentName';
     if (sortValue === 'desc') {
@@ -74,13 +86,13 @@ export class UniversityDepartmentByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getUniversityDepartmentsByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getUniversityDepartmentsByPage();
+    this.getDatasByPage();
   }
 
   delete(universityDepartment: UniversityDepartment) {
@@ -158,7 +170,8 @@ export class UniversityDepartmentByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getUniversityDepartmentsByPage();
+    this.getDatasByPage();
   }
 }

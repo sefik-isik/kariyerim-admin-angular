@@ -32,6 +32,7 @@ export class CompanyUserByPageListComponent implements OnInit {
     pageSize: 20,
     sortColumn: 'CompanyUserName',
     sortOrder: 'asc',
+    filter: '',
   };
 
   constructor(
@@ -44,16 +45,16 @@ export class CompanyUserByPageListComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getCompanyUsersByPage();
+    this.getDatasByPage();
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getCompanyUsersByPage();
+        this.getDatasByPage();
       }
     });
   }
 
-  getCompanyUsersByPage() {
+  getDatasByPage() {
     this.companyUserService.getAllByPage(this.pageModel).subscribe(
       (response) => {
         this.companyUserByPageDTO = response.data;
@@ -65,6 +66,17 @@ export class CompanyUserByPageListComponent implements OnInit {
     );
   }
 
+  filter() {
+    if (this.filter1.length > 0) {
+      this.pageModel.filter = this.filter1 ? this.filter1 : '';
+      this.pageModel.pageIndex = 0; // Reset to first page on filter change
+      this.getDatasByPage();
+    } else {
+      this.pageModel.filter = '';
+      this.getDatasByPage();
+    }
+  }
+
   sortByCompanyUserName(sortValue: string) {
     this.pageModel.sortColumn = 'CompanyUserName';
     if (sortValue === 'desc') {
@@ -72,7 +84,7 @@ export class CompanyUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getCompanyUsersByPage();
+    this.getDatasByPage();
   }
 
   sortByEmail(sortValue: string) {
@@ -82,13 +94,13 @@ export class CompanyUserByPageListComponent implements OnInit {
     } else {
       this.pageModel.sortOrder = 'asc';
     }
-    this.getCompanyUsersByPage();
+    this.getDatasByPage();
   }
 
   pageChanged($event: any) {
     this.pageModel.pageIndex = $event.page - 1;
     this.pageModel.pageSize = $event.itemsPerPage;
-    this.getCompanyUsersByPage();
+    this.getDatasByPage();
   }
 
   delete(companyUser: CompanyUser) {
@@ -160,7 +172,8 @@ export class CompanyUserByPageListComponent implements OnInit {
   }
 
   clearInput1() {
+    this.pageModel.filter = '';
     this.filter1 = null;
-    this.getCompanyUsersByPage();
+    this.getDatasByPage();
   }
 }
