@@ -104,7 +104,7 @@ export class CompanyUserImageSlideComponent implements OnInit {
   }
 
   clearInput1() {
-    this.filter1 = null;
+    this.filter1 = '';
     this.getAdminValues();
   }
 }

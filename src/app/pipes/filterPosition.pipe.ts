@@ -8,11 +8,11 @@ export class FilterPositionPipe implements PipeTransform {
   transform(value: Position[], filterText: string): Position[] {
     filterText = filterText ? filterText.toLocaleLowerCase() : null;
 
-    return filterText
+    return filterText && filterText.length > 2
       ? value.filter(
           (c: Position) =>
             c.positionName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
-      : value;
+      : null;
   }
 }

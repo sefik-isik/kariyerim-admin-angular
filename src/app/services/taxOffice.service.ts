@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/concrete/apiUrl';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../models/response/responseModel';
 import { ListResponseModel } from '../models/response/listResponseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
 import { TaxOffice } from '../models/component/taxOffice';
 import { TaxOfficeDTO } from '../models/dto/taxOfficeDTO';
+import { PageModel } from '../models/base/pageModel';
+import { TaxOfficeByPageDTO } from '../models/pageModel/taxOfficeByPageDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +54,19 @@ export class TaxOfficeService {
   getDeletedAll(): Observable<ListResponseModel<TaxOffice>> {
     let path = this.newUrlPath + 'getdeletedall';
     return this.httpClient.get<ListResponseModel<TaxOffice>>(path);
+  }
+
+  getAllByPage(
+    pageModel: PageModel
+  ): Observable<SingleResponseModel<TaxOfficeByPageDTO>> {
+    let path = this.newUrlPath + 'getallbypage';
+    return this.httpClient.get<SingleResponseModel<TaxOfficeByPageDTO>>(path, {
+      params: new HttpParams()
+        .set('pageIndex', pageModel.pageIndex.toString())
+        .set('pageSize', pageModel.pageSize.toString())
+        .set('sortColumn', pageModel.sortColumn)
+        .set('sortOrder', pageModel.sortOrder),
+    });
   }
 
   getById(id: string): Observable<SingleResponseModel<TaxOffice>> {

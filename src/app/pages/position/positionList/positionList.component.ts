@@ -1,15 +1,17 @@
+import { Position } from './../../../models/component/position';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Position } from '../../../models/component/position';
 import { FilterPositionPipe } from '../../../pipes/filterPosition.pipe';
 import { AuthService } from '../../../services/auth.service';
 import { PositionService } from '../../../services/position.service';
 import { PositionDetailComponent } from '../positionDetail/positionDetail.component';
 import { PositionUpdateComponent } from '../positionUpdate/positionUpdate.component';
 import { ValidationService } from '../../../services/validation.service';
+import { PageModel } from '../../../models/base/pageModel';
+
 //import { PositionData } from '../../../models/positionArray';
 
 @Component({
@@ -21,8 +23,15 @@ import { ValidationService } from '../../../services/validation.service';
 export class PositionListComponent implements OnInit {
   positions: Position[] = [];
   admin: boolean = false;
-  componentTitle = 'Sectors';
+  componentTitle = 'Positions';
   filter1: string;
+
+  pageModel: PageModel = {
+    pageIndex: 0,
+    pageSize: 10,
+    sortColumn: 'positionName',
+    sortOrder: 'asc',
+  };
 
   constructor(
     private toastrService: ToastrService,
@@ -35,6 +44,7 @@ export class PositionListComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getPositions();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getPositions();

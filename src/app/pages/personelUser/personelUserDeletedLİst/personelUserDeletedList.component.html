@@ -35,11 +35,12 @@
           <tr>
             <th>Id</th>
             <th *ngIf="admin">email</th>
+            <th>firstName</th>
+            <th>lastName</th>
+            <th>phoneNumber</th>
             <th>gender</th>
-            <th>licenseDegree</th>
-            <th>driverLicence</th>
-            <th>national</th>
-            <th>birthPlace</th>
+            <th>nationalStatus</th>
+            <th>birthPlaceName</th>
             <th></th>
             <th></th>
             <th>
@@ -68,9 +69,10 @@
           >
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">{{ personelUserDTO.email }}</td>
+            <td>{{ personelUserDTO.firstName }}</td>
+            <td>{{ personelUserDTO.lastName }}</td>
+            <td>{{ personelUserDTO.phoneNumber }}</td>
             <td>{{ personelUserDTO.gender | gender }}</td>
-            <td>{{ personelUserDTO.licenseDegreeName }}</td>
-            <td>{{ personelUserDTO.driverLicenceName }}</td>
             <td>{{ personelUserDTO.nationalStatus | boolenText }}</td>
             <td>{{ personelUserDTO.birthPlaceName }}</td>
             <td>

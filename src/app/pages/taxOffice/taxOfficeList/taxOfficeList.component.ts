@@ -15,7 +15,7 @@ import { TaxOfficeUpdateComponent } from '../taxOfficeUpdate/taxOfficeUpdate.com
 import { TaxOfficeDetailComponent } from '../taxOfficeDetail/taxOfficeDetail.component';
 import { ValidationService } from '../../../services/validation.service';
 import { TaxOffice } from '../../../models/component/taxOffice';
-import { TaxOfficeJsonData } from '../../../models/taxOfficeJsonData';
+import { TaxOfficeJsonData } from '../../../models/datas/taxOfficeJsonData';
 
 @Component({
   selector: 'app-taxOfficeList',

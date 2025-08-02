@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiUrl } from '../models/concrete/apiUrl';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ResponseModel } from '../models/response/responseModel';
 import { Observable } from 'rxjs';
 import { ListResponseModel } from '../models/response/listResponseModel';
 import { Position } from '../models/component/position';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PageModel } from '../models/base/pageModel';
+import { PositionByPageDTO } from '../models/pageModel/positionByPageDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +48,19 @@ export class PositionService {
   getAll(): Observable<ListResponseModel<Position>> {
     let path = this.newUrlPath + 'getall';
     return this.httpClient.get<ListResponseModel<Position>>(path);
+  }
+
+  getAllByPage(
+    pageModel: PageModel
+  ): Observable<SingleResponseModel<PositionByPageDTO>> {
+    let path = this.newUrlPath + 'getallbypage';
+    return this.httpClient.get<SingleResponseModel<PositionByPageDTO>>(path, {
+      params: new HttpParams()
+        .set('pageIndex', pageModel.pageIndex.toString())
+        .set('pageSize', pageModel.pageSize.toString())
+        .set('sortColumn', pageModel.sortColumn)
+        .set('sortOrder', pageModel.sortOrder),
+    });
   }
 
   getDeletedAll(): Observable<ListResponseModel<Position>> {

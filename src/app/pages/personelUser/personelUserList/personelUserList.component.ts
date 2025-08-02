@@ -5,8 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
-import { UserDTO } from '../../../models/dto/userDTO';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUser } from '../../../models/component/personelUser';

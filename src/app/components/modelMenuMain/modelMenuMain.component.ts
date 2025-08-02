@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ModelMenu } from '../../models/component/modelMenu';
 import { ModelMenuService } from '../../services/modelMenu.service';
-import { RouterLink } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { ValidationService } from '../../services/validation.service';
 
 @Component({
@@ -20,7 +19,6 @@ export class ModelMenuMainComponent implements OnInit {
 
   constructor(
     private modelMenuService: ModelMenuService,
-    private toastrService: ToastrService,
     private validationService: ValidationService
   ) {}
 

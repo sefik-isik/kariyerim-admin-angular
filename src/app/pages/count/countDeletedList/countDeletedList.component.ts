@@ -29,15 +29,15 @@ export class CountDeletedListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getLicenseDegrees();
+    this.getCounts();
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getLicenseDegrees();
+        this.getCounts();
       }
     });
   }
 
-  getLicenseDegrees() {
+  getCounts() {
     this.countService.getDeletedAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
@@ -137,6 +137,6 @@ export class CountDeletedListComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
-    this.getLicenseDegrees();
+    this.getCounts();
   }
 }

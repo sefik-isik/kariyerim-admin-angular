@@ -29,7 +29,6 @@ import { CountryComponent } from './pages/country/country/country.component';
 import { CountryListTab } from './pages/country/country/countryListTab';
 import { DriverLicenceComponent } from './pages/driverlicence/driverLicence/driverLicence.component';
 import { DriverLicenceListTab } from './pages/driverlicence/driverLicence/driverLicenceListTab';
-
 import { LanguageComponent } from './pages/language/language/language.component';
 import { LanguageListTab } from './pages/language/language/languageListTab';
 import { LanguageLevelComponent } from './pages/languageLevel/languageLevel/languageLevel.component';
@@ -39,10 +38,8 @@ import { RegisterCompanyUserComponent } from './components/registerCompanyUser/r
 import { RegisterPersonelUserComponent } from './components/registerPersonelUser/registerPersonelUser.component';
 import { CityDeletedListTab } from './pages/city/city/cityDeletedListTab';
 import { CompanyUserDeletedListTab } from './pages/companyUser/companyUser/companyUserDeletedListTab';
-
 import { CompanyUserAddressDeletedListTab } from './pages/companyUserAddress/companyUserAddress/companyUserAddressDeletedListTab';
 import { CompanyUserAdvertComponent } from './pages/companyUserAdvert/companyUserAdvert/companyUserAdvert.component';
-
 import { CompanyUserAdvertCityComponent } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCity.component';
 import { CompanyUserAdvertCityDeletedListTab } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCityDeletedListTab';
 import { CompanyUserAdvertCityListTab } from './pages/companyUserAdvertCity/companyUserAdvertCity/companyUserAdvertCityListTab';
@@ -149,6 +146,13 @@ import { SectorDescriptionDeletedListTab } from './pages/sectorDescription/secto
 import { UniversityDescriptionComponent } from './pages/universityDescription/universityDescription/universityDescription.component';
 import { UniversityDescriptionListTab } from './pages/universityDescription/universityDescription/universityDescriptionListTab';
 import { UniversityDescriptionDeletedListTab } from './pages/universityDescription/universityDescription/universityDescriptionDeletedListTab';
+import { PositionByPageListTab } from './pages/position/position/positionByPageListTab';
+import { AllUserByPageListTab } from './pages/allUser/allUser/allUserByPageListTab';
+import { CompanyUserByPageListTab } from './pages/companyUser/companyUser/companyUserByPageListTab';
+import { PersonelUserByPageListTab } from './pages/personelUser/personelUser/positionByPageListTab';
+import { UniversityByPageListTab } from './pages/university/university/positionByPageListTab';
+import { UniversityDepartmentByPageListTab } from './pages/universityDepartment/universityDepartment/positionByPageListTab';
+import { TaxOfficeByPageListTab } from './pages/taxOffice/taxOffice/positionByPageListTab';
 
 //-----------------
 
@@ -188,6 +192,11 @@ export const routes: Routes = [
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
+            path: 'alluserbypagelisttab',
+            component: AllUserByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
             path: 'alluserlisttab',
             component: AllUserListTab,
             canActivate: [LoginGuard, ExpirationGuard],
@@ -222,6 +231,11 @@ export const routes: Routes = [
         component: CompanyUserComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
+          {
+            path: 'companyuserbypagelisttab',
+            component: CompanyUserByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
           {
             path: 'companyuserlisttab',
             component: CompanyUserListTab,
@@ -424,6 +438,11 @@ export const routes: Routes = [
         component: UniversityDepartmentComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
+          {
+            path: 'universitydepartmentbypagelisttab',
+            component: UniversityDepartmentByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
           {
             path: 'universitydepartmentlisttab',
             component: UniversityDepartmentListTab,
@@ -641,6 +660,11 @@ export const routes: Routes = [
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
           {
+            path: 'taxofficebypagelisttab',
+            component: TaxOfficeByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
             path: 'taxofficelisttab',
             component: TaxOfficeListTab,
             canActivate: [LoginGuard, ExpirationGuard],
@@ -658,6 +682,11 @@ export const routes: Routes = [
         component: UniversityComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
+          {
+            path: 'universitybypagelisttab',
+            component: UniversityByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
           {
             path: 'universitylisttab',
             component: UniversityListTab,
@@ -716,6 +745,11 @@ export const routes: Routes = [
         component: PositionComponent,
         canActivate: [LoginGuard, ExpirationGuard],
         children: [
+          {
+            path: 'positionbypagelisttab',
+            component: PositionByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
           {
             path: 'positionlisttab',
             component: PositionListTab,
@@ -822,6 +856,11 @@ export const routes: Routes = [
         component: PersonelUserComponent,
         canActivate: [LoginGuard, ExpirationGuard, PersonelUserGuard],
         children: [
+          {
+            path: 'personeluserbypagelisttab',
+            component: PersonelUserByPageListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
           {
             path: 'personeluserlisttab',
             component: PersonelUserListTab,

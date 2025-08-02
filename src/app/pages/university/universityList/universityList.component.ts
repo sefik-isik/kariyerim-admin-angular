@@ -83,8 +83,7 @@ export class UniversityListComponent implements OnInit {
   getUniversities() {
     this.universityService.getAllDTO().subscribe(
       (response) => {
-        console.log(response.data);
-        //this.validationService.handleSuccesses(response);
+        this.validationService.handleSuccesses(response);
         this.universityDTOs = response.data.filter(
           (f) => f.universityName != '-'
         );
