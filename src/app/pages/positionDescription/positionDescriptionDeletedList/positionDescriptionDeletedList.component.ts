@@ -10,6 +10,8 @@ import { PositionDescriptionService } from '../../../services/positionDescriptio
 import { ValidationService } from '../../../services/validation.service';
 import { PositionDescriptionDetailComponent } from '../positionDescriptionDetail/positionDescriptionDetail.component';
 import { PositionDescriptionUpdateComponent } from '../positionDescriptionUpdate/positionDescriptionUpdate.component';
+import { Position } from '../../../models/component/position';
+import { PositionService } from '../../../services/position.service';
 
 @Component({
   selector: 'app-positionDescriptionDeletedList',
@@ -19,12 +21,14 @@ import { PositionDescriptionUpdateComponent } from '../positionDescriptionUpdate
 })
 export class PositionDescriptionDeletedListComponent implements OnInit {
   positionDescriptionDTOs: PositionDescriptionDTO[] = [];
+  positions: Position[] = [];
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'Position Description Deleted List';
 
   constructor(
     private positionDescriptionService: PositionDescriptionService,
+    private positionService: PositionService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private validationService: ValidationService
@@ -32,6 +36,8 @@ export class PositionDescriptionDeletedListComponent implements OnInit {
 
   ngOnInit() {
     this.getPositionDescriptions();
+    this.getPositions();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getPositionDescriptions();
@@ -44,6 +50,16 @@ export class PositionDescriptionDeletedListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.positionDescriptionDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getPositions() {
+    this.positionService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.positions = response.data.filter((f) => f.positionName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

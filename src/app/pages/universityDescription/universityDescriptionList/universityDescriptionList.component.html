@@ -13,8 +13,8 @@
         />
         <datalist id="datalist2">
           <option
-            *ngFor="let universityDescriptionDTO of universityDescriptionDTOs"
-            value="{{ universityDescriptionDTO.universityName }}"
+            *ngFor="let university of universities"
+            value="{{ university.universityName }}"
           ></option>
         </datalist>
         <span class="input-group-text">

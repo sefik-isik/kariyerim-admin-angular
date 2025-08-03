@@ -10,6 +10,8 @@ import { UniversityDescriptionService } from '../../../services/universityDescri
 import { ValidationService } from '../../../services/validation.service';
 import { UniversityDescriptionDetailComponent } from '../universityDescriptionDetail/universityDescriptionDetail.component';
 import { UniversityDescriptionUpdateComponent } from '../universityDescriptionUpdate/universityDescriptionUpdate.component';
+import { UniversityService } from '../../../services/university.service';
+import { University } from '../../../models/component/university';
 
 @Component({
   selector: 'app-universityDescriptionDeletedList',
@@ -19,12 +21,14 @@ import { UniversityDescriptionUpdateComponent } from '../universityDescriptionUp
 })
 export class UniversityDescriptionDeletedListComponent implements OnInit {
   universityDescriptionDTOs: UniversityDescriptionDTO[] = [];
+  universities: University[] = [];
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'University Description Deleted List';
 
   constructor(
     private universityDescriptionService: UniversityDescriptionService,
+    private universityService: UniversityService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private validationService: ValidationService
@@ -32,6 +36,8 @@ export class UniversityDescriptionDeletedListComponent implements OnInit {
 
   ngOnInit() {
     this.getUniversityDescriptions();
+    this.getUniversities();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getUniversityDescriptions();
@@ -44,6 +50,18 @@ export class UniversityDescriptionDeletedListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.universityDescriptionDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getUniversities() {
+    this.universityService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.universities = response.data.filter(
+          (f) => f.universityName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

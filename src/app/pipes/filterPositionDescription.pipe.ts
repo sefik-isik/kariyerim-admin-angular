@@ -9,13 +9,16 @@ export class FilterPositionDescriptionPipe implements PipeTransform {
     value: PositionDescriptionDTO[],
     filterText: string
   ): PositionDescriptionDTO[] {
-    filterText = filterText ? filterText.toLocaleLowerCase() : null;
+    filterText =
+      filterText && filterText.length > 0
+        ? filterText.toLocaleLowerCase()
+        : null;
 
     return filterText
       ? value.filter(
           (c: PositionDescriptionDTO) =>
             c.positionName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
-      : value;
+      : null;
   }
 }

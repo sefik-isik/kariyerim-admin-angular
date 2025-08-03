@@ -9,13 +9,16 @@ export class FilterUniversityDescriptionPipe implements PipeTransform {
     value: UniversityDescriptionDTO[],
     filterText: string
   ): UniversityDescriptionDTO[] {
-    filterText = filterText ? filterText.toLocaleLowerCase() : null;
+    filterText =
+      filterText && filterText.length > 0
+        ? filterText.toLocaleLowerCase()
+        : null;
 
     return filterText
       ? value.filter(
           (c: UniversityDescriptionDTO) =>
             c.universityName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
-      : value;
+      : null;
   }
 }

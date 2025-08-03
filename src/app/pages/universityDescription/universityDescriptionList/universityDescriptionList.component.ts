@@ -1,3 +1,4 @@
+import { University } from './../../../models/component/university';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { UniversityDescriptionService } from '../../../services/universityDescri
 import { ValidationService } from '../../../services/validation.service';
 import { UniversityDescriptionDetailComponent } from '../universityDescriptionDetail/universityDescriptionDetail.component';
 import { UniversityDescriptionUpdateComponent } from '../universityDescriptionUpdate/universityDescriptionUpdate.component';
+import { UniversityService } from '../../../services/university.service';
 
 @Component({
   selector: 'app-universityDescriptionList',
@@ -20,6 +22,7 @@ import { UniversityDescriptionUpdateComponent } from '../universityDescriptionUp
 })
 export class UniversityDescriptionListComponent implements OnInit {
   universityDescriptionDTOs: UniversityDescriptionDTO[] = [];
+  universities: University[] = [];
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'Position Description Deleted List';
@@ -27,6 +30,7 @@ export class UniversityDescriptionListComponent implements OnInit {
 
   constructor(
     private universityDescriptionService: UniversityDescriptionService,
+    private universityService: UniversityService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private authService: AuthService,
@@ -36,6 +40,8 @@ export class UniversityDescriptionListComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getUniversityDescriptions();
+    this.getUniversities();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getUniversityDescriptions();
@@ -48,6 +54,18 @@ export class UniversityDescriptionListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.universityDescriptionDTOs = response.data.filter(
+          (f) => f.universityName != '-'
+        );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getUniversities() {
+    this.universityService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.universities = response.data.filter(
           (f) => f.universityName != '-'
         );
       },
@@ -84,6 +102,7 @@ export class UniversityDescriptionListComponent implements OnInit {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
     }
+
     this.universityDescriptionDTOs.forEach((universityDescription) => {
       this.universityDescriptionService.delete(universityDescription).subscribe(
         (response) => {

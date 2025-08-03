@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CompanyUserAdvertJobDescriptionDTO } from '../models/dto/companyUserAdvertJobDescriptionDTO';
 
 @Pipe({
-  name: 'filterCompanyUserAdvertJobDescriptionByUser',
+  name: 'filterCompanyUserAdvertJobDescriptionByCompanyUser',
 })
-export class FilterCompanyUserAdvertJobDescriptionByUserPipe
+export class FilterCompanyUserAdvertJobDescriptionByCompanyUserPipe
   implements PipeTransform
 {
   transform(
@@ -19,7 +19,7 @@ export class FilterCompanyUserAdvertJobDescriptionByUserPipe
     return filterText
       ? value.filter(
           (c: CompanyUserAdvertJobDescriptionDTO) =>
-            c.email.toLocaleLowerCase().indexOf(filterText) !== -1
+            c.companyUserName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
       : null;
   }

@@ -10,6 +10,8 @@ import { SectorDescriptionUpdateComponent } from '../sectorDescriptionUpdate/sec
 import { SectorDescriptionDetailComponent } from '../sectorDescriptionDetail/sectorDescriptionDetail.component';
 import { SectorDescriptionService } from '../../../services/sectorDescription.service';
 import { FilterSectorDescriptionPipe } from '../../../pipes/filterSectorDescription.pipe';
+import { Sector } from '../../../models/component/sector';
+import { SectorService } from '../../../services/sectorService';
 
 @Component({
   selector: 'app-sectorDescriptionDeletedList',
@@ -19,19 +21,23 @@ import { FilterSectorDescriptionPipe } from '../../../pipes/filterSectorDescript
 })
 export class SectorDescriptionDeletedListComponent implements OnInit {
   sectorDescriptionDTOs: SectorDescriptionDTO[] = [];
+  sectors: Sector[] = [];
   dataLoaded = false;
   componentTitle = 'Position Description Deleted List';
   filter1: string;
 
   constructor(
-    private toastrService: ToastrService,
     private sectorDescriptionService: SectorDescriptionService,
+    private sectorService: SectorService,
+    private toastrService: ToastrService,
     private modalService: NgbModal,
     private validationService: ValidationService
   ) {}
 
   ngOnInit() {
     this.getSectorDescriptions();
+    this.getSectors();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getSectorDescriptions();
@@ -44,6 +50,16 @@ export class SectorDescriptionDeletedListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.sectorDescriptionDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getSectors() {
+    this.sectorService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

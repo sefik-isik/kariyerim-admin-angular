@@ -10,7 +10,9 @@ import { ValidationService } from '../../../services/validation.service';
 import { UniversityDepartmentDescriptionDTO } from '../../../models/dto/universityDepartmentDescriptionDTO';
 import { UniversityDepartmentDescriptionDetailComponent } from '../universityDepartmentDescriptionDetail/universityDepartmentDescriptionDetail.component';
 import { UniversityDepartmentDescriptionUpdateComponent } from '../universityDepartmentDescriptionUpdate/universityDepartmentDescriptionUpdate.component';
-import { FilterUniversityDepartmentDescriptiontPipe } from '../../../pipes/filterUniversityDepartmentDescription.pipe';
+import { FilterUniversityDepartmentDescriptionPipe } from '../../../pipes/filterUniversityDepartmentDescription.pipe';
+import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
+import { UniversityDepartment } from '../../../models/component/universitydepartment';
 
 @Component({
   selector: 'app-universityDepartmentDescriptionList',
@@ -19,12 +21,13 @@ import { FilterUniversityDepartmentDescriptiontPipe } from '../../../pipes/filte
   imports: [
     CommonModule,
     FormsModule,
-    FilterUniversityDepartmentDescriptiontPipe,
+    FilterUniversityDepartmentDescriptionPipe,
   ],
 })
 export class UniversityDepartmentDescriptionListComponent implements OnInit {
   universityDepartmentDescriptionDTOs: UniversityDepartmentDescriptionDTO[] =
     [];
+  universityDepartments: UniversityDepartment[] = [];
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'University Department Description List';
@@ -32,6 +35,7 @@ export class UniversityDepartmentDescriptionListComponent implements OnInit {
 
   constructor(
     private universityDepartmentDescriptionService: UniversityDepartmentDescriptionService,
+    private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private authService: AuthService,
@@ -41,6 +45,8 @@ export class UniversityDepartmentDescriptionListComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getUniversityDepartmentDescriptions();
+    this.getUniversityDepartments();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getUniversityDepartmentDescriptions();
@@ -53,6 +59,18 @@ export class UniversityDepartmentDescriptionListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.universityDepartmentDescriptionDTOs = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getUniversityDepartments() {
+    this.universityDepartmentService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.universityDepartments = response.data.filter(
           (f) => f.departmentName != '-'
         );
       },

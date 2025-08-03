@@ -15,6 +15,9 @@ import { CompanyUserAdvertJobDescriptionDetailComponent } from '../companyUserAd
 import { CompanyUserAdvertJobDescriptionUpdateComponent } from '../companyUserAdvertJobDescriptionUpdate/companyUserAdvertJobDescriptionUpdate.component';
 import { AuthService } from '../../../services/auth.service';
 import { ValidationService } from '../../../services/validation.service';
+import { CompanyUser } from '../../../models/component/companyUser';
+import { CompanyUserService } from '../../../services/companyUser.service';
+import { FilterCompanyUserAdvertJobDescriptionByCompanyUserPipe } from '../../../pipes/filterCompanyUserAdvertJobDescriptionByCompanyUser.pipe';
 
 @Component({
   selector: 'app-companyUserAdvertJobDescriptionList',
@@ -24,19 +27,23 @@ import { ValidationService } from '../../../services/validation.service';
     CommonModule,
     FormsModule,
     FilterCompanyUserAdvertJobDescriptionByUserPipe,
+    FilterCompanyUserAdvertJobDescriptionByCompanyUserPipe,
   ],
 })
 export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
   companyUserAdvertJobDescriptionDTOs: CompanyUserAdvertJobDescriptionDTO[] =
     [];
   userDTOs: UserDTO[] = [];
+  companyUsers: CompanyUser[] = [];
   dataLoaded = false;
   filter1: string = '';
+  filter2: string = '';
   admin: boolean = false;
   componentTitle = 'Company User Advert Job Description Deleted List';
 
   constructor(
     private companyUserAdvertJobDescriptionService: CompanyUserAdvertJobDescriptionService,
+    private companyUserService: CompanyUserService,
     private toastrService: ToastrService,
     private userService: UserService,
     private adminService: AdminService,
@@ -63,6 +70,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUserAdvertCities(response);
+        this.getCompanyUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -73,6 +81,16 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.userDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCompanyUsers(adminModel: AdminModel) {
+    this.companyUserService.getAll(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.companyUsers = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -169,6 +187,11 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
 
   clearInput1() {
     this.filter1 = null;
+    this.getAdminValues();
+  }
+
+  clearInput2() {
+    this.filter2 = null;
     this.getAdminValues();
   }
 }

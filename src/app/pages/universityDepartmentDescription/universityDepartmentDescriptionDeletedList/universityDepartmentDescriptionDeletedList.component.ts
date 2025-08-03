@@ -9,28 +9,27 @@ import { UniversityDepartmentDescriptionService } from '../../../services/univer
 import { ValidationService } from '../../../services/validation.service';
 import { UniversityDepartmentDescriptionDetailComponent } from '../universityDepartmentDescriptionDetail/universityDepartmentDescriptionDetail.component';
 import { UniversityDepartmentDescriptionUpdateComponent } from '../universityDepartmentDescriptionUpdate/universityDepartmentDescriptionUpdate.component';
-import { FilterUniversityDepartmentDescriptiontPipe } from '../../../pipes/filterUniversityDepartmentDescription.pipe';
+import { UniversityDepartment } from '../../../models/component/universitydepartment';
+import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 
 @Component({
   selector: 'app-universityDepartmentDescriptionDeletedList',
   templateUrl: './universityDepartmentDescriptionDeletedList.component.html',
   styleUrls: ['./universityDepartmentDescriptionDeletedList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    FilterUniversityDepartmentDescriptiontPipe,
-  ],
+  imports: [CommonModule, FormsModule],
 })
 export class UniversityDepartmentDescriptionDeletedListComponent
   implements OnInit
 {
   universityDepartmentDescriptionDTOs: UniversityDepartmentDescriptionDTO[] =
     [];
+  universityDepartments: UniversityDepartment[] = [];
   dataLoaded = false;
   filter1 = '';
   componentTitle = 'University Department Description Deleted List';
   constructor(
     private universityDepartmentDescriptionService: UniversityDepartmentDescriptionService,
+    private universityDepartmentService: UniversityDepartmentService,
     private toastrService: ToastrService,
     private modalService: NgbModal,
     private validationService: ValidationService
@@ -38,6 +37,8 @@ export class UniversityDepartmentDescriptionDeletedListComponent
 
   ngOnInit() {
     this.getUniversityDepartmentDescriptions();
+    this.getUniversityDepartments();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getUniversityDepartmentDescriptions();
@@ -50,6 +51,18 @@ export class UniversityDepartmentDescriptionDeletedListComponent
       (response) => {
         this.validationService.handleSuccesses(response);
         this.universityDepartmentDescriptionDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getUniversityDepartments() {
+    this.universityDepartmentService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.universityDepartments = response.data.filter(
+          (f) => f.departmentName != '-'
+        );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

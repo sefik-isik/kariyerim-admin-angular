@@ -11,6 +11,8 @@ import { SectorDescription } from '../../../models/component/sectorDescription';
 import { SectorDescriptionUpdateComponent } from '../sectorDescriptionUpdate/sectorDescriptionUpdate.component';
 import { SectorDescriptionDetailComponent } from '../sectorDescriptionDetail/sectorDescriptionDetail.component';
 import { FilterSectorDescriptionPipe } from '../../../pipes/filterSectorDescription.pipe';
+import { Sector } from '../../../models/component/sector';
+import { SectorService } from '../../../services/sectorService';
 
 @Component({
   selector: 'app-sectorDescriptionList',
@@ -20,12 +22,14 @@ import { FilterSectorDescriptionPipe } from '../../../pipes/filterSectorDescript
 })
 export class SectorDescriptionListComponent implements OnInit {
   sectorDescriptionDTOs: SectorDescriptionDTO[] = [];
+  sectors: Sector[] = [];
   admin: boolean = false;
   componentTitle = 'Sectors';
   filter1: string;
 
   constructor(
     private sectorDescriptionService: SectorDescriptionService,
+    private sectorService: SectorService,
     private toastrService: ToastrService,
     private authService: AuthService,
     private modalService: NgbModal,
@@ -35,6 +39,8 @@ export class SectorDescriptionListComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getSectorDescriptions();
+    this.getSectors();
+
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
         this.getSectorDescriptions();
@@ -49,6 +55,16 @@ export class SectorDescriptionListComponent implements OnInit {
         this.sectorDescriptionDTOs = response.data.filter(
           (f) => f.sectorName != '-'
         );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getSectors() {
+    this.sectorService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

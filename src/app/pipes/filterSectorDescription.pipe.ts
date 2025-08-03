@@ -9,13 +9,16 @@ export class FilterSectorDescriptionPipe implements PipeTransform {
     value: SectorDescriptionDTO[],
     filterText: string
   ): SectorDescriptionDTO[] {
-    filterText = filterText ? filterText.toLocaleLowerCase() : null;
+    filterText =
+      filterText && filterText.length > 0
+        ? filterText.toLocaleLowerCase()
+        : null;
 
     return filterText
       ? value.filter(
           (c: SectorDescriptionDTO) =>
             c.sectorName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
-      : value;
+      : null;
   }
 }
