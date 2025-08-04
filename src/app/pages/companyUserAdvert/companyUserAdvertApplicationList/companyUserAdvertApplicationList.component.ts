@@ -3,14 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminModel } from '../../../models/auth/adminModel';
-import { PersonelUserAdvertFollowDTO } from '../../../models/dto/personelUserAdvertFollowDTO';
+import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
+import { PersonelUserAdvertApplicationDTO } from '../../../models/dto/personelUserAdvertApplicationDTO';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { PersonelUserAdvertFollowService } from '../../../services/personelUserAdvertFollow.service';
-import { ToastrService } from 'ngx-toastr';
-import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
 import { PersonelUserAdvertApplicationService } from '../../../services/personelUserAdvertApplication.service';
-import { PersonelUserAdvertApplicationDTO } from '../../../models/dto/personelUserAdvertApplicationDTO';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -30,7 +27,6 @@ export class CompanyUserAdvertApplicationListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService,
     private validationService: ValidationService
   ) {}
 
@@ -49,13 +45,13 @@ export class CompanyUserAdvertApplicationListComponent implements OnInit {
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.getPersonelUserAdvertFollows(response);
+        this.getPersonelUserAdvertApplications(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getPersonelUserAdvertFollows(adminModel: AdminModel) {
+  getPersonelUserAdvertApplications(adminModel: AdminModel) {
     adminModel.id = this.companyUserAdvertDTO.id;
     this.personelUserAdvertApplicationService
       .getAllByAdvertIdDTO(adminModel)

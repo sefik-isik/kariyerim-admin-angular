@@ -173,7 +173,7 @@ export class PersonelUserAddComponent implements OnInit {
         )[0]?.id;
 
         this.validationService.handleSuccesses(response);
-        this.cities = response.data.filter((f) => f.cityName != '-');
+        this.cities = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -187,9 +187,7 @@ export class PersonelUserAddComponent implements OnInit {
         )[0]?.id;
 
         this.validationService.handleSuccesses(response);
-        this.licenseDegrees = response.data.filter(
-          (f) => f.licenseDegreeName != '-'
-        );
+        this.licenseDegrees = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -203,9 +201,7 @@ export class PersonelUserAddComponent implements OnInit {
         )[0]?.id;
 
         this.validationService.handleSuccesses(response);
-        this.driverLicences = response.data.filter(
-          (f) => f.driverLicenceName != '-'
-        );
+        this.driverLicences = response.data;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

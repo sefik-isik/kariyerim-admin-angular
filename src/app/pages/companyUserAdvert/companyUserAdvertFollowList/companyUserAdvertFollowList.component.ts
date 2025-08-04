@@ -3,12 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminModel } from '../../../models/auth/adminModel';
+import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
 import { PersonelUserAdvertFollowDTO } from '../../../models/dto/personelUserAdvertFollowDTO';
 import { AdminService } from '../../../services/helperServices/admin.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserAdvertFollowService } from '../../../services/personelUserAdvertFollow.service';
-import { ToastrService } from 'ngx-toastr';
-import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -28,7 +27,6 @@ export class CompanyUserAdvertFollowListComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private toastrService: ToastrService,
     private validationService: ValidationService
   ) {}
 

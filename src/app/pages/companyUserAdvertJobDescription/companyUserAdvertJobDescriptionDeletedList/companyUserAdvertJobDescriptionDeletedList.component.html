@@ -63,9 +63,9 @@
           <tr>
             <th>Id</th>
             <th *ngIf="admin">email</th>
+            <th>companyUserName</th>
             <th>advertName</th>
             <th>title</th>
-            <th>description</th>
             <th></th>
             <th></th>
             <th>
@@ -95,6 +95,9 @@
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">
               {{ companyUserAdvertJobDescriptionDTO.email }}
+            </td>
+            <td>
+              {{ companyUserAdvertJobDescriptionDTO.companyUserName }}
             </td>
             <td>{{ companyUserAdvertJobDescriptionDTO.advertName }}</td>
             <td>{{ companyUserAdvertJobDescriptionDTO.title }}</td>

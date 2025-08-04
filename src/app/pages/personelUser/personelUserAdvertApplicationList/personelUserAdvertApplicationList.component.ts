@@ -49,13 +49,13 @@ export class PersonelUserAdvertApplicationListComponent implements OnInit {
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
-        this.getPersonelUserAdvertFollows(response);
+        this.getPersonelUserApplicationFollows(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getPersonelUserAdvertFollows(adminModel: AdminModel) {
+  getPersonelUserApplicationFollows(adminModel: AdminModel) {
     adminModel.id = this.personelUserDTO.id;
     this.personelUserAdvertApplicationService
       .getAllByPersonelIdDTO(adminModel)

@@ -2,14 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { OperationClaim } from '../../../models/component/operationClaim';
 import { UserOperationClaim } from '../../../models/component/userOperationClaim';
 import { UserOperationClaimDTO } from '../../../models/dto/userOperationClaimDTO';
 import { OperationClaimService } from '../../../services/operationClaim.service';
+import { UserOperationClaimService } from '../../../services/userOperationClaim.service';
 import { ValidationService } from '../../../services/validation.service';
 
 @Component({
@@ -27,7 +26,6 @@ export class UserOperationClaimUpdateComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private userOperationClaimService: UserOperationClaimService,
-    private adminService: AdminService,
     private operationClaimService: OperationClaimService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService

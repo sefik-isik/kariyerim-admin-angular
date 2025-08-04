@@ -153,11 +153,13 @@ import { PersonelUserByPageListTab } from './pages/personelUser/personelUser/pos
 import { UniversityByPageListTab } from './pages/university/university/positionByPageListTab';
 import { UniversityDepartmentByPageListTab } from './pages/universityDepartment/universityDepartment/positionByPageListTab';
 import { TaxOfficeByPageListTab } from './pages/taxOffice/taxOffice/positionByPageListTab';
+import { MainGuard } from './guards/main.guard';
 
 //-----------------
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', redirectTo: 'dashboard/main', pathMatch: 'full' },
 
   {
     path: 'dashboard',
@@ -168,16 +170,16 @@ export const routes: Routes = [
       {
         path: 'main',
         component: MainComponent,
-        canActivate: [LoginGuard, ExpirationGuard],
+        canActivate: [LoginGuard, ExpirationGuard, MainGuard],
       },
       {
-        path: 'main/personelusermain',
+        path: 'personelusermain',
         component: PersonelUserMainComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
 
       {
-        path: 'main/companyusermain',
+        path: 'companyusermain',
         component: CompanyUserMainComponent,
         canActivate: [LoginGuard, ExpirationGuard],
       },
@@ -1010,5 +1012,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'registerPersonelUser', component: RegisterPersonelUserComponent },
   { path: 'registerCompanyUser', component: RegisterCompanyUserComponent },
-  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
 ];

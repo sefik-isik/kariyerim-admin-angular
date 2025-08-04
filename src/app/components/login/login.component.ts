@@ -65,7 +65,7 @@ export class LoginComponent {
               ' ' +
               response.data.lastName
           );
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['dashboard/main']);
         },
         (responseError) => this.validationService.handleErrors(responseError)
       );

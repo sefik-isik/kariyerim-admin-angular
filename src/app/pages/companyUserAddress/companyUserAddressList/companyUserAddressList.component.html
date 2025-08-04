@@ -38,8 +38,6 @@
             <th>companyUserName</th>
             <th>cityName</th>
             <th>regionName</th>
-            <th>addressDetail</th>
-
             <th></th>
             <th></th>
             <th>
@@ -64,9 +62,6 @@
             <td>{{ companyUserAddressDTO.companyUserName }}</td>
             <td>{{ companyUserAddressDTO.cityName }}</td>
             <td>{{ companyUserAddressDTO.regionName }}</td>
-            <td>
-              {{ companyUserAddressDTO.addressDetail.substring(0, 20) }}...
-            </td>
             <td>
               <i
                 (click)="openDetail(companyUserAddressDTO)"
