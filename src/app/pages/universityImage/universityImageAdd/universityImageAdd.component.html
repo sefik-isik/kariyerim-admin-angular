@@ -58,7 +58,7 @@
             name="imageName"
             #imageName="ngModel"
             placeholder="Upload Image"
-            (change)="onImageSelected($event)"
+            (ngModelChange)="onImageSelected($event)"
             aria-label="Upload File"
             [disabled]="!universityImageModel.universityName"
           />

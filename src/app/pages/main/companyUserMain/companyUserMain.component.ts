@@ -65,7 +65,7 @@ export class CompanyUserMainComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getCompanyUsers(response);
         this.getPersonelUserFollowCompanyUsers(response);
-        this.getCompanyUserAdverts(response);
+        this.getCompanyUserAdverts();
         this.getPersonelUserAdvertFollows(response);
         this.getPersonelUserAdvertApplications(response);
       },
@@ -108,8 +108,8 @@ export class CompanyUserMainComponent implements OnInit {
       );
   }
 
-  getCompanyUserAdverts(adminModel: AdminModel) {
-    this.companyUserAdvertService.getAllDTO(adminModel).subscribe(
+  getCompanyUserAdverts() {
+    this.companyUserAdvertService.getAllDTO().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserAdvertDTOs = response.data.filter(

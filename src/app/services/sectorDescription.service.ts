@@ -12,7 +12,7 @@ import { SectorDescriptionDTO } from '../models/dto/sectorDescriptionDTO';
   providedIn: 'root',
 })
 export class SectorDescriptionService {
-  newUrlPath: string = ApiUrl + 'PositionDescriptions/';
+  newUrlPath: string = ApiUrl + 'SectorDescriptions/';
 
   constructor(private httpClient: HttpClient) {}
 

@@ -92,7 +92,7 @@ export class CompanyUserAdvertListComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
-        this.getCompanyUserAdverts(response);
+        this.getCompanyUserAdverts();
         this.getPersonelUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -129,8 +129,8 @@ export class CompanyUserAdvertListComponent implements OnInit {
     );
   }
 
-  getCompanyUserAdverts(adminModel: AdminModel) {
-    this.companyUserAdvertService.getAllDTO(adminModel).subscribe(
+  getCompanyUserAdverts() {
+    this.companyUserAdvertService.getAllDTO().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserAdvertDTOs = response.data;

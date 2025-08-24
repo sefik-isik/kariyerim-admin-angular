@@ -106,7 +106,7 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
         this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
         this.getCompanyUsers(response);
-        this.getCompanyUserAdverts(response);
+        this.getCompanyUserAdverts();
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -151,8 +151,8 @@ export class CompanyUserAdvertCityAddComponent implements OnInit {
     this.getAdminValues();
   }
 
-  getCompanyUserAdverts(adminModel: AdminModel) {
-    this.companyUserAdvertService.getAll(adminModel).subscribe(
+  getCompanyUserAdverts() {
+    this.companyUserAdvertService.getAll().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserAdverts = response.data.filter(

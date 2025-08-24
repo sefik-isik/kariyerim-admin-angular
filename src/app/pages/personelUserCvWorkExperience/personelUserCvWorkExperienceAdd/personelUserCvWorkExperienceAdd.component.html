@@ -359,7 +359,6 @@
               #companySectorName="ngModel"
               placeholder="Sector Name"
               list="companySectorNameDataList"
-              [disabled]="!personelUserCvWorkExperienceModel.startDate"
             />
             <datalist id="companySectorNameDataList">
               <option
@@ -400,7 +399,6 @@
               #departmentName="ngModel"
               placeholder="Department Name"
               list="departmentNameDataList"
-              [disabled]="!personelUserCvWorkExperienceModel.companySectorName"
             />
             <datalist id="departmentNameDataList">
               <option
@@ -429,37 +427,6 @@
 
       <div class="mb-3">
         <div class="form-group">
-          <div
-            class="input-group"
-            style="
-              border: 1px solid lightgrey;
-              width: 100%;
-              justify-content: space-between;
-              border-radius: 5px;
-            "
-          >
-            <span class="input-group-text"
-              ><label class="form-check-label" for="switchCheckDefault"
-                >Found Job In Here?</label
-              ></span
-            >
-            <div class="form-check form-switch">
-              <input
-                class="form-check-input position-absolute top-50 start-100 translate-middle"
-                type="checkbox"
-                role="switch"
-                id="switchCheckDefault"
-                [(ngModel)]="personelUserCvWorkExperienceModel.foundJobInHere"
-                name="foundJobInHere"
-                style="width: 40px; height: 20px; top: 45% !important"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Working Method Name</span>
             <input
@@ -472,7 +439,6 @@
               #workingMethodName="ngModel"
               placeholder="Working Method Name"
               list="workingMethodNameDataList"
-              [disabled]="!personelUserCvWorkExperienceModel.departmentName"
             />
             <datalist id="workingMethodNameDataList">
               <option
@@ -516,7 +482,6 @@
               (change)="
                 setCountryName(personelUserCvWorkExperienceModel.countryName)
               "
-              [disabled]="!personelUserCvWorkExperienceModel.workingMethodName"
             />
             <datalist id="countryNameDataList">
               <option
@@ -558,7 +523,6 @@
               placeholder="City Name"
               list="cityNameDataList"
               (change)="setCityName(personelUserCvWorkExperienceModel.cityName)"
-              [disabled]="!personelUserCvWorkExperienceModel.countryName"
             />
             <datalist id="cityNameDataList">
               <option
@@ -599,7 +563,6 @@
               #regionName="ngModel"
               placeholder="Region Name"
               list="regionNameDataList"
-              [disabled]="!personelUserCvWorkExperienceModel.cityName"
             />
             <datalist id="regionNameDataList">
               <option
@@ -658,6 +621,36 @@
               *ngFor="let error of getValidationErrors(detail)"
             >
               {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div
+            class="input-group"
+            style="
+              border: 1px solid lightgrey;
+              width: 100%;
+              justify-content: space-between;
+              border-radius: 5px;
+            "
+          >
+            <span class="input-group-text"
+              ><label class="form-check-label" for="switchCheckDefault"
+                >Found Job In Here?</label
+              ></span
+            >
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input position-absolute top-50 start-100 translate-middle"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="personelUserCvWorkExperienceModel.foundJobInHere"
+                name="foundJobInHere"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
             </div>
           </div>
         </div>

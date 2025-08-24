@@ -6,30 +6,41 @@
   <span class="visually-hidden">Loading...</span>
 </div>
 
-<ul *ngIf="dataLoaded == true" class="list-group list-group-flush">
-  <li
-    style="cursor: pointer"
-    (click)="setModelMenu(modelMenuFirst)"
-    [class]="getModelMenuClass(modelMenuFirst)"
-    [routerLink]="['main']"
-  >
-    Main
-  </li>
+<div
+  style="
+    overflow: auto;
+    position: relative;
+    height: auto;
+    min-height: 10px;
+    max-height: 1200px;
+    background-color: rgb(255, 255, 255);
+  "
+>
+  <ul *ngIf="dataLoaded == true" class="list-group list-group-flush">
+    <li
+      style="cursor: pointer; font-size: 14px"
+      (click)="setModelMenu(modelMenuFirst)"
+      [class]="getModelMenuClass(modelMenuFirst)"
+      [routerLink]="['main']"
+    >
+      Main
+    </li>
 
-  <li
-    style="cursor: pointer"
-    *ngFor="let modelMenu of modelMenus"
-    (click)="setModelMenu(modelMenu)"
-    [class]="getModelMenuClass(modelMenu)"
-    [routerLink]="[
-      (
-        modelMenu.modelName +
-        '/' +
-        modelMenu.modelName +
-        'listtab'
-      ).toLowerCase()
-    ]"
-  >
-    {{ modelMenu.modelName }}
-  </li>
-</ul>
+    <li
+      style="cursor: pointer; font-size: 14px"
+      *ngFor="let modelMenu of modelMenus"
+      (click)="setModelMenu(modelMenu)"
+      [class]="getModelMenuClass(modelMenu)"
+      [routerLink]="[
+        (
+          modelMenu.modelName +
+          '/' +
+          modelMenu.modelName +
+          'listtab'
+        ).toLowerCase()
+      ]"
+    >
+      {{ modelMenu.modelName }}
+    </li>
+  </ul>
+</div>

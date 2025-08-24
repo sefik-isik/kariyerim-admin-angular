@@ -45,6 +45,40 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
+            <span class="input-group-text">Address</span>
+            <textarea
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="universityDTO.address"
+              type="text"
+              class="form-control"
+              name="address"
+              #address="ngModel"
+              placeholder="Web Address"
+            >
+            <span class="input-group-text">
+              <i
+                (click)="addressClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+            </textarea>
+          </div>
+          <div *ngIf="!address.valid && address.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(address)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Year Of Establishment</span>
             <input
               maxlength="10"

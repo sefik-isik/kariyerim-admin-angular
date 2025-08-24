@@ -46,7 +46,7 @@
             | filterCompanyUserImageByUser : filter1
         "
       >
-        <div class="card mt-3" style="width: 15rem">
+        <div class="card mt-3" style="width: 10rem; min-height: 16rem">
           <img
             src="{{
               companyUserImageDTO.imagePath +
@@ -54,14 +54,14 @@
                 companyUserImageDTO.imageName
             }}"
             class="img-fluid img-thumbnail"
-            style="height: 250px; width: 100%; text-align: center; border: none"
+            style="height: 100px; width: 100%; text-align: center; border: none"
             alt="{{ companyUserImageDTO.imageOwnName }}"
           />
           <div class="card-body">
-            <h5 class="card-title">
+            <h5 class="card-title" style="font-size: small">
               {{ companyUserImageDTO.companyUserName }}
             </h5>
-            <h6 class="card-title">
+            <h6 class="card-title" style="font-size: small">
               {{ companyUserImageDTO.imageOwnName }}
             </h6>
             <div class="mt-3">

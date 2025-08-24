@@ -115,7 +115,6 @@
               #sectorName="ngModel"
               placeholder="Sector Name"
               list="sectorNameDataList"
-              [disabled]="!companyUserModel.companyUserName"
             />
             <datalist id="sectorNameDataList">
               <option
@@ -157,7 +156,6 @@
               placeholder="Tax City Name"
               (change)="getTaxOffices(companyUserModel.taxCityName)"
               list="taxCityNameDataList"
-              [disabled]="!companyUserModel.sectorName"
             />
             <datalist id="taxCityNameDataList">
               <option
@@ -198,7 +196,6 @@
               #taxOfficeName="ngModel"
               placeholder="Tax Office Name"
               list="taxOfficeNameDataList"
-              [disabled]="!companyUserModel.taxCityName"
             />
             <datalist id="taxOfficeNameDataList">
               <option
@@ -239,7 +236,6 @@
               name="taxNumber"
               #taxNumber="ngModel"
               placeholder="Tax Number"
-              [disabled]="!companyUserModel.taxOfficeName"
             />
             <span class="input-group-text">
               <i
@@ -274,7 +270,6 @@
               #workerCountValue="ngModel"
               placeholder="Worker Count"
               list="workerCountValueDataList"
-              [disabled]="!companyUserModel.taxNumber"
             />
             <datalist id="workerCountValueDataList">
               <option
@@ -314,7 +309,6 @@
               name="webAddress"
               #webAddress="ngModel"
               placeholder="Web Address"
-              [disabled]="!companyUserModel.workerCountValue"
             />
             <span class="input-group-text">
               <i
@@ -349,7 +343,6 @@
               class="form-control"
               name="yearOfEstablishment"
               #yearOfEstablishment="ngModel"
-              [disabled]="!companyUserModel.webAddress"
             />
 
             <span class="input-group-text">
@@ -386,7 +379,6 @@
               name="clarification"
               #clarification="ngModel"
               placeholder="Clarification"
-              [disabled]="!companyUserModel.yearOfEstablishment"
             />
             <span class="input-group-text">
               <i

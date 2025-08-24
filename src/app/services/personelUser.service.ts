@@ -66,17 +66,9 @@ export class PersonelUserService {
   getAllByPage(
     pageModel: PageModel
   ): Observable<SingleResponseModel<PersonelUserByPageDTO>> {
-    let path = this.newUrlPath + 'getallbypage';
-    return this.httpClient.get<SingleResponseModel<PersonelUserByPageDTO>>(
-      path,
-      {
-        params: new HttpParams()
-          .set('pageIndex', pageModel.pageIndex.toString())
-          .set('pageSize', pageModel.pageSize.toString())
-          .set('sortColumn', pageModel.sortColumn)
-          .set('sortOrder', pageModel.sortOrder)
-          .set('filter', pageModel.filter || ''),
-      }
+    return this.httpClient.post<SingleResponseModel<PersonelUserByPageDTO>>(
+      this.newUrlPath + 'getallbypage',
+      pageModel
     );
   }
 

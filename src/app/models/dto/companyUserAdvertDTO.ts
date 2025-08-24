@@ -26,4 +26,12 @@ export interface CompanyUserAdvertDTO extends BaseCompanyUserDTOModel {
   languageLevelName: string;
   driverLicenceId: string;
   driverLicenceName: string;
+  countryId: string;
+  countryName: string;
+  cityId: string;
+  cityName: string;
+  regionId: string;
+  regionName: string;
+  sectorId: string;
+  sectorName: string;
 }

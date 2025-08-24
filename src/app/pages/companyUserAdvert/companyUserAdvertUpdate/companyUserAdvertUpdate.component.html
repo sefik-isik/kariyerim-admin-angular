@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Advert Name</span>
@@ -53,6 +53,7 @@
               name="advertName"
               #advertName="ngModel"
               placeholder="Advert Name"
+              [disabled]="!companyUserAdvertDTO.companyUserName"
             />
             <span class="input-group-text">
               <i
@@ -73,19 +74,44 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div
+        class="input-group mb-3 justify-content-md-center"
+        *ngIf="result == true"
+      >
+        <div class="card">
+          <img
+            *ngIf="companyUserAdvertDTO.advertImageName"
+            src="{{
+              companyUserAdvertDTO.advertImagePath +
+                'thumbs/' +
+                companyUserAdvertDTO.advertImageName
+            }}"
+            class="img-fluid"
+            alt="{{ companyUserAdvertDTO.advertImageOwnName }}"
+          />
+          <i
+            type="button"
+            (click)="deleteImage()"
+            class="bi bi-x-circle-fill btn btn-outline-danger"
+          >
+            Delete Image
+          </i>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
         <div class="input-group">
           <input
+            class="form-control"
             type="file"
-            required
             pattern=""
             [(ngModel)]="companyUserAdvertDTO.advertImageName"
-            class="form-control"
             name="advertImageName"
             #advertImageName="ngModel"
             placeholder="Upload Image"
             (change)="onImageSelected($event)"
             aria-label="Upload File"
+            [disabled]="!companyUserAdvertDTO.advertName"
           />
           <span class="input-group-text">
             <i
@@ -105,7 +131,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Image Name</span>
@@ -120,6 +146,7 @@
               name="advertImageOwnName"
               #advertImageOwnName="ngModel"
               placeholder="Image Name"
+              [disabled]="!companyUserAdvertDTO.advertImageName"
             />
             <span class="input-group-text">
               <i
@@ -140,7 +167,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Work Area Name</span>
@@ -149,13 +176,11 @@
               minlength="3"
               maxlength="50"
               pattern=""
-              [(ngModel)]="companyUserAdvertDTO.workAreaName"
               type="text"
               class="form-control"
-              name="workAreaName"
-              #workAreaName="ngModel"
               placeholder="Work Area"
               list="workAreaNameDataList"
+              [disabled]="!companyUserAdvertDTO.advertImageOwnName"
             />
             <datalist id="workAreaNameDataList">
               <option
@@ -171,18 +196,10 @@
               ></i>
             </span>
           </div>
-          <div *ngIf="!workAreaName.valid && workAreaName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(workAreaName)"
-            >
-              {{ error }}
-            </div>
-          </div>
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Working Method Name</span>
@@ -198,6 +215,7 @@
               #workingMethodName="ngModel"
               placeholder="Working Method"
               list="workingMethodNameDataList"
+              [disabled]="!companyUserAdvertDTO.workAreaName"
             />
             <datalist id="workingMethodNameDataList">
               <option
@@ -224,7 +242,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Department Name</span>
@@ -236,12 +254,13 @@
               [(ngModel)]="companyUserAdvertDTO.departmentName"
               type="text"
               class="form-control"
-              name="companyUserDepartmentName"
-              #companyUserDepartmentName="ngModel"
+              name="departmentName"
+              #departmentName="ngModel"
               placeholder="Department"
-              list="companyUserDepartmentNameDataList"
+              list="departmentNameDataList"
+              [disabled]="!companyUserAdvertDTO.workingMethodName"
             />
-            <datalist id="companyUserDepartmentNameDataList">
+            <datalist id="departmentNameDataList">
               <option
                 *ngFor="let companyUserDepartment of companyUserDepartments"
                 value="{{ companyUserDepartment.departmentName }}"
@@ -255,17 +274,10 @@
               ></i>
             </span>
           </div>
-          <div
-            *ngIf="
-              !companyUserDepartmentName.valid &&
-              companyUserDepartmentName.touched
-            "
-          >
+          <div *ngIf="!departmentName.valid && departmentName.touched">
             <div
               class="error-message"
-              *ngFor="
-                let error of getValidationErrors(companyUserDepartmentName)
-              "
+              *ngFor="let error of getValidationErrors(departmentName)"
             >
               {{ error }}
             </div>
@@ -273,7 +285,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Position</span>
@@ -289,6 +301,7 @@
               #positionName="ngModel"
               placeholder="Position"
               list="positionNameDataList"
+              [disabled]="!companyUserAdvertDTO.departmentName"
             />
             <datalist id="positionNameDataList">
               <option
@@ -315,7 +328,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Position Level</span>
@@ -331,6 +344,7 @@
               #positionLevelName="ngModel"
               placeholder="Position Level"
               list="positionLevelNameDataList"
+              [disabled]="!companyUserAdvertDTO.positionName"
             />
             <datalist id="positionLevelNameDataList">
               <option
@@ -357,9 +371,185 @@
         </div>
       </div>
 
-      <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertDTO.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="Country Name"
+              (change)="getCities(companyUserAdvertDTO.countryName)"
+              list="countryNameDataList"
+              [disabled]="!companyUserAdvertDTO.positionLevelName"
+            />
+            <datalist id="countryNameDataList">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="countryNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertDTO.cityName"
+              type="text"
+              class="form-control"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(companyUserAdvertDTO.cityName)"
+              list="cityNameDataList"
+              [disabled]="!companyUserAdvertDTO.countryName"
+            />
+            <datalist id="cityNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Region Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertDTO.regionName"
+              type="text"
+              class="form-control"
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="Region Name"
+              list="regionNameDataList"
+              [disabled]="!companyUserAdvertDTO.cityName"
+            />
+            <datalist id="regionNameDataList">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="regionNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertDTO.sectorName"
+              type="text"
+              class="form-control"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNameDataList"
+              [disabled]="!companyUserAdvertDTO.regionName"
+            />
+            <datalist id="sectorNameDataList">
+              <option
+                *ngFor="let companyUserSector of sectors"
+                value="{{ companyUserSector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="sectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="optionalInformation" *ngIf="result == false">
+        İsteğe Bağlı Bilgiler
+      </div>
+
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Experience Name</span>
@@ -399,7 +589,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">License Degree Name</span>
@@ -439,7 +629,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Driver Licence Name</span>
@@ -479,7 +669,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Language Name</span>
@@ -519,7 +709,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
             <span class="input-group-text">Language Level Name</span>
@@ -559,7 +749,7 @@
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div
             class="input-group"
@@ -592,13 +782,24 @@
     </form>
     <div class="d-grid gap-2">
       <button
+        *ngIf="result == false"
         [disabled]="!form.valid"
         type="button"
         class="btn btn-outline-primary"
         (click)="onSubmit(form)"
       >
-        Update
+        Upload
       </button>
+
+      <button
+        *ngIf="result == true"
+        type="button"
+        class="btn btn-outline-primary"
+        disabled
+      >
+        Resim güncellemesi yapmak için mevcut resmi silmelisiniz.
+      </button>
+
       <button
         type="button"
         class="btn btn-outline-dark"

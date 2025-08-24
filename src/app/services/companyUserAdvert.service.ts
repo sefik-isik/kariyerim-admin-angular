@@ -8,6 +8,7 @@ import { CompanyUserAdvertDTO } from '../models/dto/companyUserAdvertDTO';
 import { ListResponseModel } from '../models/response/listResponseModel';
 import { ResponseModel } from '../models/response/responseModel';
 import { SingleResponseModel } from '../models/response/singleResponseModel';
+import { PageModel } from '../models/base/pageModel';
 
 @Injectable({
   providedIn: 'root',
@@ -63,12 +64,9 @@ export class CompanyUserAdvertService {
     );
   }
 
-  getAll(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserAdvert>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserAdvert>>(
-      this.newUrlPath + 'getall',
-      adminModel
+  getAll(): Observable<ListResponseModel<CompanyUserAdvert>> {
+    return this.httpClient.get<ListResponseModel<CompanyUserAdvert>>(
+      this.newUrlPath + 'getall'
     );
   }
 
@@ -81,21 +79,24 @@ export class CompanyUserAdvertService {
     );
   }
 
-  getById(
-    adminModel: AdminModel
+  getAllByFilterListPage(
+    pageModel: PageModel
   ): Observable<SingleResponseModel<CompanyUserAdvert>> {
     return this.httpClient.post<SingleResponseModel<CompanyUserAdvert>>(
-      this.newUrlPath + 'getbyid',
-      adminModel
+      this.newUrlPath + 'getallbypage',
+      pageModel
     );
   }
 
-  getAllDTO(
-    adminModel: AdminModel
-  ): Observable<ListResponseModel<CompanyUserAdvertDTO>> {
-    return this.httpClient.post<ListResponseModel<CompanyUserAdvertDTO>>(
-      this.newUrlPath + 'getalldto',
-      adminModel
+  getById(id: string): Observable<SingleResponseModel<CompanyUserAdvert>> {
+    return this.httpClient.get<SingleResponseModel<CompanyUserAdvert>>(
+      this.newUrlPath + 'getbyid?id=' + id
+    );
+  }
+
+  getAllDTO(): Observable<ListResponseModel<CompanyUserAdvertDTO>> {
+    return this.httpClient.get<ListResponseModel<CompanyUserAdvertDTO>>(
+      this.newUrlPath + 'getalldto'
     );
   }
 

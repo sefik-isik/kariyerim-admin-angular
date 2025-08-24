@@ -64,15 +64,10 @@ export class UserService {
   getAllByPage(
     pageModel: PageModel
   ): Observable<SingleResponseModel<AllUserByPageDTO>> {
-    let path = this.newUrlPath + 'getallbypage';
-    return this.httpClient.get<SingleResponseModel<AllUserByPageDTO>>(path, {
-      params: new HttpParams()
-        .set('pageIndex', pageModel.pageIndex.toString())
-        .set('pageSize', pageModel.pageSize.toString())
-        .set('sortColumn', pageModel.sortColumn)
-        .set('sortOrder', pageModel.sortOrder)
-        .set('filter', pageModel.filter || ''),
-    });
+    return this.httpClient.post<SingleResponseModel<AllUserByPageDTO>>(
+      this.newUrlPath + 'getallbypage',
+      pageModel
+    );
   }
 
   getAllCompanyUserDTO(

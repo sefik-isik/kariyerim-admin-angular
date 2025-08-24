@@ -1,16 +1,12 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
   private isBrowser: boolean;
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
-    private router: Router
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 

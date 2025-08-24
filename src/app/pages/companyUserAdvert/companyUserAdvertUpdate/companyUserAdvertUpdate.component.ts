@@ -34,6 +34,14 @@ import { Experience } from './../../../models/component/experience';
 import { WorkArea } from './../../../models/component/workArea';
 import { WorkingMethod } from './../../../models/component/workingMethod';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
+import { Sector } from '../../../models/component/sector';
+import { CityService } from '../../../services/city.service';
+import { RegionService } from '../../../services/region.service';
+import { SectorService } from '../../../services/sectorService';
+import { CountryService } from '../../../services/country.service';
+import { Country } from '../../../models/component/country';
 
 @Component({
   selector: 'app-companyUserAdvertUpdate',
@@ -57,6 +65,10 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   positionLevels: PositionLevel[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
+  countries: Country[];
+  cities: City[] = [];
+  regions: Region[] = [];
+  sectors: Sector[] = [];
   admin: boolean = false;
   componentTitle = 'Company Advert Update Form';
 
@@ -72,6 +84,10 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     private positionLevelService: PositionLevelService,
     private languageService: LanguageService,
     private languageLevelService: LanguageLevelService,
+    private countryService: CountryService,
+    private cityService: CityService,
+    private regionService: RegionService,
+    private sectorService: SectorService,
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
@@ -83,6 +99,9 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
+
+    this.checkImage();
+
     this.getCompanyUserDepartments();
     this.getWorkingMethods();
     this.getWorkAreas();
@@ -93,6 +112,82 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     this.getLanguages();
     this.getLanguageLevels();
     this.getDriverLicences();
+    this.getCountries();
+    this.getCities(this.companyUserAdvertDTO.countryName);
+    this.getRegions(this.companyUserAdvertDTO.cityName);
+    this.getSectors();
+  }
+
+  getCountries() {
+    this.countryService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.countries = response.data.filter((f) => f.countryName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCities(countryName: string) {
+    this.cityService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.cities = response.data.filter(
+          (c) => c.countryId === this.getCountryId(countryName)
+        );
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getRegions(cityName: string) {
+    this.regionService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.regions = response.data
+          .filter((r) => r.cityId === this.getCityId(cityName))
+          .filter((f) => f.regionName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getSectors() {
+    this.sectorService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCountryId(countryName: string): string {
+    const countryId = this.countries.filter(
+      (c) => c.countryName === countryName
+    )[0]?.id;
+
+    return countryId;
+  }
+
+  getCityId(cityName: string): string {
+    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+
+    return cityId;
+  }
+
+  getRegionId(regionName: string): string {
+    const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
+      ?.id;
+
+    return regionId;
+  }
+
+  getSectorId(sectorName: string): string {
+    const sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+      ?.id;
+
+    return sectorId;
   }
 
   checkImage() {
@@ -149,6 +244,10 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log(this.companyUserAdvertDTO.advertImageName);
+    console.log(this.companyUserAdvertDTO.advertImagePath);
+
+    this.deleteImage();
     if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
@@ -176,6 +275,9 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
             this.companyUserAdvertDTO.advertImageName = event.body.name;
             this.companyUserAdvertDTO.advertImagePath = event.body.type;
 
+            console.log(this.companyUserAdvertDTO.advertImageName);
+            console.log(this.companyUserAdvertDTO.advertImagePath);
+
             this.update();
           }
         },
@@ -186,6 +288,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
   }
 
   update() {
+    console.log(this.getModel());
     this.companyUserAdvertService.update(this.getModel()).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
@@ -206,8 +309,8 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       userId: this.companyUserAdvertDTO.userId,
       companyUserId: this.companyUserAdvertDTO.companyUserId,
       advertName: this.companyUserAdvertDTO.advertName.trim(),
-      advertImagePath: this.companyUserAdvertDTO.advertImagePath.trim(),
-      advertImageName: this.companyUserAdvertDTO.advertImageName.trim(),
+      advertImagePath: this.companyUserAdvertDTO.advertImagePath,
+      advertImageName: this.companyUserAdvertDTO.advertImageName,
       advertImageOwnName: this.companyUserAdvertDTO.advertImageOwnName.trim(),
       workAreaId: this.getWorkAreaId(
         this.companyUserAdvertDTO.workAreaName.trim()
@@ -238,6 +341,10 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       driverLicenceId: this.getDriverLicenceId(
         this.companyUserAdvertDTO.driverLicenceName.trim()
       ),
+      countryId: this.getCountryId(this.companyUserAdvertDTO.countryName),
+      cityId: this.getCityId(this.companyUserAdvertDTO.cityName),
+      regionId: this.getRegionId(this.companyUserAdvertDTO.regionName),
+      sectorId: this.getSectorId(this.companyUserAdvertDTO.sectorName),
       createdDate: new Date(Date.now()).toJSON(),
       updatedDate: new Date(Date.now()).toJSON(),
       deletedDate: new Date(Date.now()).toJSON(),
@@ -530,5 +637,21 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
   driverLicenceNameClear() {
     this.companyUserAdvertDTO.driverLicenceName = '';
+  }
+
+  countryNameClear() {
+    this.companyUserAdvertDTO.countryName = '';
+  }
+
+  cityNameClear() {
+    this.companyUserAdvertDTO.cityName = '';
+  }
+
+  regionNameClear() {
+    this.companyUserAdvertDTO.regionName = '';
+  }
+
+  sectorNameClear() {
+    this.companyUserAdvertDTO.sectorName = '';
   }
 }

@@ -59,15 +59,10 @@ export class TaxOfficeService {
   getAllByPage(
     pageModel: PageModel
   ): Observable<SingleResponseModel<TaxOfficeByPageDTO>> {
-    let path = this.newUrlPath + 'getallbypage';
-    return this.httpClient.get<SingleResponseModel<TaxOfficeByPageDTO>>(path, {
-      params: new HttpParams()
-        .set('pageIndex', pageModel.pageIndex.toString())
-        .set('pageSize', pageModel.pageSize.toString())
-        .set('sortColumn', pageModel.sortColumn)
-        .set('sortOrder', pageModel.sortOrder)
-        .set('filter', pageModel.filter || ''),
-    });
+    return this.httpClient.post<SingleResponseModel<TaxOfficeByPageDTO>>(
+      this.newUrlPath + 'getallbypage',
+      pageModel
+    );
   }
 
   getById(id: string): Observable<SingleResponseModel<TaxOffice>> {

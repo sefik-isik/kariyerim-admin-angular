@@ -100,37 +100,40 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <span class="input-group-text"
-          >Description <br />{{ editorCount }} \ 50-5000</span
-        >
-
-        <angular-editor
-          minlength="50"
-          maxlength="5000"
-          [(ngModel)]="htmlContent"
-          [config]="config"
-          [ngModelOptions]="{ standalone: true }"
-          pattern=""
-          class="form-control"
-          name="description"
-          #description="ngModel"
-          (input)="count()"
-        ></angular-editor>
-        <span class="input-group-text">
-          <i
-            (click)="descriptionClear()"
-            class="bi bi-x-circle"
-            style="cursor: pointer"
-          ></i>
-        </span>
-      </div>
-      <div *ngIf="!description.valid && description.touched">
-        <div
-          class="error-message"
-          *ngFor="let error of getValidationErrors(description)"
-        >
-          {{ error }}
+      <div class="mb-3" *ngIf="personelUserCoverLetterModel.title">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text"
+              >Detail <br />{{ editorCount }} \ 50-5000</span
+            >
+            <angular-editor
+              minlength="50"
+              maxlength="5000"
+              [(ngModel)]="htmlContent"
+              [config]="config"
+              [ngModelOptions]="{ standalone: true }"
+              pattern=""
+              class="form-control"
+              name="detail"
+              #detail="ngModel"
+              (input)="count()"
+            ></angular-editor>
+            <span class="input-group-text">
+              <i
+                (click)="descriptionClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!detail.valid && detail.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(detail)"
+            >
+              {{ error }}
+            </div>
+          </div>
         </div>
       </div>
     </form>

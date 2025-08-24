@@ -73,10 +73,9 @@ export class ValidationService {
   handleErrors(responseError: any) {
     let errorNames: string[] = [];
 
-    console.clear();
-    console.error(responseError);
-
     if (responseError.error.StatusCode == 500) {
+      //console.clear();
+      console.error(responseError);
       this.toastrService.error(
         `${responseError.error.StatusText}`,
         'Sistem Hatası'
@@ -84,10 +83,14 @@ export class ValidationService {
     }
 
     if (responseError.error.message && responseError.status == 400) {
+      //console.clear();
+      console.error(responseError);
       this.toastrService.error(`${responseError.error.message}`);
     }
 
     if (responseError.error.errors && responseError.error.status == 400) {
+      //console.clear();
+      console.error(responseError);
       for (let errorName in responseError.error.errors) {
         errorNames.push(errorName);
       }
@@ -101,12 +104,15 @@ export class ValidationService {
       responseError.error.ValidationErrors &&
       responseError.error.StatusCode == 400
     ) {
+      //console.clear();
+      console.error(responseError);
       this.toastrService.error(
         responseError.error.StatusText,
         responseError.error.Message
       );
 
       responseError.error.ValidationErrors.forEach((e: any) => {
+        //console.clear();
         console.error(
           `Alan Adı: ${e.PropertyName} | Girilen Değer: ${e.AttemptedValue} | Hata Mesajı : ${e.ErrorMessage}`
         );
@@ -117,7 +123,7 @@ export class ValidationService {
 
   handleSuccesses(response: any) {
     if (response.message) {
-      console.clear();
+      //console.clear();
       console.info(
         'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
       );

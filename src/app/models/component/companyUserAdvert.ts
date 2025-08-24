@@ -17,4 +17,8 @@ export interface CompanyUserAdvert extends BaseCompanyUserModel {
   languageId: string;
   languageLevelId: string;
   driverLicenceId: string;
+  countryId: string;
+  cityId: string;
+  regionId: string;
+  sectorId: string;
 }

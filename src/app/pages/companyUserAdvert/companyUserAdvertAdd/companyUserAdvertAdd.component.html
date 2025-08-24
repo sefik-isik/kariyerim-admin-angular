@@ -428,6 +428,180 @@
         </div>
       </div>
 
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Country Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.countryName"
+              type="text"
+              class="form-control"
+              name="countryName"
+              #countryName="ngModel"
+              placeholder="Country Name"
+              (change)="getCities(companyUserAdvertModel.countryName)"
+              list="countryNameDataList"
+              [disabled]="!companyUserAdvertModel.positionLevelName"
+            />
+            <datalist id="countryNameDataList">
+              <option
+                *ngFor="let country of countries"
+                value="{{ country.countryName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="countryNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!countryName.valid && countryName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(countryName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">City Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.cityName"
+              type="text"
+              class="form-control"
+              name="cityName"
+              #cityName="ngModel"
+              placeholder="City Name"
+              (change)="getRegions(companyUserAdvertModel.cityName)"
+              list="cityNameDataList"
+              [disabled]="!companyUserAdvertModel.countryName"
+            />
+            <datalist id="cityNameDataList">
+              <option
+                *ngFor="let city of cities"
+                value="{{ city.cityName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cityNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cityName.valid && cityName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cityName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Region Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.regionName"
+              type="text"
+              class="form-control"
+              name="regionName"
+              #regionName="ngModel"
+              placeholder="Region Name"
+              list="regionNameDataList"
+              [disabled]="!companyUserAdvertModel.cityName"
+            />
+            <datalist id="regionNameDataList">
+              <option
+                *ngFor="let region of regions"
+                value="{{ region.regionName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="regionNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!regionName.valid && regionName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(regionName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Sector Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="companyUserAdvertModel.sectorName"
+              type="text"
+              class="form-control"
+              name="sectorName"
+              #sectorName="ngModel"
+              placeholder="Sector Name"
+              list="sectorNameDataList"
+              [disabled]="!companyUserAdvertModel.regionName"
+            />
+            <datalist id="sectorNameDataList">
+              <option
+                *ngFor="let companyUserSector of sectors"
+                value="{{ companyUserSector.sectorName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="sectorNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!sectorName.valid && sectorName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(sectorName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="optionalInformation">İsteğe Bağlı Bilgiler</div>
 
       <div class="mb-3">
@@ -444,7 +618,6 @@
               #experienceName="ngModel"
               placeholder="Experience"
               list="experienceNameDataList"
-              [disabled]="!companyUserAdvertModel.positionLevelName"
             />
             <datalist id="experienceNameDataList">
               <option
@@ -485,7 +658,6 @@
               #licenseDegreeName="ngModel"
               placeholder="License Degree"
               list="licenseDegreeNameDataList"
-              [disabled]="!companyUserAdvertModel.experienceName"
             />
             <datalist id="licenseDegreeNameDataList">
               <option
@@ -526,7 +698,6 @@
               #driverLicenceName="ngModel"
               placeholder="Driver Licence"
               list="driverLicenceNameDataList"
-              [disabled]="!companyUserAdvertModel.licenseDegreeName"
             />
             <datalist id="driverLicenceNameDataList">
               <option
@@ -567,7 +738,6 @@
               #languageName="ngModel"
               placeholder="Language"
               list="languageNameDataList"
-              [disabled]="!companyUserAdvertModel.driverLicenceName"
             />
             <datalist id="languageNameDataList">
               <option
@@ -608,7 +778,6 @@
               #languageLevelName="ngModel"
               placeholder="Language Level"
               list="languageLevelNameDataList"
-              [disabled]="!companyUserAdvertModel.languageName"
             />
             <datalist id="languageLevelNameDataList">
               <option

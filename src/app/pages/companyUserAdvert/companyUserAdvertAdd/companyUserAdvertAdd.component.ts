@@ -37,6 +37,14 @@ import { WorkArea } from './../../../models/component/workArea';
 import { WorkingMethod } from './../../../models/component/workingMethod';
 import { CompanyUserService } from './../../../services/companyUser.service';
 import { CompanyUserDepartment } from '../../../models/component/companyUserDepartment';
+import { City } from '../../../models/component/city';
+import { Region } from '../../../models/component/region';
+import { Sector } from '../../../models/component/sector';
+import { CityService } from '../../../services/city.service';
+import { RegionService } from '../../../services/region.service';
+import { SectorService } from '../../../services/sectorService';
+import { CountryService } from '../../../services/country.service';
+import { Country } from '../../../models/component/country';
 
 @Component({
   selector: 'app-companyUserAdvertAdd',
@@ -62,6 +70,10 @@ export class CompanyUserAdvertAddComponent implements OnInit {
   positionLevels: PositionLevel[] = [];
   languages: Language[] = [];
   languageLevels: LanguageLevel[] = [];
+  countries: Country[];
+  cities: City[] = [];
+  regions: Region[] = [];
+  sectors: Sector[] = [];
   admin: boolean = false;
   componentTitle = 'Company Advert Add Form';
 
@@ -79,6 +91,10 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     private positionLevelService: PositionLevelService,
     private languageService: LanguageService,
     private languageLevelService: LanguageLevelService,
+    private countryService: CountryService,
+    private cityService: CityService,
+    private regionService: RegionService,
+    private sectorService: SectorService,
     private toastrService: ToastrService,
     private router: Router,
     private adminService: AdminService,
@@ -101,6 +117,76 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     this.getLanguages();
     this.getLanguageLevels();
     this.getDriverLicences();
+    this.getCountries();
+    this.getSectors();
+  }
+
+  getCountries() {
+    this.countryService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.countries = response.data.filter((f) => f.countryName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCities(countryName: string) {
+    this.cityService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.cities = response.data
+          .filter((f) => f.cityName != '-')
+          .filter((c) => c.countryId === this.getCountryId(countryName));
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getRegions(cityName: string) {
+    this.regionService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.regions = response.data
+          .filter((f) => f.regionName != '-')
+          .filter((r) => r.cityId === this.getCityId(cityName));
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getSectors() {
+    this.sectorService.getAll().subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.sectors = response.data.filter((f) => f.sectorName != '-');
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
+  getCountryId(countryName: string): string {
+    const countryId = this.countries.filter(
+      (c) => c.countryName === countryName
+    )[0]?.id;
+    return countryId;
+  }
+
+  getCityId(cityName: string): string {
+    const cityId = this.cities.filter((c) => c.cityName === cityName)[0]?.id;
+    return cityId;
+  }
+
+  getRegionId(regionName: string): string {
+    const regionId = this.regions.filter((c) => c.regionName === regionName)[0]
+      ?.id;
+    return regionId;
+  }
+
+  getSectorId(sectorName: string): string {
+    const sectorId = this.sectors.filter((c) => c.sectorName === sectorName)[0]
+      ?.id;
+    return sectorId;
   }
 
   onImageSelected(event: any) {
@@ -192,6 +278,18 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         ]);
       },
       (responseError) => {
+        this.deleteImage();
+        this.validationService.handleErrors(responseError);
+      }
+    );
+  }
+
+  deleteImage() {
+    this.companyUserAdvertService.deleteImage(this.getModel()).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+      },
+      (responseError) => {
         this.validationService.handleErrors(responseError);
       }
     );
@@ -233,6 +331,10 @@ export class CompanyUserAdvertAddComponent implements OnInit {
       languageLevelId: this.getLanguageLevelId(
         this.companyUserAdvertModel.languageLevelName
       ),
+      countryId: this.getCountryId(this.companyUserAdvertModel.countryName),
+      cityId: this.getCityId(this.companyUserAdvertModel.cityName),
+      regionId: this.getRegionId(this.companyUserAdvertModel.regionName),
+      sectorId: this.getSectorId(this.companyUserAdvertModel.sectorName),
       militaryStatus: this.companyUserAdvertModel.militaryStatus,
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -576,5 +678,21 @@ export class CompanyUserAdvertAddComponent implements OnInit {
 
   driverLicenceNameClear() {
     this.companyUserAdvertModel.driverLicenceName = '';
+  }
+
+  countryNameClear() {
+    this.companyUserAdvertModel.countryName = '';
+  }
+
+  cityNameClear() {
+    this.companyUserAdvertModel.cityName = '';
+  }
+
+  regionNameClear() {
+    this.companyUserAdvertModel.regionName = '';
+  }
+
+  sectorNameClear() {
+    this.companyUserAdvertModel.sectorName = '';
   }
 }

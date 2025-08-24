@@ -56,6 +56,7 @@ export class SectorDescriptionAddComponent implements OnInit {
       this.sectorDescriptionService.add(this.getModel()).subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
+
           this.activeModal.close();
           this.toastrService.success(response.message, 'Başarılı');
           this.router.navigate([
@@ -74,9 +75,7 @@ export class SectorDescriptionAddComponent implements OnInit {
   getModel(): SectorDescription {
     return Object.assign({
       id: '',
-      positionId: this.getSectorId(
-        this.sectorDescriptionModel.sectorName.trim()
-      ),
+      sectorId: this.getSectorId(this.sectorDescriptionModel.sectorName.trim()),
       title: this.sectorDescriptionModel.title.trim(),
       description: this.htmlContent,
       createDate: new Date(Date.now()).toJSON(),

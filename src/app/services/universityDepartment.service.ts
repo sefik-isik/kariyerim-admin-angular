@@ -64,17 +64,9 @@ export class UniversityDepartmentService {
   getAllByPage(
     pageModel: PageModel
   ): Observable<SingleResponseModel<UniversityDepartmentByPageDTO>> {
-    let path = this.newUrlPath + 'getallbypage';
-    return this.httpClient.get<
+    return this.httpClient.post<
       SingleResponseModel<UniversityDepartmentByPageDTO>
-    >(path, {
-      params: new HttpParams()
-        .set('pageIndex', pageModel.pageIndex.toString())
-        .set('pageSize', pageModel.pageSize.toString())
-        .set('sortColumn', pageModel.sortColumn)
-        .set('sortOrder', pageModel.sortOrder)
-        .set('filter', pageModel.filter || ''),
-    });
+    >(this.newUrlPath + 'getallbypage', pageModel);
   }
 
   getById(id: string): Observable<SingleResponseModel<UniversityDepartment>> {
