@@ -21,14 +21,8 @@
               name="departmentName"
               #departmentName="ngModel"
               placeholder="Department Name"
-              list="departmentNameDataList"
             />
-            <datalist id="departmentNameDataList">
-              <option
-                *ngFor="let companyUserDepartment of companyUserDepartments"
-                value="{{ companyUserDepartment.departmentName }}"
-              ></option>
-            </datalist>
+
             <span class="input-group-text">
               <i
                 (click)="departmentNameClear()"

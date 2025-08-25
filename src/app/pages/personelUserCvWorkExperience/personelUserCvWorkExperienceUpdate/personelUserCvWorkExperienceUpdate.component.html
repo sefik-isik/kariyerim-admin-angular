@@ -26,6 +26,10 @@
           <div class="input-group">
             <span class="input-group-text">Company Name</span>
             <input
+              required
+              minlength="3"
+              maxlength="100"
+              pattern=""
               class="form-control"
               placeholder="text"
               [(ngModel)]="personelUserCvWorkExperienceDTO.companyName"

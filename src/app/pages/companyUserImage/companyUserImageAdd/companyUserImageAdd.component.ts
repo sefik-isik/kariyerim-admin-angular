@@ -50,6 +50,7 @@ export class CompanyUserImageAddComponent implements OnInit {
   ngOnInit() {
     this.admin = this.authService.isAdmin();
     this.getAdminValues();
+    this.companyUserImageModel.imageOwnName = 'Logo';
   }
 
   onImageSelected(event: any) {

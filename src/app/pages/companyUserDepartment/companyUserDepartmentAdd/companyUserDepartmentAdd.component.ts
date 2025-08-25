@@ -65,7 +65,7 @@ export class CompanyUserDepartmentAddComponent implements OnInit {
   getModel(): CompanyUserDepartment {
     return Object.assign({
       id: '',
-      departmentId: this.companyUserDepartmentModel.departmentName.trim(),
+      departmentName: this.companyUserDepartmentModel.departmentName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

@@ -72,7 +72,7 @@
             <input
               required
               minlength="3"
-              maxlength="50"
+              maxlength="100"
               pattern=""
               [(ngModel)]="companyUserAdvertModel.companyUserName"
               type="text"
@@ -123,6 +123,10 @@
               name="advertName"
               #advertName="ngModel"
               placeholder="Advert Name"
+              (ngModelChange)="
+                companyUserAdvertModel.advertImageOwnName =
+                  companyUserAdvertModel.advertName + ' İlan'
+              "
               [disabled]="!companyUserAdvertModel.companyUserName"
             />
             <span class="input-group-text">
