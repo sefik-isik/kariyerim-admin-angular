@@ -227,6 +227,40 @@
       <div class="mb-3">
         <div class="form-group">
           <div class="input-group">
+            <span class="input-group-text">Title</span>
+            <input
+              maxlength="150"
+              pattern=""
+              [(ngModel)]="personelUserModel.title"
+              type="text"
+              class="form-control"
+              name="title"
+              #title="ngModel"
+              placeholder="Title"
+            />
+
+            <span class="input-group-text">
+              <i
+                (click)="titleNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!title.valid && title.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(title)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
             <span class="input-group-text">Date Of Birth</span>
             <input
               maxlength="50"

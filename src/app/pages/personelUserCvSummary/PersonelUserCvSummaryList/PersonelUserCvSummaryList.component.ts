@@ -85,12 +85,12 @@ export class PersonelUserCvSummaryListComponent implements OnInit {
     );
   }
 
-  delete(PersonelUserCvSummaries: PersonelUserCvSummary) {
+  delete(personelUserCvSummary: PersonelUserCvSummary) {
     if (!confirm('Silmek istediğinize emin misiniz?')) {
       this.toastrService.info('Silme İşlemi İptal Edildi');
       return;
     }
-    this.personelUserCvSummaryService.delete(PersonelUserCvSummaries).subscribe(
+    this.personelUserCvSummaryService.delete(personelUserCvSummary).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.toastrService.success('Başarı ile silindi');

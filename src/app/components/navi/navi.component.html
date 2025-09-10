@@ -19,21 +19,20 @@
       </ul>
 
       <div *ngIf="isAuth" class="btn-group">
-        <button class="btn btn-ligth btn-sm" type="button">
+        <button
+          type="button"
+          class="btn btn-sm btn-ligth dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          style="margin-top: -5px"
+        >
+          <span class="visually-hidden">Toggle Dropdown</span>
           <i *ngIf="isAdmin" class="bi bi-person-fill" style="color: red"></i>
 
           <i *ngIf="isAdmin == false" class="bi bi-person-fill"></i>
 
           {{ firstName }}
           {{ lastName }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-ligth dropdown-toggle dropdown-toggle-split"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <span class="visually-hidden">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu" style="font-size: smaller; padding: 1rem">
           <li>

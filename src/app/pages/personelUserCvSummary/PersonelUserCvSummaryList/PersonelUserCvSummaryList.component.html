@@ -37,8 +37,6 @@
             <th *ngIf="admin">email</th>
             <th>cvName</th>
             <th>cvSummaryTitle</th>
-            <th>cvSummaryDescription</th>
-
             <th></th>
             <th></th>
             <th>
@@ -62,12 +60,6 @@
             <td *ngIf="admin">{{ personelUserCvSummaryDTO.email }}</td>
             <td>{{ personelUserCvSummaryDTO.cvName }}</td>
             <td>{{ personelUserCvSummaryDTO.cvSummaryTitle }}</td>
-            <td>
-              {{
-                personelUserCvSummaryDTO.cvSummaryDescription.substring(0, 20)
-              }}...
-            </td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCvSummaryDTO)"

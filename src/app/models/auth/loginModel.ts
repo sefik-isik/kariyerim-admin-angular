@@ -4,4 +4,5 @@ export interface LoginModel extends BaseModel {
   id: string;
   email: string;
   password: string;
+  userType: string;
 }

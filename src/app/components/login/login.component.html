@@ -85,18 +85,32 @@
                   </p>
                 </div>
               </div>
-              <div class="d-grid gap-2 mt-3">
-                <button
-                  type="button"
-                  (click)="onSubmit(form)"
-                  [disabled]="!form.valid"
-                  class="btn btn-outline-success"
-                >
-                  Sign in
-                </button>
+            </div>
 
-                <div style="text-align: center; margin: 0px">or</div>
-              </div>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="switchCheckDefault"
+                [(ngModel)]="userType"
+                name="userType"
+                style="width: 40px; height: 20px; top: 45% !important"
+              />
+              <span style="margin-left: 10px">Are you company user?</span>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button
+                type="button"
+                (click)="onSubmit(form)"
+                [disabled]="!form.valid"
+                class="btn btn-outline-success"
+              >
+                Sign in
+              </button>
+
+              <div style="text-align: center; margin: 0px">or</div>
             </div>
           </form>
           <div class="d-grid gap-2">

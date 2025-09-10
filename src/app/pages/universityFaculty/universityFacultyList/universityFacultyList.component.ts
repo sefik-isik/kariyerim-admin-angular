@@ -20,7 +20,7 @@ import { UniversityFacultyDetailComponent } from '../universityFacultyDetail/uni
 export class UniversityFacultyListComponent implements OnInit {
   universityFaculties: UniversityFaculty[] = [];
   admin: boolean = false;
-  componentTitle = 'Sectors';
+  componentTitle = 'University Faculties';
   filter1: string;
 
   constructor(

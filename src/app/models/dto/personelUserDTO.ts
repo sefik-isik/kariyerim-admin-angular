@@ -13,4 +13,5 @@ export interface PersonelUserDTO extends BaseUserModel {
   militaryStatus: boolean;
   retirementStatus: boolean;
   dateOfBirth: string;
+  title: string;
 }

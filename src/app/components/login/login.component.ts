@@ -17,6 +17,7 @@ import { AddToLocalStorageService } from '../../services/helperServices/addToLoc
 export class LoginComponent {
   title: string = 'Please Login In';
   loginModel: LoginModel = {} as LoginModel;
+  userType: boolean = false;
 
   constructor(
     private autService: AuthService,
@@ -30,11 +31,27 @@ export class LoginComponent {
     return this.validationService.getValidationErrors(state);
   }
 
+  getLoginModel(): LoginModel {
+    if (this.userType == true) {
+      return Object.assign({
+        id: '',
+        userType: 'CompanyUser',
+        email: this.loginModel.email,
+        password: this.loginModel.password,
+      });
+    } else {
+      return Object.assign({
+        id: '',
+        userType: 'PersonelUser',
+        email: this.loginModel.email,
+        password: this.loginModel.password,
+      });
+    }
+  }
+
   onSubmit(form: NgForm) {
     if (form.valid) {
-      const loginModel: LoginModel = Object.assign({ id: '' }, form.value);
-
-      this.autService.login(loginModel).subscribe(
+      this.autService.login(this.getLoginModel()).subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
           this.addToLocalStorageService.addToken(response.data.token);
@@ -67,7 +84,10 @@ export class LoginComponent {
           );
           this.router.navigate(['dashboard/main']);
         },
-        (responseError) => this.validationService.handleErrors(responseError)
+        (responseError) => {
+          this.toastrService.error('Lütfen Giriş İçin Doğru Seçimi Yapınız');
+          this.validationService.handleErrors(responseError);
+        }
       );
     } else {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');

@@ -24,7 +24,7 @@ export class ExpirationGuard implements CanActivate {
   ): Observable<boolean | UrlTree> | boolean {
     if (this.authService.checkTokenExpiration('expiration')) {
       this.authService.logout();
-      this.toastrService.info('Oturum sürweniz dolmuştur.');
+      this.toastrService.info('Oturum süreniz dolmuştur.');
       return false;
     }
     return true;

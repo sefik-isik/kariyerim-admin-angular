@@ -13,7 +13,7 @@ import { UniversityFacultyAddComponent } from '../universityFacultyAdd/universit
   imports: [RouterOutlet, RouterLink, CommonModule],
 })
 export class UniversityFacultyComponent {
-  componentTitle = 'Positions';
+  componentTitle = 'University Faculties';
   admin: boolean = false;
 
   constructor(

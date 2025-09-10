@@ -3,9 +3,6 @@ import { BaseCompanyUserModel } from '../base/baseCompanyUserModel';
 
 export interface CompanyUserAdvert extends BaseCompanyUserModel {
   advertName: string;
-  advertImageName: string;
-  advertImagePath: string;
-  advertImageOwnName: string;
   workAreaId: string;
   workingMethodId: string;
   experienceId: string;

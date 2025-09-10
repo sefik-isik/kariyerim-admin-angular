@@ -36,8 +36,6 @@
             <th>Id</th>
             <th *ngIf="admin">email</th>
             <th>title</th>
-            <th>description</th>
-
             <th></th>
             <th></th>
             <th>
@@ -67,10 +65,6 @@
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">{{ personelUserCoverLetterDTO.email }}</td>
             <td>{{ personelUserCoverLetterDTO.title }}</td>
-            <td>
-              {{ personelUserCoverLetterDTO.description.substring(0, 20) }}...
-            </td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCoverLetterDTO)"

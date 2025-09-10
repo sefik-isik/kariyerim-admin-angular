@@ -1,32 +1,33 @@
-import { PersonelUserCvService } from './../../../services/personelUserCv.service';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
-import { AdminModel } from '../../../models/auth/adminModel';
-import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserDTO } from '../../../models/dto/userDTO';
-import { UserService } from '../../../services/user.service';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
-import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
-import { UniversityService } from '../../../services/university.service';
-import { University } from '../../../models/component/university';
-import { PersonelUserCv } from '../../../models/component/personelUserCv';
+import {
+  AngularEditorConfig,
+  AngularEditorModule,
+} from '@kolkov/angular-editor';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ValidationService } from '../../../services/validation.service';
-import { AuthService } from '../../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { AdminModel } from '../../../models/auth/adminModel';
 import { PersonelUser } from '../../../models/component/personelUser';
+import { PersonelUserCv } from '../../../models/component/personelUserCv';
+import { University } from '../../../models/component/university';
 import { UniversityFaculty } from '../../../models/component/universityFaculty';
 import { UniversityDepartment } from '../../../models/component/universitydepartment';
+import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
+import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { AuthService } from '../../../services/auth.service';
+import { AdminService } from '../../../services/helperServices/admin.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
+import { UniversityService } from '../../../services/university.service';
 import { UniversityDepartmentService } from '../../../services/universityDepartment.service';
 import { UniversityFacultyService } from '../../../services/universityFaculty.service';
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { angularEditorConfig } from '../../../models/concrete/angularEditorConfig';
+import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
+import { PersonelUserCvService } from './../../../services/personelUserCv.service';
 
 @Component({
   selector: 'app-personelUserCvEducationAdd',
@@ -249,6 +250,7 @@ export class PersonelUserCvEducationAddComponent implements OnInit {
         this.universityFaculties = response.data.filter(
           (f) => f.facultyName != '-'
         );
+        console.log(this.universityFaculties);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

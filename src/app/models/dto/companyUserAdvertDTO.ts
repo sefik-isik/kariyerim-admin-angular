@@ -2,9 +2,6 @@ import { BaseCompanyUserDTOModel } from '../base/baseCompanyUserDTOModel';
 
 export interface CompanyUserAdvertDTO extends BaseCompanyUserDTOModel {
   advertName: string;
-  advertImageName: string;
-  advertImagePath: string;
-  advertImageOwnName: string;
   workAreaId: string;
   workAreaName: string;
   workingMethodId: string;

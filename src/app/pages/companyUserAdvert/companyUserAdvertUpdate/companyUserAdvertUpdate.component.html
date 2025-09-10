@@ -78,99 +78,6 @@
         </div>
       </div>
 
-      <div
-        class="input-group mb-3 justify-content-md-center"
-        *ngIf="result == true"
-      >
-        <div class="card">
-          <img
-            *ngIf="companyUserAdvertDTO.advertImageName"
-            src="{{
-              companyUserAdvertDTO.advertImagePath +
-                'thumbs/' +
-                companyUserAdvertDTO.advertImageName
-            }}"
-            class="img-fluid"
-            alt="{{ companyUserAdvertDTO.advertImageOwnName }}"
-          />
-          <i
-            type="button"
-            (click)="deleteImage()"
-            class="bi bi-x-circle-fill btn btn-outline-danger"
-          >
-            Delete Image
-          </i>
-        </div>
-      </div>
-
-      <div class="mb-3" *ngIf="result == false">
-        <div class="input-group">
-          <input
-            class="form-control"
-            type="file"
-            pattern=""
-            [(ngModel)]="companyUserAdvertDTO.advertImageName"
-            name="advertImageName"
-            #advertImageName="ngModel"
-            placeholder="Upload Image"
-            (change)="onImageSelected($event)"
-            aria-label="Upload File"
-            [disabled]="!companyUserAdvertDTO.advertName"
-          />
-          <span class="input-group-text">
-            <i
-              (click)="advertImageNameClear()"
-              class="bi bi-x-circle"
-              style="cursor: pointer"
-            ></i>
-          </span>
-        </div>
-        <div *ngIf="!advertImageName.valid && advertImageName.touched">
-          <div
-            class="error-message"
-            *ngFor="let error of getValidationErrors(advertImageName)"
-          >
-            {{ error }}
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3" *ngIf="result == false">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-text">Image Name</span>
-            <input
-              required
-              minlength="3"
-              maxlength="50"
-              pattern=""
-              [(ngModel)]="companyUserAdvertDTO.advertImageOwnName"
-              type="text"
-              class="form-control"
-              name="advertImageOwnName"
-              #advertImageOwnName="ngModel"
-              placeholder="Image Name"
-              [disabled]="!companyUserAdvertDTO.advertImageName"
-            />
-            <span class="input-group-text">
-              <i
-                (click)="advertImageOwnNameClear()"
-                class="bi bi-x-circle"
-                style="cursor: pointer"
-              ></i>
-            </span>
-          </div>
-          <div *ngIf="!advertImageOwnName.valid && advertImageOwnName.touched">
-            <div
-              class="error-message"
-              *ngFor="let error of getValidationErrors(advertImageOwnName)"
-            >
-              {{ error }}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="mb-3" *ngIf="result == false">
         <div class="form-group">
           <div class="input-group">
@@ -187,7 +94,7 @@
               class="form-control"
               placeholder="Work Area"
               list="workAreaNameDataList"
-              [disabled]="!companyUserAdvertDTO.advertImageOwnName"
+              [disabled]="!companyUserAdvertDTO.companyUserName"
             />
             <datalist id="workAreaNameDataList">
               <option
@@ -801,7 +708,7 @@
         [disabled]="!form.valid"
         type="button"
         class="btn btn-outline-primary"
-        (click)="onSubmit(form)"
+        (click)="update(form)"
       >
         Upload
       </button>

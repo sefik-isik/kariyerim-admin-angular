@@ -189,86 +189,16 @@ export class CompanyUserAdvertAddComponent implements OnInit {
     return sectorId;
   }
 
-  onImageSelected(event: any) {
-    this.selectedImage = <File>event.target.files[0];
-
-    const allowedImageTypes = [
-      'image/png',
-      'image/jpeg',
-      'image/gif',
-      'image/webp',
-    ];
-
-    if (!allowedImageTypes.includes(this.selectedImage.type)) {
-      this.toastrService.error(
-        'Please select a image with .png, .jpeg, webp or .gif extension',
-        'Invalid image type'
-      );
-    } else if (this.selectedImage.size > 5 * 1024 * 1024) {
-      this.toastrService.error(
-        'Image size exceeds 5 MB. Please select a smaller image',
-        'Image too large'
-      );
-    } else if (this.selectedImage.size < 1024) {
-      this.toastrService.error(
-        'Image size is too small. Please select a larger image',
-        'Image too small'
-      );
-    } else {
-      this.toastrService.success('File selected successfully', 'Success');
-      this.imageName = this.selectedImage.name;
-    }
-  }
-
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
   }
 
-  onSubmit(form: NgForm) {
-    if (!this.selectedImage) {
-      this.toastrService.error(
-        'Please select a image to upload',
-        'No image selected'
-      );
-      return;
-    }
-
+  add(form: NgForm) {
     if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
     }
-    const formData = new FormData();
-    formData.append('image', this.selectedImage, this.selectedImage.name);
 
-    this.companyUserAdvertService
-      .uploadImage(
-        formData,
-        this.getCompanyUserId(this.companyUserAdvertModel.companyUserName)
-      )
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            const percentDone = Math.round(event.loaded / (event.total * 100));
-            console.log(`Image is ${percentDone}% uploaded.`);
-          } else if (event.type === HttpEventType.Response) {
-            this.imageName = event.body.name;
-            this.imagePath = event.body.type;
-
-            this.add();
-
-            this.toastrService.success(
-              'Company User Image Added Successfully',
-              'Success'
-            );
-          }
-        },
-        (responseError) => {
-          this.validationService.handleErrors(responseError);
-        }
-      );
-  }
-
-  add() {
     this.companyUserAdvertService.add(this.getModel()).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
@@ -276,18 +206,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         this.router.navigate([
           '/dashboard/companyuseradvert/companyuseradvertlisttab',
         ]);
-      },
-      (responseError) => {
-        this.deleteImage();
-        this.validationService.handleErrors(responseError);
-      }
-    );
-  }
-
-  deleteImage() {
-    this.companyUserAdvertService.deleteImage(this.getModel()).subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
       },
       (responseError) => {
         this.validationService.handleErrors(responseError);
@@ -303,9 +221,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
         this.companyUserAdvertModel.companyUserName
       ),
       advertName: this.companyUserAdvertModel.advertName,
-      advertImageName: this.imageName,
-      advertImagePath: this.imagePath,
-      advertImageOwnName: this.companyUserAdvertModel.advertImageOwnName,
       workAreaId: this.getWorkAreaId(this.companyUserAdvertModel.workAreaName),
       workingMethodId: this.getWorkingMethodId(
         this.companyUserAdvertModel.workingMethodName
@@ -630,14 +545,6 @@ export class CompanyUserAdvertAddComponent implements OnInit {
 
   advertNameClear() {
     this.companyUserAdvertModel.advertName = '';
-  }
-
-  advertImageNameClear() {
-    this.companyUserAdvertModel.advertImageName = '';
-  }
-
-  advertImageOwnNameClear() {
-    this.companyUserAdvertModel.advertImageOwnName = '';
   }
 
   workAreaNameClear() {

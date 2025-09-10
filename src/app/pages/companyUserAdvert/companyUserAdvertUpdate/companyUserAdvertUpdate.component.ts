@@ -99,9 +99,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-
-    this.checkImage();
-
     this.getCompanyUserDepartments();
     this.getWorkingMethods();
     this.getWorkAreas();
@@ -190,105 +187,15 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     return sectorId;
   }
 
-  checkImage() {
-    if (this.companyUserAdvertDTO.advertImageName == 'noImage.jpg') {
-      this.result = false;
-    } else {
-      this.result = true;
-    }
-  }
-
-  onImageSelected(event: any) {
-    this.selectedImage = <File>event.target.files[0];
-
-    const allowedImageTypes = [
-      'image/png',
-      'image/jpeg',
-      'image/gif',
-      'image/webp',
-    ];
-
-    if (!allowedImageTypes.includes(this.selectedImage.type)) {
-      this.toastrService.error(
-        'Please select a image with .png, .jpeg, webp or .gif extension',
-        'Invalid image type'
-      );
-    } else if (this.selectedImage.size > 5 * 1024 * 1024) {
-      this.toastrService.error(
-        'Image size exceeds 5 MB. Please select a smaller image',
-        'Image too large'
-      );
-    } else if (this.selectedImage.size < 1024) {
-      this.toastrService.error(
-        'Image size is too small. Please select a larger image',
-        'Image too small'
-      );
-    } else {
-      this.toastrService.success('File selected successfully', 'Success');
-      this.companyUserAdvertDTO.advertImageName = this.selectedImage.name;
-    }
-  }
-
-  deleteImage() {
-    this.companyUserAdvertService.deleteImage(this.getModel()).subscribe(
-      (response) => {
-        this.validationService.handleSuccesses(response);
-        this.result = false;
-      },
-      (responseError) => this.validationService.handleErrors(responseError)
-    );
-  }
-
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
   }
 
-  onSubmit(form: NgForm) {
-    console.log(this.companyUserAdvertDTO.advertImageName);
-    console.log(this.companyUserAdvertDTO.advertImagePath);
-
-    this.deleteImage();
+  update(form: NgForm) {
     if (!form.valid) {
       this.toastrService.error('Lütfen Formunuzu Kontrol Ediniz');
       return;
     }
-
-    if (!this.selectedImage) {
-      this.toastrService.error(
-        'Please select a image to upload',
-        'No image selected'
-      );
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('image', this.selectedImage, this.selectedImage.name);
-
-    this.companyUserAdvertService
-      .uploadImage(formData, this.companyUserAdvertDTO.companyUserId)
-      .subscribe(
-        (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            const percentDone = Math.round(event.loaded / (event.total * 100));
-            console.log(`File is ${percentDone}% uploaded.`);
-          } else if (event.type === HttpEventType.Response) {
-            this.companyUserAdvertDTO.advertImageName = event.body.name;
-            this.companyUserAdvertDTO.advertImagePath = event.body.type;
-
-            console.log(this.companyUserAdvertDTO.advertImageName);
-            console.log(this.companyUserAdvertDTO.advertImagePath);
-
-            this.update();
-          }
-        },
-        (responseError) => {
-          this.validationService.handleErrors(responseError);
-        }
-      );
-  }
-
-  update() {
-    console.log(this.getModel());
     this.companyUserAdvertService.update(this.getModel()).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
@@ -309,9 +216,7 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
       userId: this.companyUserAdvertDTO.userId,
       companyUserId: this.companyUserAdvertDTO.companyUserId,
       advertName: this.companyUserAdvertDTO.advertName.trim(),
-      advertImagePath: this.companyUserAdvertDTO.advertImagePath,
-      advertImageName: this.companyUserAdvertDTO.advertImageName,
-      advertImageOwnName: this.companyUserAdvertDTO.advertImageOwnName.trim(),
+
       workAreaId: this.getWorkAreaId(
         this.companyUserAdvertDTO.workAreaName.trim()
       ),
@@ -589,14 +494,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
 
   advertNameClear() {
     this.companyUserAdvertDTO.advertName = '';
-  }
-
-  advertImageNameClear() {
-    this.companyUserAdvertDTO.advertImageName = '';
-  }
-
-  advertImageOwnNameClear() {
-    this.companyUserAdvertDTO.advertImageOwnName = '';
   }
 
   workAreaNameClear() {

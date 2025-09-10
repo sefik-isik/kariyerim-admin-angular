@@ -154,6 +154,9 @@ import { UniversityByPageListTab } from './pages/university/university/positionB
 import { UniversityDepartmentByPageListTab } from './pages/universityDepartment/universityDepartment/positionByPageListTab';
 import { TaxOfficeByPageListTab } from './pages/taxOffice/taxOffice/positionByPageListTab';
 import { MainGuard } from './guards/main.guard';
+import { UniversityFacultyComponent } from './pages/universityFaculty/universityFaculty/universityFaculty.component';
+import { UniversityFacultyListTab } from './pages/universityFaculty/universityFaculty/universityFacultyListTab';
+import { UniversityFacultyDeletedListTab } from './pages/universityFaculty/universityFaculty/universityFacultyDeletedListTab';
 
 //-----------------
 
@@ -697,6 +700,23 @@ export const routes: Routes = [
           {
             path: 'universitydeletedlisttab',
             component: UniversityDeletedListTab,
+            canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
+          },
+        ],
+      },
+      {
+        path: 'universityfaculty',
+        component: UniversityFacultyComponent,
+        canActivate: [LoginGuard, ExpirationGuard],
+        children: [
+          {
+            path: 'universityfacultylisttab',
+            component: UniversityFacultyListTab,
+            canActivate: [LoginGuard, ExpirationGuard],
+          },
+          {
+            path: 'universitydescriptiondeletedlisttab',
+            component: UniversityFacultyDeletedListTab,
             canActivate: [LoginGuard, ExpirationGuard, StatusGuard],
           },
         ],

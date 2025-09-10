@@ -94,6 +94,7 @@ export class PersonelUserAddComponent implements OnInit {
       driverLicenceId: this.getDriverLicenceId(
         this.personelUserModel.driverLicenceName
       ),
+      title: this.personelUserModel.title,
       militaryStatus: this.personelUserModel.militaryStatus,
       nationalStatus: this.personelUserModel.nationalStatus,
       retirementStatus: this.personelUserModel.retirementStatus,
@@ -287,5 +288,9 @@ export class PersonelUserAddComponent implements OnInit {
 
   dateOfBirthClear() {
     this.personelUserModel.dateOfBirth = '';
+  }
+
+  titleNameClear() {
+    this.personelUserModel.title = '';
   }
 }

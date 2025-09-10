@@ -39,24 +39,6 @@ export class CompanyUserAdvertService {
     );
   }
 
-  uploadImage(formData: FormData, id: string): Observable<HttpEvent<File>> {
-    return this.httpClient.post<File>(
-      this.newUrlPath + 'uploadimage?id=' + id,
-      formData,
-      {
-        reportProgress: true,
-        observe: 'events',
-      }
-    );
-  }
-
-  deleteImage(companyUserAdvert: CompanyUserAdvert): Observable<ResponseModel> {
-    return this.httpClient.post<ResponseModel>(
-      this.newUrlPath + 'deleteimage',
-      companyUserAdvert
-    );
-  }
-
   terminate(companyUserAdvert: CompanyUserAdvert): Observable<ResponseModel> {
     return this.httpClient.post<ResponseModel>(
       this.newUrlPath + 'terminate',

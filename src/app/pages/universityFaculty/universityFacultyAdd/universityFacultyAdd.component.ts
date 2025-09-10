@@ -16,7 +16,7 @@ import { ValidationService } from '../../../services/validation.service';
 })
 export class UniversityFacultyAddComponent implements OnInit {
   universityFacultyModel: UniversityFaculty = {} as UniversityFaculty;
-  componentTitle = 'Position Add Form';
+  componentTitle = 'University Faculty Add Form';
 
   constructor(
     private toastrService: ToastrService,
@@ -55,7 +55,7 @@ export class UniversityFacultyAddComponent implements OnInit {
   getModel(): UniversityFaculty {
     return Object.assign({
       id: '',
-      universityFacultyName: this.universityFacultyModel.facultyName.trim(),
+      facultyName: this.universityFacultyModel.facultyName.trim(),
       createDate: new Date(Date.now()).toJSON(),
     });
   }

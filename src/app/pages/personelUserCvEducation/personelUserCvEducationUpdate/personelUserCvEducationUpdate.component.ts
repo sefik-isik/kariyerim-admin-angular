@@ -92,10 +92,9 @@ export class PersonelUserCvEducationUpdateComponent implements OnInit {
         );
         if (this.personelUserCvEducationDTO.endDate == '1899-12-31') {
           this.endDateClear();
-
-          this.htmlContent = response.data.detail;
-          this.editorCount = this.htmlContent.length;
         }
+        this.htmlContent = response.data.detail;
+        this.editorCount = this.htmlContent.length;
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );

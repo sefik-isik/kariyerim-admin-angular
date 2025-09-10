@@ -21,6 +21,6 @@ export class FilterCompanyUserAdvertJobDescriptionByCompanyUserPipe
           (c: CompanyUserAdvertJobDescriptionDTO) =>
             c.companyUserName.toLocaleLowerCase().indexOf(filterText) !== -1
         )
-      : null;
+      : value;
   }
 }

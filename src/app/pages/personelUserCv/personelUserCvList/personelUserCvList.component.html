@@ -36,7 +36,6 @@
             <th>Id</th>
             <th *ngIf="admin">email</th>
             <th>cvName</th>
-            <th>birthPlace</th>
             <th>isPrivate</th>
             <th>languageName</th>
             <th>level</th>
@@ -62,7 +61,6 @@
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">{{ personelUserCvDTO.email }}</td>
             <td>{{ personelUserCvDTO.cvName }}</td>
-            <td>{{ personelUserCvDTO.birthPlaceName }}</td>
             <td>{{ personelUserCvDTO.isPrivate | private }}</td>
             <td>{{ personelUserCvDTO.languageName }}</td>
             <td>{{ personelUserCvDTO.levelTitle }}</td>

@@ -11,4 +11,5 @@ export interface PersonelUser extends BaseUserModel {
   retirementStatus: boolean;
   driverLicenceId: string;
   dateOfBirth: string;
+  title: string;
 }
