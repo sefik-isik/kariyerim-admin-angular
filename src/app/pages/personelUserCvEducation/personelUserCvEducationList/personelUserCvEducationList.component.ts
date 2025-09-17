@@ -1,10 +1,10 @@
-import { ValidationService } from './../../../services/validation.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { PersonelUserCvEducationDTO } from '../../../models/dto/personelUserCvEducationDTO';
 import { AdminService } from '../../../services/helperServices/admin.service';
+import { ValidationService } from './../../../services/validation.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -16,18 +16,12 @@ import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
 import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { NullDateFormatPipe } from '../../../pipes/nullDateFormat.pipe';
 
 @Component({
   selector: 'app-personelUserCvEducationList',
   templateUrl: './personelUserCvEducationList.component.html',
   styleUrls: ['./personelUserCvEducationList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    FilterPersonelUserCvEducationByUserPipe,
-    NullDateFormatPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserCvEducationByUserPipe],
 })
 export class PersonelUserCvEducationListComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];

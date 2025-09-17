@@ -78,6 +78,48 @@
           </div>
         </div>
       </div>
+      <div class="mb-3">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-text">Cv Name</span>
+            <input
+              required
+              minlength="3"
+              maxlength="50"
+              pattern=""
+              [(ngModel)]="personelUserAdvertFollowModel.personelUserCvName"
+              type="text"
+              class="form-control"
+              name="cvName"
+              #cvName="ngModel"
+              placeholder="Cv Name"
+              list="cvNameDataList"
+              [disabled]="!personelUserAdvertFollowModel.personelUserMail"
+            />
+            <datalist id="cvNameDataList">
+              <option
+                *ngFor="let personelUserCvDTO of personelUserCvDTOs"
+                value="{{ personelUserCvDTO.cvName }}"
+              ></option>
+            </datalist>
+            <span class="input-group-text">
+              <i
+                (click)="cvNameClear()"
+                class="bi bi-x-circle"
+                style="cursor: pointer"
+              ></i>
+            </span>
+          </div>
+          <div *ngIf="!cvName.valid && cvName.touched">
+            <div
+              class="error-message"
+              *ngFor="let error of getValidationErrors(cvName)"
+            >
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
     <div class="d-grid gap-2">
       <button

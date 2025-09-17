@@ -63,8 +63,12 @@
             "
           >
             <td>{{ i + 1 }}</td>
-            <td *ngIf="admin">{{ companyUserAdvertDTO.email }}</td>
-            <td>{{ companyUserAdvertDTO.companyUserName }}</td>
+            <td *ngIf="admin">
+              {{ companyUserAdvertDTO.email }}
+            </td>
+            <td>
+              {{ companyUserAdvertDTO.companyUserName }}
+            </td>
             <td>{{ companyUserAdvertDTO.advertName }}</td>
             <td *ngIf="admin">
               <i
@@ -91,14 +95,14 @@
               <i
                 (click)="openApplicationAdd(companyUserAdvertDTO)"
                 class="bi bi-bookmark-plus"
-                style="color: rgb(25, 190, 47)"
+                style="color: rgb(25, 190, 47); cursor: pointer"
               ></i>
             </td>
             <td *ngIf="!isCompanyUser">
               <i
                 (click)="applicationAdd(companyUserAdvertDTO)"
                 class="bi bi-bookmark-plus"
-                style="color: rgb(25, 190, 47)"
+                style="color: rgb(25, 190, 47); cursor: pointer"
               ></i>
             </td>
             <td *ngIf="isCompanyUser || admin">
@@ -112,21 +116,21 @@
               <i
                 (click)="openDetail(companyUserAdvertDTO)"
                 class="bi bi-journal-text"
-                style="color: midnightblue"
+                style="color: midnightblue; cursor: pointer"
               ></i>
             </td>
             <td *ngIf="admin">
               <i
                 (click)="open(companyUserAdvertDTO)"
                 class="bi bi-pencil-square"
-                style="color: midnightblue"
+                style="color: midnightblue; cursor: pointer"
               ></i>
             </td>
             <td *ngIf="admin">
               <i
                 (click)="delete(companyUserAdvertDTO)"
                 class="bi bi-trash"
-                style="color: crimson"
+                style="color: crimson; cursor: pointer"
               ></i>
             </td>
           </tr>

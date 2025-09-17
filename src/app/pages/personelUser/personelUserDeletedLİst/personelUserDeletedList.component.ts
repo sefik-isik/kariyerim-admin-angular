@@ -1,37 +1,30 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { AdminModel } from '../../../models/auth/adminModel';
 import { AdminService } from '../../../services/helperServices/admin.service';
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { UserDTO } from '../../../models/dto/userDTO';
-import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
-import { PersonelUserService } from '../../../services/personelUser.service';
-import { PersonelUser } from '../../../models/component/personelUser';
-import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
-import { BoolenTextPipe } from '../../../pipes/boolenText.pipe';
-import { GenderPipe } from '../../../pipes/gender.pipe';
-import { UserService } from '../../../services/user.service';
-import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PersonelUserUpdateComponent } from '../personelUserUpdate/personelUserUpdate.component';
-import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserDetail.component';
+import { PersonelUser } from '../../../models/component/personelUser';
+import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
+import { UserDTO } from '../../../models/dto/userDTO';
+import { FilterPersonelUserPipe } from '../../../pipes/filterPersonelUser.pipe';
+import { GenderPipe } from '../../../pipes/gender.pipe';
 import { AuthService } from '../../../services/auth.service';
+import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
+import { PersonelUserService } from '../../../services/personelUser.service';
+import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
+import { PersonelUserDetailComponent } from '../personelUserDetail/personelUserDetail.component';
+import { PersonelUserUpdateComponent } from '../personelUserUpdate/personelUserUpdate.component';
 
 @Component({
   selector: 'app-personelUserDeletedList',
   templateUrl: './personelUserDeletedList.component.html',
   styleUrls: ['./personelUserDeletedList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    FilterPersonelUserPipe,
-    BoolenTextPipe,
-    GenderPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserPipe, GenderPipe],
 })
 export class PersonelUserDeletedListComponent implements OnInit {
   userDTOs: UserDTO[] = [];

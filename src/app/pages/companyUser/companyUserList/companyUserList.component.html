@@ -62,7 +62,6 @@
             <th>Id</th>
             <th *ngIf="admin">email</th>
             <th>company</th>
-            <th>workerCount</th>
             <th>sector</th>
             <th>taxCity</th>
             <th>taxOffice</th>
@@ -92,7 +91,6 @@
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">{{ companyUserDTO.email }}</td>
             <td>{{ companyUserDTO.companyUserName.substring(0, 20) }}...</td>
-            <td>{{ companyUserDTO.workerCountValue }}</td>
             <td>{{ companyUserDTO.sectorName }}</td>
             <td>{{ companyUserDTO.taxCityName }}</td>
             <td>{{ companyUserDTO.taxOfficeName }}</td>

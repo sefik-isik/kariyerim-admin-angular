@@ -1,8 +1,3 @@
-import { BaseModel } from '../base/baseModel';
+import { BaseAdvertDTOModel } from '../base/baseAdvertDTOModel';
 
-export interface PersonelUserFollowCompanyUserDTO extends BaseModel {
-  companyUserId: string;
-  companyUserName: string;
-  personelUserId: string;
-  personelUserMail: string;
-}
+export interface PersonelUserFollowCompanyUserDTO extends BaseAdvertDTOModel {}

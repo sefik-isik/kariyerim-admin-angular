@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AdminModel } from '../../../models/auth/adminModel';
-import { PersonelUserFollowCompanyUser } from '../../../models/component/personelUserFollowCompanyUser';
 import { CompanyUserAdvertDTO } from '../../../models/dto/companyUserAdvertDTO';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
 import { UserDTO } from '../../../models/dto/userDTO';
@@ -18,6 +17,8 @@ import { ValidationService } from '../../../services/validation.service';
 import { PersonelUserAdvertFollowDTO } from './../../../models/dto/personelUserAdvertFollowDTO';
 import { CompanyUserService } from '../../../services/companyUser.service';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
+import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
+import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 
 @Component({
   selector: 'app-companyUserAdvertFollowAdd',
@@ -26,11 +27,12 @@ import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class CompanyUserAdvertFollowAddComponent implements OnInit {
-  companyUserAdvertDTO: CompanyUserAdvertDTO = {} as CompanyUserAdvertDTO;
+  @Input() companyUserAdvertDTO: CompanyUserAdvertDTO;
   personelUserAdvertFollowModel: PersonelUserAdvertFollowDTO =
     {} as PersonelUserAdvertFollowDTO;
   companyUserDTOs: CompanyUserDTO[] = [];
   personelUserDTOs: PersonelUserDTO[] = [];
+  personelUserCvDTOs: PersonelUserCvDTO[] = [];
   userDTOs: UserDTO[] = [];
   componentTitle = 'Personel User Advert Follow Add Form';
 
@@ -44,7 +46,8 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
     private validationService: ValidationService,
     private localStorageService: LocalStorageService,
     private adminService: AdminService,
-    private personelUserAdvertFollowService: PersonelUserAdvertFollowService
+    private personelUserAdvertFollowService: PersonelUserAdvertFollowService,
+    private personelUserCvService: PersonelUserCvService
   ) {}
 
   ngOnInit() {
@@ -79,9 +82,12 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
     return Object.assign({
       id: '',
       advertId: this.companyUserAdvertDTO.id,
-      companyUserId: this.getCompanyUserId(this.companyUserAdvertDTO.email),
+      companyUserId: this.companyUserAdvertDTO.companyUserId,
       personelUserId: this.getPersonelUserId(
         this.personelUserAdvertFollowModel.personelUserMail
+      ),
+      personelUserCvId: this.getPersonelUserCvId(
+        this.personelUserAdvertFollowModel.personelUserCvName
       ),
       createDate: new Date(Date.now()).toJSON(),
     });
@@ -95,6 +101,7 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
         this.getCompanyUsers(response);
         this.getAllPersonelUsers(response);
         this.getPersonelUsers(response);
+        this.getPersonelUserCvs(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -120,12 +127,29 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
     );
   }
 
+  getPersonelUserCvs(adminModel: AdminModel) {
+    this.personelUserCvService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.personelUserCvDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
   getCompanyUserId(email: string): string {
     const companyUserId = this.companyUserDTOs.filter(
       (c) => c.email === email
     )[0]?.id;
 
     return companyUserId;
+  }
+
+  getPersonelUserCvId(cvName: string): string {
+    const cvId = this.personelUserCvDTOs.filter((c) => c.cvName === cvName)[0]
+      ?.id;
+
+    return cvId;
   }
 
   getPersonelUsers(adminModel: AdminModel) {
@@ -139,18 +163,18 @@ export class CompanyUserAdvertFollowAddComponent implements OnInit {
   }
 
   getPersonelUserId(email: string): string {
-    const personelUser = this.personelUserDTOs.find(
-      (user) => user.email === email
-    );
-    if (personelUser) {
-      return personelUser.id;
-    } else {
-      this.toastrService.error('Personel Kullanıcı bulunamadı', 'Hata');
-      return '';
-    }
+    const personelUserId = this.personelUserDTOs.filter(
+      (c) => c.email === email
+    )[0]?.id;
+
+    return personelUserId;
   }
 
   personelUserMailClear() {
     this.personelUserAdvertFollowModel.personelUserMail = '';
+  }
+
+  cvNameClear() {
+    this.personelUserAdvertFollowModel.personelUserCvName = '';
   }
 }

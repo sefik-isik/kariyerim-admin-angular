@@ -13,21 +13,15 @@ import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/helperServices/localStorage.service';
 import { PersonelUserService } from '../../../services/personelUser.service';
 import { PersonelUserCvEducationService } from '../../../services/personelUserCvEducation.service';
+import { ValidationService } from '../../../services/validation.service';
 import { PersonelUserCvEducationDetailComponent } from '../personelUserCvEducationDetail/personelUserCvEducationDetail.component';
 import { PersonelUserCvEducationUpdateComponent } from '../personelUserCvEducationUpdate/personelUserCvEducationUpdate.component';
-import { NullDateFormatPipe } from '../../../pipes/nullDateFormat.pipe';
-import { ValidationService } from '../../../services/validation.service';
 
 @Component({
   selector: 'app-personelUserCvEducationDeletedList',
   templateUrl: './personelUserCvEducationDeletedList.component.html',
   styleUrls: ['./personelUserCvEducationDeletedList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    FilterPersonelUserCvEducationByUserPipe,
-    NullDateFormatPipe,
-  ],
+  imports: [CommonModule, FormsModule, FilterPersonelUserCvEducationByUserPipe],
 })
 export class PersonelUserCvEducationDeletedListComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];

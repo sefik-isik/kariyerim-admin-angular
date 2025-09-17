@@ -90,8 +90,6 @@ export class CompanyUserAdvertUpdateComponent implements OnInit {
     private sectorService: SectorService,
     private toastrService: ToastrService,
     private router: Router,
-    private adminService: AdminService,
-    private localStorageService: LocalStorageService,
     public activeModal: NgbActiveModal,
     private validationService: ValidationService,
     private authService: AuthService

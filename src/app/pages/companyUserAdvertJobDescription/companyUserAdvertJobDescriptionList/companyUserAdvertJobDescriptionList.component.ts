@@ -69,7 +69,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.getAllCompanyUsers(response);
-        this.getCompanyUserAdvertCities(response);
+        this.getCompanyUserJobDescriptions(response);
         this.getCompanyUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -96,7 +96,7 @@ export class CompanyUserAdvertJobDescriptionListComponent implements OnInit {
     );
   }
 
-  getCompanyUserAdvertCities(adminModel: AdminModel) {
+  getCompanyUserJobDescriptions(adminModel: AdminModel) {
     this.companyUserAdvertJobDescriptionService.getAllDTO(adminModel).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);

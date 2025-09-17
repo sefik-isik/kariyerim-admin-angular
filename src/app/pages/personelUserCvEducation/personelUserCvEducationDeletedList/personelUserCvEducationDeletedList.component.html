@@ -36,14 +36,9 @@
             <th>Id</th>
             <th *ngIf="admin">email</th>
             <th>cvName</th>
-            <th>abandonment</th>
             <th>universityName</th>
             <th>facultyName</th>
             <th>departmentName</th>
-            <th>educationInfo</th>
-            <th>startDate</th>
-            <th>endDate</th>
-
             <th></th>
             <th></th>
             <th>
@@ -73,26 +68,9 @@
             <td>{{ i + 1 }}</td>
             <td *ngIf="admin">{{ personelUserCvEducationDTO.email }}</td>
             <td>{{ personelUserCvEducationDTO.cvName }}</td>
-            <td>{{ personelUserCvEducationDTO.abandonment }}</td>
             <td>{{ personelUserCvEducationDTO.universityName }}</td>
             <td>{{ personelUserCvEducationDTO.facultyName }}</td>
             <td>{{ personelUserCvEducationDTO.departmentName }}</td>
-            <td>{{ personelUserCvEducationDTO.educationInfo }}</td>
-            <td>
-              {{
-                personelUserCvEducationDTO.startDate
-                  | date : "dd/MM/yyyy"
-                  | nullDateFormat
-              }}
-            </td>
-            <td>
-              {{
-                personelUserCvEducationDTO.endDate
-                  | date : "dd/MM/yyyy"
-                  | nullDateFormat
-              }}
-            </td>
-
             <td>
               <i
                 (click)="openDetail(personelUserCvEducationDTO)"

@@ -18,6 +18,8 @@ import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { CompanyUserService } from '../../../services/companyUser.service';
+import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
+import { PersonelUserCvService } from '../../../services/personelUserCv.service';
 
 @Component({
   selector: 'app-companyUserAdvertApplicationAdd',
@@ -32,6 +34,7 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
   personelUserDTOs: PersonelUserDTO[] = [];
   userDTOs: UserDTO[] = [];
   companyUserDTOs: CompanyUserDTO[] = [];
+  personelUserCvDTOs: PersonelUserCvDTO[] = [];
   componentTitle = 'Personel User Advert Application Add Form';
 
   constructor(
@@ -44,7 +47,8 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private companyUserService: CompanyUserService,
     private adminService: AdminService,
-    private personelUserAdvertApplicationService: PersonelUserAdvertApplicationService
+    private personelUserAdvertApplicationService: PersonelUserAdvertApplicationService,
+    private personelUserCvService: PersonelUserCvService
   ) {}
 
   ngOnInit() {
@@ -83,6 +87,9 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
       personelUserId: this.getPersonelUserId(
         this.personelUserAdvertApplicationModel.personelUserMail
       ),
+      personelUserCvId: this.getPersonelUserCvId(
+        this.personelUserAdvertApplicationModel.personelUserCvName
+      ),
       createDate: new Date(Date.now()).toJSON(),
     });
   }
@@ -93,7 +100,7 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
       (response) => {
         this.validationService.handleSuccesses(response);
         this.getAllPersonelUsers(response);
-
+        this.getPersonelUserCvs(response);
         this.getPersonelUsers(response);
       },
       (responseError) => this.validationService.handleErrors(responseError)
@@ -142,6 +149,16 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
     );
   }
 
+  getPersonelUserCvs(adminModel: AdminModel) {
+    this.personelUserCvService.getAllDTO(adminModel).subscribe(
+      (response) => {
+        this.validationService.handleSuccesses(response);
+        this.personelUserCvDTOs = response.data;
+      },
+      (responseError) => this.validationService.handleErrors(responseError)
+    );
+  }
+
   getCompanyUserId(email: string): string {
     const companyUserId = this.companyUserDTOs.filter(
       (c) => c.email === email
@@ -150,7 +167,18 @@ export class CompanyUserAdvertApplicationAddComponent implements OnInit {
     return companyUserId;
   }
 
+  getPersonelUserCvId(cvName: string): string {
+    const cvId = this.personelUserCvDTOs.filter((c) => c.cvName === cvName)[0]
+      ?.id;
+
+    return cvId;
+  }
+
   personelUserMailClear() {
     this.personelUserAdvertApplicationModel.personelUserMail = '';
+  }
+
+  cvNameClear() {
+    this.personelUserAdvertApplicationModel.personelUserCvName = '';
   }
 }

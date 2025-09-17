@@ -124,9 +124,9 @@ export class ValidationService {
   handleSuccesses(response: any) {
     if (response.message) {
       //console.clear();
-      console.info(
-        'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
-      );
+      // console.info(
+      //   'Message : ' + response.message + ' isSuccess : ' + response.isSuccess
+      // );
     }
   }
 }

@@ -17,7 +17,6 @@ import { AddToLocalStorageService } from '../../services/helperServices/addToLoc
 export class LoginComponent {
   title: string = 'Please Login In';
   loginModel: LoginModel = {} as LoginModel;
-  userType: boolean = false;
 
   constructor(
     private autService: AuthService,
@@ -27,12 +26,16 @@ export class LoginComponent {
     private validationService: ValidationService
   ) {}
 
+  ngOnInit() {
+    this.loginModel.userType = true;
+  }
+
   getValidationErrors(state: any) {
     return this.validationService.getValidationErrors(state);
   }
 
   getLoginModel(): LoginModel {
-    if (this.userType == true) {
+    if (this.loginModel.userType == true) {
       return Object.assign({
         id: '',
         userType: 'CompanyUser',

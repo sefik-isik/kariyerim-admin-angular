@@ -21,13 +21,7 @@ import { ValidationService } from '../../../services/validation.service';
   selector: 'app-companyUserFollowList',
   templateUrl: './companyUserFollowList.component.html',
   styleUrls: ['./companyUserFollowList.component.css'],
-  imports: [
-    CommonModule,
-    FormsModule,
-
-    FilterFollowCompanyByPersonelUserPipe,
-    CommonModule,
-  ],
+  imports: [CommonModule, FormsModule, FilterFollowCompanyByPersonelUserPipe],
 })
 export class CompanyUserFollowListComponent implements OnInit {
   @Input() companyUserDTO: CompanyUserDTO;

@@ -89,6 +89,15 @@ export class PersonelUserAdvertFollowService {
     );
   }
 
+  getAllByCompanyIdDTO(
+    adminModel: AdminModel
+  ): Observable<ListResponseModel<PersonelUserAdvertFollowDTO>> {
+    return this.httpClient.post<ListResponseModel<PersonelUserAdvertFollowDTO>>(
+      this.newUrlPath + 'getallbycompanyiddto',
+      adminModel
+    );
+  }
+
   getAllByPersonelIdDTO(
     adminModel: AdminModel
   ): Observable<ListResponseModel<PersonelUserAdvertFollowDTO>> {
