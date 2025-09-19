@@ -38,6 +38,14 @@ export class AuthService implements OnInit {
     );
   }
 
+  isAuthenticated() {
+    if (this.localStorageService.getFromLocalStorage('token')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   updatePassword(passwordModel: PasswordModel) {
     return this.HttpClient.post<SingleResponseModel<PasswordModel>>(
       this.newUrlPath + 'updatepassword',

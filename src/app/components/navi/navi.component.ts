@@ -28,18 +28,10 @@ export class NaviComponent implements OnInit {
     this.firstName = this.localStorageService.getFromLocalStorage('firstName');
     this.lastName = this.localStorageService.getFromLocalStorage('lastName');
 
-    this.isAuthenticated();
+    this.isAuth = this.authService.isAuthenticated();
   }
 
   exit() {
     this.authService.logout();
-  }
-
-  isAuthenticated() {
-    if (this.localStorageService.getFromLocalStorage('token')) {
-      this.isAuth = true;
-    } else {
-      this.isAuth = false;
-    }
   }
 }

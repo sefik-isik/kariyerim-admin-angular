@@ -27,23 +27,34 @@
     </div>
     <div class="row mt-3">
       <div class="col-md-12">
-        <carousel>
-          <slide
-            *ngFor="
-              let universityImage of universityImages
-                | filterUniversityImage : filter1
-            "
-          >
-            <img
-              src="{{ universityImage.imagePath + universityImage.imageName }}"
-              alt="first slide"
-              style="display: block; width: 100%"
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h3>{{ universityImage.imageOwnName }}</h3>
-            </div>
-          </slide>
-        </carousel>
+        <div class="card">
+          <div class="card-body" style="background-color: whitesmoke">
+            <carousel>
+              <slide
+                *ngFor="
+                  let universityImage of universityImages
+                    | filterUniversityImage : filter1
+                "
+              >
+                <img
+                  src="{{
+                    universityImage.imagePath + universityImage.imageName
+                  }}"
+                  alt="first slide"
+                  style="display: block; width: 100%"
+                />
+                <div
+                  style="font-size: 16px; margin-top: 10px; font-weight: 600"
+                >
+                  {{ universityImage.imageOwnName }}
+                </div>
+                <div style="font-size: 14px; margin-top: 10px">
+                  {{ universityImage.universityName }}
+                </div>
+              </slide>
+            </carousel>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -14,7 +14,6 @@ import { UserService } from '../../../services/user.service';
 import { ValidationService } from '../../../services/validation.service';
 import { AllUserDetailComponent } from '../allUserDetail/allUserDetail.component';
 import { AllUserUpdateComponent } from '../allUserUpdate/allUserUpdate.component';
-import e from 'express';
 
 @Component({
   selector: 'app-allUserByPageList',

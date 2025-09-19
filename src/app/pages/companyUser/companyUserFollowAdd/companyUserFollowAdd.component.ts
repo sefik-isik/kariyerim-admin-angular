@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CompanyUserDTO } from '../../../models/dto/companyUserDTO';
 import { PersonelUserDTO } from '../../../models/dto/personelUserDTO';
@@ -28,7 +28,7 @@ import { PersonelUserCvDTO } from '../../../models/dto/personelUserCvDTO';
 export class CompanyUserFollowAddComponent implements OnInit {
   personelUserFollowCompanyUserModel: PersonelUserFollowCompanyUserDTO =
     {} as PersonelUserFollowCompanyUserDTO;
-  companyUserDTO: CompanyUserDTO = {} as CompanyUserDTO;
+  @Input() companyUserDTO: CompanyUserDTO = {} as CompanyUserDTO;
   personelUserDTOs: PersonelUserDTO[] = [];
   personelUserCvDTOs: PersonelUserCvDTO[] = [];
   userDTOs: UserDTO[] = [];
@@ -74,6 +74,7 @@ export class CompanyUserFollowAddComponent implements OnInit {
   }
 
   getModel(): PersonelUserFollowCompanyUser {
+    console.log(this.companyUserDTO.id);
     return Object.assign({
       id: '',
       companyUserId: this.companyUserDTO.id,

@@ -49,25 +49,25 @@ export class CompanyUserMainComponent implements OnInit {
 
   ngOnInit() {
     this.admin = this.authService.isAdmin();
-    this.getAdminValues();
+    this.getAdminValues('', '');
 
     this.modalService.activeInstances.subscribe((x) => {
       if (x.length == 0) {
-        this.getAdminValues();
+        this.getAdminValues('', '');
       }
     });
   }
 
-  getAdminValues() {
+  getAdminValues(companyUserId: string, advertId: string) {
     const id = this.localStorageService.getFromLocalStorage('id');
     this.adminService.getAdminValues(id).subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.getCompanyUsers(response);
-        this.getPersonelUserFollowCompanyUsers(response);
-        this.getCompanyUserAdverts();
-        this.getPersonelUserAdvertFollows(response);
-        this.getPersonelUserAdvertApplications(response);
+        this.getPersonelUserFollowCompanyUsers(response, companyUserId);
+        this.getCompanyUserAdverts(companyUserId);
+        this.getPersonelUserAdvertFollows(response, advertId);
+        this.getPersonelUserAdvertApplications(response, advertId);
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
@@ -76,12 +76,12 @@ export class CompanyUserMainComponent implements OnInit {
   setCompanyUserId(id: string) {
     this.companyUserId = id;
     this.advertId = '';
-    this.getAdminValues();
+    this.getAdminValues(this.companyUserId, this.advertId);
   }
 
   setAdvertId(id: string) {
     this.advertId = id;
-    this.getAdminValues();
+    this.getAdminValues(this.companyUserId, this.advertId);
   }
 
   getCompanyUsers(adminModel: AdminModel) {
@@ -94,34 +94,36 @@ export class CompanyUserMainComponent implements OnInit {
     );
   }
 
-  getPersonelUserFollowCompanyUsers(adminModel: AdminModel) {
+  getPersonelUserFollowCompanyUsers(
+    adminModel: AdminModel,
+    companyUserId: string
+  ) {
+    adminModel.id = companyUserId;
     this.personelUserFollowCompanyUserService
       .getAllByCompanyIdDTO(adminModel)
       .subscribe(
         (response) => {
           this.validationService.handleSuccesses(response);
-          this.personelUserFollowCompanyUserDTOs = response.data.filter(
-            (f) => f.companyUserId === this.companyUserId
-          );
+          this.personelUserFollowCompanyUserDTOs = response.data;
         },
         (responseError) => this.validationService.handleErrors(responseError)
       );
   }
 
-  getCompanyUserAdverts() {
+  getCompanyUserAdverts(companyUserId: string) {
     this.companyUserAdvertService.getAllDTO().subscribe(
       (response) => {
         this.validationService.handleSuccesses(response);
         this.companyUserAdvertDTOs = response.data.filter(
-          (f) => f.companyUserId === this.companyUserId
+          (f) => f.companyUserId == companyUserId
         );
       },
       (responseError) => this.validationService.handleErrors(responseError)
     );
   }
 
-  getPersonelUserAdvertFollows(adminModel: AdminModel) {
-    adminModel.id = this.advertId;
+  getPersonelUserAdvertFollows(adminModel: AdminModel, advertId: string) {
+    adminModel.id = advertId;
     this.personelUserAdvertFollowService
       .getAllByAdvertIdDTO(adminModel)
       .subscribe(
@@ -133,8 +135,8 @@ export class CompanyUserMainComponent implements OnInit {
       );
   }
 
-  getPersonelUserAdvertApplications(adminModel: AdminModel) {
-    adminModel.id = this.advertId;
+  getPersonelUserAdvertApplications(adminModel: AdminModel, advertId: string) {
+    adminModel.id = advertId;
     this.personelUserAdvertApplicationService
       .getAllByAdvertIdDTO(adminModel)
       .subscribe(
